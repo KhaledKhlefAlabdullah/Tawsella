@@ -23,10 +23,10 @@ return new class extends Migration
             $table->double('end_longitude')->nullable();
             $table->boolean('is_completed')->default(false)->nullable();
             $table->boolean('is_canceled')->default(false)->nullable();
-            $table->foreign('driver_id')->references('users')->on('id')->onDelete('cascade');
-            $table->foreign('customer_id')->references('users')->on('id')->onDelete('cascade');
-            $table->foreign('taxi_id')->references('taxis')->on('id')->onDelete('cascade');
-            $table->foreign('movement_type_id')->references('taxi_movement_types')->on('id')->onDelete('cascade');
+            $table->foreign('driver_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('customer_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('taxi_id')->references('id')->on('taxis')->onDelete('cascade');
+            $table->foreign('movement_type_id')->references('id')->on('taxi_movement_types')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
 

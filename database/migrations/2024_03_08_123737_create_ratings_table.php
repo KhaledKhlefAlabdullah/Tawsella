@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('driver_id');
             $table->float('rating');
             $table->string('notes')->nullable();
-            $table->foreign('customer_id')->references('users')->on('id')->onDelete('cascade');
-            $table->foreign('driver_id')->references('users')->on('id')->onDelete('cascade');
+            $table->foreign('customer_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('driver_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

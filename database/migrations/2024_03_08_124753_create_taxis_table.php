@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('lamp_number');
             $table->string('plate_number');
             $table->string('car_detailes');
-            $table->foreign('driver_id')->references('users')->on('id')->onDelete('cascade');
+            $table->foreign('driver_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
 

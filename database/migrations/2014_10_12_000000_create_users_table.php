@@ -2,7 +2,9 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 return new class extends Migration
 {
@@ -23,6 +25,15 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
         });
+
+        $password=password_hash('12345',PASSWORD_DEFAULT);
+        DB::table('users')->insert([
+            'id' => Str::uuid(),
+            'email'=>'admin.star.taxi@gmail.com',
+            'password'=>$password,
+            'user_type' => 'admin',
+            'created_at' => now(),
+        ]);
     }
 
     /**

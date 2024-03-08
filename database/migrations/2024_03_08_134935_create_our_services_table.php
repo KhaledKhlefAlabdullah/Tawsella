@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('admin_id');
             $table->string('service_name');
             $table->text('service_description');
-            $table->foreign('admin_id')->references('users')->on('id')->onDelete('cascade');
+            $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

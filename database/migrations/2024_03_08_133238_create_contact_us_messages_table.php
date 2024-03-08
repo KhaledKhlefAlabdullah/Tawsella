@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email');
             $table->string('phone_number');
             $table->text('description');
-            $table->foreign('admin_id')->references('users')->on('id')->onDelete('cascade');
+            $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
