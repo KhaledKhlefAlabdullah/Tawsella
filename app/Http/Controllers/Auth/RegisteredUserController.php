@@ -4,13 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserProfile;
 use App\Providers\RouteServiceProvider;
 use Exception;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
@@ -41,12 +40,23 @@ class RegisteredUserController extends Controller
     
             $user = User::create([
                 'email' => $request->email,
-                'password' => Hash::make($request->password),
+                'password' => password_hash($request->password,PASSWORD_DEFAULT),
+                'user_type' => 'customer'
             ]);
             
+            UserProfile::create([
+                'user_id' => $user->id,
+                'name' => $request->input('name')
+            ]);
+
             if($request->wantsJson()){
-                return api_response(message:'register-success');
+
+                $token = createToken($user,'register-token');
+
+                return api_response(data:$token,message:'register-success');
+
             }
+
             event(new Registered($user));
     
             Auth::login($user);
@@ -54,7 +64,7 @@ class RegisteredUserController extends Controller
             return redirect(RouteServiceProvider::HOME);
         }
         catch(Exception $e){
-            return api_response(message:'register-error');
+            return api_response(errors:[$e->getMessage()],message:'register-error',code:500);
         }
        
     }

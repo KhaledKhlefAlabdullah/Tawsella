@@ -1,5 +1,6 @@
 <?php
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Carbon;
 
 /**
  * Prepares a standardized JSON response for API endpoints.
@@ -38,5 +39,21 @@ if (!function_exists('api_response')) {
         }
 
         return response()->json($response, $code);
+    }
+}
+
+/**
+ * @return string token 
+ */
+if(!function_exists('creteToken')){
+    function createToken($user,$token_name){
+
+         // Set the expiration time for the new token
+         $expiresAt = Carbon::now()->addDays(30);
+
+         // Create a new token for the user
+         $token = $user->createToken($token_name, ['*'], $expiresAt);
+         
+         return $token->plainTextToken;
     }
 }

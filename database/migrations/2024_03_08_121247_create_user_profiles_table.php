@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('user_id');
             $table->string('name');
             $table->string('user_avatar')->default('/images/profile_images/user_profile.png');
-            $table->string('phoneNumber');
+            $table->string('phoneNumber')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();

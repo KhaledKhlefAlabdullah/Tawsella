@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
-use Dotenv\Exception\ValidationException;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\RedirectResponse;
@@ -40,14 +39,11 @@ class AuthenticatedSessionController extends Controller
                 // Delete all existing tokens for the authenticated user
                 $request->user()->tokens()->delete();
 
-                // Set the expiration time for the new token
-                $expiresAt = Carbon::now()->addDays(30);
-
                 // Get user details
                 $user = $request->user();
 
                 // Create a new token for the user
-                $token = $user->createToken('login_token', ['*'], $expiresAt);
+                $token = createToken($user,'login-token');
 
                 return api_response(data: ['token' => $token->plainTextToken, 'user' => $user], message: 'Login successful');
             }
