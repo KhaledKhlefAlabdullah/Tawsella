@@ -6,13 +6,14 @@ namespace App\Models;
 
 use App\Models\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuid;
+    use HasApiTokens, HasFactory, Notifiable, HasUuid,SoftDeletes;
 
     protected $keyType='string';
 
@@ -26,9 +27,11 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
         'email',
         'password',
+        'user_type',
+        'driver_type',
+        'is_active'
     ];
 
     /**
@@ -50,4 +53,44 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function user_profile(){
+        return $this->hasOne(UserProfile::class,'user_id');
+    }
+
+    public function customer_ratings(){
+        return $this->hasMany(Rating::class,'customer_id');
+    }
+
+    public function driver_ratings(){
+        return $this->hasMany(Rating::class,'driver_id');
+    }
+
+    public function taxi(){
+        return $this->hasOne(Taxi::class,'driver_id');
+    }
+
+    public function customer_movements(){
+        return $this->hasMany(TaxiMovement::class,'customer_id');
+    }
+
+    public function driver_movements(){
+        return $this->hasMany(TaxiMovement::class,'driver_id');
+    }
+
+    public function admin_offers(){
+        return $this->hasMany(Offer::class,'admin_id');
+    }
+
+    public function about_us(){
+        return $this->hasOne(AboutUs::class,'admin_id');
+    }
+
+    public function contact_us_messages(){
+        return $this->hasMany(ContactUsMessage::class,'admin_id');
+    }
+
+    public function our_services(){
+        return $this->hasMany(OurService::class,'admin_id');
+    }
 }

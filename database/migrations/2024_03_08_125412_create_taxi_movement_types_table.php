@@ -11,13 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_profiles', function (Blueprint $table) {
+        Schema::create('taxi_movement_types', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->string('user_id');
-            $table->string('name');
-            $table->string('user_avatar')->default('/images/profile_images/user_profile.png');
-            $table->string('phoneNumber');
-            $table->foreign('user_id')->references('users')->on('id')->onDelete('cascade');
+            $table->string('type');
+            $table->float('price');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_profiles');
+        Schema::dropIfExists('taxi_movement_types');
     }
 };

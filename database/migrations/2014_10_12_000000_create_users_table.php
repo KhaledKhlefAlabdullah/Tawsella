@@ -16,11 +16,12 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('user_type',['customer','driver','admin']);
-            $table->enum('driver_state',['ready','in_break','reserved']);
-            $table->boolean('is_active');
+            $table->enum('user_type',['customer','driver','admin'])->default('customer');
+            $table->enum('driver_state',['ready','in_break','reserved'])->nullable();
+            $table->boolean('is_active')->default(true);
             $table->rememberToken();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

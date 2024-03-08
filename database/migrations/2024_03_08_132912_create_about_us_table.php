@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_profiles', function (Blueprint $table) {
+        Schema::create('about_us', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->string('user_id');
-            $table->string('name');
-            $table->string('user_avatar')->default('/images/profile_images/user_profile.png');
-            $table->string('phoneNumber');
-            $table->foreign('user_id')->references('users')->on('id')->onDelete('cascade');
+            $table->string('admin_id');
+            $table->string('title');
+            $table->text('description');
+            $table->string('complaints_number');
+            $table->foreign('admin_id')->references('users')->on('id')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_profiles');
+        Schema::dropIfExists('about_us');
     }
 };
