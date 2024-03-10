@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('lamp_number');
             $table->string('plate_number');
             $table->string('car_detailes');
+            $table->double('last_location_latitude')->nullable();
+            $table->double('last_location_longitude')->nullable();
             $table->foreign('driver_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();

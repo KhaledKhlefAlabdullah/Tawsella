@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AboutUs;
+use Exception;
 use Illuminate\Http\Request;
 
 class AboutUsController extends Controller
@@ -12,7 +13,13 @@ class AboutUsController extends Controller
      */
     public function index()
     {
-        //
+        try{
+
+            return api_response(message:'get-aboutus-success');
+        }
+        catch(Exception $e){
+            return api_response(message:'get-aboutus-success');
+        }
     }
 
     /**

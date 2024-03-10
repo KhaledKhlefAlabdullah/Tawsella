@@ -14,5 +14,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::middleware('auth:sanctom')->group(function () {
 
-require __DIR__.'/auth.php';
+    Route::middleware('driver')->group(function () {
+
+        Route::group(['prefix' => 'driver'], function () {
+
+        });
+    });
+
+    Route::middleware('customer')->group(function () {
+
+        Route::group(['prefix' => 'customer'], function () {
+            
+        });
+    });
+});
+
+require __DIR__ . '/auth.php';
