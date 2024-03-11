@@ -5,7 +5,7 @@
         </div>
     @endif
 
-    <form method="POST" action="{{ route('register_admin') }}">
+    <form method="POST" action="{{ route('store-driver') }}">
         @csrf
 
         <!-- Name -->

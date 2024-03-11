@@ -61,6 +61,7 @@ class RegisteredUserController extends Controller
 
             // Redirect back or to any other page
             return redirect()->back();
+            
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'register-error', code: 500);
         }
