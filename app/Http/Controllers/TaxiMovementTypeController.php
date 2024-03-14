@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\TaxiMovementType;
+use Exception;
 use Illuminate\Http\Request;
+
+use function Laravel\Prompts\error;
 
 class TaxiMovementTypeController extends Controller
 {
@@ -12,7 +15,21 @@ class TaxiMovementTypeController extends Controller
      */
     public function index()
     {
-        //
+        try{
+
+            $movemntTypes = TaxiMovementType::all()->select('id', 'type', 'price');
+
+            if(request()->wantsJson())
+                return api_response(data:$movemntTypes,message:'getting-movement-type-error');
+            
+            return view('');
+
+        }
+        catch(Exception $e){
+            if(request()->wantsJson())
+                return api_response(errors:[$e->getMessage()],message:'getting-movement-type-success',code:500);
+            return abort(message:'there error in getting the movements type',code:500);
+        }
     }
 
     /**

@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('taxi_movements', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->string('driver_id');
+            $table->string('driver_id')->nullable();
             $table->string('customer_id');
-            $table->string('taxi_id');
+            $table->string('taxi_id')->nullable();
             $table->string('movement_type_id');
             $table->double('start_latitude');
             $table->double('start_longitude');

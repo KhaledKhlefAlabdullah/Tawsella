@@ -36,6 +36,7 @@ class RegisteredUserController extends Controller
             $request->validate([
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+                'phone_number' => ['required','string','regex:/^+[0-9]{9,20}$/'],
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
             ]);
 
@@ -47,7 +48,8 @@ class RegisteredUserController extends Controller
 
             UserProfile::create([
                 'user_id' => $user->id,
-                'name' => $request->input('name')
+                'name' => $request->input('name'),
+                'phoneNumber' => $request->input('phone_number')
             ]);
 
             if ($request->wantsJson()) {

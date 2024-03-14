@@ -1,6 +1,6 @@
 <?php
 
-
+use App\Models\User;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 use Illuminate\Database\Eloquent\Model;
@@ -139,4 +139,15 @@ if (!function_exists('editProfileAvatar')) {
         return $new_file_path;
     }
 
+}
+
+/**
+ * this function return the admin id
+ * @return string admin_id
+ */
+if(!function_exists('getAdminId')){
+    function getAdminId(){
+        $admin_id = User::where('user_type','admin')->first()->id;
+        return $admin_id;
+    }
 }

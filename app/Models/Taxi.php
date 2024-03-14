@@ -13,7 +13,7 @@ class Taxi extends Model
 
     protected $keyType = 'string';
     protected $primaryKey = 'id';
-    protected $incrementing = false;
+    public $incrementing = false;
 
     protected $fillable =[
         'driver_id',

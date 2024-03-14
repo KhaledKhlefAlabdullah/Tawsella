@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\CreateTaxiMovementEvent;
+use App\Http\Requests\TaxiMovementRequest;
 use App\Models\TaxiMovement;
+use Exception;
 use Illuminate\Http\Request;
 
 class TaxiMovementController extends Controller
@@ -12,7 +15,9 @@ class TaxiMovementController extends Controller
      */
     public function index()
     {
-        //
+        try {
+        } catch (Exception $e) {
+        }
     }
 
     /**
@@ -26,9 +31,30 @@ class TaxiMovementController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(TaxiMovementRequest $request)
     {
-        //
+        try {
+
+            $validatedData = $request->validated();
+
+            TaxiMovement::create($validatedData);
+
+            // 1
+            // event(new CreateTaxiMovementEvent($request->input('customer_id'),
+            // $request->input('start_latitude'),
+            // $request->input('start_longitude')));
+            
+            // 2
+            CreateTaxiMovementEvent::dispatch(
+                $request->input('customer_id'),
+                $request->input('start_latitude'),
+                $request->input('start_longitude')
+            );
+
+            return api_response(message: 'create-movement-success');
+        } catch (Exception $e) {
+            return api_response(errors: [$e->getMessage()], message: 'create-movement-error', code: 500);
+        }
     }
 
     /**
@@ -60,6 +86,13 @@ class TaxiMovementController extends Controller
      */
     public function destroy(TaxiMovement $taxiMovement)
     {
-        //
+        try {
+
+            $taxiMovement->delete();
+
+            return redirect()->back();
+        } catch (Exception $e) {
+            return abort('there error in deleting this movemnt', 500);
+        }
     }
 }

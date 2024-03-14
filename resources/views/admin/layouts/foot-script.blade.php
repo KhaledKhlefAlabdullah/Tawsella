@@ -44,3 +44,13 @@
 
     <!-- CUSTOM JS -->
     <script src="{{ asset('assets/js/custom.js') }}"></script>
+    @vite('resources/js/app.js')
+    <script>
+           setTimeout(() => {
+            var userId = <?php echo json_encode(auth()->id()); ?>;
+            Echo.private(`Taxi-movement.${userId}`).
+            listen('.App\\Events\\CreateTaxiMovementEvent', (e) => {
+                alert(`New message received from ${e.customer.name}. View profile: ${e.customer.profile_link}`);
+                console.log(e);
+            });}, 200);
+    </script>

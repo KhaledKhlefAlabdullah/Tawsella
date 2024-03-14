@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\TaxiMovementController;
+use App\Http\Controllers\TaxiMovementTypeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctom')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
 
     Route::middleware('driver')->group(function () {
 
@@ -25,8 +27,12 @@ Route::middleware('auth:sanctom')->group(function () {
 
     Route::middleware('customer')->group(function () {
 
+        Route::get('/movement-types',[TaxiMovementTypeController::class,'index']);
+
         Route::group(['prefix' => 'customer'], function () {
             
+            Route::post('/create-taxi-movemet',[TaxiMovementController::class,'store']);
+
         });
     });
 });

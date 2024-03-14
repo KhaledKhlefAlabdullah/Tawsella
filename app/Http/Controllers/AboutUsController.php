@@ -14,7 +14,7 @@ class AboutUsController extends Controller
     public function index()
     {
         try{
-
+            
             return api_response(message:'get-aboutus-success');
         }
         catch(Exception $e){
