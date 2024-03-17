@@ -34,7 +34,7 @@ class AuthenticatedSessionController extends Controller
 
             // Return a JSON response with the token and user details
             if ($request->wantsJson()) {
-                
+
                 // Delete all existing tokens for the authenticated user
                 $request->user()->tokens()->delete();
 
@@ -42,7 +42,7 @@ class AuthenticatedSessionController extends Controller
                 $user = $request->user();
 
                 // Create a new token for the user
-                $token = createToken($user,'login-token');
+                $token = createToken($user, 'login-token');
 
                 return api_response(data: ['token' => $token, 'user' => $user], message: 'Login successful');
             }
@@ -52,26 +52,42 @@ class AuthenticatedSessionController extends Controller
             return redirect()->intended(RouteServiceProvider::HOME);
         } catch (AuthenticationException $e) {
             // Catch AuthenticationException and return an unauthorized response
-            return api_response(errors:[$e->getMessage(),'Unauthorized'],message:'Invalid credentials',code:401);
+            return api_response(errors: [$e->getMessage(), 'Unauthorized'], message: 'Invalid credentials', code: 401);
         } catch (ValidationValidationException $e) {
             // Catch ValidationException and return a validation error response
-            return api_response(errors:[$e->errors()],message:'Validation Error',code:422);
-        } catch(Exception $e){
-            return api_response(errors:[$e->getMessage()],message:'login error',code:500);
+            return api_response(errors: [$e->errors()], message: 'Validation Error', code: 422);
+        } catch (Exception $e) {
+            return api_response(errors: [$e->getMessage()], message: 'login error', code: 500);
         }
     }
 
     /**
      * Destroy an authenticated session.
      */
-    public function destroy(Request $request): RedirectResponse
+    public function destroy(Request $request)
     {
-        Auth::guard('web')->logout();
+        try {
+            if (request()->wantsJson()) {
+                $request->user()->currentAccessToken()->delete();
 
-        $request->session()->invalidate();
+                return api_response(message:'Logout successfully');
+            }
 
-        $request->session()->regenerateToken();
+            Auth::guard('web')->logout();
 
-        return redirect('/');
+            $request->session()->invalidate();
+
+            $request->session()->regenerateToken();
+
+            return redirect('/');
+        } catch (\Exception $e) {
+            if (request()->wantsJson()) {
+
+                // Handle any exceptions that might occur during logout
+                return api_response(errors:[$e->getMessage()],message:'there error in logout try agin');
+            }
+        }
+
+        return abort('there error in logout try agin', 500);
     }
 }

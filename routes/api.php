@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\TaxiMovementController;
 use App\Http\Controllers\TaxiMovementTypeController;
+use App\Models\AboutUs;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +36,8 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/create-taxi-movemet',[TaxiMovementController::class,'store']);
 
         });
+
+        Route::get('/about-us',[AboutUsController::class,'index']);
     });
 });
 

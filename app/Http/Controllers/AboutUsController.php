@@ -16,7 +16,7 @@ class AboutUsController extends Controller
     public function index()
     {
         try {
-            $aboutUsRecords = AboutUs::all();
+            $aboutUsRecords = AboutUs::select('title','description','complaints_number')->first();
 
             if (request()->wantsJson()) {
                 return api_response(data: $aboutUsRecords, message: 'successfully getting about us details');
