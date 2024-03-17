@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TaxiMovementType;
+use Exception;
 use Illuminate\Http\Request;
 
 class TaxiMovementTypeController extends Controller
@@ -12,8 +13,19 @@ class TaxiMovementTypeController extends Controller
      */
     public function index()
     {
-        $movementTypes = TaxiMovementType::all();
-        return view('taxi_movement_types.index', ['movementTypes' => $movementTypes]);
+        try {
+
+            $movementTypes = TaxiMovementType::all()->select('id', 'type', 'price');
+
+            if (request()->wantsJson())
+                return api_response(data: $movementTypes, message: 'getting-movement-type-error');
+
+            return view('taxi_movement_types.index', ['movementTypes' => $movementTypes]);
+        } catch (Exception $e) {
+            if (request()->wantsJson())
+                return api_response(errors: [$e->getMessage()], message: 'getting-movement-type-success', code: 500);
+            return abort(message: 'there error in getting the movements type', code: 500);
+        }
     }
 
     /**
