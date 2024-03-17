@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AboutUsRequest;
 use App\Models\AboutUs;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,10 +15,21 @@ class AboutUsController extends Controller
      */
     public function index()
     {
+        try {
+            $aboutUsRecords = AboutUs::all();
 
+            if (request()->wantsJson()) {
+                return api_response(data: $aboutUsRecords, message: 'successfully getting about us details');
+            }
 
-        $aboutUsRecords = AboutUs::all();
-        return view('aboutus.index', ['aboutUsRecords' => $aboutUsRecords]);
+            return view('aboutus.index', ['aboutUsRecords' => $aboutUsRecords]);
+        } catch (Exception $e) {
+            if (request()->wantsJson()) {
+                return api_response(errors: [$e->getMessage()], message: 'successfully getting about us details', code: 500);
+            }
+
+            return abort('there error in getting the data', 500);
+        }
     }
 
     /**
@@ -30,29 +43,25 @@ class AboutUsController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * Or
+     * Update the exists aboutus details
      */
-    public function store(Request $request)
+    public function store_or_update(AboutUsRequest $request)
     {
-        $data = $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'complaints_number' => 'required|numeric',
-        ]);
+        try {
 
-        $data['admin_id'] = Auth::id();
+            $validatedData = $request->validated();
 
-        AboutUs::create($data);
+            if (AboutUs::count() == 0) {
+                AboutUs::create($validatedData);
+            } else {
+                AboutUs::first()->update($validatedData);
+            }
 
-        return redirect()->route('aboutus.index')->with('success', 'تم إنشاء نبذة عنا بنجاح.');
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(AboutUs $aboutUs)
-    {
-        // يمكنك تعيين البيانات التي تريد عرضها في صفحة العرض هنا
-        return view('aboutus.show', ['aboutUs' => $aboutUs]);
+            return redirect()->route('aboutus.index')->with('success', 'تم إنشاء نبذة عنا بنجاح.');
+        } catch (Exception $e) {
+            return abort('there error in getting the data', 500);
+        }
     }
 
     /**
@@ -65,28 +74,15 @@ class AboutUsController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, AboutUs $aboutUs)
-    {
-        $data = $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'complaints_number' => 'required|numeric',
-        ]);
-
-        $aboutUs->update($data);
-
-        return redirect()->route('aboutus.index')->with('success', 'تم تحديث نبذة عنا بنجاح.');
-    }
-
-    /**
      * Remove the specified resource from storage.
      */
     public function destroy(AboutUs $aboutUs)
     {
-        $aboutUs->delete();
-
-        return redirect()->route('aboutus.index')->with('success', 'تم حذف نبذة عنا بنجاح.');
+        try {
+            $aboutUs->delete();
+            return redirect()->route('aboutus.index')->with('success', 'تم حذف نبذة عنا بنجاح.');
+        } catch (Exception $e) {
+            return abort('there error in deleting aboutus data', 500);
+        }
     }
 }
