@@ -17,7 +17,7 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        Gate::authorize('admin',User::class);
+        Gate::authorize('admin', User::class);
 
         return $next($request);
     }

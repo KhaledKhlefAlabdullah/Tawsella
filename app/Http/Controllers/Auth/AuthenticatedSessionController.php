@@ -44,7 +44,7 @@ class AuthenticatedSessionController extends Controller
                 // Create a new token for the user
                 $token = createToken($user,'login-token');
 
-                return api_response(data: ['token' => $token->plainTextToken, 'user' => $user], message: 'Login successful');
+                return api_response(data: ['token' => $token, 'user' => $user], message: 'Login successful');
             }
 
             $request->session()->regenerate();

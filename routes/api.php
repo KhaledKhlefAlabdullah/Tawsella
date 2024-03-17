@@ -1,8 +1,9 @@
 <?php
 
+use App\Http\Controllers\TaxiMovementController;
+use App\Http\Controllers\TaxiMovementTypeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\AboutUsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +16,7 @@ use App\Http\Controllers\Api\AboutUsController;
 |
 */
 
-Route::middleware('auth:sanctom')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
 
     Route::middleware('driver')->group(function () {
 
@@ -26,22 +27,14 @@ Route::middleware('auth:sanctom')->group(function () {
 
     Route::middleware('customer')->group(function () {
 
+        Route::get('/movement-types',[TaxiMovementTypeController::class,'index']);
+
         Route::group(['prefix' => 'customer'], function () {
+            
+            Route::post('/create-taxi-movemet',[TaxiMovementController::class,'store']);
 
         });
     });
 });
-
-
-Route::group(['prefix' => 'api'], function () {
-    Route::group(['prefix' => 'aboutus'], function () {
-        Route::get('/', [AboutUsController::class, 'index']); // عرض قائمة السجلات
-        Route::get('/{aboutUs}', [AboutUsController::class, 'show']); // عرض سجل محدد
-        Route::post('/', [AboutUsController::class, 'store']); // إنشاء سجل جديد
-        Route::put('/{aboutUs}', [AboutUsController::class, 'update']); // تحديث سجل محدد
-        Route::delete('/{aboutUs}', [AboutUsController::class, 'destroy']); // حذف سجل محدد
-    });
-});
-
 
 require __DIR__ . '/auth.php';

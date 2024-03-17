@@ -13,7 +13,7 @@ class OurService extends Model
 
     protected $keyType = 'string';
     protected $primaryKey = 'id';
-    protected $incrementing = false;
+    public $incrementing = false;
 
     protected $fillable =[
         'admin_id',

@@ -1,11 +1,9 @@
 <?php
 
+use App\Events\CreateTaxiMovementEvent;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TaxiMovementTypeController;
-use App\Http\Controllers\OfferController;
-use App\Http\Controllers\AboutUsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,39 +15,32 @@ use App\Http\Controllers\AboutUsController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::get('/', function () {
+    return view('welcome');
+});
 
-Route::resource('aboutus', AboutUsController::class);
-Route::resource('offers', OfferController::class);
+Route::middleware(['auth', 'admin'])->group(function () {
 
-Route::resource('taxi_movement_types', TaxiMovementTypeController::class);
-
-Route::middleware('auth')->group(function () {
-
-    Route::middleware('admin')->group(function () {
-
-        Route::get('/', function () {
-            return view('admin.dashboard');
-        });
-
-        Route::resource('aboutus', AboutUsController::class);
-        Route::resource('offers', OfferController::class);
-
-        Route::resource('taxi_movement_types', TaxiMovementTypeController::class);
-
-        Route::get('/dashboard', function () {
-            return view('dashboard');
-        })->middleware(['auth', 'verified'])->name('dashboard');
-
-        Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-
-        Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-
-        Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-        // For create the drivers acounts
-        Route::post('/register_admin', [RegisteredUserController::class, 'admin_store'])->name('register_admin');
-
+    Route::get('/dashboard', function () {
+        return view('admin.dashboard');
     });
+
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+
+    Route::get('/create-driver', [RegisteredUserController::class, 'create'])
+        ->name('create-driver');
+
+    // For create the drivers acounts
+    Route::post('/store-driver', [RegisteredUserController::class, 'admin_store'])->name('store-driver');
+});
+
+Route::get("/test",function(){
+    return event(new CreateTaxiMovementEvent("2",223,3344));
 });
 
 require __DIR__ . '/auth.php';

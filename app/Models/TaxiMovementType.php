@@ -1,5 +1,4 @@
 <?php
-// app/Models/TaxiMovementType.php
 
 namespace App\Models;
 
@@ -10,24 +9,22 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class TaxiMovementType extends Model
 {
-    use HasFactory, HasUuid, SoftDeletes;
+    use HasFactory,HasUuid,SoftDeletes;
 
     protected $keyType = 'string';
     protected $primaryKey = 'id';
-    public $incrementing = false; // Change the access level to public
+    public $incrementing = false;
 
-    protected $fillable = [
+    protected $fillable =[
         'type',
         'price'
     ];
 
-    public function type_movements()
-    {
-        return $this->hasMany(TaxiMovement::class, 'movement_type_id');
+    public function type_movements(){
+        return $this->hasMany(TaxiMovement::class,'movement_type_id');
     }
 
-    public function movement_type_offers()
-    {
-        return $this->hasMany(Offer::class, 'movement_type_id');
+    public function movement_type_offers(){
+        return $this->hasMany(Offer::class,'movement_type_id');
     }
 }

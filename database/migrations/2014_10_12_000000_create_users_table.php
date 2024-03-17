@@ -26,7 +26,7 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        $password=password_hash('12345',PASSWORD_DEFAULT);
+        $password=password_hash('12345678',PASSWORD_DEFAULT);
         DB::table('users')->insert([
             'id' => Str::uuid(),
             'email'=>'admin.star.taxi@gmail.com',
