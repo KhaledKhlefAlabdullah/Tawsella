@@ -32,7 +32,7 @@ class AboutUsRequest extends FormRequest
             'admin_id' => 'string|required|exists:users,is',
             'title' => 'required|string',
             'description' => 'required|string',
-            'complaints_number' => 'required|string|regex:/^+[0-9]{9,20}$/'
+            'complaints_number' => 'sometimes|required|string|regex:/^+[0-9]{9,20}$/'
         ];
     }
 }

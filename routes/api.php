@@ -23,22 +23,22 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::middleware('driver')->group(function () {
 
         Route::group(['prefix' => 'driver'], function () {
-
         });
     });
 
     Route::middleware('customer')->group(function () {
 
-        Route::get('/movement-types',[TaxiMovementTypeController::class,'index']);
+        Route::get('/movement-types', [TaxiMovementTypeController::class, 'index']);
 
-        Route::group(['prefix' => 'customer'], function () {
-            
-            Route::post('/create-taxi-movemet',[TaxiMovementController::class,'store']);
+        Route::post('/create-taxi-movemet', [TaxiMovementController::class, 'store']);
 
-        });
-
-        Route::get('/about-us',[AboutUsController::class,'index']);
     });
+});
+
+Route::group(['prefix' => 'info'], function () {
+    Route::get('/about-us', [AboutUsController::class, 'index']);
+
+    Route::get('/addition', [AboutUsController::class, 'get_addition_information']);
 });
 
 require __DIR__ . '/auth.php';
