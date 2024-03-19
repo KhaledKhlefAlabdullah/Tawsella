@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ContactUsMessagesRequest;
+use App\Mail\ContactUsMails;
 use App\Models\ContactUsMessage;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ContactUsMessageController extends Controller
 {
@@ -12,23 +16,53 @@ class ContactUsMessageController extends Controller
      */
     public function index()
     {
-        //
-    }
+        try {
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+            $contct_us = ContactUsMessage::select('admin_id', 'description', 'email', 'phone_number')
+                ->where('is_answerd', false)
+                ->get();
+
+            return view('contctus', [$contct_us]);
+        } catch (Exception $e) {
+            return abort(500,'there error in getting constct us messages');
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ContactUsMessagesRequest $request)
     {
-        //
+        try {
+
+            $validatedData = $request->validated();
+
+            ContactUsMessage::create($validatedData);
+
+            return api_response(message: 'send contact us message success');
+        } catch (Exception $e) {
+            return api_response(errors: $e->getMessage(), message: 'send contact us message error', code: 500);
+        }
+    }
+
+    /**
+     * Answer the contact us message
+     */
+    public function answer(Request $request, ContactUsMessage $contactUsMessage)
+    {
+        try {
+
+            $contactUsMessage->update([
+                'is_answerd' => true
+            ]);
+
+            // this to send request by the email to the cutomer 
+            Mail::to($contactUsMessage->email)->send(new ContactUsMails($request->message));
+
+            return view();
+        } catch (Exception $e) {
+            return abort(500,'there error in answered the contact us message');
+        }
     }
 
     /**
@@ -36,23 +70,14 @@ class ContactUsMessageController extends Controller
      */
     public function show(ContactUsMessage $contactUsMessage)
     {
-        //
-    }
+        try {
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ContactUsMessage $contactUsMessage)
-    {
-        //
-    }
+            $contactDetails = $contactUsMessage->select('admin_id', 'description', 'email', 'phone_number')->firstOrFail();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, ContactUsMessage $contactUsMessage)
-    {
-        //
+            return view('contact_us.show', ['contactDetails' => $contactDetails]);
+        } catch (Exception $e) {
+            return abort(500, 'There was an error in getting the contact us message details with error'.$e->getMessage());
+        }
     }
 
     /**
@@ -60,6 +85,15 @@ class ContactUsMessageController extends Controller
      */
     public function destroy(ContactUsMessage $contactUsMessage)
     {
-        //
+        try{
+
+            $contactUsMessage->delete();
+
+            return redirect()->back();
+
+        }
+        catch(Exception $e){
+            return abort(500,'there error in deleting the contact us message');
+        }
     }
 }

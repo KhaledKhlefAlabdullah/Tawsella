@@ -17,10 +17,10 @@ class ContactUsMessage extends Model
 
     protected $fillable =[
         'admin_id',
-        'title',
         'description',
         'email',
-        'phone_number'
+        'phone_number',
+        'is_answerd'
     ];
 
     public function admin(){

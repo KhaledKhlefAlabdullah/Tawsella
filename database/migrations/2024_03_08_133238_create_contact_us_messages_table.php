@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('contact_us_messages', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
             $table->string('admin_id');
-            $table->string('title');
             $table->string('email');
-            $table->string('phone_number');
+            $table->string('phone_number')->nullable();
             $table->text('description');
+            $table->boolean('is_answerd')->default(false);
             $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();

@@ -1,13 +1,12 @@
 <?php
 
 use App\Http\Controllers\AboutUsController;
+use App\Http\Controllers\ContactUsMessageController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\TaxiMovementController;
 use App\Http\Controllers\TaxiMovementTypeController;
 use App\Http\Controllers\UserProfileController;
 use App\Models\AboutUs;
-use App\Models\UserProfile;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,4 +53,5 @@ Route::group(['prefix' => 'info'], function () {
 
 Route::get('/offers',[OfferController::class,'index']);
 
+Route::post('/contact-us',[ContactUsMessageController::class,'store']);
 require __DIR__ . '/auth.php';

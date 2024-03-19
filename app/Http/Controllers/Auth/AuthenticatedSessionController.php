@@ -88,6 +88,6 @@ class AuthenticatedSessionController extends Controller
             }
         }
 
-        return abort('there error in logout try agin', 500);
+        return abort(500,'there error in logout try agin');
     }
 }
