@@ -4,6 +4,7 @@ use App\Models\User;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Get an Eloquent model instance by its ID and perform a existence check.
@@ -149,5 +150,14 @@ if(!function_exists('getAdminId')){
     function getAdminId(){
         $admin_id = User::where('user_type','admin')->first()->id;
         return $admin_id;
+    }
+}
+
+/**
+ * @return string Auth user id
+ */
+if(!function_exists('getMyId')){
+    function getMyId(){
+        return Auth::id();
     }
 }

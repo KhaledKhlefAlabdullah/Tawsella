@@ -15,6 +15,8 @@ return new class extends Migration
             $table->uuid('id')->unique()->primary();
             $table->string('type');
             $table->float('price');
+            $table->text('description')->nullable();
+            $table->boolean('is_onKM')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });

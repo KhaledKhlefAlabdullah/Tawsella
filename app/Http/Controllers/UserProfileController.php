@@ -10,6 +10,8 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+use function Laravel\Prompts\error;
+
 class UserProfileController extends Controller
 {
     /**
@@ -17,30 +19,18 @@ class UserProfileController extends Controller
      */
     public function index()
     {
-    }
+        try{
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+            $profile = UserProfile::select('users.id as user_id','user_profiles.name','user_profiles.user_avatar','user_profiles.phoneNumber','users.email')
+            ->join('users','user_profiles.user_id','=','users.id')
+            ->where('user_profiles.user_id', getMyId())
+            ->first();
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(UserProfile $userProfile)
-    {
-        //
+            return api_response(data:$profile ,message:'user profile details getting success');
+        }
+        catch(Exception $e){
+            return api_response(errors:$e->getMessage(),message:'user profile details getting error',code:500);
+        }
     }
 
     /**
@@ -98,13 +88,5 @@ class UserProfileController extends Controller
 
             return abort(message: 'there error in update user details', code: 500);
         }
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(UserProfile $userProfile)
-    {
-        //
     }
 }

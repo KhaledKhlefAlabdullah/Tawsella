@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\AboutUsController;
+use App\Http\Controllers\OfferController;
 use App\Http\Controllers\TaxiMovementController;
 use App\Http\Controllers\TaxiMovementTypeController;
+use App\Http\Controllers\UserProfileController;
 use App\Models\AboutUs;
+use App\Models\UserProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +36,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/create-taxi-movemet', [TaxiMovementController::class, 'store']);
 
     });
+
+    Route::group(['prefix' => 'profile'],function(){
+
+        Route::get('/my-profile',[UserProfileController::class,'index']);
+
+        Route::post('/edit/{user_id}',[UserProfileController::class,'update']);
+
+    });
 });
 
 Route::group(['prefix' => 'info'], function () {
@@ -40,5 +51,7 @@ Route::group(['prefix' => 'info'], function () {
 
     Route::get('/addition', [AboutUsController::class, 'get_addition_information']);
 });
+
+Route::get('/offers',[OfferController::class,'index']);
 
 require __DIR__ . '/auth.php';

@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Offer;
 use App\Models\TaxiMovementType;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+
 class OfferController extends Controller
 {
     /**
@@ -14,8 +16,29 @@ class OfferController extends Controller
      */
     public function index()
     {
-        $offers = Offer::all();
-        return view('offers.index', ['offers' => $offers]);
+        try {
+
+            $offers = Offer::select(
+                'offers.offer',
+                'offers.value_of_discount',
+                'offers.valide_date',
+                'taxi_movement_types.type',
+                'taxi_movement_types.price'
+            )
+                ->join('taxi_movement_types', 'offers.movement_type_id', '=', 'taxi_movement_types.id')
+                ->where('offers.valide_date', '>=', now())
+                ->get();
+
+            if (request()->wantsJson())
+                return api_response(data: $offers, message: 'getting offers success');
+
+            return view('offers.index', ['offers' => $offers]);
+            
+        } catch (Exception $e) {
+            if (request()->wantsJson())
+                return api_response(errors: $e->getMessage(), message: 'getting offers error', code: 500);
+            return abort('there error in getting offers', 500);
+        }
     }
 
     /**
@@ -95,18 +118,4 @@ class OfferController extends Controller
 
         return redirect()->route('offers.index')->with('success', 'تم حذف العرض بنجاح.');
     }
-
-
-    public function index()
-    {
-        try{
-
-            return api_response(message:'get-aboutus-success');
-        }
-        catch(Exception $e){
-            return api_response(message:'get-aboutus-success');
-        }
-    }
-
-
 }

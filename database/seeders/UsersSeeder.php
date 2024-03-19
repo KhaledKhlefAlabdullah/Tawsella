@@ -17,7 +17,7 @@ class UsersSeeder extends Seeder
     {
         //['customer','driver','admin']
         DB::table('users')->insert([
-            'id' => Str::uuid(),
+            'id' => 'Asds-52664d66-aasd5566-C1',
             'email'=>'customer1@gmail.com',
             'password'=>password_hash('12345678',PASSWORD_DEFAULT),
             'user_type' => 'customer',
@@ -25,7 +25,7 @@ class UsersSeeder extends Seeder
         ]);
         
         DB::table('users')->insert([
-            'id' => Str::uuid(),
+            'id' => 'Asds-52664d66-aasd5566-C2',
             'email'=>'customer2@gmail.com',
             'password'=>password_hash('12345678',PASSWORD_DEFAULT),
             'user_type' => 'customer',
@@ -33,7 +33,7 @@ class UsersSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'id' => Str::uuid(),
+            'id' => 'Asds-52664d66-aasd5566-D1',
             'email'=>'driver1@gmail.com',
             'password'=>password_hash('12345678',PASSWORD_DEFAULT),
             'user_type' => 'driver',

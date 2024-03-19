@@ -119,6 +119,31 @@ class AboutUsController extends Controller
         }
     }
 
+
+    public function edit_additional_info(AboutUs $aboutUs)
+    {
+        // يمكنك تعيين البيانات التي تحتاجها في صفحة التحرير هنا
+        return view('aboutus.edit', ['aboutUs' => $aboutUs]);
+    }
+
+     /**
+     * Update Additional info records 
+     */
+    public function update_additional_info(AboutUsRequest $request){
+        try{
+
+            $validatedData = $request->validated();
+
+            AboutUs::create($validatedData);
+
+            return redirect()->route('aboutus.index')->with('success', 'تم إنشاء نبذة عنا بنجاح.');
+
+        }
+        catch(Exception $e){
+            return abort('there error in add new additional info',500);
+        }
+    }
+
     /**
      * Remove the specified resource from storage.
      */
