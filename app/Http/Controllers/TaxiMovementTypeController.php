@@ -15,12 +15,13 @@ class TaxiMovementTypeController extends Controller
     {
         try {
 
-            $movementTypes = TaxiMovementType::all()->select('id', 'type', 'price');
+            $movementTypes = TaxiMovementType::all()->select('id', 'type', 'price','description','is_onKM');
 
             if (request()->wantsJson())
                 return api_response(data: $movementTypes, message: 'getting-movement-type-error');
 
             return view('taxi_movement_types.index', ['movementTypes' => $movementTypes]);
+
         } catch (Exception $e) {
             if (request()->wantsJson())
                 return api_response(errors: [$e->getMessage()], message: 'getting-movement-type-success', code: 500);
