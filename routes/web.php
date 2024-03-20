@@ -4,6 +4,7 @@ use App\Events\CreateTaxiMovementEvent;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DriversController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TaxiController;
 use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -45,19 +46,24 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
-
     Route::get('/create-driver', [RegisteredUserController::class, 'create'])
         ->name('create-driver');
 
     // For create the drivers acounts
     Route::post('/store-driver', [RegisteredUserController::class, 'admin_store'])->name('store-driver');
 
-    Route::group(['prefix' => 'drivers'],function(){
-        Route::get('/drivers',[DriversController::class,'index']);
+    //***************************start route Taxi ******************************** */
+    Route::get('/taxi', [TaxiController::class, 'index'])->name('taxis.index');
+    Route::get('/taxis/create', [TaxiController::class, 'create'])->name('taxis.create');
+    Route::post('/taxis', [TaxiController::class, 'store'])->name('taxis.store');
+
+    //*************************** End route Taxi *********************************** */
+
+    Route::group(['prefix' => 'drivers'], function () {
+        Route::get('/', [DriversController::class, 'index']);
     });
 });
-Route::get('/drivers',[DriversController::class,'index']);
+Route::get('/drivers', [DriversController::class, 'index']);
 
 Route::get("/test", function () {
     return event(new CreateTaxiMovementEvent("2", 223, 3344));
