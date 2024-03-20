@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TaxiRequest;
 use App\Models\Taxi;
 use App\Models\User;
 use Exception;
@@ -27,48 +28,41 @@ class TaxiController extends Controller
      */
     public function create()
     {
-        try{
+        try {
             $drivers = User::where('user_type', 'driver')
-            ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
-            ->select('users.id', 'user_profiles.name')->get();
+                ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
+                ->select('users.id', 'user_profiles.name')->get();
 
-        // عرض الاستمارة لإنشاء سجل جديد
-        return view('taxis.create', ['drivers' => $drivers]);
-        }
-        catch(Exception $e){
-            abort('there error in redirect to the add taxi form',500);
+            // عرض الاستمارة لإنشاء سجل جديد
+            return view('taxis.create', ['drivers' => $drivers]);
+        } catch (Exception $e) {
+            abort(500, 'there error in redirect to the add taxi form');
         }
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TaxiRequest $request)
     {
-        // التحقق من البيانات المدخلة
-        $validatedData = $request->validate([
-            'driver_id' => 'required|exists:users,id',
-            'care_name' => 'required|string',
-            'lamp_number' => 'required|string',
-            'plate_number' => 'required|string|unique:taxis,plate_number',
-            'car_details' => 'nullable|string',
-        ]);
+        try {
+            // التحقق من البيانات المدخلة
+            $validatedData = $request->validated();
 
-        // إنشاء سجل جديد
-        $taxi = Taxi::create($validatedData);
+            // إنشاء سجل جديد
+            Taxi::create($validatedData);
 
-        // إعادة توجيه أو عرض رسالة نجاح
-        return redirect()->route('taxis.index')->with('success', 'تم إنشاء سجل التاكسي بنجاح.');
+            // إعادة توجيه أو عرض رسالة نجاح
+            return redirect()->route('taxis.index')->with('success', 'تم إنشاء سجل التاكسي بنجاح.');
+        } catch (Exception $e) {
+            abort(500, 'there error in creatting taxi');
+        }
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Taxi  $taxi
-     * @return \Illuminate\Http\Response
      */
     public function show(Taxi $taxi)
     {
@@ -80,7 +74,6 @@ class TaxiController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Taxi  $taxi
-     * @return \Illuminate\Http\Response
      */
     public function edit(Taxi $taxi)
     {
@@ -91,37 +84,27 @@ class TaxiController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Taxi  $taxi
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Taxi $taxi)
+    public function update(TaxiRequest $request, Taxi $taxi)
     {
-        // التحقق من البيانات المدخلة
-        $validatedData = $request->validate([
-            'driver_id' => 'required|exists:users,id',
-            'care_name' => 'required|string',
-            'lamp_number' => 'required|string',
-            'plate_number' => [
-                'required',
-                'string',
-                Rule::unique('taxis')->ignore($taxi->id),
-            ],
-            'car_details' => 'nullable|string',
-        ]);
+        try {
+            // التحقق من البيانات المدخلة
+            $validatedData = $request->validated();
 
-        // تحديث السجل بالبيانات المحدثة
-        $taxi->update($validatedData);
+            // تحديث السجل بالبيانات المحدثة
+            $taxi->update($validatedData);
 
-        // إعادة توجيه أو عرض رسالة نجاح
-        return redirect()->route('taxis.index')->with('success', 'تم تحديث سجل التاكسي بنجاح.');
+            // إعادة توجيه أو عرض رسالة نجاح
+            return redirect()->route('taxis.index')->with('success', 'تم تحديث سجل التاكسي بنجاح.');
+        } catch (Exception $e) {
+            abort(500, 'there error in updatting taxi details');
+        }
     }
 
     /**
      * Remove the specified resource from storage.
-     *
      * @param  \App\Models\Taxi  $taxi
-     * @return \Illuminate\Http\Response
      */
     public function destroy(Taxi $taxi)
     {
