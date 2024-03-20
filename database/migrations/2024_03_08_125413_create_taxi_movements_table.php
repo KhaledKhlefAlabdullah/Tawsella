@@ -17,6 +17,9 @@ return new class extends Migration
             $table->string('customer_id');
             $table->string('taxi_id')->nullable();
             $table->string('movement_type_id');
+            $table->string('my_address');
+            $table->string('destnation_address');
+            $table->enum('gender',['male','femail']);
             $table->double('start_latitude');
             $table->double('start_longitude');
             $table->double('end_latitude')->nullable();
