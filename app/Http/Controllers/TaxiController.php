@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Taxi;
+use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -22,13 +24,20 @@ class TaxiController extends Controller
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
+        try{
+            $drivers = User::where('user_type', 'driver')
+            ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
+            ->select('users.id', 'user_profiles.name')->get();
+
         // عرض الاستمارة لإنشاء سجل جديد
-        return view('taxis.create');
+        return view('taxis.create', ['drivers' => $drivers]);
+        }
+        catch(Exception $e){
+            abort('there error in redirect to the add taxi form',500);
+        }
     }
 
     /**

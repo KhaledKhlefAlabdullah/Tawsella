@@ -54,10 +54,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/store-driver', [RegisteredUserController::class, 'admin_store'])->name('store-driver');
 
     Route::group(['prefix' => 'drivers'],function(){
-        Route::get('/drivers',[DriversController::class,'index']);
+        Route::get('/',[DriversController::class,'index']);
     });
 });
-Route::get('/drivers',[DriversController::class,'index']);
 
 Route::get("/test", function () {
     return event(new CreateTaxiMovementEvent("2", 223, 3344));
