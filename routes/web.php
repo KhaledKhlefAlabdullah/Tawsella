@@ -2,6 +2,7 @@
 
 use App\Events\CreateTaxiMovementEvent;
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\DriversController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,7 +38,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     // For create the drivers acounts
     Route::post('/store-driver', [RegisteredUserController::class, 'admin_store'])->name('store-driver');
+
+    Route::group(['prefix' => 'drivers'],function(){
+        Route::get('/drivers',[DriversController::class,'index']);
+    });
 });
+Route::get('/drivers',[DriversController::class,'index']);
 
 Route::get("/test",function(){
     return event(new CreateTaxiMovementEvent("2",223,3344));
