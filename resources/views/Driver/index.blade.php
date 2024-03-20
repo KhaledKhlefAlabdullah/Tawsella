@@ -33,40 +33,39 @@
                             </tr>
                         </thead>
                         <tbody>
-
-                                    <tr>
-                                        <th scope="row"><a href="#">1</a></th>
-                                        <td>name</td>
-                                        <td><a href="#" class="text-primary">email </a></td>
-                                        <td>
-                                            balances
-                                            {{-- @if ($user->padding)
-                                                <a href="{{ route('balances.show', $user->id) }}">$
-                                                    {{ $user->balance->credit_balance }}</a>
-                                            @else
-                                                {{ __('No balance available') }}
-                                            @endif --}}
-                                        </td>
-                                        <td>
-                                            <a href="#">{{ __('Edit') }}</a>
-                                        </td>
-                                        <td>
-                                            <span class="badge {{ $user->is_active ? 'bg-success' : 'bg-danger' }}">
-                                                {{ $user->is_active ? __('Active') : __('Inactive') }}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <form action="{{ route('users.toggleStatus', $user->id) }}" method="POST"
-                                                onsubmit="return confirmStatusChange(event, {{ $user->is_active }})">
-                                                @csrf
-                                                @method('POST')
-                                                <button type="submit">
-                                                    <i class="bi bi-power" style="margin-left: 30px;"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @endif
+                            @foreach ($drivers as $driver)
+                                <tr>
+                                    <th scope="row"><a href="#">{{ $loop->iteration }}</a></th>
+                                    <td>{{ $driver->name }}</td>
+                                    <td><a href="#" class="text-primary">{{ $driver->email }}</a></td>
+                                    <td>
+                                        {{-- balances --}}
+                                        {{-- @if ($driver->padding)
+                                            <a href="{{ route('balances.show', $driver->id) }}">$
+                                                {{ $driver->balance->credit_balance }}</a>
+                                        @else
+                                            {{ __('No balance available') }}
+                                        @endif --}}
+                                    </td>
+                                    <td>
+                                        <a href="#">{{ $driver->plate_number }}</a>
+                                    </td>
+                                    <td>
+                                        <span class="badge {{ $driver->is_active ? 'bg-success' : 'bg-danger' }}">
+                                            {{ $driver->is_active ? __('Active') : __('Inactive') }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        {{-- <form action="{{ route('users.toggleStatus', $driver->id) }}" method="POST"
+                                            onsubmit="return confirmStatusChange(event, {{ $driver->is_active }})">
+                                            @csrf
+                                            @method('POST')
+                                            <button type="submit">
+                                                <i class="bi bi-power" style="margin-left: 30px;"></i>
+                                            </button>
+                                        </form> --}}
+                                    </td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -75,12 +74,4 @@
         </div>
     </main>
 
-    {{-- <script>
-        function confirmStatusChange(event, isActive) {
-            if (!confirm(isActive ? '{{ __('The account will be deactivated. Are you sure?') }}' :
-                    '{{ __('The account will be reactivated. Are you sure?') }}')) {
-                event.preventDefault();
-            }
-        }
-    </script> --}}
 @endsection

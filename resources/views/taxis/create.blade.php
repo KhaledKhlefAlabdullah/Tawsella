@@ -1,0 +1,54 @@
+@extends('layouts.app')
+
+@section('content')
+    <main class="main" id="main">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">{{ __('إضافة سجل تاكسي جديد') }}</div>
+
+                        <div class="card-body">
+                            <form method="POST" action="{{ route('taxis.store') }}">
+                                @csrf
+
+                                <div class="mb-3">
+                                    <label for="driver_id" class="form-label">{{ __('رقم السائق') }}</label>
+                                    <select class="form-select" id="driver_id" name="driver_id" required>
+                                        <option value="">اختر السائق</option>
+                                        @foreach ($drivers as $driver)
+                                            <option value="{{ $driver->id }}">{{ $driver->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="care_name" class="form-label">{{ __('اسم السيارة') }}</label>
+                                    <input type="text" class="form-control" id="care_name" name="care_name" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="lamp_number" class="form-label">{{ __('رقم المصباح') }}</label>
+                                    <input type="text" class="form-control" id="lamp_number" name="lamp_number" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="plate_number" class="form-label">{{ __('رقم اللوحة') }}</label>
+                                    <input type="text" class="form-control" id="plate_number" name="plate_number"
+                                        required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="car_details" class="form-label">{{ __('تفاصيل السيارة') }}</label>
+                                    <textarea class="form-control" id="car_details" name="car_details"></textarea>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">{{ __('إضافة') }}</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+@endsection

@@ -162,7 +162,7 @@
             </a>
             <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="{{ url('/user/profile') }}">
+                    <a href="{{ url('/drivers/') }}">
                         <div class="ms-auto" style="margin-right: 30px">
                             <span>عرض السائقين</span><i class="bi bi-circle" style="margin-left: 10px"></i>
                         </div>
@@ -185,16 +185,31 @@
             </a>
             <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="#">
+                    <a href="{{ url('/taxi') }}">
                         <div class="ms-auto" style="margin-right: 30px">
                             <span> عرض السيارات </span><i class="bi bi-circle" style="margin-left: 10px"></i>
                         </div>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{{ route('taxis.create') }}">
                         <div class="ms-auto" style="margin-right: 30px">
                             <span> اضافة سيارة </span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                        </div>
+                    </a>
+                </li>
+            </ul>
+        </li><!-- End Forms Nav -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" data-bs-target="#taxi-nav" data-bs-toggle="collapse" href="#">
+                <i class="bi bi-chevron-down "></i><span class="ms-auto">الطلبات الحية</span><i
+                    class="bi bi-cart4 "style="margin-left: 10px"></i>
+            </a>
+            <ul id="taxi-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <li>
+                    <a href="{{ url('#') }}">
+                        <div class="ms-auto" style="margin-right: 30px">
+                            <span> الطلبات الحالية </span><i class="bi bi-circle" style="margin-left: 10px"></i>
                         </div>
                     </a>
                 </li>
@@ -208,14 +223,14 @@
             </a>
             <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="#">
+                    <a href="{{ url('#') }}">
                         <div class="ms-auto" style="margin-right: 30px">
                             <span>الخدمات</span><i class="bi bi-circle" style="margin-left: 10px"></i>
                         </div>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
+                    <a href="{{ url('#') }}">
                         <div class="ms-auto" style="margin-right: 30px">
                             <span>العروض</span><i class="bi bi-circle" style="margin-left: 10px"></i>
                         </div>
@@ -232,7 +247,7 @@
             </a>
             <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="#">
+                    <a href="{{ url('#') }}">
                         <div class="ms-auto" style="margin-right: 30px">
                             <span> رصيد السائقين </span><i class="bi bi-circle" style="margin-left: 10px"></i>
                         </div>
@@ -271,7 +286,7 @@
             </a>
         </li><!-- End Blank Page Nav -->
         <li class="nav-item">
-            <a class="nav-link nav-icon" href="#">
+            <a class="nav-link nav-icon" href="{{ url('#') }}">
                 <span class="ms-auto">الاشعارات</span>
                 <i class="bi bi-bell " style="margin-left: 10px"></i>
             </a><!-- End Notification Icon -->
