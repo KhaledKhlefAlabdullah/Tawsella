@@ -223,14 +223,14 @@
             </a>
             <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="{{ url('#') }}">
+                    <a href="{{ url('/serve') }}">
                         <div class="ms-auto" style="margin-right: 30px">
                             <span>الخدمات</span><i class="bi bi-circle" style="margin-left: 10px"></i>
                         </div>
                     </a>
                 </li>
                 <li>
-                    <a href="{{ url('#') }}">
+                    <a href="{{ route('offers.index') }}">
                         <div class="ms-auto" style="margin-right: 30px">
                             <span>العروض</span><i class="bi bi-circle" style="margin-left: 10px"></i>
                         </div>

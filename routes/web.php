@@ -3,8 +3,10 @@
 use App\Events\CreateTaxiMovementEvent;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DriversController;
+use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaxiController;
+use App\Http\Controllers\TaxiMovementTypeController;
 use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +25,11 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+//*****************************End route Servises ******************************** */
+Route::get('/serve',[TaxiMovementTypeController::class,'index']);
+//*****************************End route Servises ******************************** */
+//******************************************************************************* */
+
 //************************************ ROUTE **************************************** */
 //************************************ ROUTE **************************************** */
 
@@ -36,7 +43,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     });
     //*****************************End route Contact ******************************** */
     //******************************************************************************* */
-
     //***************************start route dashboard ******************************** */
     Route::get('/dashboard', function () {
         return view('dashboard', []);
@@ -67,6 +73,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/taxis/create', [TaxiController::class, 'create'])->name('taxis.create');
     Route::post('/taxis', [TaxiController::class, 'store'])->name('taxis.store');
     //*************************** End route Taxi *********************************** */
+    //**************************************************************************** */
+
+    //*************************** Start route offers *********************************** */
+    Route::get('/offers', [OfferController::class, 'index'])->name('offers.index');
+    //*************************** End route offers *********************************** */
+    //**************************************************************************** */
 
 
 });
