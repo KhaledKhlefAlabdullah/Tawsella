@@ -4,6 +4,7 @@ use App\Events\CreateTaxiMovementEvent;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DriversController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,15 +17,27 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware(['auth', 'admin'])->group(function () {
 
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/profiles', function () {
+        return view('profile.profile');
     });
+    Route::get('/Contact', function () {
+        return view('Contact');
+    });
+    Route::get('/payment', function () {
+        return view('payment');
+    });
+    Route::get('/dashboard', function () {
+        return view('dashboard', []);
+    })->middleware(['auth', 'verified'])->name('dashboard');
+
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 
@@ -32,6 +45,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::get('/user/profile', [UserProfileController::class, 'index'])->name('user.profile');
 
     Route::get('/create-driver', [RegisteredUserController::class, 'create'])
         ->name('create-driver');
@@ -45,8 +59,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 Route::get('/drivers',[DriversController::class,'index']);
 
-Route::get("/test",function(){
-    return event(new CreateTaxiMovementEvent("2",223,3344));
+Route::get("/test", function () {
+    return event(new CreateTaxiMovementEvent("2", 223, 3344));
 });
 
 require __DIR__ . '/auth.php';
