@@ -23,8 +23,8 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="care_name" class="form-label">{{ __('اسم السيارة') }}</label>
-                                    <input type="text" class="form-control" id="care_name" name="care_name" required>
+                                    <label for="car_name" class="form-label">{{ __('اسم السيارة') }}</label>
+                                    <input type="text" class="form-control" id="car_name" name="car_name" required>
                                 </div>
 
                                 <div class="mb-3">
@@ -39,8 +39,8 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="car_details" class="form-label">{{ __('تفاصيل السيارة') }}</label>
-                                    <textarea class="form-control" id="car_details" name="car_details"></textarea>
+                                    <label for="car_detailes" class="form-label">{{ __('تفاصيل السيارة') }}</label>
+                                    <textarea class="form-control" id="car_detailes" name="car_detailes"></textarea>
                                 </div>
 
                                 <button type="submit" class="btn btn-primary">{{ __('إضافة') }}</button>
