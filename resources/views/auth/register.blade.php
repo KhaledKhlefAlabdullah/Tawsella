@@ -26,6 +26,10 @@
                                 <label for="email">البريد الإلكتروني:</label>
                                 <input type="email" name="email" class="form-control" placeholder="أدخل بريدك الإلكتروني" required>
                             </div>
+                            <div class="form-group">
+                                <label for="phone_number">ادخل رقم الجوال:</label>
+                                <input type="phone_number" name="phone_number" class="form-control" placeholder="ادخل رقم الجوال" required>
+                            </div>
 
                             <div class="form-group">
                                 <label for="password">كلمة المرور:</label>

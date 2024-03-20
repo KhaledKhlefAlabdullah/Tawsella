@@ -29,12 +29,12 @@ class TaxiController extends Controller
     public function create()
     {
         try {
-            $drivers = User::where('user_type', 'driver')
+            $drivers = User::where('users.user_type', 'driver')
                 ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
                 ->select('users.id', 'user_profiles.name')->get();
-
-            // عرض الاستمارة لإنشاء سجل جديد
-            return view('taxis.create', ['drivers' => $drivers]);
+            
+             // عرض الاستمارة لإنشاء سجل جديد
+            return view('taxis.create', compact('drivers'));
         } catch (Exception $e) {
             abort(500, 'there error in redirect to the add taxi form');
         }
