@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class TaxiRequest extends FormRequest
+class TaxiMovementsTypesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,11 +22,10 @@ class TaxiRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'driver_id' => 'required|exists:users,id',
-            'care_name' => 'required|string',
-            'lamp_number' => 'required|string',
-            'plate_number' => 'required|string|unique:taxis,plate_number',
-            'car_details' => 'nullable|string',
+            'type' => ['required','sometimes'],
+            'price' => ['required','sometimes'],
+            'description' => ['required','sometimes'],
+            'is_onKM' => ['required','sometimes']
         ];
     }
 }

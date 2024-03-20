@@ -19,12 +19,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-
-
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/profiles', function () {
         return view('profile.profile');
@@ -35,7 +29,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/payment', function () {
         return view('payment');
     });
-    Route::get('/dashboard', function () {
+    Route::get('/', function () {
         return view('dashboard', []);
     })->middleware(['auth', 'verified'])->name('dashboard');
 
