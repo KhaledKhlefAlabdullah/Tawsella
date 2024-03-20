@@ -26,7 +26,7 @@ class TaxiRequest extends FormRequest
             'driver_id' => 'required|exists:users,id',
             'care_name' => 'required|string',
             'lamp_number' => 'required|string',
-            'plate_number' => 'required|string|unique:taxis,plate_number'. Rule::unique('taxis')->ignore(request()->taxi->id),,
+            'plate_number' => 'required|string|unique:taxis,plate_number',
             'car_details' => 'nullable|string',
         ];
     }

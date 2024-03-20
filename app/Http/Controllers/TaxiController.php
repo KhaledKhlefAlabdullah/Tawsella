@@ -45,30 +45,15 @@ class TaxiController extends Controller
      */
     public function store(TaxiRequest $request)
     {
-<<<<<<< HEAD
-        // التحقق من البيانات المدخلة
-        $validatedData = $request->validate([
-            'driver_id' => 'required|exists:users,id',
-            'car_name' => 'required|string',
-            'lamp_number' => 'required|string',
-            'plate_number' => 'required|string|unique:taxis,plate_number',
-            'car_detailes' => 'nullable|string',
-        ]);
-
-        // التأكد من وجود قيمة لـ car_detailes قبل تخزينها
-        $carDetails = $validatedData['car_detailes'] ?? ''; // قيمة افتراضية فارغة إذا لم يتم تقديم قيمة
-        $validatedData['car_detailes'] = $carDetails;
-
-        // إنشاء سجل جديد
-        Taxi::create($validatedData);
-=======
         try {
             // التحقق من البيانات المدخلة
             $validatedData = $request->validated();
+            // التأكد من وجود قيمة لـ car_detailes قبل تخزينها
+            $carDetails = $validatedData['car_detailes'] ?? ''; // قيمة افتراضية فارغة إذا لم يتم تقديم قيمة
+            $validatedData['car_detailes'] = $carDetails;
 
             // إنشاء سجل جديد
             Taxi::create($validatedData);
->>>>>>> 7640dcc96727f22a0f2666b7608ab9dccd89fad5
 
             // إعادة توجيه أو عرض رسالة نجاح
             return redirect()->route('taxis.index')->with('success', 'تم إنشاء سجل التاكسي بنجاح.');
