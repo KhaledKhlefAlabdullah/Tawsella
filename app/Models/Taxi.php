@@ -17,7 +17,7 @@ class Taxi extends Model
 
     protected $fillable =[
         'driver_id',
-        'care_name',
+        'car_name',
         'lamp_number',
         'plate_number',
         'car_detailes'
