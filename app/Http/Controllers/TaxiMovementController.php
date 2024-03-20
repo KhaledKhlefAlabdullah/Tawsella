@@ -92,7 +92,7 @@ class TaxiMovementController extends Controller
 
             return redirect()->back();
         } catch (Exception $e) {
-            return abort('there error in deleting this movemnt', 500);
+            return abort(500,'there error in deleting this movemnt');
         }
     }
 }

@@ -31,7 +31,7 @@ class AboutUsController extends Controller
                 return api_response(errors: [$e->getMessage()], message: 'successfully getting about us details', code: 500);
             }
 
-            return abort('there error in getting the data', 500);
+            return abort(500,'there error in getting the data');
         }
     }
 
@@ -88,7 +88,7 @@ class AboutUsController extends Controller
 
             return redirect()->route('aboutus.index')->with('success', 'تم إنشاء نبذة عنا بنجاح.');
         } catch (Exception $e) {
-            return abort('there error in getting the data', 500);
+            return abort(500,'there error in getting the data');
         }
     }
 
@@ -115,7 +115,7 @@ class AboutUsController extends Controller
 
         }
         catch(Exception $e){
-            return abort('there error in add new additional info',500);
+            return abort(500,'there error in add new additional info');
         }
     }
 
@@ -140,7 +140,7 @@ class AboutUsController extends Controller
 
         }
         catch(Exception $e){
-            return abort('there error in add new additional info',500);
+            return abort(500,'there error in add new additional info');
         }
     }
 
@@ -153,7 +153,7 @@ class AboutUsController extends Controller
             $aboutUs->delete();
             return redirect()->route('aboutus.index')->with('success', 'تم حذف نبذة عنا بنجاح.');
         } catch (Exception $e) {
-            return abort('there error in deleting aboutus data', 500);
+            return abort(500,'there error in deleting aboutus data');
         }
     }
 }

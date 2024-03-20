@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
@@ -42,7 +43,7 @@ class RegisteredUserController extends Controller
 
             $user = User::create([
                 'email' => $request->email,
-                'password' => password_hash($request->password, PASSWORD_DEFAULT),
+                'password' => Hash::make($request->password),
                 'user_type' => $user_type
             ]);
 

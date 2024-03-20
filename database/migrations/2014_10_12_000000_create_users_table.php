@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 
@@ -26,7 +27,7 @@ return new class extends Migration
             $table->softDeletes();
         });
 
-        $password=password_hash('12345678',PASSWORD_DEFAULT);
+        $password=Hash::make('12345678');
         DB::table('users')->insert([
             'id' => Str::uuid(),
             'email'=>'admin.star.taxi@gmail.com',
