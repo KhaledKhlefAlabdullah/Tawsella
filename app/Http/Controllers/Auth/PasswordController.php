@@ -21,7 +21,7 @@ class PasswordController extends Controller
         ]);
 
         $request->user()->update([
-            'password' => password_hash($validated['new_password'],PASSWORD_DEFAULT),
+            'password' => Hash::make($validated['new_password']),
         ]);
 
         if(request()->wantsJson()){

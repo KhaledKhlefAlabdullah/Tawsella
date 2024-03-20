@@ -1,10 +1,24 @@
-<!-- resources/views/offers/show.blade.php -->
+@extends('layouts.app')
 
-    <h1>تفاصيل العرض</h1>
-
-    <p><strong>نوع الحركة:</strong> {{ $offer->movement_type_offer->type }}</p>
-    <p><strong>العرض:</strong> {{ $offer->offer }}</p>
-    <p><strong>قيمة الخصم:</strong> {{ $offer->value_of_discount }}</p>
-    <p><strong>تاريخ الصلاحية:</strong> {{ $offer->valide_date }}</p>
-
-    <a href="{{ route('offers.index') }}" class="btn btn-secondary">رجوع</a>
+@section('content')
+<main class="main" id="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        {{ $offer->title }}
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">{{ $offer->description }}</p>
+                        <p class="card-text">تاريخ انتهاء العرض: {{ $offer->expiration_date }}</p>
+                    </div>
+                    <div class="card-footer">
+                        <a href="{{ route('offers.index') }}" class="btn btn-primary">عودة إلى القائمة</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+@endsection
