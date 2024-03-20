@@ -41,10 +41,7 @@ class TaxiMovementTypeController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'type' => 'required',
-            'price' => 'required|numeric',
-        ]);
+        $data = $request->validated();
 
         TaxiMovementType::create($data);
 

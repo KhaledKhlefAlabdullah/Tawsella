@@ -13,7 +13,7 @@
                                 @csrf
 
                                 <div class="mb-3">
-                                    <label for="driver_id" class="form-label">{{ __('رقم السائق') }}</label>
+                                    <label for="driver_id" class="form-label">{{ __('السائق') }}</label>
                                     <select class="form-select" id="driver_id" name="driver_id" required>
                                         <option value="">اختر السائق</option>
                                         @foreach ($drivers as $driver)
