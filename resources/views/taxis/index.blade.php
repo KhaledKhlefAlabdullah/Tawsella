@@ -25,8 +25,8 @@
                             <tr style="margin-left: 15px">
                                 <th scope="col">#</th>
                                 <th scope="col"><p class="text-center">{{ __('اسم السائق') }}</p></th>
-                                <th scope="col"><p class="text-center">{{ __('رقم الهاتف') }}</p></th>
-                                <th scope="col"><p class="text-center">{{ __('البريد الإلكتروني') }}</p></th>
+                                <th scope="col"><p class="text-center">{{ __('اسم السيارة') }}</p></th>
+                                <th scope="col"><p class="text-center">{{ __('رقم المصباح') }}</p></th>
                                 <th scope="col"><p class="text-center">{{ __('رقم اللوحة') }}</p></th>
                                 <th scope="col"><p class="text-center">{{ __('تفاصيل السيارة') }}</p></th>
                             </tr>
@@ -35,8 +35,8 @@
                             @foreach ($taxis as $taxi)
                                 <tr>
                                     <th scope="row">{{ $loop->iteration }}</th>
-                                    <td><p class="text-center">{{ $taxi->driver_id }}</p></td>
-                                    <td><p class="text-center">{{ $taxi->care_name }}</p></td>
+                                    <td><p class="text-center">{{ $taxi->driver->id }}</p></td>
+                                    <td><p class="text-center">{{ $taxi->car_name }}</p></td>
                                     <td><p class="text-center">{{ $taxi->lamp_number }}</p></td>
                                     <td><p class="text-center">{{ $taxi->plate_number }}</p></td>
                                     <td><p class="text-center">{{ $taxi->car_detailes }}</p></td>

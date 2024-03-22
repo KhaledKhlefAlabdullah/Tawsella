@@ -6,6 +6,7 @@ use App\Http\Controllers\DriversController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaxiController;
+use App\Http\Controllers\TaxiMovementController;
 use App\Http\Controllers\TaxiMovementTypeController;
 use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route;
@@ -26,7 +27,7 @@ Route::get('/', function () {
 });
 
 //*****************************End route Servises ******************************** */
-Route::get('/serve',[TaxiMovementTypeController::class,'index']);
+Route::get('/serve', [TaxiMovementTypeController::class, 'index']);
 //*****************************End route Servises ******************************** */
 //******************************************************************************* */
 
@@ -79,6 +80,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/offers', [OfferController::class, 'index'])->name('offers.index');
     //*************************** End route offers *********************************** */
     //**************************************************************************** */
+
+    //*************************** START route taxi-movement *********************************** */
+    //**************************************************************************** */
+    Route::get('/current-taxi-movement', [TaxiMovementController::class, 'currentTaxiMovement'])->name('current.taxi.movement');
+    //*************************** End route taxi-movement *********************************** */
 
 
 });
