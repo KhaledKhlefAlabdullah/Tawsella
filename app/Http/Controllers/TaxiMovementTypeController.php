@@ -14,19 +14,19 @@ class TaxiMovementTypeController extends Controller
     public function index()
     {
         try {
-
-            $movementTypes = TaxiMovementType::all()->select('id', 'type', 'price', 'description', 'is_onKM');
+            $movementTypes = TaxiMovementType::select('id', 'type', 'price','description','is_onKM')->get();
 
             if (request()->wantsJson())
                 return api_response(data: $movementTypes, message: 'getting-movement-type-error');
 
-            return view('taxi_movement_types.index', ['movementTypes' => $movementTypes]);
+            return view('servises', ['movementTypes' => $movementTypes]);
         } catch (Exception $e) {
             if (request()->wantsJson())
                 return api_response(errors: [$e->getMessage()], message: 'getting-movement-type-success', code: 500);
-            return abort(message: 'there error in getting the movements type', code: 500);
+            return abort(500, 'there error in getting the movements type');
         }
     }
+
 
     /**
      * Show the form for creating a new resource.

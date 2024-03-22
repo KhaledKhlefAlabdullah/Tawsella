@@ -35,7 +35,7 @@ class OfferController extends Controller
                 return api_response(data: $offers, message: 'getting offers success');
 
             return view('offers.index', ['offers' => $offers]);
-            
+
         } catch (Exception $e) {
             if (request()->wantsJson())
                 return api_response(errors: $e->getMessage(), message: 'getting offers error', code: 500);
