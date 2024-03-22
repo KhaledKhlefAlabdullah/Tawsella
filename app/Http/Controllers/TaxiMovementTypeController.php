@@ -26,8 +26,6 @@ class TaxiMovementTypeController extends Controller
             return abort(500, 'there error in getting the movements type');
         }
     }
-
-
     /**
      * Show the form for creating a new resource.
      */
