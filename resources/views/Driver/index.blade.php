@@ -20,24 +20,24 @@
                             {{ session('success') }}
                         </div>
                     @endif
-                    <table class="table table-borderless datatable">
+                    <table class="table table-borderless datatable" >
                         <thead>
-                            <tr style="margin-left: 15px">
+                            <tr style="margin-left: 15px" >
                                 <th scope="col">#</th>
-                                <th scope="col">{{ __('السائق') }}</th>
-                                <th scope="col">{{ __('الايميل') }}</th>
-                                <th scope="col">{{ __('الرصيد') }}</th>
-                                <th scope="col">{{ __('رقم السيارة') }}</th>
-                                <th scope="col">{{ __('حالة الحساب') }}</th>
-                                <th scope="col">{{ __('ادارة') }}</th>
+                                <th scope="col"><p class="text-center">{{ __('السائق') }}</p></th>
+                                <th scope="col"><p class="text-center">{{ __('الايميل') }}</p></th>
+                                <th scope="col"><p class="text-center">{{ __('الرصيد') }}</p></th>
+                                <th scope="col"><p class="text-center">{{ __('رقم السيارة') }}</p></th>
+                                <th scope="col"><p class="text-center">{{ __('حالة الحساب') }}</p></th>
+                                <th scope="col"><p class="text-center">{{ __('ادارة') }}</p></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($drivers as $driver)
-                                <tr>
+                                <tr >
                                     <th scope="row"><a href="#">{{ $loop->iteration }}</a></th>
-                                    <td>{{ $driver->name }}</td>
-                                    <td><a href="#" class="text-primary">{{ $driver->email }}</a></td>
+                                    <td><p class="text-center">{{ $driver->name }}</p></td>
+                                    <td><a href="#" class="text-primary"><p class="text-center">{{ $driver->email }}</p></a></td>
                                     <td>
                                         {{-- balances --}}
                                         {{-- @if ($driver->padding)
@@ -48,11 +48,11 @@
                                         @endif --}}
                                     </td>
                                     <td>
-                                        <a href="#">{{ $driver->plate_number }}</a>
+                                        <a href="#"><p class="text-center">{{ $driver->plate_number }}</p></a>
                                     </td>
                                     <td>
-                                        <span class="badge {{ $driver->is_active ? 'bg-success' : 'bg-danger' }}">
-                                            {{ $driver->is_active ? __('Active') : __('Inactive') }}
+                                        <span class="badge {{ $driver->is_active ? 'bg-success' : 'bg-danger' }} ">
+                                            <center>{{ $driver->is_active ? __('Active') : __('Inactive') }}</center>
                                         </span>
                                     </td>
                                     <td>
