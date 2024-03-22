@@ -48,17 +48,14 @@ class TaxiController extends Controller
         try {
             // التحقق من البيانات المدخلة
             $validatedData = $request->validated();
-            // التأكد من وجود قيمة لـ car_detailes قبل تخزينها
-            $carDetails = $validatedData['car_detailes'] ?? ''; // قيمة افتراضية فارغة إذا لم يتم تقديم قيمة
-            $validatedData['car_detailes'] = $carDetails;
-
+            
             // إنشاء سجل جديد
             Taxi::create($validatedData);
 
             // إعادة توجيه أو عرض رسالة نجاح
             return redirect()->route('taxis.index')->with('success', 'تم إنشاء سجل التاكسي بنجاح.');
         } catch (Exception $e) {
-            abort(500, 'there error in creatting taxi');
+            abort(500, 'there error in creatting taxi'.$e->getMessage());
         }
     }
 

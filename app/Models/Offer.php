@@ -20,7 +20,8 @@ class Offer extends Model
         'admin_id',
         'offer',
         'value_of_discount',
-        'valide_date'
+        'valide_date',
+        'description'
     ];
 
     public function movement_type_offer(){

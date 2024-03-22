@@ -6,7 +6,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">إنشاء حساب جديد</div>
+                    <div class="card-header">إنشاء حساب سائق جديد</div>
 
                     <div class="card-body">
                         @if (session('success'))
@@ -15,7 +15,7 @@
                             </div>
                         @endif
 
-                        <form action="{{ route('register') }}" method="POST">
+                        <form action="{{ route('store-driver') }}" method="POST">
                             @csrf
                             <div class="form-group">
                                 <label for="name">الاسم:</label>

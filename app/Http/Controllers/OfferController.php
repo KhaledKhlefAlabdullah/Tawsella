@@ -23,7 +23,9 @@ class OfferController extends Controller
                 'offers.value_of_discount',
                 'offers.valide_date',
                 'taxi_movement_types.type',
-                'taxi_movement_types.price'
+                'taxi_movement_types.price',
+                'taxi_movement_types.description'
+
             )
                 ->join('taxi_movement_types', 'offers.movement_type_id', '=', 'taxi_movement_types.id')
                 ->where('offers.valide_date', '>=', now())
@@ -62,6 +64,7 @@ class OfferController extends Controller
             'offer' => 'required',
             'value_of_discount' => 'required|numeric',
             'valide_date' => 'required|date',
+            'description' => 'sometimes|string|nullable'
         ]);
 
         // تعيين admin_id بمعرف المستخدم الحالي
