@@ -84,8 +84,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
 });
 Route::get('/drivers', [DriversController::class, 'index']);
 
-Route::get("/test", function () {
-    return event(new CreateTaxiMovementEvent("2", 223, 3344));
-});
+
 
 require __DIR__ . '/auth.php';
