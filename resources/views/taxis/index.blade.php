@@ -39,7 +39,7 @@
                                     <td><p class="text-center">{{ $taxi->car_name }}</p></td>
                                     <td><p class="text-center">{{ $taxi->lamp_number }}</p></td>
                                     <td><p class="text-center">{{ $taxi->plate_number }}</p></td>
-                                    <td><p class="text-center">{{ $taxi->car_detailes }}</p></td>
+                                    <td><p class="text-center"><a href="{{ route('taxis.show', $taxi->id) }}" class="btn btn-primary">{{ __('تفاصيل') }}</a></p></td> <!-- زر التفاصيل -->
                                 </tr>
                             @endforeach
                         </tbody>

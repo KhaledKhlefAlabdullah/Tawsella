@@ -71,8 +71,15 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     //***************************start route Taxi ******************************** */
     Route::get('/taxi', [TaxiController::class, 'index'])->name('taxis.index');
+    Route::get('/taxis/{taxi}', [TaxiController::class, 'show'])->name('taxis.show');
+
     Route::get('/taxis/create', [TaxiController::class, 'create'])->name('taxis.create');
     Route::post('/taxis', [TaxiController::class, 'store'])->name('taxis.store');
+
+    Route::get('/taxis/{taxi}/edit', [TaxiController::class, 'edit'])->name('taxis.edit');
+    Route::put('/taxis/{taxi}', [TaxiController::class, 'update'])->name('taxis.update');
+    
+    Route::delete('/taxis/{taxi}', [TaxiController::class, 'destroy'])->name('taxis.destroy');
     //*************************** End route Taxi *********************************** */
     //**************************************************************************** */
 
