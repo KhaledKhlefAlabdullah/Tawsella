@@ -66,6 +66,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::group(['prefix' => 'drivers'], function () {
         Route::get('/', [DriversController::class, 'index']);
     });
+    Route::get('/drivers/{id}', [DriversController::class, 'show'])->name('drivers.show');
+
+    Route::get('/drivers/{id}/edit', [DriversController::class, 'edit'])->name('drivers.edit');
+    Route::put('/drivers/{id}', [DriversController::class, 'update'])->name('drivers.update');
     //***************************End route driver ******************************** */
     //**************************************************************************** */
 
@@ -78,7 +82,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/taxis/{taxi}/edit', [TaxiController::class, 'edit'])->name('taxis.edit');
     Route::put('/taxis/{taxi}', [TaxiController::class, 'update'])->name('taxis.update');
-    
+
     Route::delete('/taxis/{taxi}', [TaxiController::class, 'destroy'])->name('taxis.destroy');
     //*************************** End route Taxi *********************************** */
     //**************************************************************************** */

@@ -64,6 +64,9 @@
                                                 <i class="bi bi-power" style="margin-left: 30px;"></i>
                                             </button>
                                         </form> --}}
+                                         <a href="{{ route('drivers.show', ['id' => $driver->id]) }}" class="btn btn-primary">
+                                            {{ __('تفاصيل') }}
+                                        </a>
                                     </td>
                                 </tr>
                             @endforeach
