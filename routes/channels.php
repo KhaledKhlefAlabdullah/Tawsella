@@ -21,3 +21,11 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 Broadcast::channel('Taxi-movement.{admin_id}', function ($user, $admin_id) {
     return (int) $user->id === (int) $admin_id;
 });
+
+Broadcast::channel('customer.{customer_id}', function ($user, $customer_id) {
+    return (int) $user->id === (int) $customer_id;
+});
+
+Broadcast::channel('driver.{driver_id}', function ($user, $driver_id) {
+    return (int) $user->id === (int) $driver_id;
+});

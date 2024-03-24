@@ -1,13 +1,11 @@
 <?php
 
-use App\Events\CreateTaxiMovementEvent;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\DriversController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaxiController;
 use App\Http\Controllers\TaxiMovementTypeController;
-use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -80,6 +78,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //*************************** End route offers *********************************** */
     //**************************************************************************** */
 
+    Route::post('/accept_reject_request',[TaxiMovementTypeController::class])->name('accept_reject_request');
+
+    
 
 });
 Route::get('/drivers', [DriversController::class, 'index']);

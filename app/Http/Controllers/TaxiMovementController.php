@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AcceptTaxiMovemntEvent;
 use App\Events\CreateTaxiMovementEvent;
+use App\Events\RejectTaxiMovemntEvent;
 use App\Http\Requests\TaxiMovementRequest;
+use App\Models\Taxi;
 use App\Models\TaxiMovement;
 use Exception;
 use Illuminate\Http\Request;
@@ -53,7 +56,7 @@ class TaxiMovementController extends Controller
 
             $validatedData = $request->validated();
 
-            TaxiMovement::create($validatedData);
+            $taxiMovement = TaxiMovement::create($validatedData);
 
             // 1
             // event(new CreateTaxiMovementEvent($request->input('customer_id'),
@@ -62,18 +65,63 @@ class TaxiMovementController extends Controller
             
             // 2
             CreateTaxiMovementEvent::dispatch(
-                $request->input('customer_id'),
-                $request->input('start_latitude'),
-                $request->input('start_longitude'),
-                $request->input('gender'),
-                $request->input('my_address'),
-                $request->input('destnation_address')
-                
+               $taxiMovement
             );
+
+            // $request->input('customer_id'),
+            // $request->input('start_latitude'),
+            // $request->input('start_longitude'),
+            // $request->input('gender'),
+            // $request->input('my_address'),
+            // $request->input('destnation_address')
 
             return api_response(message: 'create-movement-success');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'create-movement-error', code: 500);
+        }
+    }
+
+
+    /**
+     * Accept and regect Taxi movement request
+     */
+    public function accept_reject_request(Request $request, TaxiMovement $taxiMovement){
+        try{
+
+            $request->validate([
+                'state' => 'string|required|in:accepted,rejected',
+                'driver_id' => 'sometimes|string|required',
+                'message' => 'string|sometimes|required'
+            ]);
+
+            $taxiMovement->update([
+                'request_state' => $request->input('state')
+            ]);
+
+            if($request->input('state') == 'accepted'){
+
+                $driver_id = $request->input('driver_id');
+                $taxi_id = Taxi::where('driver_id',$driver_id)->first()->id;
+
+                $taxiMovement->update([
+                    'driver_id' => $driver_id,
+                    'taxi_id' => $taxi_id
+                ]);
+
+                AcceptTaxiMovemntEvent::dispatch(
+                    $taxiMovement
+                );
+            }else if($request->input('state') == 'rejected'){
+                RejectTaxiMovemntEvent::dispatch(
+                    $taxiMovement->customer_id,
+                    $request->input('message')
+                );  
+            }
+
+            return '';
+        }
+        catch(Exception $e){
+            return '';
         }
     }
 
