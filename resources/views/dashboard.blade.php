@@ -42,7 +42,7 @@
 
                 <ul id="requests-container">
                     @foreach ($lifeTaxiMovements as $lifeTaxiMovement)
-                        lifeTaxiMovements<li>
+                        <li>
                             <div class="card">
                                 <h2>طلب جديد</h2>
                                 <hr>
@@ -50,44 +50,69 @@
                                     <div class="col-lg-6 mb-6">
                                         <div class="text-center card-content" style="margin: 10px;">
                                             <h4>اسم العميل: </h4>
-                                            {{-- <h4>${customer.name}</h4> --}}
-                                        </div>
-                                    </div>
-                                    {{-- <div class="col-lg-6 mb-6">
-                                        <div class="text-center card-content" style="margin: 10px;">
-                                          <h4>صورة العميل: </h4><h4><img src="${customer.user_avatar}" alt="صورة العميل"/></h4>
+                                            <h4>{{ $lifeTaxiMovement->customer_name }}</h4>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 mb-6">
                                         <div class="text-center card-content" style="margin: 10px;">
-                                          <h4>رقم العميل: </h4><h4>${customer.phoneNumber}</h4>
+                                            <h4>صورة العميل: </h4>
+                                            <h4><img src="{{ $lifeTaxiMovement->avatar }}" alt="صورة العميل" /></h4>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 mb-6">
                                         <div class="text-center card-content" style="margin: 10px;">
-                                          <h4>جنس العميل: </h4><h4>${gender}</h4>
+                                            <h4>رقم العميل: </h4>
+                                            <h4>{{ $lifeTaxiMovement->customer_phone }}</h4>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 mb-6">
                                         <div class="text-center card-content" style="margin: 10px;">
-                                          <h4>عنوان العميل: </h4><h4>${customer_address}</h4>
+                                            <h4>جنس العميل: </h4>
+                                            <h4>{{ $lifeTaxiMovement->gender }}</h4>
                                         </div>
                                     </div>
-                                    <div class="col-lg-6 mb-6" >
+                                    <div class="col-lg-6 mb-6">
                                         <div class="text-center card-content" style="margin: 10px;">
-                                          <h4>وجهة العميل: </h4><h4>${destnation_address}</h4>
+                                            <h4>عنوان العميل: </h4>
+                                            <h4>{{ $lifeTaxiMovement->from }}</h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 mb-6">
+                                        <div class="text-center card-content" style="margin: 10px;">
+                                            <h4>وجهة العميل: </h4>
+                                            <h4>{{ $lifeTaxiMovement->to }}</h4>
                                         </div>
                                     </div>
                                 </div>
                                 <hr>
-                                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13035.963879898062!2d${locationLong}!3d${locationLat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2598f267cb08b%3A0xae4b9b4fc4d9dc07!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sin!4v1608576658584!5m2!1sen!2sin" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                                <hr> --}}
-                             
-                            </div>
-                          </li>
-                    @endforeach
+                                <iframe width="600" height="450" frameborder="0" style="border:0"
+                                    src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d3523.0238833428734!2d{{ $lifeTaxiMovement->long }}85!3d{{ $lifeTaxiMovement->lat }}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sar!2str!4v1711312086781!5m2!1sar!2str"
+                                    allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
 
+                                <hr>
+                                <form action="{{ url('/accept-reject-request/' . $lifeTaxiMovement->id) }}" method="POST">
+                                    @csrf <!-- Add CSRF token for Laravel form submission -->
+
+                                    <div class="form-group">
+                                        <label for="decision" class="form-label">القرار:</label><br>
+                                        <select id="decision" name="state" class="form-input" required>
+                                            <option value="accept">قبول</option>
+                                            <option value="reject">رفض</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="reason" class="form-label">السبب (في حال الرفض):</label><br>
+                                        <textarea id="reason" name="message" class="form-input" rows="4" cols="50"></textarea>
+                                    </div>
+
+                                    <input type="submit" value="Submit" class="form-submit">
+                                </form>
+                            </div>
+                        </li>
+                    @endforeach
                 </ul>
+
             </div>
         </section>
     </main>

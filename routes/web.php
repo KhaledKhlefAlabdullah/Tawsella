@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DriversController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ProfileController;
@@ -43,9 +44,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //*****************************End route Contact ******************************** */
     //******************************************************************************* */
     //***************************start route dashboard ******************************** */
-    Route::get('/dashboard', function () {
-        return view('dashboard', []);
-    })->middleware(['auth', 'verified'])->name('dashboard');
+    Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
     //***************************End route dashboard ******************************** */
     //******************************************************************************* */
 
@@ -90,8 +89,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //*************************** End route offers *********************************** */
     //**************************************************************************** */
 
-    Route::post('/accept_reject_request',[TaxiMovementTypeController::class])->name('accept_reject_request');
-
+    Route::post('/accept-reject-request/{taxiMovement}',[TaxiMovementController::class,'accept_reject_request']);
     
     //*************************** START route taxi-movement *********************************** */
     //**************************************************************************** */

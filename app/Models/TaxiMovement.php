@@ -52,4 +52,8 @@ class TaxiMovement extends Model
     {
         return $this->belongsTo(TaxiMovementType::class, 'movement_type_id');
     }
+
+    public function calculations(){
+        return $this->hasMany(calculations::class,'taxi_movement_id');
+    }
 }

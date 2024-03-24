@@ -93,4 +93,8 @@ class User extends Authenticatable
     public function our_services(){
         return $this->hasMany(OurService::class,'admin_id');
     }
+
+    public function calculations(){
+        return $this->hasMany(calculations::class,'driver_id');
+    }
 }
