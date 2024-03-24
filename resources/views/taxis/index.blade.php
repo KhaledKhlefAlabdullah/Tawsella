@@ -24,22 +24,22 @@
                         <thead>
                             <tr style="margin-left: 15px">
                                 <th scope="col">#</th>
-                                <th scope="col">{{ __('اسم السائق') }}</th>
-                                <th scope="col">{{ __('رقم الهاتف') }}</th>
-                                <th scope="col">{{ __('البريد الإلكتروني') }}</th>
-                                <th scope="col">{{ __('رقم اللوحة') }}</th>
-                                <th scope="col">{{ __('تفاصيل السيارة') }}</th>
+                                <th scope="col"><p class="text-center">{{ __('اسم السائق') }}</p></th>
+                                <th scope="col"><p class="text-center">{{ __('اسم السيارة') }}</p></th>
+                                <th scope="col"><p class="text-center">{{ __('رقم المصباح') }}</p></th>
+                                <th scope="col"><p class="text-center">{{ __('رقم اللوحة') }}</p></th>
+                                <th scope="col"><p class="text-center">{{ __('تفاصيل السيارة') }}</p></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($taxis as $taxi)
                                 <tr>
                                     <th scope="row">{{ $loop->iteration }}</th>
-                                    <td>{{ $taxi->driver_id }}</td>
-                                    <td>{{ $taxi->care_name }}</td>
-                                    <td>{{ $taxi->lamp_number }}</td>
-                                    <td>{{ $taxi->plate_number }}</td>
-                                    <td>{{ $taxi->car_detailes }}</td>
+                                    <td><p class="text-center">{{ $taxi->driver->id }}</p></td>
+                                    <td><p class="text-center">{{ $taxi->car_name }}</p></td>
+                                    <td><p class="text-center">{{ $taxi->lamp_number }}</p></td>
+                                    <td><p class="text-center">{{ $taxi->plate_number }}</p></td>
+                                    <td><p class="text-center"><a href="{{ route('taxis.show', $taxi->id) }}" class="btn btn-primary">{{ __('تفاصيل') }}</a></p></td> <!-- زر التفاصيل -->
                                 </tr>
                             @endforeach
                         </tbody>

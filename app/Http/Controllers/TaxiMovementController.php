@@ -29,7 +29,7 @@ class TaxiMovementController extends Controller
     public function currentTaxiMovement()
     {
         try{
-        
+
             $taxiMovement = TaxiMovement::select('taxi_movements.my_address','taxi_movements.destnation_address','taxi_movements.gender','taxi_movements.start_latitude','taxi_movements.start_longitude','driver.email as driver_email','customer.email as customer_email','driver_profile.name as driver_name','driver_profile.phoneNumber as driver_phone','customer_profile.name as customer_name','customer_profile.phoneNumber as customer_phone','taxis.car_name as car_car_name','taxis.lamp_number as car_lamp_number','taxis.plate_number as car_plate_number','taxi_movement_types.type','taxi_movement_types.price')
             ->leftJoin('users as driver','taxi_movements.driver_id','=','driver.id')
             ->leftJoin('users as customer','taxi_movements.customer_id','=','customer.id')
@@ -40,7 +40,7 @@ class TaxiMovementController extends Controller
             ->where(['is_completed' => false,'is_canceled' => false])
             ->get();
 
-            return view();
+            return view('taxi_movementcurrent_taxi_movement',['taxiMovement'=>$taxiMovement]);
         }
         catch(Exception $e){
             return abort(500,'there error in getting current taxi movement'.$e->getMessage());
@@ -62,7 +62,7 @@ class TaxiMovementController extends Controller
             // event(new CreateTaxiMovementEvent($request->input('customer_id'),
             // $request->input('start_latitude'),
             // $request->input('start_longitude')));
-            
+
             // 2
             CreateTaxiMovementEvent::dispatch(
                $taxiMovement

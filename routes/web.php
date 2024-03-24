@@ -5,6 +5,7 @@ use App\Http\Controllers\DriversController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaxiController;
+use App\Http\Controllers\TaxiMovementController;
 use App\Http\Controllers\TaxiMovementTypeController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,7 +25,7 @@ Route::get('/', function () {
 });
 
 //*****************************End route Servises ******************************** */
-Route::get('/serve',[TaxiMovementTypeController::class,'index']);
+Route::get('/serve', [TaxiMovementTypeController::class, 'index']);
 //*****************************End route Servises ******************************** */
 //******************************************************************************* */
 
@@ -63,13 +64,24 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::group(['prefix' => 'drivers'], function () {
         Route::get('/', [DriversController::class, 'index']);
     });
+    Route::get('/drivers/{id}', [DriversController::class, 'show'])->name('drivers.show');
+
+    Route::get('/drivers/{id}/edit', [DriversController::class, 'edit'])->name('drivers.edit');
+    Route::put('/drivers/{id}', [DriversController::class, 'update'])->name('drivers.update');
     //***************************End route driver ******************************** */
     //**************************************************************************** */
 
     //***************************start route Taxi ******************************** */
     Route::get('/taxi', [TaxiController::class, 'index'])->name('taxis.index');
+    Route::get('/taxis/{taxi}', [TaxiController::class, 'show'])->name('taxis.show');
+
     Route::get('/taxis/create', [TaxiController::class, 'create'])->name('taxis.create');
     Route::post('/taxis', [TaxiController::class, 'store'])->name('taxis.store');
+
+    Route::get('/taxis/{taxi}/edit', [TaxiController::class, 'edit'])->name('taxis.edit');
+    Route::put('/taxis/{taxi}', [TaxiController::class, 'update'])->name('taxis.update');
+
+    Route::delete('/taxis/{taxi}', [TaxiController::class, 'destroy'])->name('taxis.destroy');
     //*************************** End route Taxi *********************************** */
     //**************************************************************************** */
 
@@ -81,6 +93,10 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/accept_reject_request',[TaxiMovementTypeController::class])->name('accept_reject_request');
 
     
+    //*************************** START route taxi-movement *********************************** */
+    //**************************************************************************** */
+    Route::get('/current-taxi-movement', [TaxiMovementController::class, 'currentTaxiMovement'])->name('current.taxi.movement');
+    //*************************** End route taxi-movement *********************************** */
 
 });
 Route::get('/drivers', [DriversController::class, 'index']);

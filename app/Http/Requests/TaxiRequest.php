@@ -23,10 +23,11 @@ class TaxiRequest extends FormRequest
     {
         return [
             'driver_id' => 'required|exists:users,id',
-            'care_name' => 'required|string',
+            'car_name' => 'required|string',
             'lamp_number' => 'required|string',
             'plate_number' => 'required|string|unique:taxis,plate_number',
-            'car_details' => 'nullable|string',
+            'car_detailes' => 'nullable|string',
         ];
     }
 }
+

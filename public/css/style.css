@@ -1098,7 +1098,7 @@ p {
 }
 
 .dashboard .top-selling .table tbody td {
-    vertical-align: middle;
+    vertical-align: center;
 }
 
 .dashboard .top-selling img {
