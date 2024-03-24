@@ -21,17 +21,21 @@ class CreateTaxiMovementEvent implements ShouldBroadcast
     protected $gender;
     protected $customer_address;
     protected $customer_destnation_address;
+
+    protected $taxiMovement;
     /**
      * Create a new event instance.
      */
-    public function __construct($customer_id, $location_lat, $location_long,$gender,$customer_address,$customer_destnation_address)
-    {
-        $this->customer_id = $customer_id;
-        $this->location_lat = $location_lat;
-        $this->location_long = $location_long;
-        $this->gender = $gender;
-        $this->customer_address = $customer_address;
-        $this->customer_destnation_address = $customer_destnation_address;
+    public function __construct($taxiMovement )//$customer_id, $location_lat, $location_long,$gender,$customer_address,$customer_destnation_address)
+    {   
+        $this->taxiMovement = $taxiMovement;
+      
+        $this->customer_id = $taxiMovement->customer_id;
+        $this->location_lat = $taxiMovement->location_lat;
+        $this->location_long = $taxiMovement->location_long;
+        $this->gender = $taxiMovement->gender;
+        $this->customer_address = $taxiMovement->my_address;
+        $this->customer_destnation_address = $taxiMovement->destnation_address;
     }
 
     /**
@@ -51,6 +55,7 @@ class CreateTaxiMovementEvent implements ShouldBroadcast
 
         $customer = UserProfile::where('user_id',$this->customer_id)->select('name','user_avatar','phoneNumber')->first();
         return [
+            'taxiMovement' => $this->taxiMovement,
             'customer' => $customer,
             'gender' => $this->gender,
             'customer_address' => $this->customer_address,
