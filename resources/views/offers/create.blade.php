@@ -3,34 +3,42 @@
 @section('content')
     <main class="main" id="main">
         <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1 class="my-4">إضافة عرض جديد</h1>
-                    <form action="{{ route('offers.store') }}" method="post" enctype="multipart/form-data">
-                        @csrf
+            <h1 class="my-4">إضافة عرض جديد</h1>
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <form method="post" action="{{ route('offers.store') }}">
+                                @csrf
 
-                        <div class="mb-3">
-                            <label for="title" class="form-label">عنوان العرض</label>
-                            <input type="text" class="form-control" id="title" name="title" required>
+                                <div class="form-group">
+                                    <label for="movement_type_id">نوع الحركة</label>
+                                    <select name="movement_type_id" id="movement_type_id" class="form-control">
+                                        @foreach($movementTypes as $movementType)
+                                            <option value="{{ $movementType->id }}">{{ $movementType->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="offer">العرض</label>
+                                    <textarea name="offer" id="offer" class="form-control" rows="3"></textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="value_of_discount">قيمة الخصم</label>
+                                    <input type="text" name="value_of_discount" id="value_of_discount" class="form-control">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="valide_date">تاريخ الصلاحية</label>
+                                    <input type="date" name="valide_date" id="valide_date" class="form-control">
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">حفظ</button>
+                            </form>
                         </div>
-
-                        <div class="mb-3">
-                            <label for="image" class="form-label">الصورة</label>
-                            <input type="file" name="image" class="form-control" accept="image/*" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="description" class="form-label">وصف العرض</label>
-                            <textarea class="form-control" id="description" name="description" required></textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="expiry_date" class="form-label">تاريخ انتهاء العرض</label>
-                            <input type="date" class="form-control" id="expiry_date" name="expiry_date" required>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary">إضافة العرض</button>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
