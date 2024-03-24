@@ -19,6 +19,7 @@ class OfferController extends Controller
         try {
 
             $offers = Offer::select(
+                'offers.id',
                 'offers.offer',
                 'offers.value_of_discount',
                 'offers.valide_date',

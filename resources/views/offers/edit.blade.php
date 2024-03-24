@@ -10,32 +10,52 @@
 
                     <div class="card mb-3" style="max-width: 540px;">
                         <div class="row g-0">
-                            <div class="col-md-4">
-                                <img src="{{ asset($offer->image) }}" class="img-fluid rounded-start" alt="Offer Image">
-                            </div>
                             <div class="col-md-8">
                                 <div class="card-body">
-                                    <form method="POST" action="{{ route('offers.update', $offer->id) }}" enctype="multipart/form-data">
+                                    <form method="post" action="{{ route('offers.update', $offer->id) }}">
                                         @csrf
-                                        @method('PUT')
+                                        @method('put')
 
-                                        <div class="mb-3">
-                                            <label for="title" class="form-label">عنوان العرض</label>
-                                            <input type="text" class="form-control" id="title" name="title" value="{{ old('title', $offer->title) }}" required>
+                                        <div class="form-group">
+                                            <label for="movement_type_id">نوع الحركة</label>
+                                            <select name="movement_type_id" id="movement_type_id" class="form-control">
+                                                @foreach($movementTypes as $movementType)
+                                                    <option value="{{ $movementType->id }}" {{ $offer->movement_type_id == $movementType->id ? 'selected' : '' }}>
+                                                        {{ $movementType->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
 
-                                        <div class="mb-3">
-                                            <label for="description" class="form-label">وصف العرض</label>
-                                            <textarea class="form-control" id="description" name="description" rows="3" required>{{ old('description', $offer->description) }}</textarea>
+                                        <div class="form-group">
+                                            <label for="admin_id">المشرف</label>
+                                            <select name="admin_id" id="admin_id" class="form-control">
+                                                @foreach($admins as $admin)
+                                                    <option value="{{ $admin->id }}" {{ $offer->admin_id == $admin->id ? 'selected' : '' }}>
+                                                        {{ $admin->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
                                         </div>
 
-                                        <div class="mb-3">
-                                            <label for="expiry_date" class="form-label">تاريخ انتهاء العرض</label>
-                                            <input type="date" class="form-control" id="expiry_date" name="expiry_date" value="{{ old('expiry_date', $offer->expiry_date) }}" required>
+                                        <div class="form-group">
+                                            <label for="offer">العرض</label>
+                                            <textarea name="offer" id="offer" class="form-control">{{ $offer->offer }}</textarea>
                                         </div>
 
-                                        <button type="submit" class="btn btn-primary">حفظ التعديلات</button>
+                                        <div class="form-group">
+                                            <label for="value_of_discount">قيمة الخصم</label>
+                                            <input type="text" name="value_of_discount" id="value_of_discount" class="form-control" value="{{ $offer->value_of_discount }}">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="valide_date">تاريخ الصلاحية</label>
+                                            <input type="date" name="valide_date" id="valide_date" class="form-control" value="{{ $offer->valide_date }}">
+                                        </div>
+
+                                        <button type="submit" class="btn btn-primary">تحديث العرض</button>
                                     </form>
+
                                 </div>
                             </div>
                         </div>
