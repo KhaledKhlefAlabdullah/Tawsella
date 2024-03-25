@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TaxiMovement;
+use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
@@ -24,7 +25,12 @@ class DashboardController extends Controller
                 ->where(['taxi_movements.is_completed' => false, 'taxi_movements.is_canceled' => false,'taxi_movements.request_state' => 'pending'])
                 ->get();
 
-            return view('dashboard',['lifeTaxiMovements'=>$taxiMovement]);
+            $drivers = User::where(['user_type' => 'driver', 'driver_state' => 'ready'])
+            ->leftJoin('user_profiles','users.id','=','user_profiles.user_id')
+            ->select('users.id','user_profiles.name','user_profiles.user_avatar')
+            ->get();
+
+            return view('dashboard',['lifeTaxiMovements'=>$taxiMovement,'drivers' => $drivers]);
         }
         catch(Exception $e){
             return abort(500,'there error in getting current taxi movement'.$e->getMessage());

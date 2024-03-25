@@ -90,15 +90,16 @@ class TaxiMovementController extends Controller
     /**
      * Accept and regect Taxi movement request
      */
-    public function accept_reject_request(Request $request, TaxiMovement $taxiMovement){
+    public function accept_reject_request(Request $request, string $id){
         try{
-
             $request->validate([
-                'state' => 'string|required|in:accepted,rejected',
+                'state' => 'sometimes|string|required|in:accepted,rejected',
                 'driver_id' => 'sometimes|string|required',
                 'message' => 'string|sometimes|required'
             ]);
-
+            
+            $taxiMovement = getAndCheckModelById(TaxiMovement::class,$id);
+            
             $taxiMovement->update([
                 'request_state' => $request->input('state')
             ]);

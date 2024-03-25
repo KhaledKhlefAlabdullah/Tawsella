@@ -24,6 +24,7 @@ return new class extends Migration
             $table->double('start_longitude');
             $table->double('end_latitude')->nullable();
             $table->double('end_longitude')->nullable();
+            $table->boolean('is_don')->default(false);
             $table->boolean('is_completed')->default(false);
             $table->boolean('is_canceled')->default(false);
             $table->enum('request_state',['accepted','rejected','pending'])->default('pending');

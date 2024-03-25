@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
+use function PHPUnit\Framework\isNull;
+
 class RegisteredUserController extends Controller
 {
     /**
@@ -38,6 +40,7 @@ class RegisteredUserController extends Controller
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
                 'phone_number' => ['required','string','regex:/^\+[0-9]{9,20}$/'],
+                'driver_state' => $user_type == 'driver' ? 'ready' : null,
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
             ]);
 
@@ -47,10 +50,18 @@ class RegisteredUserController extends Controller
                 'user_type' => $user_type
             ]);
 
+            if($user_type == 'driver' && !is_null($request->input('avatar'))){
+                $avatar = $request->input('avatar');
+            }
+            else{
+                $avatar = '/images/profile_images/user_profile.png';
+            }
+            
             UserProfile::create([
                 'user_id' => $user->id,
                 'name' => $request->input('name'),
-                'phoneNumber' => $request->input('phone_number')
+                'phoneNumber' => $request->input('phone_number'),
+                'user_avatar' => $avatar
             ]);
 
             if ($request->wantsJson()) {
@@ -78,6 +89,9 @@ class RegisteredUserController extends Controller
      */
     public function admin_store(Request $request)
     {
+        $request->validate([
+            'avatar' => 'nullable|image|mimes:png,jpg'
+        ]);
         return $this->store($request, 'driver');
     }
 }

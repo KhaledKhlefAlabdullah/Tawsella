@@ -34,7 +34,9 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <!-- Template Main CSS File -->
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
-
+    {{-- for view maps for every customer --}}
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
     <!-- Vendor CSS Files -->
     <!-- Template Main CSS File -->
     <!-- =======================================================
@@ -44,53 +46,7 @@
   * Author: BootstrapMade.com
   * License: https://bootstrapmade.com/license/
   ======================================================== -->
-    <style>
-        .container {
-            margin: 50px auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            justify-content: center;
 
-        }
-
-        .form-title {
-            text-align: center;
-            color: #333;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-label {
-            font-weight: bold;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-            resize: vertical;
-        }
-
-        .form-submit {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-        }
-
-        .form-submit:hover {
-            background-color: #45a049;
-        }
-    </style>
 </head>
 
 <body class="font-sans antialiased">
@@ -214,7 +170,8 @@
                               </div>
                           </div>
                           <hr>
-                          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13035.963879898062!2d${locationLat}!3d${locationLong}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2598f267cb08b%3A0xae4b9b4fc4d9dc07!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sin!4v1608576658584!5m2!1sen!2sin" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13035.963879898062!2d${locationLong}!3d${locationLat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2598f267cb08b%3A0xae4b9b4fc4d9dc07!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sin!4v1608576658584!5m2!1sen!2sin" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                          
                           <hr>
                           <form action="{{ url('/accept-reject-request/ ${request_id}') }}" method="">
                                     @csrf <!-- Add CSRF token for Laravel form submission -->

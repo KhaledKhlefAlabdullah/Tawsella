@@ -30,7 +30,7 @@ class User extends Authenticatable
         'email',
         'password',
         'user_type',
-        'driver_type',
+        'driver_state',
         'is_active'
     ];
 
