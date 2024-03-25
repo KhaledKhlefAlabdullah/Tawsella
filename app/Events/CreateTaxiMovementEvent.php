@@ -15,6 +15,7 @@ class CreateTaxiMovementEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    protected $request_id;
     protected $customer_id;
     protected $location_lat;
     protected $location_long;
@@ -22,14 +23,12 @@ class CreateTaxiMovementEvent implements ShouldBroadcast
     protected $customer_address;
     protected $customer_destnation_address;
 
-    protected $taxiMovement;
     /**
      * Create a new event instance.
      */
     public function __construct($taxiMovement )//$customer_id, $location_lat, $location_long,$gender,$customer_address,$customer_destnation_address)
     {   
-        $this->taxiMovement = $taxiMovement;
-      
+        $this->request_id = $taxiMovement->id;   
         $this->customer_id = $taxiMovement->customer_id;
         $this->location_lat = $taxiMovement->location_lat;
         $this->location_long = $taxiMovement->location_long;
@@ -55,7 +54,7 @@ class CreateTaxiMovementEvent implements ShouldBroadcast
 
         $customer = UserProfile::where('user_id',$this->customer_id)->select('name','user_avatar','phoneNumber')->first();
         return [
-            'taxiMovement' => $this->taxiMovement,
+            'request_id' => $this->request_id,
             'customer' => $customer,
             'gender' => $this->gender,
             'customer_address' => $this->customer_address,

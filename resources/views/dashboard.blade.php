@@ -90,7 +90,7 @@
                                     allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
 
                                 <hr>
-                                <form action="{{ url('/accept-reject-request/' . $lifeTaxiMovement->id) }}" method="POST">
+                                <form action="{{ route('accept-reject-request',['taxiMovement' => $lifeTaxiMovement->id]) }}" method="POST">
                                     @csrf <!-- Add CSRF token for Laravel form submission -->
 
                                     <div class="form-group">
@@ -105,7 +105,7 @@
                                         <label for="reason" class="form-label">السبب (في حال الرفض):</label><br>
                                         <textarea id="reason" name="message" class="form-input" rows="4" cols="50"></textarea>
                                     </div>
-
+                                    {{-- todo fix this tomoro --}}
                                     <input type="submit" value="Submit" class="form-submit">
                                 </form>
                             </div>

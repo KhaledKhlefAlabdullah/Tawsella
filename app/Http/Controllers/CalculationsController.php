@@ -14,10 +14,10 @@ class CalculationsController extends Controller
     public function index()
     {
         try{
-
+            // todo complete here tomoro
         }
         catch(Exception $e){
-            return 
+            return abort(500,'there error in getting ');
         }
     }
 

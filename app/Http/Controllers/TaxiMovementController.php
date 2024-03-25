@@ -45,7 +45,7 @@ class TaxiMovementController extends Controller
                 ->where(['taxi_movements.is_completed' => false, 'taxi_movements.is_canceled' => false,'taxi_movements.request_state' => 'accepted'])
                 ->get();
 
-            return view('current_taxi_movement',['taxiMovement'=>$taxiMovement]);
+            return view('taxi_movement.currentTaxiMovement',['taxiMovement'=>$taxiMovement]);
         }
         catch(Exception $e){
             return abort(500,'there error in getting current taxi movement'.$e->getMessage());
@@ -123,7 +123,7 @@ class TaxiMovementController extends Controller
                 );  
             }
 
-            return back();
+            return redirect()->back();
         }
         catch(Exception $e){
             return abort(500,'error in accept or reject request');
