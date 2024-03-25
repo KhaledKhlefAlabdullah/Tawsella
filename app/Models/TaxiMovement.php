@@ -27,6 +27,7 @@ class TaxiMovement extends Model
         'start_longitude',
         'end_latitude',
         'end_longitude',
+        'is_don',
         'is_completed',
         'is_canceled',
         'request_state',
