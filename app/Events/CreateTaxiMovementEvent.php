@@ -11,40 +11,19 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CreateTaxiMovementEvent implements ShouldBroadcast
+class CreateTaxiMovementEvent extends BaseEvent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    protected $request_id;
-    protected $customer_id;
-    protected $location_lat;
-    protected $location_long;
-    protected $gender;
-    protected $customer_address;
-    protected $customer_destnation_address;
-
-    /**
-     * Create a new event instance.
-     */
-    public function __construct($taxiMovement )//$customer_id, $location_lat, $location_long,$gender,$customer_address,$customer_destnation_address)
-    {   
-        $this->request_id = $taxiMovement->id;   
-        $this->customer_id = $taxiMovement->customer_id;
-        $this->location_lat = $taxiMovement->location_lat;
-        $this->location_long = $taxiMovement->location_long;
-        $this->gender = $taxiMovement->gender;
-        $this->customer_address = $taxiMovement->my_address;
-        $this->customer_destnation_address = $taxiMovement->destnation_address;
+    public function __construct($taxiMovement ){
+        parent::__construct($taxiMovement);
     }
-
     /**
      * Get the channels the event should broadcast on.
      *
      * @return Channel
      */
-    public function broadcastOn() : Channel 
+    public function broadcastOn() : array 
     {
-        return new PrivateChannel('Taxi-movement.'.getAdminId());
+        return [new PrivateChannel('Taxi-movement.'.getAdminId())];
 
         // new Channel('channel');
     }

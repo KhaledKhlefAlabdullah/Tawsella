@@ -2,29 +2,24 @@
 
 namespace App\Events;
 
-use App\Models\TaxiMovement;
-use App\Models\User;
+use App\Models\TaxiMovementType;
 use App\Models\UserProfile;
-use Illuminate\Broadcasting\Channel;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
-use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Queue\SerializesModels;
 
-class AcceptTaxiMovemntEvent implements ShouldBroadcast
+class AcceptTaxiMovemntEvent extends BaseEvent
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    protected $driver_id;
+    protected $movement_type;
 
-    protected $taxiMovement;
-    
     /**
      * Create a new event instance.
      */
-    public function __construct(TaxiMovement $taxiMovement)
+    public function __construct($taxiMovement)
     {
-        $this->taxiMovement = $taxiMovement;
+        $this->driver_id = $taxiMovement->driver_id;
+        $this->movement_type = TaxiMovementType::findOrFail($this->request_id)->type;
+
+        parent::__construct($taxiMovement);
     }
 
     /**
@@ -33,31 +28,73 @@ class AcceptTaxiMovemntEvent implements ShouldBroadcast
      * @return array<int, \Illuminate\Broadcasting\Channel>
      */
     public function broadcastOn(): array
-    {   
-        $customer_id = $this->taxiMovement->customer_id;
-        $driver_id = $this->taxiMovement->driver_id;
+    {
+        $customer_id = $this->customer_id;
+        $driver_id = $this->driver_id;
 
-        
+
         return [
-            new PrivateChannel('customer.'.$customer_id),
-            new PrivateChannel('driver.'.$driver_id)
+            new PrivateChannel('customer.' . $customer_id),
+            new PrivateChannel('driver.' . $driver_id)
         ];
     }
 
+    public function getDriverData()
+    {
+        return [
+            'gender' => $this->gender,
+            'customer_address' => $this->customer_address,
+            'destnation_address' => $this->customer_destnation_address,
+            'location_lat' => $this->location_lat,
+            'location_long' => $this->location_long,
+            'type' => $this->movement_type
+        ];
+    }
+
+    public function broadcastWithDriver(): array
+    {
+        $customer_id = $this->customer_id;
+
+        $customer_profile = UserProfile::where('user_id', $customer_id)->select('name', 'user_avatar', 'phoneNumber',)->first();
+
+        return [
+            'request_id' => $this->request_id,
+            'customer' => $customer_profile,
+            'taxiMovementInfo' => $this->getDriverData()
+        ];
+    }
+
+    public function broadcastWithCustomer(): array
+    {
+        $driver_id = $this->driver_id;
+
+        $driver_profile = UserProfile::where('user_id', $driver_id)->select('name', 'user_avatar', 'phoneNumber',)->first();
+
+        return [
+            'message' => '',
+            'driver' => $driver_profile
+        ];
+    }
+
+    /**
+     * Get the data to broadcast.
+     *
+     * @return array
+     */
     public function broadcastWith(): array
     {
-        $customer_id = $this->taxiMovement->customer_id;
-        $driver_id = $this->taxiMovement->driver_id;
+        $channels = $this->broadcastOn();
 
-        $customer_profile = UserProfile::where('user_id', $customer_id)->select('name','user_avatar','phoneNumber',)->first();
-      
-        $driver_profile = UserProfile::where('user_id', $customer_id)->select('name','user_avatar','phoneNumber',)->first();
+        // Check which channel is being broadcasted to
+        foreach ($channels as $channel) {
+            if ($channel instanceof PrivateChannel && strpos($channel->name, 'customer') !== false) {
+                return $this->broadcastWithCustomer();
+            } elseif ($channel instanceof PrivateChannel && strpos($channel->name, 'driver') !== false) {
+                return $this->broadcastWithDriver();
+            }
+        }
 
-        $customer_data = ['message' => '','driver' => $driver_profile];
-        $driver_data = ['customer' => $customer_profile , 'taxiMovementInfo' => $this->taxiMovement];
-        return [
-            'customer.'.$customer_id => $customer_data,
-            'driver.'.$driver_id => $driver_data
-        ];
+        // Default data if channel not recognized
+        return [];
     }
 }
