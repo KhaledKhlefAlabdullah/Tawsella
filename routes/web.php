@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\CalculationsController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DriversController;
 use App\Http\Controllers\OfferController;
@@ -44,7 +45,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //*****************************End route Contact ******************************** */
     //******************************************************************************* */
     //***************************start route dashboard ******************************** */
-    Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     //***************************End route dashboard ******************************** */
     //******************************************************************************* */
 
@@ -72,10 +73,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     //***************************start route Taxi ******************************** */
     Route::get('/taxi', [TaxiController::class, 'index'])->name('taxis.index');
+
     Route::get('/taxis/{taxi}', [TaxiController::class, 'show'])->name('taxis.show');
 
     Route::get('/taxis/create', [TaxiController::class, 'create'])->name('taxis.create');
     Route::post('/taxis', [TaxiController::class, 'store'])->name('taxis.store');
+
 
     Route::get('/taxis/{taxi}/edit', [TaxiController::class, 'edit'])->name('taxis.edit');
     Route::put('/taxis/{taxi}', [TaxiController::class, 'update'])->name('taxis.update');
@@ -97,13 +100,28 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //*************************** End route offers *********************************** */
     //**************************************************************************** */
 
-    Route::post('/accept-reject-request/{taxiMovement}',[TaxiMovementController::class,'accept_reject_request'])->name('accept-reject-request');
-    
+    Route::post('/accept-reject-request/{taxiMovement}', [TaxiMovementController::class, 'accept_reject_request'])->name('accept-reject-request');
+
     //*************************** START route taxi-movement *********************************** */
     //**************************************************************************** */
     Route::get('/current-taxi-movement', [TaxiMovementController::class, 'currentTaxiMovement'])->name('current.taxi.movement');
     //*************************** End route taxi-movement *********************************** */
 
+    //*************************** Start route calculations *********************************** */
+    Route::get('/calculations', [CalculationsController::class, 'index'])->name('calculations.index');
+
+    Route::get('/calculations/{calculations}', [CalculationsController::class, 'show'])->name('calculations.show');
+
+    Route::get('/calculations/create', [CalculationsController::class, 'create'])->name('calculations.create');
+    Route::post('/calculations', [CalculationsController::class, 'store'])->name('calculations.store');
+
+    Route::get('/calculations/{calculations}/edit', [CalculationsController::class, 'edit'])->name('calculations.edit');
+    Route::put('/calculations/{calculations}', [CalculationsController::class, 'update'])->name('calculations.update');
+
+    Route::delete('/calculations/{calculations}', [CalculationsController::class, 'destroy'])->name('calculations.destroy');
+
+    //*************************** End route calculations *********************************** */
+    //**************************************************************************** */
 });
 Route::get('/drivers', [DriversController::class, 'index']);
 

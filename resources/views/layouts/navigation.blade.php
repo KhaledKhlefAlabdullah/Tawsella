@@ -247,7 +247,7 @@
             </a>
             <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="{{ url('#') }}">
+                    <a href="{{ route('calculations.index') }}">
                         <div class="ms-auto" style="margin-right: 30px">
                             <span> رصيد السائقين </span><i class="bi bi-circle" style="margin-left: 10px"></i>
                         </div>

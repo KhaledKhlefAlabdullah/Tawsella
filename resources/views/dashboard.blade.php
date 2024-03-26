@@ -31,11 +31,13 @@
                     <div class="col-lg-6 mb-6 card"style="padding: 10px;">
                         <div class="text-center card-content">
                             <h4>عدد السائقين</h4>
+                            <p>{{$totalDrivers}}</p>
                         </div>
                     </div>
                     <div class="col-lg-6 mb-6 card"style="padding: 10px;">
                         <div class="text-center card-content">
                             <h4>عدد السيارات</h4>
+                            <p>{{ $totalTaxi }}</p>
                         </div>
                     </div>
                 </div>
