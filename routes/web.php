@@ -76,7 +76,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/taxis/{taxi}', [TaxiController::class, 'show'])->name('taxis.show');
 
-    Route::get('/taxis/create', [TaxiController::class, 'create'])->name('taxis.create');
+    Route::get('/taxis1/create', [TaxiController::class, 'create'])->name('taxis.create');
     Route::post('/taxis', [TaxiController::class, 'store'])->name('taxis.store');
 
     Route::get('/taxis/{taxi}/edit', [TaxiController::class, 'edit'])->name('taxis.edit');
@@ -99,12 +99,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //*************************** End route offers *********************************** */
     //**************************************************************************** */
 
+    //*************************** START route taxi-movement *********************************** */
     Route::post('/accept-reject-request/{taxiMovement}', [TaxiMovementController::class, 'accept_reject_request'])->name('accept-reject-request');
 
-    //*************************** START route taxi-movement *********************************** */
-    //**************************************************************************** */
+
     Route::get('/current-taxi-movement', [TaxiMovementController::class, 'currentTaxiMovement'])->name('current.taxi.movement');
     //*************************** End route taxi-movement *********************************** */
+    //**************************************************************************** */
 
     //*************************** Start route calculations *********************************** */
     Route::get('/calculations', [CalculationsController::class, 'index'])->name('calculations.index');
