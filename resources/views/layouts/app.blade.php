@@ -106,101 +106,172 @@
 
     <!-- Reale time Scripts -->
     @vite('resources/js/app.js')
-    {{-- <script>
-           setTimeout(() => {
-            var userId = <?php echo json_encode(auth()->id()); ?>;
-            Echo.private(`Taxi-movement.${userId}`).
-            listen('.App\\Events\\CreateTaxiMovementEvent', (e) => {
 
-            });}, 200);
-    </script> --}}
     <script>
         setTimeout(() => {
             var userId = <?php echo json_encode(auth()->id()); ?>;
             Echo.private(`Taxi-movement.${userId}`)
                 .listen('.App\\Events\\CreateTaxiMovementEvent', (event) => {
-                    // Extract data from the event
+                    var index = event.index;
+                    var drivers = event.drivers;
                     var request_id = event.request_id;
                     var customer = event.customer;
-                    var locationLat = event.location_lat;
-                    var locationLong = event.location_long;
+                    var locationLat = event.lat;
+                    var locationLong = event.long;
                     var gender = event.gender;
                     var customer_address = event.customer_address;
                     var destnation_address = event.destnation_address;
 
-                    // Create new list item
                     var newItem = document.createElement('li');
-
-                    // Construct the HTML for the new item
+                    console.log(locationLat);
                     newItem.innerHTML = `
-                    <li>
-                      <div class="card">
-                          <h2>اشعار طلب جديد</h2>
-                          <hr>
-                          <div class="row">
-                              <div class="col-lg-6 mb-6">
-                                  <div class="text-center card-content" style="margin: 10px;">
-                                      <h4>اسم العميل: </h4><h4>${customer.name}</h4>
-                                  </div>
-                              </div>
-                              <div class="col-lg-6 mb-6">
-                                  <div class="text-center card-content" style="margin: 10px;">
-                                    <h4>صورة العميل: </h4><h4><img src="${customer.user_avatar}" alt="صورة العميل"/></h4>
-                                  </div>
-                              </div>
-                              <div class="col-lg-6 mb-6">
-                                  <div class="text-center card-content" style="margin: 10px;">
-                                    <h4>رقم العميل: </h4><h4>${customer.phoneNumber}</h4>
-                                  </div>
-                              </div>
-                              <div class="col-lg-6 mb-6">
-                                  <div class="text-center card-content" style="margin: 10px;">
-                                    <h4>جنس العميل: </h4><h4>${gender}</h4>
-                                  </div>
-                              </div>
-                              <div class="col-lg-6 mb-6">
-                                  <div class="text-center card-content" style="margin: 10px;">
-                                    <h4>عنوان العميل: </h4><h4>${customer_address}</h4>
-                                  </div>
-                              </div>
-                              <div class="col-lg-6 mb-6" >
-                                  <div class="text-center card-content" style="margin: 10px;">
-                                    <h4>وجهة العميل: </h4><h4>${destnation_address}</h4>
-                                  </div>
-                              </div>
-                          </div>
-                          <hr>
-                          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13035.963879898062!2d${locationLong}!3d${locationLat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c2598f267cb08b%3A0xae4b9b4fc4d9dc07!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sin!4v1608576658584!5m2!1sen!2sin" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                          
-                          <hr>
-                          <form action="{{ url('/accept-reject-request/ ${request_id}') }}" method="">
-                                    @csrf <!-- Add CSRF token for Laravel form submission -->
+            <li id='item${index}'>
+                <div class="card">
+                    <h2>طلب جديد</h2>
+                    <hr>
+                    <div class="col">
+                        <div class="row align-items-center">
+                            <div class="col-lg-6 mb-6">
+                                <div class="text-center card-content" style="margin: 10px;">
+                                    <h4>اسم العميل: ${customer.name}</h4>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-6">
+                                <div class="text-center card-content" style="margin: 10px;">
+                                    <h4>صورة العميل: <img class="img" src="{{ asset('assets') }}${customer.avatar}" alt="صورة العميل" /></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center ">
+                            <div class="col-lg-6 mb-6">
+                                <div class="text-center card-content" style="margin: 10px;">
+                                    <h4>رقم العميل: ${customer.phoneNumber}</h4>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-6">
+                                <div class="text-center card-content" style="margin: 10px;">
+                                    <h4>جنس العميل: ${gender}</h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row align-items-center">
+                            <div class="col-lg-6 mb-6">
+                                <div class="text-center card-content" style="margin: 10px;">
+                                    <h4>عنوان العميل: ${customer_address}</h4>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 mb-6">
+                                <div class="text-center card-content" style="margin: 10px;">
+                                    <h4>وجهة العميل: ${destnation_address}</h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div id="map${index}" class="map"></div>
+                    <hr>
+                    <div id="buttons${index}" class="card row" style="display: block;">
+                                    <button id='accept${index}'
+                                        onclick="showAcceptForm(${index})">قبول</button>
+                                    <button id='reject${index}'
+                                        onclick="showRejectForm(${index})">رفض</button>
+                                </div>
 
-                                    <div class="form-group">
-                                        <label for="decision" class="form-label">القرار:</label><br>
-                                        <select id="decision" name="state" class="form-input" required>
-                                            <option value="accept">قبول</option>
-                                            <option value="reject">رفض</option>
+                                <form id="accept-form${index}" method="POST"
+                                    action="{{ url('/accept-reject-request/${request_id}') }}"
+                                    style="display: none;">
+                                    @csrf <!-- Add CSRF token for Laravel form submission -->
+                                    @if ($errors->any())
+                                        <div class="alert alert-danger">
+                                            <ul>
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
+                                    <div id="driver-field${index}" class="form-group">
+                                        <label for="driver_id" class="form-label">اسم السائق:</label><br>
+                                    
+                                                <select id="driver_id" name="driver_id" class="form-input">
+                                        <option value="">اختر السائق</option>
+                                        ${drivers.map(driver => `<option value="${driver.id}">${driver.name}</option>`).join('')}
                                         </select>
                                     </div>
-
-                                    <div class="form-group">
-                                        <label for="reason" class="form-label">السبب (في حال الرفض):</label><br>
-                                        <textarea id="reason" name="message" class="form-input" rows="4" cols="50"></textarea>
-                                    </div>
-                                    
-                                    <input type="submit" value="Submit" class="form-submit">
+                                    <!-- Hidden input field for static state -->
+                                    <input type="hidden" name="state" value="accepted">
+                                    <input type="submit" class="form-submit">
                                 </form>
-                      </div>
-                    </li>`;
 
-                    // Append the request HTML to a container
+                                <form id="reject-form${index}" method="POST"
+                                    action="{{ url('/accept-reject-request/${request_id}') }}"
+                                    style="display: none;">
+                                    @csrf <!-- Add CSRF token for Laravel form submission -->
+                                    @if ($errors->any())
+                                        <div class="alert alert-danger">
+                                            <ul>
+                                                @foreach ($errors->all() as $error)
+                                                    <li>{{ $error }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    @endif
+                                    <div id="reason-field${index}" class="form-group">
+                                        <label for="reason" class="form-label">السبب (اختياري):</label><br>
+                                        <textarea id="reason${index}" name="message" class="form-input" rows="4" cols="50">{{ old('message') }}</textarea>
+                                    </div>
+                                    <!-- Hidden input field for static state -->
+                                    <input type="hidden" name="state" value="rejected">
+                                    <input type="submit" class="form-submit">
+                                </form>
+                    </div>
+                 
+                    </li>
+                    `;
+                    console.log(55);
+
                     document.getElementById('requests-container').appendChild(newItem);
+
+                    var script = document.createElement('script');
+
+                    // Set the text content of the script
+                    script.textContent = `
+                    var map${index} = L.map('map${index}').setView([${locationLat}, ${locationLong}], 10); // Set the map view with latitude and longitude of the current request
+                                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                }).addTo(map${index});
+                                var marker${index} = L.marker([${locationLat}, ${locationLong}]).addTo(
+                                    map${index});
+                                marker${index}.bindPopup(JSON.stringify('${customer.name}')).openPopup();
+                                // You can customize the popup content as needed
+
+                                function showAcceptForm(index) {
+                                    document.getElementById('accept' + index).style.display = 'none';
+                                    document.getElementById('reject' + index).style.display = 'none';
+                                    document.getElementById('accept-form' + index).style.display = 'block';
+                                    document.getElementById('reject-form' + index).style.display = 'none';
+                                    document.getElementById('buttons' + index).style.display = 'none';
+                                }
+
+                                function showRejectForm(index) {
+                                    document.getElementById('accept' + index).style.display = 'none';
+                                    document.getElementById('reject' + index).style.display = 'none';
+                                    document.getElementById('accept-form' + index).style.display = 'none';
+                                    document.getElementById('reject-form' + index).style.display = 'block';
+                                    document.getElementById('buttons' + index).style.display = 'none';
+                                }
+                                `;
+                               
+                                console.log(55);
+
+                    // Get the HTML element to append the script to
+                    var item = document.getElementById(`item${index}`);
+
+                    // Append the script element to the HTML element
+                    item.appendChild(script);
                 });
-        }, 200);
+        }, 1000); // Set a delay of 1 second (1000 milliseconds) to ensure proper rendering after the page load
     </script>
-
-
 </body>
 
 </html>

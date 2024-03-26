@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Taxi;
 use App\Models\User;
 use App\Models\UserProfile;
 use App\Providers\RouteServiceProvider;
@@ -39,7 +40,7 @@ class RegisteredUserController extends Controller
             $request->validate([
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-                'phone_number' => ['required','string','regex:/^\+[0-9]{9,20}$/'],
+                'phone_number' => ['required', 'string', 'regex:/^\+[0-9]{9,20}$/'],
                 'driver_state' => $user_type == 'driver' ? 'ready' : null,
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
             ]);
@@ -50,18 +51,27 @@ class RegisteredUserController extends Controller
                 'user_type' => $user_type
             ]);
 
-            if($user_type == 'driver' && !is_null($request->input('avatar'))){
-                $avatar = $request->input('avatar');
-            }
-            else{
+            if ($user_type == 'driver') {
+
+                // Taxi::create([
+                //     'driver_id' => $user->id,
+                //     'car_name' => $request->input('car_name'),
+                //     'lamp_number' => $request->input('lamp_number'),
+                //     'plate_number' => $request->input('plate_number'),
+                //     'car_detailes' => $request->input('car_detailes')
+                // ]);
+
+                if (!is_null($request->input('avatar')))
+                    $avatar = $request->input('avatar');
+            } else {
                 $avatar = '/images/profile_images/user_profile.png';
             }
-            
+
             UserProfile::create([
                 'user_id' => $user->id,
                 'name' => $request->input('name'),
                 'phoneNumber' => $request->input('phone_number'),
-                'user_avatar' => $avatar
+                'avatar' => $avatar
             ]);
 
             if ($request->wantsJson()) {
@@ -75,7 +85,6 @@ class RegisteredUserController extends Controller
 
             // Redirect back or to any other page
             return redirect()->back();
-            
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'register-error', code: 500);
         }
@@ -91,6 +100,10 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'avatar' => 'nullable|image|mimes:png,jpg'
+            // 'car_name' => ,
+            // 'lamp_number' => ,
+            // 'plate_number' => ,
+            // 'car_detailes' => 
         ]);
         return $this->store($request, 'driver');
     }

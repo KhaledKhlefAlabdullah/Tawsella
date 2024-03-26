@@ -28,7 +28,7 @@ class UserProfileRequest extends FormRequest
             'phoneNumber' => ['required','sometimes','string','regex:/^\+?[0-9]{9,20}$/','unique'],
             'carPlatNumber' => ['required','sometimes','string','unique'],
             'carLampNumber' => ['required','sometimes','string'],
-            'user_avatar' => ['required','sometimes','image','mimes:png,jpg,gif']
+            'avatar' => ['required','sometimes','image','mimes:png,jpg,gif']
         ];
     }
 }

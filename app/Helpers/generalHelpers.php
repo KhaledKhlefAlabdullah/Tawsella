@@ -125,13 +125,12 @@ if (!function_exists('storeProfileAvatar')) {
  */
 if (!function_exists('editProfileAvatar')) {
 
-    function editProfileAvatar($old_path,$new_path, $new_file): string
+    function editProfileAvatar($old_path, $new_path, $new_file): string
     {
         // Delete the old file from storage
         if (file_exists($old_path)) {
 
             unlink(public_path($old_path));
-
         }
 
         // Store the new file
@@ -139,16 +138,16 @@ if (!function_exists('editProfileAvatar')) {
 
         return $new_file_path;
     }
-
 }
 
 /**
  * this function return the admin id
  * @return string admin_id
  */
-if(!function_exists('getAdminId')){
-    function getAdminId(){
-        $admin_id = User::where('user_type','admin')->first()->id;
+if (!function_exists('getAdminId')) {
+    function getAdminId()
+    {
+        $admin_id = User::where('user_type', 'admin')->first()->id;
         return $admin_id;
     }
 }
@@ -156,8 +155,30 @@ if(!function_exists('getAdminId')){
 /**
  * @return string Auth user id
  */
-if(!function_exists('getMyId')){
-    function getMyId(){
+if (!function_exists('getMyId')) {
+    function getMyId()
+    {
         return Auth::id();
+    }
+}
+
+/**
+ * it returned the ready drivers
+ * @return User
+ */
+if (!function_exists('getReadyDrivers')) {
+    function getReadyDrivers()
+    {
+        $drivers = User::where(['user_type' => 'driver', 'driver_state' => 'ready', 'is_active' => true])
+            ->join('taxis', 'users.id', '=', 'taxis.driver_id')
+            ->leftJoin('user_profiles', 'users.id', '=', 'user_profiles.user_id')
+            ->select('users.id', 'user_profiles.name', 'user_profiles.avatar')
+            ->get();
+
+        if (empty($drivers)) {
+            return abort(404, 'there no drivers ready to work');
+        }
+
+        return $drivers;
     }
 }

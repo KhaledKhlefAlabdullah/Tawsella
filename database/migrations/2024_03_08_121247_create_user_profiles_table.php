@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->unique()->primary();
             $table->string('user_id');
             $table->string('name');
-            $table->string('user_avatar')->default('/images/profile_images/user_profile.png');
+            $table->string('avatar')->default('/images/profile_images/avatar.png');
             $table->string('phoneNumber')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();

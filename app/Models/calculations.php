@@ -18,7 +18,7 @@ class calculations extends Model
     protected $fillable = [
         'driver_id',
         'taxi_movement_id',
-        'calculate'
+        'mount'
     ];
 
     public function driver(){

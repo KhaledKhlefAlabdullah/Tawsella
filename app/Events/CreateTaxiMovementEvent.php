@@ -2,6 +2,8 @@
 
 namespace App\Events;
 
+use App\Models\Taxi;
+use App\Models\TaxiMovement;
 use App\Models\UserProfile;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -26,15 +28,17 @@ class CreateTaxiMovementEvent extends BaseEvent
     public function broadcastWith(): array
     {       
 
-        $customer = UserProfile::where('user_id',$this->customer_id)->select('name','user_avatar','phoneNumber')->first();
+        $customer = UserProfile::where('user_id',$this->customer_id)->select('name','avatar','phoneNumber')->first();
         return [
+            'index' => TaxiMovement::where('is_don',false)->count(),
+            'drivers' => getReadyDrivers(),
             'request_id' => $this->request_id,
             'customer' => $customer,
             'gender' => $this->gender,
             'customer_address' => $this->customer_address,
             'destnation_address' => $this->customer_destnation_address,
-            'location_lat' => $this->location_lat,
-            'location_long' => $this->location_long,
+            'lat' => $this->location_lat,
+            'long' => $this->location_long,
         ];
     }
 

@@ -14,7 +14,6 @@ class TaxiController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -29,12 +28,20 @@ class TaxiController extends Controller
     public function create()
     {
         try {
-            $drivers = User::where('users.user_type', 'driver')
-                ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
-                ->select('users.id', 'user_profiles.name')->get();
             
-             // عرض الاستمارة لإنشاء سجل جديد
+            // get the drivers dont have taxi
+            $drivers = User::where([
+                'users.user_type' => 'driver',
+                'users.is_active' => true
+            ])
+            ->leftJoin('taxis', 'users.id', '=', 'taxis.driver_id')
+            ->whereNull('taxis.id')
+            ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
+            ->select('users.id', 'user_profiles.name','user_profiles.avatar')
+            ->get();
+            
             return view('taxis.create', compact('drivers'));
+
         } catch (Exception $e) {
             abort(500, 'there error in redirect to the add taxi form');
         }
@@ -53,7 +60,7 @@ class TaxiController extends Controller
             Taxi::create($validatedData);
 
             // إعادة توجيه أو عرض رسالة نجاح
-            return redirect()->route('taxis.index')->with('success', 'تم إنشاء سجل التاكسي بنجاح.');
+            return redirect()->back()->with('success', 'تم إنشاء سجل التاكسي بنجاح.');
         } catch (Exception $e) {
             abort(500, 'there error in creatting taxi'.$e->getMessage());
         }

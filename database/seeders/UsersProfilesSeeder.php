@@ -19,7 +19,7 @@ class UsersProfilesSeeder extends Seeder
             'id' => Str::uuid(),
             'user_id' => 'Asds-52664d66-aasd5566-C1',
             'name' => 'customer 1',
-            'user_avatar' => 'avatar1',
+            'avatar' => 'avatar1',
             'phoneNumber' => '+96563335648',
         ]);
 
@@ -27,7 +27,7 @@ class UsersProfilesSeeder extends Seeder
             'id' => Str::uuid(),
             'user_id' => 'Asds-52664d66-aasd5566-C2',
             'name' => 'customer 2',
-            'user_avatar' => 'avatar2',
+            'avatar' => 'avatar2',
             'phoneNumber' => '+96563335648',
         ]);
     }

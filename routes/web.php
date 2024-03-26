@@ -57,7 +57,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     //***************************start route driver ******************************** */
     Route::get('/create-driver', [RegisteredUserController::class, 'create'])
-        ->name('create-driver');
+        ->name('create.driver');
     // For create the drivers acounts
     Route::post('/store-driver', [RegisteredUserController::class, 'admin_store'])->name('store-driver');
     Route::group(['prefix' => 'drivers'], function () {
@@ -72,9 +72,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     //***************************start route Taxi ******************************** */
     Route::get('/taxi', [TaxiController::class, 'index'])->name('taxis.index');
-    Route::get('/taxis/{taxi}', [TaxiController::class, 'show'])->name('taxis.show');
-
-    Route::get('/taxis/create', [TaxiController::class, 'create'])->name('taxis.create');
+    Route::get('/taxi/{taxi}', [TaxiController::class, 'show'])->name('taxis.show');
+    Route::get('/taxis/create',[TaxiController::class,'create'])->name('taxis.create');
     Route::post('/taxis', [TaxiController::class, 'store'])->name('taxis.store');
 
     Route::get('/taxis/{taxi}/edit', [TaxiController::class, 'edit'])->name('taxis.edit');

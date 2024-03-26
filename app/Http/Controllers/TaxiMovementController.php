@@ -8,9 +8,11 @@ use App\Events\RejectTaxiMovemntEvent;
 use App\Http\Requests\TaxiMovementRequest;
 use App\Models\Taxi;
 use App\Models\TaxiMovement;
+use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class TaxiMovementController extends Controller
 {
@@ -94,40 +96,49 @@ class TaxiMovementController extends Controller
         try{
             $request->validate([
                 'state' => 'sometimes|string|required|in:accepted,rejected',
-                'driver_id' => 'sometimes|string|required',
-                'message' => 'string|sometimes|required'
+                'driver_id' => 'sometimes|nullable|string',
+                'message' => 'string|sometimes|nullable'
             ]);
-            
+    
             $taxiMovement = getAndCheckModelById(TaxiMovement::class,$id);
-            
+    
             $taxiMovement->update([
-                'request_state' => $request->input('state')
+                'request_state' => $request->input('state'),
+                'is_don' => true
             ]);
-
+    
             if($request->input('state') == 'accepted'){
 
                 $driver_id = $request->input('driver_id');
-                $taxi_id = Taxi::where('driver_id',$driver_id)->first()->id;
+                
+                $driver = getAndCheckModelById(User::class,$driver_id);
 
+                $driver->update([
+                    'driver_state' => 'reserved'
+                ]);
+
+                $taxi_id = Taxi::where('driver_id',$driver_id)->first()->id;
+                
                 $taxiMovement->update([
                     'driver_id' => $driver_id,
                     'taxi_id' => $taxi_id
                 ]);
-
-                AcceptTaxiMovemntEvent::dispatch(
-                    $taxiMovement
-                );
-            }else if($request->input('state') == 'rejected'){
+                
+                AcceptTaxiMovemntEvent::dispatch($taxiMovement);
+            } else if($request->input('state') == 'rejected'){
+                
                 RejectTaxiMovemntEvent::dispatch(
                     $taxiMovement->customer_id,
                     $request->input('message')
                 );  
             }
+    
+            return redirect()->back()->with('success', 'Request '.$request->input('state').' successfully.');
 
-            return redirect()->back();
-        }
-        catch(Exception $e){
-            return abort(500,'error in accept or reject request');
+        } catch(ValidationException $e) {
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        } catch(Exception $e){
+            return redirect()->back()->withErrors(['error' => 'An error occurred. Please try again.'])->withInput();
         }
     }
 
@@ -138,7 +149,7 @@ class TaxiMovementController extends Controller
     {
         //
     }
-
+    
     /**
      * Show the form for editing the specified resource.
      */

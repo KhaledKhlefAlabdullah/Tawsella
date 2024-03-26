@@ -17,7 +17,7 @@ class AcceptTaxiMovemntEvent extends BaseEvent
     public function __construct($taxiMovement)
     {
         $this->driver_id = $taxiMovement->driver_id;
-        $this->movement_type = TaxiMovementType::findOrFail($this->request_id)->type;
+        $this->movement_type = TaxiMovementType::findOrFail($taxiMovement->movement_type_id)->type;
 
         parent::__construct($taxiMovement);
     }
@@ -55,7 +55,7 @@ class AcceptTaxiMovemntEvent extends BaseEvent
     {
         $customer_id = $this->customer_id;
 
-        $customer_profile = UserProfile::where('user_id', $customer_id)->select('name', 'user_avatar', 'phoneNumber',)->first();
+        $customer_profile = UserProfile::where('user_id', $customer_id)->select('name', 'avatar', 'phoneNumber',)->first();
 
         return [
             'request_id' => $this->request_id,
@@ -68,7 +68,7 @@ class AcceptTaxiMovemntEvent extends BaseEvent
     {
         $driver_id = $this->driver_id;
 
-        $driver_profile = UserProfile::where('user_id', $driver_id)->select('name', 'user_avatar', 'phoneNumber',)->first();
+        $driver_profile = UserProfile::where('user_id', $driver_id)->select('name', 'avatar', 'phoneNumber',)->first();
 
         return [
             'message' => '',

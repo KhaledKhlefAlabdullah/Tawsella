@@ -9,25 +9,29 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Taxi extends Model
 {
-    use HasFactory,HasUuid,SoftDeletes;
+    use HasFactory, HasUuid, SoftDeletes;
 
     protected $keyType = 'string';
     protected $primaryKey = 'id';
     public $incrementing = false;
 
-    protected $fillable =[
+    protected $fillable = [
         'driver_id',
         'car_name',
         'lamp_number',
         'plate_number',
-        'car_detailes'
+        'car_detailes',
+        'last_location_latitude',
+        'last_location_longitude'
     ];
 
-    public function driver(){
-        return $this->belongsTo(User::class,'driver_id');
+    public function driver()
+    {
+        return $this->belongsTo(User::class, 'driver_id');
     }
 
-    public function taxi_movements(){
-        return $this->hasMany(TaxiMovement::class,'taxi_id');
+    public function taxi_movements()
+    {
+        return $this->hasMany(TaxiMovement::class, 'taxi_id');
     }
 }

@@ -21,7 +21,7 @@ class UserProfileController extends Controller
     {
         try{
 
-            $profile = UserProfile::select('users.id as user_id','user_profiles.name','user_profiles.user_avatar','user_profiles.phoneNumber','users.email')
+            $profile = UserProfile::select('users.id as user_id','user_profiles.name','user_profiles.avatar','user_profiles.phoneNumber','users.email')
             ->join('users','user_profiles.user_id','=','users.id')
             ->where('user_profiles.user_id', getMyId())
             ->first();
@@ -54,22 +54,22 @@ class UserProfileController extends Controller
 
             $userProfile = findAndUpdate(UserProfile::class, $id, ['name', 'phoneNumber'], [$request->input('name'), $request->input('phoneNumber')]);
 
-            if ($request->user_avatar) {
+            if ($request->avatar) {
 
-                $avatar = $request->user_avatar;
+                $avatar = $request->avatar;
 
                 $path = 'images/profiles';
 
-                if ($userProfile->user_avatar == '/images/profile_images/user_profile.png') {
+                if ($userProfile->avatar == '/images/profile_images/user_profile.png') {
 
                     $avatar_path = storeProfileAvatar($avatar, $path);
                 } else {
 
-                    $avatar_path = editProfileAvatar($userProfile->user_avatar, $path, $avatar);
+                    $avatar_path = editProfileAvatar($userProfile->avatar, $path, $avatar);
                 }
 
                 $userProfile->update([
-                    'user_avatar' => $avatar_path
+                    'avatar' => $avatar_path
                 ]);
             }
 
