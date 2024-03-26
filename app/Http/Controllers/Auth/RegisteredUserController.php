@@ -41,7 +41,6 @@ class RegisteredUserController extends Controller
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
                 'phone_number' => ['required', 'string', 'regex:/^\+[0-9]{9,20}$/'],
-                'driver_state' => $user_type == 'driver' ? 'ready' : null,
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
             ]);
 
@@ -78,7 +77,7 @@ class RegisteredUserController extends Controller
 
                 $token = createToken($user, 'register-token');
 
-                return api_response(data: $token, message: 'register-success');
+                return api_response(data: ['token' => $token, 'user_id' => $user->id], message: 'register-success');
             }
 
             Session::flash('success', 'Driver account created successfully.');
@@ -99,7 +98,9 @@ class RegisteredUserController extends Controller
     public function admin_store(Request $request)
     {
         $request->validate([
-            'avatar' => 'nullable|image|mimes:png,jpg'
+            'avatar' => 'nullable|image|mimes:png,jpg',
+            'driver_state' => 'driver',
+
             // 'car_name' => ,
             // 'lamp_number' => ,
             // 'plate_number' => ,
