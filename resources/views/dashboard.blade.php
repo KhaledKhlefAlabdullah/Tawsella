@@ -87,30 +87,53 @@
                                     </div>
                                 </div>
                                 <hr>
-                                <iframe width="600" height="450" frameborder="0" style="border:0"
-                                    src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d3523.0238833428734!2d{{ $lifeTaxiMovement->long }}85!3d{{ $lifeTaxiMovement->lat }}!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sar!2str!4v1711312086781!5m2!1sar!2str"
-                                    allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
-
+                                <div id="map{{ $loop->index }}" class="map"></div>
                                 <hr>
-                                <form action="{{ route('accept-reject-request',['taxiMovement' => $lifeTaxiMovement->id]) }}" method="POST">
+                                <form method="POST" action="{{ route('accept.reject.request', ['taxiMovement' => $lifeTaxiMovement->id]) }}">
                                     @csrf <!-- Add CSRF token for Laravel form submission -->
-
+                                
                                     <div class="form-group">
                                         <label for="decision" class="form-label">القرار:</label><br>
                                         <select id="decision" name="state" class="form-input" required>
-                                            <option value="accept">قبول</option>
-                                            <option value="reject">رفض</option>
+                                            <option value="accept" {{ old('state') == 'accept' ? 'selected' : '' }}>قبول</option>
+                                            <option value="reject" {{ old('state') == 'reject' ? 'selected' : '' }}>رفض</option>
                                         </select>
                                     </div>
-
+                                
+                                    <div class="form-group">
+                                        <label for="driver_id" class="form-label">اسم السائق:</label><br>
+                                        <select id="driver_id" name="driver_id" class="form-input" required>
+                                            <option value="">اختر السائق</option>
+                                            @foreach($drivers as $driver)
+                                                <option value="{{ $driver->id }}" {{ old('driver_id') == $driver->id ? 'selected' : '' }}>{{ $driver->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                
                                     <div class="form-group">
                                         <label for="reason" class="form-label">السبب (في حال الرفض):</label><br>
-                                        <textarea id="reason" name="message" class="form-input" rows="4" cols="50"></textarea>
+                                        <textarea id="reason" name="message" class="form-input" rows="4" cols="50">{{ old('message') }}</textarea>
                                     </div>
-                                    {{-- todo fix this tomoro --}}
-                                    <input type="submit" value="Submit" class="form-submit">
+                                
+                                    <input type="submit" class="form-submit">
                                 </form>
+                                
                             </div>
+                            <script>
+                                console.log('hhhhi');
+                                var map{{ $loop->index }} = L.map('map{{ $loop->index }}').setView([{{ $lifeTaxiMovement->lat }},
+                                    {{ $lifeTaxiMovement->long }}
+                                ], 10); // Set the map view with latitude and longitude of the current request
+                                console.log('hhhhi');
+                                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                }).addTo(map{{ $loop->index }});
+                                console.log('hhhhi');
+                                var marker{{ $loop->index }} = L.marker([{{ $lifeTaxiMovement->lat }}, {{ $lifeTaxiMovement->long }}]).addTo(
+                                    map{{ $loop->index }});
+                                marker{{ $loop->index }}.bindPopup(
+                                    {{ $lifeTaxiMovement->customer_name }}); // You can customize the popup content as needed
+                            </script>
                         </li>
                     @endforeach
                 </ul>
@@ -118,4 +141,20 @@
             </div>
         </section>
     </main>
+    @foreach ($lifeTaxiMovements as $lifeTaxiMovement)
+        <script>
+            var map{{ $loop->index }} = L.map('map{{ $loop->index }}').setView([{{ $lifeTaxiMovement->lat }},
+                {{ $lifeTaxiMovement->long }}
+            ], 10); // Set the map view with latitude and longitude of the current request
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map{{ $loop->index }});
+
+            var marker{{ $loop->index }} = L.marker([{{ $lifeTaxiMovement->lat }}, {{ $lifeTaxiMovement->long }}]).addTo(
+                map{{ $loop->index }});
+                marker{{ $loop->index }}.bindPopup(JSON.stringify('{{ $lifeTaxiMovement->customer_name }}')).openPopup();
+// You can customize the popup content as needed
+        </script>
+    @endforeach
 @endsection
