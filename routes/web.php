@@ -79,7 +79,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/taxis/create', [TaxiController::class, 'create'])->name('taxis.create');
     Route::post('/taxis', [TaxiController::class, 'store'])->name('taxis.store');
 
-
     Route::get('/taxis/{taxi}/edit', [TaxiController::class, 'edit'])->name('taxis.edit');
     Route::put('/taxis/{taxi}', [TaxiController::class, 'update'])->name('taxis.update');
 
