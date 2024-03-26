@@ -19,17 +19,16 @@ class UserProfileController extends Controller
      */
     public function index()
     {
-        try{
+        try {
 
-            $profile = UserProfile::select('users.id as user_id','user_profiles.name','user_profiles.avatar','user_profiles.phoneNumber','users.email')
-            ->join('users','user_profiles.user_id','=','users.id')
-            ->where('user_profiles.user_id', getMyId())
-            ->first();
+            $profile = UserProfile::select('users.id as user_id', 'user_profiles.name', 'user_profiles.avatar', 'user_profiles.phoneNumber', 'users.email')
+                ->join('users', 'user_profiles.user_id', '=', 'users.id')
+                ->where('user_profiles.user_id', getMyId())
+                ->first();
 
-            return api_response(data:$profile ,message:'user profile details getting success');
-        }
-        catch(Exception $e){
-            return api_response(errors:$e->getMessage(),message:'user profile details getting error',code:500);
+            return api_response(data: $profile, message: 'user profile details getting success');
+        } catch (Exception $e) {
+            return api_response(errors: $e->getMessage(), message: 'user profile details getting error', code: 500);
         }
     }
 
@@ -38,7 +37,6 @@ class UserProfileController extends Controller
      */
     public function edit(UserProfile $userProfile)
     {
-
     }
 
     /**
@@ -49,10 +47,15 @@ class UserProfileController extends Controller
         try {
 
             $request->validated();
+            $user = getAndCheckModelById(User::class, $id);
+            $user->update(['email' => $request->input('email')]);
 
-            $user = findAndUpdate(User::class, $id, ['email'], [$request->input('email')]);
+            $userProfile = UserProfile::where('user_id',$id)->first();
 
-            $userProfile = findAndUpdate(UserProfile::class, $id, ['name', 'phoneNumber'], [$request->input('name'), $request->input('phoneNumber')]);
+            $userProfile->update([
+                'name' => $request->input('name'),
+                'phoneNumber' => $request->input('phoneNumber')
+            ]);
 
             if ($request->avatar) {
 
@@ -75,7 +78,11 @@ class UserProfileController extends Controller
 
             if (Auth::user()->user_type == 'admin') {
 
-                $taxi = findAndUpdate(Taxi::class, $id, ['lamp_number', 'plate_number'], [$request->input('carLampNumber'), $request->input('carPlatNumber')]);
+                $taxi = getAndCheckModelById(Taxi::class, $id);
+                $taxi->update([
+                    'lamp_number' => $request->input('carLampNumber'),
+                    'plate_number' => $request->input('carPlatNumber')
+                ]);
             }
 
             if ($request->wantsJson())
