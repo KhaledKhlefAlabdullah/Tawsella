@@ -67,6 +67,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/drivers/{id}/edit', [DriversController::class, 'edit'])->name('drivers.edit');
     Route::put('/drivers/{id}', [DriversController::class, 'update'])->name('drivers.update');
+
+    Route::post('/drivers/set-state', [DriversController::class, 'setState'])->name('drivers.set_state');
+
     //***************************End route driver ******************************** */
     //**************************************************************************** */
 
@@ -98,7 +101,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //**************************************************************************** */
 
     Route::post('/accept-reject-request/{taxiMovement}',[TaxiMovementController::class,'accept_reject_request'])->name('accept.reject.request');
-    
+
     //*************************** START route taxi-movement *********************************** */
     //**************************************************************************** */
     Route::get('/current-taxi-movement', [TaxiMovementController::class, 'currentTaxiMovement'])->name('current.taxi.movement');
