@@ -9,6 +9,7 @@ use App\Http\Controllers\TaxiMovementTypeController;
 use App\Http\Controllers\UserProfileController;
 use App\Models\AboutUs;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DriversController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,6 +21,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+
+Route::post('/drivers/set-state', [DriversController::class, 'setState'])->name('api.drivers.set_state');
 
 Route::middleware('auth:sanctum')->group(function () {
 
