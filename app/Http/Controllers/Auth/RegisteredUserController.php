@@ -89,7 +89,7 @@ class RegisteredUserController extends Controller
             return api_response(errors: [$e->getMessage()], message: 'register-error', code: 500);
         }
     }
-
+    
 
     /**
      * Admin register to create driver account

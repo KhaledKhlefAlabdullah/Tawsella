@@ -123,7 +123,6 @@
                     var destnation_address = event.destnation_address;
 
                     var newItem = document.createElement('li');
-                    console.log(locationLat);
                     newItem.innerHTML = `
             <li id='item${index}'>
                 <div class="card">
@@ -262,7 +261,6 @@
                                 }
                                 `;
                                
-                                console.log(55);
 
                     // Get the HTML element to append the script to
                     var item = document.getElementById(`item${index}`);
@@ -271,6 +269,22 @@
                     item.appendChild(script);
                 });
         }, 1000); // Set a delay of 1 second (1000 milliseconds) to ensure proper rendering after the page load
+    </script>
+    <script>
+        setTimeout(() => {
+            var userId = <?php echo json_encode(auth()->id()); ?>;
+            Echo.private(`movemnt.${userId}`)
+                .listen('.App\\Events\\MenementFindUnFindEvent', (event) => {
+                    var driver = event.driver;
+                    var customer = event.customer;
+                    var message = event.message;
+                    console.log(driver);
+                    console.log(customer);
+                    console.log(message);
+
+                    alert(driver);
+                }); 
+        },200); 
     </script>
 </body>
 

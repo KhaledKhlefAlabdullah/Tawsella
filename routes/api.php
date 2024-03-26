@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\MenementFindUnFindEvent;
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\ContactUsMessageController;
 use App\Http\Controllers\OfferController;
@@ -55,3 +56,11 @@ Route::get('/offers',[OfferController::class,'index']);
 
 Route::post('/contact-us',[ContactUsMessageController::class,'store']);
 require __DIR__ . '/auth.php';
+
+// Route::post('/test', function () {
+//     MenementFindUnFindEvent::dispatch(
+//         'driver1',
+//         'gdjhs',
+//         'msksksk'
+//     );
+// });

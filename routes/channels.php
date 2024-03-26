@@ -29,3 +29,7 @@ Broadcast::channel('customer.{customer_id}', function ($user, $customer_id) {
 Broadcast::channel('driver.{driver_id}', function ($user, $driver_id) {
     return (int) $user->id === (int) $driver_id;
 });
+
+Broadcast::channel('movemnt.{admin_id}', function ($user, $admin_id) {
+    return (int) $user->id === (int) $admin_id;
+});

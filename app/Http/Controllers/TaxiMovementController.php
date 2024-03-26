@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Events\AcceptTaxiMovemntEvent;
 use App\Events\CreateTaxiMovementEvent;
+use App\Events\MenementFindUnFindEvent;
 use App\Events\RejectTaxiMovemntEvent;
 use App\Http\Requests\TaxiMovementRequest;
 use App\Models\Taxi;
@@ -145,9 +146,25 @@ class TaxiMovementController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(TaxiMovement $taxiMovement)
+    public function show(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'state' => 'required|boolean'
+        ]);
+
+        $taxiMovement = getAndCheckModelById(TaxiMovement::class, $id);
+
+        if($request->input('state')){
+            MenementFindUnFindEvent::dispatch(
+                '',
+                '',
+                'تم ايجاد الزبون'
+            );
+        }
+        else{
+            
+        }
+
     }
     
     /**
