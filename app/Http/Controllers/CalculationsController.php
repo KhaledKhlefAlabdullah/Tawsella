@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\calculations;
+use App\Models\Calculations;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -14,7 +14,7 @@ class CalculationsController extends Controller
     public function index()
     {
         try {
-            $calculations = calculations::all();
+            $calculations = Calculations::all();
             return view('calculations.index', ['calculations' => $calculations]);
         } catch (Exception $e) {
             return abort(500, 'There was an error in getting calculations');
@@ -40,7 +40,7 @@ class CalculationsController extends Controller
             'calculate' => 'required|numeric',
         ]);
 
-        calculations::create($data);
+        Calculations::create($data);
 
         return redirect()->route('calculations.index')->with('success', 'Calculation created successfully');
     }
@@ -49,7 +49,7 @@ class CalculationsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(calculations $calculations)
+    public function show(Calculations $calculations)
     {
         return view('calculations.show', ['calculations' => $calculations]);
     }
@@ -58,7 +58,7 @@ class CalculationsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(calculations $calculations)
+    public function edit(Calculations $calculations)
     {
         return view('calculations.edit', ['calculations' => $calculations]);
     }
@@ -67,7 +67,7 @@ class CalculationsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, calculations $calculations)
+    public function update(Request $request, Calculations $calculations)
     {
         $data = $request->validate([
             'driver_id' => 'required',
@@ -84,7 +84,7 @@ class CalculationsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(calculations $calculations)
+    public function destroy(Calculations $calculations)
     {
         $calculations->delete();
 

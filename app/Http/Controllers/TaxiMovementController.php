@@ -4,15 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Events\AcceptTaxiMovemntEvent;
 use App\Events\CreateTaxiMovementEvent;
-use App\Events\MenementFindUnFindEvent;
+use App\Events\MovementFindUnFindEvent;
 use App\Events\RejectTaxiMovemntEvent;
 use App\Http\Requests\TaxiMovementRequest;
+use App\Models\Calculations;
 use App\Models\Taxi;
 use App\Models\TaxiMovement;
+use App\Models\TaxiMovementType;
 use App\Models\User;
+use App\Models\UserProfile;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class TaxiMovementController extends Controller
@@ -155,7 +159,7 @@ class TaxiMovementController extends Controller
         $taxiMovement = getAndCheckModelById(TaxiMovement::class, $id);
 
         if($request->input('state')){
-            MenementFindUnFindEvent::dispatch(
+            MovementFindUnFindEvent::dispatch(
                 '',
                 '',
                 'تم ايجاد الزبون'
@@ -167,6 +171,61 @@ class TaxiMovementController extends Controller
 
     }
     
+
+    /**
+     * Make the movement is completed
+     */
+    public function makeMovementIsCompleted(Request $request, string $id){
+        try{
+
+            $request->validate([
+                'way' => 'sometimes|numeric',
+                'end_lat' => 'required|numeric',
+                'end_lon' => 'required|numeric'
+            ]);
+
+            $taxiMovement = getAndCheckModelById(TaxiMovement::class, $id);
+
+            $taxiMovement->update([
+                'is_completed' => true,
+                'end_latitude' => $request->input('end_lat'),
+                'end_longitude' => $request->input('end_lon')
+            ]);
+
+            $movement_type = TaxiMovementType::findOrFail($taxiMovement->movement_type_id);
+            if($movement_type->is_onKM){
+                $totalPrice = $request->input('way')*$movement_type->price;
+            }
+            else{
+                $totalPrice = $movement_type->price;
+            }
+
+            Calculations::create([
+                'driver_id' => Auth::id(),
+                'taxi_movement_id' => $id,
+                'totalPrice' => $totalPrice,
+                'way' => $request->input('way')
+            ]);
+
+            $driverName = UserProfile::where('user_id',Auth::id())->first()->name;
+
+            $customerName = UserProfile::where('user_id',  $taxiMovement->customer_id)->first()->name;
+
+            $from = $taxiMovement->my_address;
+            $to = $taxiMovement->destnation_address;
+
+            MovementFindUnFindEvent::dispatch(
+                $driverName,
+                $customerName,
+                'تم اكمال طلب الزبون من '.$from.'إلى '.$to
+            );
+            return api_response(message:'success');
+        }
+        catch(Exception $e){
+            return api_response(errors:$e->getMessage(),message:'error',code:500);
+        }
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
