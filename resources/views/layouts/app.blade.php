@@ -136,6 +136,8 @@
                     var gender = event.gender;
                     var customer_address = event.customer_address;
                     var destnation_address = event.destnation_address;
+                    
+                    alert("لقد وصل طلب جديد");
 
                     var newItem = document.createElement('li');
                     newItem.innerHTML = `
@@ -184,13 +186,15 @@
                     <hr>
                     <div id="map${index}" class="map"></div>
                     <hr>
-                    <div id="buttons${index}" class="card row" style="display: block;">
-                                    <button id='accept${index}'
+                    <div id="buttons${index}" class="p-4 w-100" style="display: block;">
+                                    <button id='accept${index}' class="btn rounded btn-success"
                                         onclick="showAcceptForm(${index})">قبول</button>
-                                    <button id='reject${index}'
+                                    <button id='reject${index}' class="btn rounded btn-danger"
                                         onclick="showRejectForm(${index})">رفض</button>
                                 </div>
-
+                                <button id="cancel${index}" class="btn" style="display: none;"
+                                    onclick="showButtons(${index})"><i class="fa-solid fa-x"></i></button>
+                               
                                 <form id="accept-form${index}" method="POST"
                                     action="{{ url('/accept-reject-request/${request_id}') }}"
                                     style="display: none;">
@@ -207,7 +211,7 @@
                                     <div id="driver-field${index}" class="form-group">
                                         <label for="driver_id" class="form-label">اسم السائق:</label><br>
                                     
-                                                <select id="driver_id" name="driver_id" class="form-input">
+                                                <select id="driver_id" name="driver_id" class="form-input" required>
                                         <option value="">اختر السائق</option>
                                         ${drivers.map(driver => `<option value="${driver.id}">${driver.name}</option>`).join('')}
                                         </select>
@@ -232,7 +236,7 @@
                                     @endif
                                     <div id="reason-field${index}" class="form-group">
                                         <label for="reason" class="form-label">السبب (اختياري):</label><br>
-                                        <textarea id="reason${index}" name="message" class="form-input" rows="4" cols="50">{{ old('message') }}</textarea>
+                                        <textarea id="reason${index}" name="message" class="form-input" rows="4" cols="50" required>{{ old('message') }}</textarea>
                                     </div>
                                     <!-- Hidden input field for static state -->
                                     <input type="hidden" name="state" value="rejected">
@@ -260,19 +264,26 @@
                                 // You can customize the popup content as needed
 
                                 function showAcceptForm(index) {
-                                    document.getElementById('accept' + index).style.display = 'none';
-                                    document.getElementById('reject' + index).style.display = 'none';
                                     document.getElementById('accept-form' + index).style.display = 'block';
                                     document.getElementById('reject-form' + index).style.display = 'none';
                                     document.getElementById('buttons' + index).style.display = 'none';
+                                    document.getElementById('cancel' + index).style.display = 'block';
+
                                 }
 
                                 function showRejectForm(index) {
-                                    document.getElementById('accept' + index).style.display = 'none';
-                                    document.getElementById('reject' + index).style.display = 'none';
                                     document.getElementById('accept-form' + index).style.display = 'none';
                                     document.getElementById('reject-form' + index).style.display = 'block';
                                     document.getElementById('buttons' + index).style.display = 'none';
+                                    document.getElementById('cancel' + index).style.display = 'block';
+
+                                }
+
+                                function showButtons(index){
+                                    document.getElementById('accept-form' + index).style.display = 'none';
+                                    document.getElementById('reject-form' + index).style.display = 'none';
+                                    document.getElementById('buttons' + index).style.display = 'block';
+                                    document.getElementById('cancel' + index).style.display = 'none';
                                 }
                                 `;
                                
@@ -282,8 +293,11 @@
 
                     // Append the script element to the HTML element
                     item.appendChild(script);
+
                 });
         }, 1000); // Set a delay of 1 second (1000 milliseconds) to ensure proper rendering after the page load
+
+        
     </script>
   
 </body>
