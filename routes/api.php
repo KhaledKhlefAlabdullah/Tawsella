@@ -21,6 +21,8 @@ use App\Http\Controllers\DriversController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::post('/found-customer/{id}', [TaxiMovementController::class, 'foundCostumer'])->name('found.customer');
+
 
 
 
