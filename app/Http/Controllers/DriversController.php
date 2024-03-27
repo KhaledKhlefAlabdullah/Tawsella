@@ -83,27 +83,31 @@ class DriversController extends Controller
     public function setState(Request $request)
     {
         try {
-
             $driverId = auth()->id();
 
             // التحقق من وجود السائق في قاعدة البيانات
             $driver = User::where('id', $driverId)->where('user_type', 'driver')->first();
             if (!$driver) {
-                return response()->json(['message' => 'Driver not found'], 404);
+                return api_response(null, 'Driver not found', 404);
             }
+
             // تحديث حالة السائق بناءً على القيمة المرسلة في الطلب
             if ($request->state == 0) {
                 $driver->driver_state = 'in_break';
-                $driver->save();
-                return response()->json(['message' => 'Driver is in_break'], 200);
+                $message = 'Driver is in_break';
             } elseif ($request->state == 1) {
                 $driver->driver_state = 'Ready';
-                $driver->save();
-                return response()->json(['message' => 'Driver is Ready'], 200);
+                $message = 'Driver is Ready';
+            } else {
+                // إذا كانت القيمة المرسلة غير صالحة
+                return api_response(null, 'Invalid state value', 400);
             }
-            return response()->json(['message' => 'Driver state updated successfully'], 200);
+
+            $driver->save();
+            return api_response(null, $message, 200);
         } catch (Exception $e) {
-            return response()->json(['message' => 'Failed to update driver state', 'error' => $e->getMessage()], 500);
+            return api_response(null, 'Failed to update driver state', 500, null, ['error' => $e->getMessage()]);
         }
     }
+
 }
