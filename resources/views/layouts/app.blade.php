@@ -106,7 +106,22 @@
 
     <!-- Reale time Scripts -->
     @vite('resources/js/app.js')
+    <script>
+        setTimeout(() => {
+            var userId = <?php echo json_encode(auth()->id()); ?>;
+            Echo.private(`movemnt.${userId}`)
+                .listen('.App\\Events\\MovementFindUnFindEvent', (event) => {
+                    var driver = event.driver;
+                    var customer = event.customer;
+                    var message = event.message;
+                    console.log(driver);
+                    console.log(customer);
+                    console.log(message);
 
+                    alert(driver);
+                }); 
+        },200); 
+    </script>
     <script>
         setTimeout(() => {
             var userId = <?php echo json_encode(auth()->id()); ?>;
@@ -270,22 +285,7 @@
                 });
         }, 1000); // Set a delay of 1 second (1000 milliseconds) to ensure proper rendering after the page load
     </script>
-    <script>
-        setTimeout(() => {
-            var userId = <?php echo json_encode(auth()->id()); ?>;
-            Echo.private(`movemnt.${userId}`)
-                .listen('.App\\Events\\MovementFindUnFindEvent', (event) => {
-                    var driver = event.driver;
-                    var customer = event.customer;
-                    var message = event.message;
-                    console.log(driver);
-                    console.log(customer);
-                    console.log(message);
-
-                    alert(driver);
-                }); 
-        },200); 
-    </script>
+  
 </body>
 
 </html>

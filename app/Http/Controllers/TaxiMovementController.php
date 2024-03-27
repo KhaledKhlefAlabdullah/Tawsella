@@ -159,19 +159,22 @@ class TaxiMovementController extends Controller
 
         $taxiMovement = getAndCheckModelById(TaxiMovement::class, $id);
 
+        $driver = UserProfile::where('user_id',$taxiMovement->driver_id)->first();
+        $customer = UserProfile::where('user_id',$taxiMovement->customer_id)->first();
+
         if($request->input('state')){
             // إذا تم العثور على الزبون، ارسل الحدث
             MovementFindUnFindEvent::dispatch(
-                $taxiMovement->driver->name, // اسم السائق الذي وجد الزبون
-                $taxiMovement->customer->name, // اسم الزبون الذي تم العثور عليه
+                $driver->name, // اسم السائق الذي وجد الزبون
+                $customer->name, // اسم الزبون الذي تم العثور عليه
                 'تم ايجاد الزبون'
             );
         }
         else{
             // إذا لم يتم العثور على الزبون، قم بإطلاق الحدث وحذف taxiMovement
             MovementFindUnFindEvent::dispatch(
-                $taxiMovement->driver->name, // اسم السائق
-                $taxiMovement->customer->name, // اسم الزبون الذي تم العثور عليه
+                $driver->name, // اسم السائق الذي وجد الزبون
+                $customer->name, // اسم الزبون الذي تم العثور عليه
                 'لم يتم العثور على الزبون'
             );
 

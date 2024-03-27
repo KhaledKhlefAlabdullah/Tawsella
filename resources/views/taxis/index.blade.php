@@ -35,7 +35,7 @@
                             @foreach ($taxis as $taxi)
                                 <tr>
                                     <th scope="row">{{ $loop->iteration }}</th>
-                                    <td><p class="text-center">{{ $taxi->driver->id }}</p></td>
+                                    <td><p class="text-center">{{ $taxi->driverName }}</p></td>
                                     <td><p class="text-center">{{ $taxi->car_name }}</p></td>
                                     <td><p class="text-center">{{ $taxi->lamp_number }}</p></td>
                                     <td><p class="text-center">{{ $taxi->plate_number }}</p></td>
