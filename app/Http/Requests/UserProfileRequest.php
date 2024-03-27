@@ -23,12 +23,13 @@ class UserProfileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required','sometimes','string'],
-            'email' => ['required', 'string', 'email', 'max:255','unique'],
-            'phoneNumber' => ['required','sometimes','string','regex:/^\+?[0-9]{9,20}$/','unique'],
-            'carPlatNumber' => ['required','sometimes','string','unique'],
-            'carLampNumber' => ['required','sometimes','string'],
-            'avatar' => ['required','sometimes','image','mimes:png,jpg,gif']
+            'name' => ['required', 'sometimes', 'string'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'phoneNumber' => ['required', 'sometimes', 'string', 'regex:/^\+?[0-9]{9,20}$/', 'unique:user_profiles,phoneNumber'],
+            'carPlatNumber' => ['sometimes', 'string', 'unique:car_table,plat_number'],
+            'carLampNumber' => ['sometimes', 'string'],
+            'avatar' => ['sometimes', 'image', 'mimes:png,jpg,gif']
         ];
     }
+    
 }

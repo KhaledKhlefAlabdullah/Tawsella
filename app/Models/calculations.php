@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class calculations extends Model
+class Calculations extends Model
 {
     use HasFactory, HasUuid, SoftDeletes;
 
@@ -18,7 +18,8 @@ class calculations extends Model
     protected $fillable = [
         'driver_id',
         'taxi_movement_id',
-        'mount'
+        'totalPrice',
+        'way'
     ];
 
     public function driver(){

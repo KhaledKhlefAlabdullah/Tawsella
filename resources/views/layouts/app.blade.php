@@ -274,7 +274,7 @@
         setTimeout(() => {
             var userId = <?php echo json_encode(auth()->id()); ?>;
             Echo.private(`movemnt.${userId}`)
-                .listen('.App\\Events\\MenementFindUnFindEvent', (event) => {
+                .listen('.App\\Events\\MovementFindUnFindEvent', (event) => {
                     var driver = event.driver;
                     var customer = event.customer;
                     var message = event.message;

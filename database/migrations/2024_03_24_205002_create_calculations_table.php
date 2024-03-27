@@ -15,7 +15,8 @@ return new class extends Migration
             $table->uuid('id')->primary()->unique();
             $table->string('driver_id');
             $table->string('taxi_movement_id');
-            $table->float('mount');
+            $table->float('totalPrice');
+            $table->float('way');
             $table->foreign('driver_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('taxi_movement_id')->references('id')->on('taxi_movements')->onDelete('cascade');
             $table->timestamps();

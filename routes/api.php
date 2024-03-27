@@ -1,6 +1,6 @@
 <?php
 
-use App\Events\MenementFindUnFindEvent;
+use App\Events\MovementFindUnFindEvent;
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\ContactUsMessageController;
 use App\Http\Controllers\OfferController;
@@ -24,31 +24,28 @@ use App\Http\Controllers\DriversController;
 Route::post('/found-customer/{id}', [TaxiMovementController::class, 'foundCostumer'])->name('found.customer');
 
 
-Route::post('/drivers/set-state', [DriversController::class, 'setState']);
+
 
 Route::middleware('auth:sanctum')->group(function () {
 
+    // for driver
+    Route::post('/drivers/set-state', [DriversController::class, 'setState']);
 
-    Route::middleware('driver')->group(function () {
+    Route::post('/make-is-completed/{id}', [TaxiMovementController::class, 'makeMovementIsCompleted']);
 
-        Route::group(['prefix' => 'driver'], function () {
-        });
+    Route::group(['prefix' => 'driver'], function () {
     });
 
-    Route::middleware('customer')->group(function () {
+    Route::get('/movement-types', [TaxiMovementTypeController::class, 'index']);
 
-        Route::get('/movement-types', [TaxiMovementTypeController::class, 'index']);
+    Route::post('/create-taxi-movemet', [TaxiMovementController::class, 'store']);
 
-        Route::post('/create-taxi-movemet', [TaxiMovementController::class, 'store']);
 
-    });
+    Route::group(['prefix' => 'profile'], function () {
 
-    Route::group(['prefix' => 'profile'],function(){
+        Route::get('/my-profile', [UserProfileController::class, 'index']);
 
-        Route::get('/my-profile',[UserProfileController::class,'index']);
-
-        Route::post('/edit/{user_id}',[UserProfileController::class,'update']);
-
+        Route::post('/edit/{user_id}', [UserProfileController::class, 'update']);
     });
 });
 
@@ -58,13 +55,15 @@ Route::group(['prefix' => 'info'], function () {
     Route::get('/addition', [AboutUsController::class, 'get_addition_information']);
 });
 
-Route::get('/offers',[OfferController::class,'index']);
 
-Route::post('/contact-us',[ContactUsMessageController::class,'store']);
+Route::get('/offers', [OfferController::class, 'index']);
+
+Route::post('/contact-us', [ContactUsMessageController::class, 'store']);
+
 require __DIR__ . '/auth.php';
 
 // Route::post('/test', function () {
-//     MenementFindUnFindEvent::dispatch(
+//     MovementFindUnFindEvent::dispatch(
 //         'driver1',
 //         'gdjhs',
 //         'msksksk'

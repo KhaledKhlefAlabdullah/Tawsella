@@ -84,8 +84,7 @@ class DriversController extends Controller
     {
         try {
 
-            // الحصول على معرف السائق من الـ Request بالفعل
-            $driverId = $request->driver_id;
+            $driverId = auth()->id();
 
             // التحقق من وجود السائق في قاعدة البيانات
             $driver = User::where('id', $driverId)->where('user_type', 'driver')->first();
