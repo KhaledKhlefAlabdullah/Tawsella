@@ -200,15 +200,7 @@ a:hover {
   .button-1:focus {
     background-color: #F082AC;
   }
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-span,
-a,
-p {
+*{
     font-family: "Cairo", sans-serif;
 }
 

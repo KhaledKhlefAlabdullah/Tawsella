@@ -103,7 +103,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //**************************************************************************** */
 
 
-    Route::post('/accept-reject-request/{taxiMovement}',[TaxiMovementController::class,'accept_reject_request'])->name('accept.reject.request');
+    Route::post('/accept-reject-request/{id}',[TaxiMovementController::class,'accept_reject_request'])->name('accept.reject.request');
 
     //*************************** START route taxi-movement *********************************** */
     Route::post('/accept-reject-request/{taxiMovement}', [TaxiMovementController::class, 'accept_reject_request'])->name('accept-reject-request');

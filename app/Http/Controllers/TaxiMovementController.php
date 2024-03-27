@@ -161,7 +161,7 @@ class TaxiMovementController extends Controller
 
         if($request->input('state')){
             // إذا تم العثور على الزبون، ارسل الحدث
-            MenementFindUnFindEvent::dispatch(
+            MovementFindUnFindEvent::dispatch(
                 $taxiMovement->driver->name, // اسم السائق الذي وجد الزبون
                 $taxiMovement->customer->name, // اسم الزبون الذي تم العثور عليه
                 'تم ايجاد الزبون'
@@ -169,7 +169,7 @@ class TaxiMovementController extends Controller
         }
         else{
             // إذا لم يتم العثور على الزبون، قم بإطلاق الحدث وحذف taxiMovement
-            MenementFindUnFindEvent::dispatch(
+            MovementFindUnFindEvent::dispatch(
                 $taxiMovement->driver->name, // اسم السائق
                 $taxiMovement->customer->name, // اسم الزبون الذي تم العثور عليه
                 'لم يتم العثور على الزبون'

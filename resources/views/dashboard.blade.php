@@ -37,7 +37,7 @@
                     <div class="col-lg-12 mb-6 card"style="padding: 10px;">
                         <div class="text-center card-content">
                             <h4>عدد السائقين</h4>
-                            <p>{{$totalDrivers}}</p>
+                            <p>{{ $totalDrivers }}</p>
                         </div>
                     </div>
                     <div class="col-lg-12 mb-6 card"style="padding: 10px;">
@@ -63,9 +63,8 @@
                                         </div>
                                         <div class="col-lg-6 mb-6">
                                             <div class="text-center card-content" style="margin: 10px;">
-                                                <img class="img"
-                                                        src="{{ asset('assets' . $lifeTaxiMovement->avatar) }}"
-                                                        alt="صورة العميل" />
+                                                <img class="img" src="{{ asset('assets' . $lifeTaxiMovement->avatar) }}"
+                                                    alt="صورة العميل" />
                                             </div>
                                         </div>
                                     </div>
@@ -77,7 +76,9 @@
                                         </div>
                                         <div class="col-lg-6 mb-6">
                                             <div class="text-center card-content" style="margin: 10px;">
-                                                <h4>الجنس: <span style="color: {{ $lifeTaxiMovement->gender ? '#4154f1' : 'pink' }}">{{ $lifeTaxiMovement->gender }}</span></h4>
+                                                <h4>الجنس: <span
+                                                        style="color: {{ $lifeTaxiMovement->gender ? '#4154f1' : 'pink' }}">{{ $lifeTaxiMovement->gender }}</span>
+                                                </h4>
                                             </div>
                                         </div>
                                     </div>
@@ -97,16 +98,19 @@
                                 <hr>
                                 <div id="map{{ $loop->index }}" class="map"></div>
                                 <hr>
-                                
+
                                 <div id="buttons{{ $loop->index }}" class="p-4 w-100" style="display: block;">
-                                    <button id='accept{{ $loop->index }}' class="button-3"
+                                    <button id='accept{{ $loop->index }}' class="btn rounded btn-success"
                                         onclick="showAcceptForm({{ $loop->index }})">قبول</button>
-                                    <button id='reject{{ $loop->index }}' class="button-1"
+                                    <button id='reject{{ $loop->index }}' class="btn rounded btn-danger "
                                         onclick="showRejectForm({{ $loop->index }})">رفض</button>
-                                </div> 
+
+                                    <button id='reject{{ $loop->index }}' class="btn rounded btn-danger "
+                                        onclick="showRejectForm({{ $loop->index }})">رفض</button>
+                                </div>
 
                                 <form id="accept-form{{ $loop->index }}" method="POST"
-                                    action="{{ route('accept.reject.request', ['taxiMovement' => $lifeTaxiMovement->id]) }}"
+                                    action="{{ route('accept.reject.request', ['id' => $lifeTaxiMovement->id]) }}"
                                     style="display: none;">
                                     @csrf <!-- Add CSRF token for Laravel form submission -->
                                     @if ($errors->any())
@@ -133,7 +137,7 @@
                                 </form>
 
                                 <form id="reject-form{{ $loop->index }}" method="POST"
-                                    action="{{ route('accept.reject.request', ['taxiMovement' => $lifeTaxiMovement->id]) }}"
+                                    action="{{ route('accept.reject.request', ['id' => $lifeTaxiMovement->id]) }}"
                                     style="display: none;">
                                     @csrf <!-- Add CSRF token for Laravel form submission -->
                                     @if ($errors->any())

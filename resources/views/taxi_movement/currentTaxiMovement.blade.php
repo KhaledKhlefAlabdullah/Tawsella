@@ -11,39 +11,29 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>My Address</th>
-                                <th>Destination Address</th>
-                                <th>Gender</th>
-                                <th>Start Latitude</th>
-                                <th>Start Longitude</th>
-                                <th>Driver Email</th>
-                                <th>Customer Email</th>
-                                <th>Driver Name</th>
-                                <th>Driver Phone</th>
-                                <th>Customer Name</th>
-                                <th>Customer Phone</th>
-                                <th>Car Name</th>
-                                <th>Lamp Number</th>
-                                <th>Plate Number</th>
-                                <th>Movement Type</th>
-                                <th>Price</th>
+                                <th>العميل</th>
+                                <th>رقم العميل</th>
+                                <th>مكان انطلاق العميل</th>
+                                <th>وجهة العميل</th>
+                                <th>الجنس</th>
+                                <th>السائق</th>
+                                <th>رقم السائق</th>
+                                <th>فانوس السيارة</th>
+                                <th>لوحة السيارة</th>
+                                <th>نوع الطلب</th>
+                                <th>التكلفة</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($taxiMovement as $movement)
                                 <tr>
+                                    <td>{{ $movement->customer_name }}</td>
+                                    <td>{{ $movement->customer_phone }}</td>
                                     <td>{{ $movement->my_address }}</td>
                                     <td>{{ $movement->destnation_address }}</td>
                                     <td>{{ $movement->gender }}</td>
-                                    <td>{{ $movement->start_latitude }}</td>
-                                    <td>{{ $movement->start_longitude }}</td>
-                                    <td>{{ $movement->driver_email }}</td>
-                                    <td>{{ $movement->customer_email }}</td>
                                     <td>{{ $movement->driver_name }}</td>
-                                    <td>{{ $movement->driver_phone }}</td>
-                                    <td>{{ $movement->customer_name }}</td>
-                                    <td>{{ $movement->customer_phone }}</td>
-                                    <td>{{ $movement->car_car_name }}</td>
+                                    <td>{{ $movement->driver_phone }}</td>                                    
                                     <td>{{ $movement->car_lamp_number }}</td>
                                     <td>{{ $movement->car_plate_number }}</td>
                                     <td>{{ $movement->type }}</td>
