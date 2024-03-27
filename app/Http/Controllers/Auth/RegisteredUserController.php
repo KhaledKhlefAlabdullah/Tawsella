@@ -47,7 +47,8 @@ class RegisteredUserController extends Controller
             $user = User::create([
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
-                'user_type' => $user_type
+                'user_type' => $user_type,
+                'driver_sate' => $user_type == 'driver' ? 'ready' : null
             ]);
 
             if ($user_type == 'driver') {
@@ -60,7 +61,7 @@ class RegisteredUserController extends Controller
                 //     'car_detailes' => $request->input('car_detailes')
                 // ]);
 
-                if (!is_null($request->input('avatar')))
+                if ($request->has('avatar'))
                     $avatar = $request->input('avatar');
             } else {
                 $avatar = '/images/profile_images/user_profile.png';
@@ -97,15 +98,13 @@ class RegisteredUserController extends Controller
      */
     public function admin_store(Request $request)
     {
-        $request->validate([
-            'avatar' => 'nullable|image|mimes:png,jpg',
-            'driver_state' => 'driver',
-
-            // 'car_name' => ,
-            // 'lamp_number' => ,
-            // 'plate_number' => ,
-            // 'car_detailes' => 
-        ]);
+        // $request->validate([
+        //     'avatar' => 'nullable|image|mimes:png,jpg',
+        //     // 'car_name' => ,
+        //     // 'lamp_number' => ,
+        //     // 'plate_number' => ,
+        //     // 'car_detailes' => 
+        // ]);
         return $this->store($request, 'driver');
     }
 }
