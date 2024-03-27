@@ -69,7 +69,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/drivers/{id}/edit', [DriversController::class, 'edit'])->name('drivers.edit');
     Route::put('/drivers/{id}', [DriversController::class, 'update'])->name('drivers.update');
 
-    Route::post('/drivers/set-state', [DriversController::class, 'setState'])->name('drivers.set_state');
+    // Route::post('/drivers/set-state', [DriversController::class, 'setState'])->name('drivers.set_state');
 
     //***************************End route driver ******************************** */
     //**************************************************************************** */

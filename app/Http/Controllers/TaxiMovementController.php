@@ -100,18 +100,18 @@ class TaxiMovementController extends Controller
                 'driver_id' => 'sometimes|nullable|string',
                 'message' => 'string|sometimes|nullable'
             ]);
-    
+
             $taxiMovement = getAndCheckModelById(TaxiMovement::class,$id);
-    
+
             $taxiMovement->update([
                 'request_state' => $request->input('state'),
                 'is_don' => true
             ]);
-    
+
             if($request->input('state') == 'accepted'){
 
                 $driver_id = $request->input('driver_id');
-                
+
                 $driver = getAndCheckModelById(User::class,$driver_id);
 
                 $driver->update([
@@ -119,21 +119,21 @@ class TaxiMovementController extends Controller
                 ]);
 
                 $taxi_id = Taxi::where('driver_id',$driver_id)->first()->id;
-                
+
                 $taxiMovement->update([
                     'driver_id' => $driver_id,
                     'taxi_id' => $taxi_id
                 ]);
-                
+
                 AcceptTaxiMovemntEvent::dispatch($taxiMovement);
             } else if($request->input('state') == 'rejected'){
-                
+
                 RejectTaxiMovemntEvent::dispatch(
                     $taxiMovement->customer_id,
                     $request->input('message')
-                );  
+                );
             }
-    
+
             return redirect()->back()->with('success', 'Request '.$request->input('state').' successfully.');
 
         } catch(ValidationException $e) {
@@ -146,7 +146,8 @@ class TaxiMovementController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, string $id)
+
+    public function foundCostumer(Request $request, string $id)
     {
         $request->validate([
             'state' => 'required|boolean'
@@ -155,18 +156,26 @@ class TaxiMovementController extends Controller
         $taxiMovement = getAndCheckModelById(TaxiMovement::class, $id);
 
         if($request->input('state')){
+            // إذا تم العثور على الزبون، ارسل الحدث
             MenementFindUnFindEvent::dispatch(
-                '',
-                '',
+                $taxiMovement->driver->name, // اسم السائق الذي وجد الزبون
+                $taxiMovement->customer->name, // اسم الزبون الذي تم العثور عليه
                 'تم ايجاد الزبون'
             );
         }
         else{
-            
-        }
+            // إذا لم يتم العثور على الزبون، قم بإطلاق الحدث وحذف taxiMovement
+            MenementFindUnFindEvent::dispatch(
+                $taxiMovement->driver->name, // اسم السائق
+                $taxiMovement->customer->name, // اسم الزبون الذي تم العثور عليه
+                'لم يتم العثور على الزبون'
+            );
 
+            // حذف taxiMovement
+            $taxiMovement->delete();
+        }
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      */

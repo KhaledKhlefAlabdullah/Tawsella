@@ -6,6 +6,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use App\Http\Requests\DriverStateRequest;
+
 class DriversController extends Controller
 {
     public function index()
@@ -78,7 +79,8 @@ class DriversController extends Controller
         } catch (Exception $e) {
             return abort(500, 'There was an error in updating the driver data');
         }
-    }public function setState(DriverStateRequest $request)
+    }
+    public function setState(Request $request)
     {
         try {
 
@@ -87,19 +89,19 @@ class DriversController extends Controller
 
             // التحقق من وجود السائق في قاعدة البيانات
             $driver = User::where('id', $driverId)->where('user_type', 'driver')->first();
-
             if (!$driver) {
                 return response()->json(['message' => 'Driver not found'], 404);
             }
-
             // تحديث حالة السائق بناءً على القيمة المرسلة في الطلب
             if ($request->state == 0) {
                 $driver->driver_state = 'in_break';
+                $driver->save();
+                return response()->json(['message' => 'Driver is in_break'], 200);
             } elseif ($request->state == 1) {
                 $driver->driver_state = 'Ready';
+                $driver->save();
+                return response()->json(['message' => 'Driver is Ready'], 200);
             }
-            $driver->save();
-
             return response()->json(['message' => 'Driver state updated successfully'], 200);
         } catch (Exception $e) {
             return response()->json(['message' => 'Failed to update driver state', 'error' => $e->getMessage()], 500);

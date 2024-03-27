@@ -21,11 +21,13 @@ use App\Http\Controllers\DriversController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+Route::post('/found-customer/{id}', [TaxiMovementController::class, 'foundCostumer'])->name('found.customer');
 
 
-Route::post('/drivers/set-state', [DriversController::class, 'setState'])->name('api.drivers.set_state');
+Route::post('/drivers/set-state', [DriversController::class, 'setState']);
 
 Route::middleware('auth:sanctum')->group(function () {
+
 
     Route::middleware('driver')->group(function () {
 
