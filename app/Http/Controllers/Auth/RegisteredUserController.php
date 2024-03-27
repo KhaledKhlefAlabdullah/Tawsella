@@ -36,13 +36,13 @@ class RegisteredUserController extends Controller
     public function store(Request $request, string $user_type = 'customer')
     {
         try {
-
             $request->validate([
                 'name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
                 'phone_number' => ['required', 'string', 'regex:/^\+[0-9]{9,20}$/'],
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
             ]);
+
 
             $user = User::create([
                 'email' => $request->email,
@@ -51,28 +51,13 @@ class RegisteredUserController extends Controller
                 'driver_sate' => $user_type == 'driver' ? 'ready' : null
             ]);
 
-            if ($user_type == 'driver') {
-
-                // Taxi::create([
-                //     'driver_id' => $user->id,
-                //     'car_name' => $request->input('car_name'),
-                //     'lamp_number' => $request->input('lamp_number'),
-                //     'plate_number' => $request->input('plate_number'),
-                //     'car_detailes' => $request->input('car_detailes')
-                // ]);
-
-                if ($request->has('avatar'))
-                    $avatar = $request->input('avatar');
-            } else {
-                $avatar = '/images/profile_images/user_profile.png';
-            }
-
+            
             UserProfile::create([
                 'user_id' => $user->id,
                 'name' => $request->input('name'),
                 'phoneNumber' => $request->input('phone_number'),
-                'avatar' => $avatar
             ]);
+            
 
             if ($request->wantsJson()) {
 
@@ -85,8 +70,11 @@ class RegisteredUserController extends Controller
 
             // Redirect back or to any other page
             return redirect()->back();
+
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'register-error', code: 500);
+            if(request()->wantsJson())
+                return api_response(errors: [$e->getMessage()], message: 'register-error', code: 500);
+
         }
     }
     
