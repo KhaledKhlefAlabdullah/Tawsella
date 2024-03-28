@@ -130,6 +130,7 @@ class TaxiMovementController extends Controller
                 ]);
 
                 AcceptTaxiMovemntEvent::dispatch($taxiMovement);
+                
             } else if($request->input('state') == 'rejected'){
 
                 RejectTaxiMovemntEvent::dispatch(
