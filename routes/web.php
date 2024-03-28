@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaxiController;
 use App\Http\Controllers\TaxiMovementController;
 use App\Http\Controllers\TaxiMovementTypeController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -129,6 +130,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //*************************** End route calculations *********************************** */
     //**************************************************************************** */
 });
+
+Route::post('/broadcasts', function (Request $request) {
+    $pusher = new Pusher\Pusher(env('PUSHER_APP_KEY'), env('PUSHER_APP_SECRET'), env('PUSHER_APP_ID'));
+    return $pusher->authorizeChannel($request->request->get('channel_name'), $request->request->get('socket_id'));
+});
+
 Route::get('/drivers', [DriversController::class, 'index']);
 
 
