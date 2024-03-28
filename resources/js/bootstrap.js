@@ -20,28 +20,11 @@ import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 window.Pusher = Pusher;
 
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: import.meta.env.VITE_PUSHER_APP_KEY,
-//     cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
-//     // wssPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
-//     forceTLS: false,
-//     enabledTransports: ['ws', 'wss'],
-// });
-
-import Echo from "laravel-echo";
-
-import Pusher from "pusher-js";
-window.Pusher = Pusher;
-
 window.Echo = new Echo({
-    authEndpoint: "/broadcasts",
-    broadcaster: "pusher",
+    broadcaster: 'pusher',
     key: import.meta.env.VITE_PUSHER_APP_KEY,
-    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER ?? "en",
-    wsHost: import.meta.env.VITE_PUSHER_HOST ? import.meta.env.VITE_PUSHER_HOST : `ws-${import.meta.env.VITE_PUSHER_APP_CLUSTER}.pusher.com`, // Properly concatenate the string
-    wsPort: import.meta.env.VITE_PUSHER_PORT ?? 80,
-    wssPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
-    enabledTransports: ["ws", "wss"],
-    withCredentials: true
+    cluster: import.meta.env.VITE_PUSHER_APP_CLUSTER,
+    // wssPort: import.meta.env.VITE_PUSHER_PORT ?? 443,
+    forceTLS: false,
+    enabledTransports: ['ws', 'wss'],
 });
