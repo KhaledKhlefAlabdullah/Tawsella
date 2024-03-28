@@ -149,7 +149,7 @@
                                         </div>
                                     @endif
                                     <div id="reason-field{{ $loop->index }}" class="form-group">
-                                        <label for="reason" class="form-label">السبب (اختياري):</label><br>
+                                        <label for="reason" class="form-label">السبب:</label><br>
                                         <textarea id="reason{{ $loop->index }}" name="message" class="form-input" rows="4" cols="50" required>{{ old('message') }}</textarea>
                                     </div>
                                     <!-- Hidden input field for static state -->

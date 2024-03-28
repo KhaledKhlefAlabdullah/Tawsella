@@ -143,7 +143,7 @@ class TaxiMovementController extends Controller
         } catch(ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch(Exception $e){
-            return redirect()->back()->withErrors(['error' => 'An error occurred. Please try again.'])->withInput();
+            return redirect()->back()->withErrors(['error' => $e->getMessage().'An error occurred. Please try again.'])->withInput();
         }
     }
 
