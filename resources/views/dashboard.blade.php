@@ -104,16 +104,15 @@
                                         onclick="showAcceptForm({{ $loop->index }})">قبول</button>
                                     <button id='reject{{ $loop->index }}' class="btn rounded btn-danger "
                                         onclick="showRejectForm({{ $loop->index }})">رفض</button>
-
-                                    <button id='reject{{ $loop->index }}' class="btn rounded btn-danger "
-                                        onclick="showRejectForm({{ $loop->index }})">رفض</button>
                                 </div>
-
+                                <button id='cancel{{ $loop->index }}' class="btn" style="display: none;"
+                                    onclick="showButtons({{ $loop->index }})"><i class="fa-solid fa-x"></i></button>
                                 <form id="accept-form{{ $loop->index }}" method="POST"
                                     action="{{ route('accept.reject.request', ['id' => $lifeTaxiMovement->id]) }}"
                                     style="display: none;">
                                     @csrf <!-- Add CSRF token for Laravel form submission -->
                                     @if ($errors->any())
+                                    
                                         <div class="alert alert-danger">
                                             <ul>
                                                 @foreach ($errors->all() as $error)
@@ -124,7 +123,7 @@
                                     @endif
                                     <div id="driver-field{{ $loop->index }}" class="form-group">
                                         <label for="driver_id" class="form-label">اسم السائق:</label><br>
-                                        <select id="driver_id{{ $loop->index }}" name="driver_id" class="form-input">
+                                        <select id="driver_id{{ $loop->index }}" name="driver_id" class="form-input" required>
                                             <option value="">اختر السائق</option>
                                             @foreach ($drivers as $driver)
                                                 <option value="{{ $driver->id }}">{{ $driver->name }}</option>
@@ -150,8 +149,8 @@
                                         </div>
                                     @endif
                                     <div id="reason-field{{ $loop->index }}" class="form-group">
-                                        <label for="reason" class="form-label">السبب (اختياري):</label><br>
-                                        <textarea id="reason{{ $loop->index }}" name="message" class="form-input" rows="4" cols="50">{{ old('message') }}</textarea>
+                                        <label for="reason" class="form-label">السبب:</label><br>
+                                        <textarea id="reason{{ $loop->index }}" name="message" class="form-input" rows="4" cols="50" required>{{ old('message') }}</textarea>
                                     </div>
                                     <!-- Hidden input field for static state -->
                                     <input type="hidden" name="state" value="rejected">
@@ -174,19 +173,25 @@
                                 // You can customize the popup content as needed
 
                                 function showAcceptForm(index) {
-                                    document.getElementById('accept' + index).style.display = 'none';
-                                    document.getElementById('reject' + index).style.display = 'none';
                                     document.getElementById('accept-form' + index).style.display = 'block';
                                     document.getElementById('reject-form' + index).style.display = 'none';
                                     document.getElementById('buttons' + index).style.display = 'none';
+                                    document.getElementById('cancel' + index).style.display = 'block';
+
                                 }
 
                                 function showRejectForm(index) {
-                                    document.getElementById('accept' + index).style.display = 'none';
-                                    document.getElementById('reject' + index).style.display = 'none';
                                     document.getElementById('accept-form' + index).style.display = 'none';
                                     document.getElementById('reject-form' + index).style.display = 'block';
                                     document.getElementById('buttons' + index).style.display = 'none';
+                                    document.getElementById('cancel' + index).style.display = 'block';
+                                }
+
+                                function showButtons(index){
+                                    document.getElementById('accept-form' + index).style.display = 'none';
+                                    document.getElementById('reject-form' + index).style.display = 'none';
+                                    document.getElementById('buttons' + index).style.display = 'block';
+                                    document.getElementById('cancel' + index).style.display = 'none';
                                 }
                             </script>
 

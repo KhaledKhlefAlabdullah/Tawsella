@@ -27,8 +27,8 @@ class BaseEvent implements ShouldBroadcast
     {
         $this->request_id = $taxiMovement->id;
         $this->customer_id = $taxiMovement->customer_id;
-        $this->location_lat = $taxiMovement->location_lat;
-        $this->location_long = $taxiMovement->location_long;
+        $this->location_lat = $taxiMovement->start_latitude;
+        $this->location_long = $taxiMovement->start_longitude;
         $this->gender = $taxiMovement->gender;
         $this->customer_address = $taxiMovement->my_address;
         $this->customer_destnation_address = $taxiMovement->destnation_address;

@@ -130,7 +130,9 @@ class TaxiMovementController extends Controller
                 ]);
 
                 AcceptTaxiMovemntEvent::dispatch($taxiMovement);
-            } else if ($request->input('state') == 'rejected') {
+
+
+            } else if($request->input('state') == 'rejected'){
 
                 RejectTaxiMovemntEvent::dispatch(
                     $taxiMovement->customer_id,
@@ -141,8 +143,9 @@ class TaxiMovementController extends Controller
             return redirect()->back()->with('success', 'Request ' . $request->input('state') . ' successfully.');
         } catch (ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
-        } catch (Exception $e) {
-            return redirect()->back()->withErrors(['error' => 'An error occurred. Please try again.'])->withInput();
+
+        } catch(Exception $e){
+            return redirect()->back()->withErrors(['error' => $e->getMessage().'An error occurred. Please try again.'])->withInput();
         }
     }
 
