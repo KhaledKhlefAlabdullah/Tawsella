@@ -124,6 +124,7 @@
     </script>
     <script>
         setTimeout(() => {
+      
             var userId = <?php echo json_encode(auth()->id()); ?>;
             Echo.private(`Taxi-movement.${userId}`)
                 .listen('.App\\Events\\CreateTaxiMovementEvent', (event) => {
