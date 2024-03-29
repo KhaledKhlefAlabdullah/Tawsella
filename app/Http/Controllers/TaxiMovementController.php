@@ -36,26 +36,25 @@ class TaxiMovementController extends Controller
      */
     public function currentTaxiMovement()
     {
-        try{
+        try {
 
             $currentDate = Carbon::now()->toDateString();
 
             // Query to get requests for the current day
-            $taxiMovement = TaxiMovement::select('taxi_movements.my_address','taxi_movements.destnation_address','taxi_movements.gender','taxi_movements.start_latitude','taxi_movements.start_longitude','driver.email as driver_email','customer.email as customer_email','driver_profile.name as driver_name','driver_profile.phoneNumber as driver_phone','customer_profile.name as customer_name','customer_profile.phoneNumber as customer_phone','taxis.car_name as car_car_name','taxis.lamp_number as car_lamp_number','taxis.plate_number as car_plate_number','taxi_movement_types.type','taxi_movement_types.price')
-                ->leftJoin('users as driver','taxi_movements.driver_id','=','driver.id')
-                ->leftJoin('users as customer','taxi_movements.customer_id','=','customer.id')
-                ->leftJoin('user_profiles as driver_profile','taxi_movements.driver_id','=','driver_profile.user_id')
-                ->leftJoin('user_profiles as customer_profile','taxi_movements.customer_id','=','customer_profile.user_id')
-                ->leftJoin('taxis','taxi_movements.driver_id','=','taxis.id')
-                ->leftJoin('taxi_movement_types','taxi_movements.movement_type_id','=','taxi_movement_types.id')
+            $taxiMovement = TaxiMovement::select('taxi_movements.my_address', 'taxi_movements.destnation_address', 'taxi_movements.gender', 'taxi_movements.start_latitude', 'taxi_movements.start_longitude', 'driver.email as driver_email', 'customer.email as customer_email', 'driver_profile.name as driver_name', 'driver_profile.phoneNumber as driver_phone', 'customer_profile.name as customer_name', 'customer_profile.phoneNumber as customer_phone', 'taxis.car_name as car_car_name', 'taxis.lamp_number as car_lamp_number', 'taxis.plate_number as car_plate_number', 'taxi_movement_types.type', 'taxi_movement_types.price')
+                ->leftJoin('users as driver', 'taxi_movements.driver_id', '=', 'driver.id')
+                ->leftJoin('users as customer', 'taxi_movements.customer_id', '=', 'customer.id')
+                ->leftJoin('user_profiles as driver_profile', 'taxi_movements.driver_id', '=', 'driver_profile.user_id')
+                ->leftJoin('user_profiles as customer_profile', 'taxi_movements.customer_id', '=', 'customer_profile.user_id')
+                ->leftJoin('taxis', 'taxi_movements.driver_id', '=', 'taxis.id')
+                ->leftJoin('taxi_movement_types', 'taxi_movements.movement_type_id', '=', 'taxi_movement_types.id')
                 ->whereDate('taxi_movements.created_at', $currentDate)
-                ->where(['taxi_movements.is_completed' => false, 'taxi_movements.is_canceled' => false,'taxi_movements.request_state' => 'accepted'])
+                ->where(['taxi_movements.is_completed' => false, 'taxi_movements.is_canceled' => false, 'taxi_movements.request_state' => 'accepted'])
                 ->get();
 
-            return view('taxi_movement.currentTaxiMovement',['taxiMovement'=>$taxiMovement]);
-        }
-        catch(Exception $e){
-            return abort(500,'there error in getting current taxi movement'.$e->getMessage());
+            return view('taxi_movement.currentTaxiMovement', ['taxiMovement' => $taxiMovement]);
+        } catch (Exception $e) {
+            return abort(500, 'there error in getting current taxi movement' . $e->getMessage());
         }
     }
 
@@ -77,7 +76,7 @@ class TaxiMovementController extends Controller
 
             // 2
             CreateTaxiMovementEvent::dispatch(
-               $taxiMovement
+                $taxiMovement
             );
 
             // $request->input('customer_id'),
@@ -97,32 +96,33 @@ class TaxiMovementController extends Controller
     /**
      * Accept and regect Taxi movement request
      */
-    public function accept_reject_request(Request $request, string $id){
-        try{
+    public function accept_reject_request(Request $request, string $id)
+    {
+        try {
             $request->validate([
                 'state' => 'sometimes|string|required|in:accepted,rejected',
                 'driver_id' => 'sometimes|nullable|string',
                 'message' => 'string|sometimes|nullable'
             ]);
 
-            $taxiMovement = getAndCheckModelById(TaxiMovement::class,$id);
+            $taxiMovement = getAndCheckModelById(TaxiMovement::class, $id);
 
             $taxiMovement->update([
                 'request_state' => $request->input('state'),
                 'is_don' => true
             ]);
 
-            if($request->input('state') == 'accepted'){
+            if ($request->input('state') == 'accepted') {
 
                 $driver_id = $request->input('driver_id');
 
-                $driver = getAndCheckModelById(User::class,$driver_id);
+                $driver = getAndCheckModelById(User::class, $driver_id);
 
                 $driver->update([
                     'driver_state' => 'reserved'
                 ]);
 
-                $taxi_id = Taxi::where('driver_id',$driver_id)->first()->id;
+                $taxi_id = Taxi::where('driver_id', $driver_id)->first()->id;
 
                 $taxiMovement->update([
                     'driver_id' => $driver_id,
@@ -130,7 +130,8 @@ class TaxiMovementController extends Controller
                 ]);
 
                 AcceptTaxiMovemntEvent::dispatch($taxiMovement);
-                
+
+
             } else if($request->input('state') == 'rejected'){
 
                 RejectTaxiMovemntEvent::dispatch(
@@ -139,10 +140,10 @@ class TaxiMovementController extends Controller
                 );
             }
 
-            return redirect()->back()->with('success', 'Request '.$request->input('state').' successfully.');
-
-        } catch(ValidationException $e) {
+            return redirect()->back()->with('success', 'Request ' . $request->input('state') . ' successfully.');
+        } catch (ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
+
         } catch(Exception $e){
             return redirect()->back()->withErrors(['error' => $e->getMessage().'An error occurred. Please try again.'])->withInput();
         }
@@ -152,7 +153,7 @@ class TaxiMovementController extends Controller
      * Display the specified resource.
      */
 
-    public function foundCostumer(Request $request, string $id)
+    public function foundCustomer(Request $request, string $id)
     {
         $request->validate([
             'state' => 'required|boolean'
@@ -160,36 +161,32 @@ class TaxiMovementController extends Controller
 
         $taxiMovement = getAndCheckModelById(TaxiMovement::class, $id);
 
-        $driver = UserProfile::where('user_id',$taxiMovement->driver_id)->first();
-        $customer = UserProfile::where('user_id',$taxiMovement->customer_id)->first();
+        $driver = UserProfile::where('user_id', $taxiMovement->driver_id)->first();
+        $customer = UserProfile::where('user_id', $taxiMovement->customer_id)->first();
 
-        if($request->input('state')){
-            // إذا تم العثور على الزبون، ارسل الحدث
-            MovementFindUnFindEvent::dispatch(
-                $driver->name, // اسم السائق الذي وجد الزبون
-                $customer->name, // اسم الزبون الذي تم العثور عليه
-                'تم ايجاد الزبون'
-            );
-        }
-        else{
-            // إذا لم يتم العثور على الزبون، قم بإطلاق الحدث وحذف taxiMovement
-            MovementFindUnFindEvent::dispatch(
-                $driver->name, // اسم السائق الذي وجد الزبون
-                $customer->name, // اسم الزبون الذي تم العثور عليه
-                'لم يتم العثور على الزبون'
-            );
+        $message = $request->input('state') ? 'تم ايجاد الزبون' : 'لم يتم العثور على الزبون';
 
+        MovementFindUnFindEvent::dispatch(
+            $driver->name ?? 'Unknown Driver',
+            $customer->name ?? 'Unknown Customer',
+            $message
+        );
+
+        if (!$request->input('state')) {
             // حذف taxiMovement
             $taxiMovement->delete();
         }
+
+        return api_response(null, $message, 200);
     }
 
 
     /**
      * Make the movement is completed
      */
-    public function makeMovementIsCompleted(Request $request, string $id){
-        try{
+    public function makeMovementIsCompleted(Request $request, string $id)
+    {
+        try {
 
             $request->validate([
                 'way' => 'sometimes|numeric',
@@ -206,10 +203,9 @@ class TaxiMovementController extends Controller
             ]);
 
             $movement_type = TaxiMovementType::findOrFail($taxiMovement->movement_type_id);
-            if($movement_type->is_onKM){
-                $totalPrice = $request->input('way')*$movement_type->price;
-            }
-            else{
+            if ($movement_type->is_onKM) {
+                $totalPrice = $request->input('way') * $movement_type->price;
+            } else {
                 $totalPrice = $movement_type->price;
             }
 
@@ -220,7 +216,7 @@ class TaxiMovementController extends Controller
                 'way' => $request->input('way')
             ]);
 
-            $driverName = UserProfile::where('user_id',Auth::id())->first()->name;
+            $driverName = UserProfile::where('user_id', Auth::id())->first()->name;
 
             $customerName = UserProfile::where('user_id',  $taxiMovement->customer_id)->first()->name;
 
@@ -230,12 +226,11 @@ class TaxiMovementController extends Controller
             MovementFindUnFindEvent::dispatch(
                 $driverName,
                 $customerName,
-                'تم اكمال طلب الزبون من '.$from.'إلى '.$to
+                'تم اكمال طلب الزبون من ' . $from . 'إلى ' . $to
             );
-            return api_response(message:'success');
-        }
-        catch(Exception $e){
-            return api_response(errors:$e->getMessage(),message:'error',code:500);
+            return api_response(message: 'success');
+        } catch (Exception $e) {
+            return api_response(errors: $e->getMessage(), message: 'error', code: 500);
         }
     }
 
@@ -266,7 +261,7 @@ class TaxiMovementController extends Controller
 
             return redirect()->back();
         } catch (Exception $e) {
-            return abort(500,'there error in deleting this movemnt');
+            return abort(500, 'there error in deleting this movemnt');
         }
     }
 }
