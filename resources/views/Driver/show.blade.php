@@ -21,10 +21,10 @@
                     <div class="card">
                         <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
                             <div class="social-links mt-2">
-                                <img src="{{ asset('/img/person.jpg') }}"
+                                <img src="{{ asset('assets/'.$driver->avatar) }}"
                                     style="width: 150px;height: 130px;border-radius: 50%" alt="">
                             </div>
-                            <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+                           
                             <h2>{{ $driver->name }} <a href="#"><i class="bi bi-award"></i></a></h2>
                             <h3>({{ $driver->role->name ?? 'driver' }})</h3>
 
@@ -112,40 +112,48 @@
                                     <form method="post" action="{{ route('drivers.update', $driver->id) }}" class="mt-6 space-y-6">
                                         @csrf
                                         @method('put')
-
+                                    
                                         <div class="mb-3">
-                                            <x-input-label for="name" :value="__('Name')" />
+                                            <x-input-label for="name" :value="__('الاسم')" />
                                             <x-text-input id="name" name="name" type="text" class="form-control"
                                                 :value="old('name', $driver->name)" required autofocus autocomplete="name" />
                                             <x-input-error class="mt-2" :messages="$errors->get('name')" />
                                         </div>
-
+                                    
                                         <div class="mb-3">
-                                            <x-input-label for="email" :value="__('Email')" />
+                                            <x-input-label for="email" :value="__('البريد الالكتروني')" />
                                             <x-text-input id="email" name="email" type="email" class="form-control"
                                                 :value="old('email', $driver->email)" required autocomplete="username" />
                                             <x-input-error class="mt-2" :messages="$errors->get('email')" />
                                         </div>
-
                                         <div class="mb-3">
-                                            <x-input-label for="plate_number" :value="__('Plate Number')" />
-                                            <x-text-input id="plate_number" name="plate_number" type="text" class="form-control"
-                                                :value="old('plate_number', $driver->plate_number)" required autocomplete="plate_number" />
-                                            <x-input-error class="mt-2" :messages="$errors->get('plate_number')" />
+                                            <x-input-label for="avatar" :value="__('صور الملف الشخصي')" />
+                                            <input id="avatar" name="avatar" type="file" class="form-control" accept="image/*" />
+                                            <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
                                         </div>
-
                                         <div class="mb-3">
-                                            <x-input-label for="phoneNumber" :value="__('Phone Number')" />
+                                            <x-input-label for="phoneNumber" :value="__('رقم الجوال')" />
                                             <x-text-input id="phoneNumber" name="phoneNumber" type="tel" class="form-control"
                                                 :value="old('phoneNumber', $driver->phoneNumber)" required autocomplete="phoneNumber" />
                                             <x-input-error class="mt-2" :messages="$errors->get('phoneNumber')" />
                                         </div>
-
+                                        <div class="mb-3">
+                                            <x-input-label for="plate_number" :value="__('رقم لوحة السيارة')" />
+                                            <x-text-input id="plate_number" name="plate_number" type="text" class="form-control"
+                                                :value="old('plate_number', $driver->plate_number)" required autocomplete="plate_number" />
+                                            <x-input-error class="mt-2" :messages="$errors->get('plate_number')" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <x-input-label for="lamp_number" :value="__('رقم فانوس السيارة')" />
+                                            <x-text-input id="lamp_number" name="lamp_number" type="text" class="form-control"
+                                                :value="old('lamp_number', $driver->lamp_number)" required autocomplete="lamp_number" />
+                                            <x-input-error class="mt-2" :messages="$errors->get('lamp_number')" />
+                                        </div>
                                         <div class="d-flex align-items-center gap-4">
-                                            <x-primary-button>
-                                                {{ __('Save') }}
+                                            <x-primary-button class="btn btn-success">
+                                                {{ __('حفظ') }}
                                             </x-primary-button>
-
+                                    
                                             @if (session('status') === 'profile-updated')
                                                 <p x-data="{ show: true }" x-show="show" x-transition
                                                     x-init="setTimeout(() => show = false, 2000)" class="text-sm text-gray-600">
@@ -154,52 +162,12 @@
                                             @endif
                                         </div>
                                     </form>
+                                    
 
                                 </div>
 
 
                                 <div class="tab-pane fade setting pt-3" id="profile-settings">
-
-                                    <!-- Settings Form -->
-                                    <form>
-                                        <div class="row mb-3">
-                                            <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Email
-                                                Notifications</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="changesMade"
-                                                        checked>
-                                                    <label class="form-check-label" for="changesMade">
-                                                        Changes made to your account
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="newProducts"
-                                                        checked>
-                                                    <label class="form-check-label" for="newProducts">
-                                                        Information on new products and services
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="proOffers">
-                                                    <label class="form-check-label" for="proOffers">
-                                                        Marketing and promo offers
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="securityNotify"
-                                                        checked disabled>
-                                                    <label class="form-check-label" for="securityNotify">
-                                                        Security alerts
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                                        </div>
-                                    </form><!-- End settings Form -->
 
                                 </div>
 

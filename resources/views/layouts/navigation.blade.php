@@ -185,7 +185,7 @@
             </a>
             <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="{{ url('/taxi') }}">
+                    <a href="{{ route('taxis.index') }}">
                         <div class="ms-auto" style="margin-right: 30px">
                             <span> عرض السيارات </span><i class="bi bi-circle" style="margin-left: 10px"></i>
                         </div>

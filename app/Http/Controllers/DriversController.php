@@ -6,31 +6,35 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use App\Http\Requests\DriverStateRequest;
+use App\Http\Requests\UpdateDriverRequest;
+use App\Models\Calculations;
+use App\Models\Taxi;
+use App\Models\UserProfile;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class DriversController extends Controller
 {
     public function index()
     {
         try {
-            $drivers = User::select('user_profiles.name', 'user_profiles.phoneNumber', 'users.id','users.is_active', 'users.email', 'taxis.plate_number','taxis.lamp_number',)
-                ->leftJoin('user_profiles', 'users.id', '=', 'user_profiles.user_id')
-                ->leftJoin('taxis', 'users.id', '=', 'taxis.driver_id')
-                ->where('users.user_type', 'driver')->get();
-            return view('Driver.index', ['drivers' => $drivers]);
+
+            $drivers = $this->getDrivers(['users.user_type' => 'driver'],'get');
+
+            $combinedAccounts = $this->getCalculations($drivers);
+
+            return view('Driver.index', ['drivers' => $combinedAccounts]);
         } catch (Exception $e) {
             return abort(500, 'there error in getting the drivers data');
         }
     }
+
     public function show($id)
     {
         try {
             // العثور على بيانات السائق باستخدام المعرف الممرر
-            $driver = User::select('user_profiles.name', 'user_profiles.phoneNumber', 'users.id', 'users.email', 'taxis.plate_number')
-                ->leftJoin('user_profiles', 'users.id', '=', 'user_profiles.user_id')
-                ->leftJoin('taxis', 'users.id', '=', 'taxis.driver_id')
-                ->where('users.user_type', 'driver')
-                ->where('users.id', $id)
-                ->first();
+            $driver = $this->getDrivers(['users.id' => $id,'users.user_type' => 'driver'],'first');
             // التحقق مما إذا كان السائق موجودًا
             if (!$driver) {
                 return abort(404, 'Driver not found');
@@ -46,40 +50,18 @@ class DriversController extends Controller
     public function edit($id)
     {
         try {
-            $driver = User::select('user_profiles.name', 'user_profiles.phoneNumber', 'users.id', 'users.email', 'taxis.plate_number')
-                ->leftJoin('user_profiles', 'users.id', '=', 'user_profiles.user_id')
-                ->leftJoin('taxis', 'users.id', '=', 'taxis.driver_id')
-                ->where('users.user_type', 'driver')
-                ->where('users.id', $id)
-                ->first();
+
+            $driver = $this->getDrivers(['users.id' => $id,'users.user_type' => 'driver'],'first');
+
             if (!$driver) {
-                return abort(404, 'Driver not found');
+                return redirect()->back()->withErrors(['driver is not exists'.'An error occurred. Please try again.'])->withInput();
             }
             return view('Driver.show', ['driver' => $driver]);
         } catch (Exception $e) {
-            return abort(500, 'There was an error in getting the driver data');
+            return redirect()->back()->withErrors(['error' => $e->getMessage().'An error occurred. Please try again.'])->withInput();
         }
     }
 
-    public function update(Request $request, $id)
-    {
-        try {
-            $driver = User::find($id);
-            if (!$driver) {
-                return abort(404, 'Driver not found');
-            }
-            $driver->update([
-                'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'plate_number' => $request->input('plate_number'),
-                'phoneNumber' => $request->input('phoneNumber'),
-                // تحديث المزيد من الحقول هنا حسب الحاجة
-            ]);
-            return redirect()->route('drivers.show', $driver->id)->with('success', 'Driver updated successfully');
-        } catch (Exception $e) {
-            return abort(500, 'There was an error in updating the driver data');
-        }
-    }
     public function setState(Request $request)
     {
         try {
@@ -108,6 +90,84 @@ class DriversController extends Controller
         } catch (Exception $e) {
             return api_response(null, 'Failed to update driver state', 500, null, ['error' => $e->getMessage()]);
         }
+    }
+
+    public function destroy(string $id)
+    {
+        try {
+            $driver = getAndCheckModelById(User::class, $id);
+
+            $driver->delete();
+
+            return redirect()->back()->with('success', 'Driver deleted successfully');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage() . 'An error occurred. Please try again.'])->withInput();
+        }
+    }
+
+    ///////////////////////////////// helper functions here /////////////////////////////////////
+
+    /**
+     * Get Drivers data
+     */
+    public function getDrivers(array $conditions, $method)
+    {
+        $query = User::select('user_profiles.name', 'users.email', 'user_profiles.phoneNumber', 'user_profiles.avatar', 'users.id', 'users.is_active', 'taxis.plate_number', 'taxis.lamp_number')
+                    ->leftJoin('user_profiles', 'users.id', '=', 'user_profiles.user_id')
+                    ->leftJoin('taxis', 'users.id', '=', 'taxis.driver_id')
+                    ->leftJoin('calculations', 'users.id', '=', 'calculations.driver_id')
+                    ->where('users.user_type', 'driver');
+    
+        // Apply the specified method
+        if ($method === 'get') {
+            return $query->get();
+        } elseif ($method === 'first') {
+            return $query->first(); // Change the limit value as needed
+        } else {
+            return $query->get(); // Default to getting all records if method is not recognized
+        }
+    }
+
+        /**
+     * Get Drivers calculations
+     */
+    public function getCalculations($drivers)
+    {
+        // Get today's date
+        $today = Carbon::now()->toDateString();
+
+        // Get driver accounts for today
+        $todayAccounts = Calculations::select('driver_id', DB::raw('SUM(totalPrice) as total_today'))
+            ->whereDate('created_at', $today)
+            ->groupBy('driver_id')
+            ->get();
+
+        // Get total account for each driver
+        $totalAccounts = Calculations::select('driver_id', DB::raw('SUM(totalPrice) as total_previous'))
+            ->groupBy('driver_id')
+            ->get();
+
+        // Combine today's and previous accounts
+        $combinedAccounts = [];
+        foreach ($drivers as $driver) {
+            $driver_id = $driver->id;
+            $todayTotal = $todayAccounts->firstWhere('driver_id', $driver_id)->total_today ?? 0;
+            $previousTotal = $totalAccounts->firstWhere('driver_id', $driver_id)->total_previous ?? 0;
+
+            $combinedAccounts[] = (object)[
+                'driver_id' => $driver_id,
+                'name' => $driver->name,
+                'email' => $driver->email,
+                'phoneNumber' => $driver->phoneNumber,
+                'total_today' => $todayTotal,
+                'total_previous' => $previousTotal,
+                'is_active' => $driver->is_active,
+                'plate_number' => $driver->plate_number,
+                'lamp_number' => $driver->lamp_number,
+            ];
+        }
+
+        return $combinedAccounts;
     }
 
 }

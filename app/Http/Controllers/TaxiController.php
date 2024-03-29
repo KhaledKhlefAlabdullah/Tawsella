@@ -71,19 +71,8 @@ class TaxiController extends Controller
             // إعادة توجيه أو عرض رسالة نجاح
             return redirect()->back()->with('success', 'تم إنشاء سجل التاكسي بنجاح.');
         } catch (Exception $e) {
-            abort(500, 'there error in creatting taxi'.$e->getMessage());
+            return redirect()->back()->withErrors(['error' => $e->getMessage().'An error occurred. Please try again.'])->withInput();
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Taxi  $taxi
-     */
-    public function show(Taxi $taxi)
-    {
-        // عرض تفاصيل السجل المحدد
-        return view('taxis.show', compact('taxi'));
     }
 
     /**
@@ -93,8 +82,13 @@ class TaxiController extends Controller
      */
     public function edit(Taxi $taxi)
     {
-        // عرض الاستمارة لتحرير السجل
-        return view('taxis.edit', compact('taxi'));
+        try{
+            return view('taxis.edit', compact('taxi'));
+
+        }
+        catch(Exception $e){
+            return redirect()->back()->withErrors(['error' => $e->getMessage().'An error occurred. Please try again.'])->withInput();
+        }
     }
 
     /**
@@ -114,7 +108,7 @@ class TaxiController extends Controller
             // إعادة توجيه أو عرض رسالة نجاح
             return redirect()->route('taxis.index')->with('success', 'تم تحديث سجل التاكسي بنجاح.');
         } catch (Exception $e) {
-            abort(500, 'there error in updatting taxi details');
+            return redirect()->back()->withErrors(['error' => $e->getMessage().'An error occurred. Please try again.'])->withInput();
         }
     }
 
@@ -124,10 +118,15 @@ class TaxiController extends Controller
      */
     public function destroy(Taxi $taxi)
     {
+        try{
         // حذف السجل المحدد
         $taxi->delete();
 
         // إعادة توجيه أو عرض رسالة نجاح
         return redirect()->route('taxis.index')->with('success', 'تم حذف سجل التاكسي بنجاح.');
+        }
+        catch(Exception $e){
+            return redirect()->back()->withErrors(['error' => $e->getMessage().'An error occurred. Please try again.'])->withInput();
+        }
     }
 }

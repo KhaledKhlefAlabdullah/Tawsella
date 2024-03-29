@@ -201,7 +201,7 @@ class TaxiMovementController extends Controller
                 'end_latitude' => $request->input('end_lat'),
                 'end_longitude' => $request->input('end_lon')
             ]);
-
+            
             $movement_type = TaxiMovementType::findOrFail($taxiMovement->movement_type_id);
             if ($movement_type->is_onKM) {
                 $totalPrice = $request->input('way') * $movement_type->price;

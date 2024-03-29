@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Taxi;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -22,14 +23,18 @@ class UserProfileRequest extends FormRequest
      */
     public function rules(): array
     {
+
+        $id = $this->route('id');
+
         return [
-            'name' => ['required', 'sometimes', 'string'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'phoneNumber' => ['required', 'sometimes', 'string', 'regex:/^\+?[0-9]{9,20}$/', 'unique:user_profiles,phoneNumber'],
-            'carPlatNumber' => ['sometimes', 'string', 'unique:car_table,plat_number'],
-            'carLampNumber' => ['sometimes', 'string'],
-            'avatar' => ['sometimes', 'image', 'mimes:png,jpg,gif']
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($id)],
+            'phoneNumber' => ['required', 'string', 'regex:/^\+[0-9]{9,20}$/', Rule::exists('user_profiles')->where(function ($query) use ($id) {
+                $query->where('user_id', $id);
+            })],
+            'avatar' => ['sometimes', 'image', 'max:10024'], // Example: max file size of 10MB
+            'plate_number' => ['required', 'string', 'max:255', Rule::unique('taxis')->ignore(Taxi::where('driver_id', $id)->pluck('id')->first())],
+            'lamp_number' => ['required', 'string', 'max:255', Rule::unique('taxis')->ignore(Taxi::where('driver_id', $id)->pluck('id')->first())],
         ];
     }
-    
 }

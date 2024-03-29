@@ -113,6 +113,9 @@ a:hover {
     text-decoration: none;
 }
 
+.pipe {
+    margin: 0 5px;
+}
 
 /* CSS */
 .button-3 {

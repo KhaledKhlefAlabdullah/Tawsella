@@ -9,6 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TaxiController;
 use App\Http\Controllers\TaxiMovementController;
 use App\Http\Controllers\TaxiMovementTypeController;
+use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -65,7 +66,8 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/', [DriversController::class, 'index']);
         Route::get('/{id}', [DriversController::class, 'show'])->name('drivers.show');
         Route::get('/edit/{id}', [DriversController::class, 'edit'])->name('drivers.edit');
-        Route::put('update/{id}', [DriversController::class, 'update'])->name('drivers.update');
+        Route::put('/update/{id}', [UserProfileController::class, 'update'])->name('drivers.update');
+        Route::delete('/delete/{id}', [DriversController::class, 'destroy'])->name('drivers.destroy');
     });
 
 
@@ -75,17 +77,18 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //**************************************************************************** */
 
     //***************************start route Taxi ******************************** */
-    Route::get('/taxi', [TaxiController::class, 'index'])->name('taxis.index');
+    Route::group(['prefix' => 'taxis'], function () {
+        Route::get('/', [TaxiController::class, 'index'])->name('taxis.index');
 
-    Route::get('/taxis/{taxi}', [TaxiController::class, 'show'])->name('taxis.show');
+        Route::get('/create', [TaxiController::class, 'create'])->name('taxis.create');
+        Route::post('/store', [TaxiController::class, 'store'])->name('taxis.store');
 
-    Route::get('/taxis1/create', [TaxiController::class, 'create'])->name('taxis.create');
-    Route::post('/taxis', [TaxiController::class, 'store'])->name('taxis.store');
+        Route::get('/edit/{taxi}', [TaxiController::class, 'edit'])->name('taxis.edit');
+        Route::put('/update/{taxi}', [TaxiController::class, 'update'])->name('taxis.update');
 
-    Route::get('/taxis/{taxi}/edit', [TaxiController::class, 'edit'])->name('taxis.edit');
-    Route::put('/taxis/{taxi}', [TaxiController::class, 'update'])->name('taxis.update');
+        Route::delete('/delete/{id}', [TaxiController::class, 'destroy'])->name('taxis.destroy');
+    });
 
-    Route::delete('/taxis/{taxi}', [TaxiController::class, 'destroy'])->name('taxis.destroy');
     //*************************** End route Taxi *********************************** */
     //**************************************************************************** */
 

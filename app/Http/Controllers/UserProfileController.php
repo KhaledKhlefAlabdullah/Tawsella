@@ -81,8 +81,8 @@ class UserProfileController extends Controller
 
                     $taxi = Taxi::where('driver_id', $id)->first();
                     $taxi->update([
-                        'lamp_number' => $request->input('carLampNumber'),
-                        'plate_number' => $request->input('carPlatNumber')
+                        'lamp_number' => $request->input('plate_number'),
+                        'plate_number' => $request->input('lamp_number')
                     ]);
                 }
             }
