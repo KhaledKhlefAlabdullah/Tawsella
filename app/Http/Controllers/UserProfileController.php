@@ -79,7 +79,7 @@ class UserProfileController extends Controller
             if (!is_null(Auth::user())) {
                 if (Auth::user()->user_type == 'admin') {
 
-                    $taxi = getAndCheckModelById(Taxi::class, $id);
+                    $taxi = Taxi::where('driver_id', $id)->first();
                     $taxi->update([
                         'lamp_number' => $request->input('carLampNumber'),
                         'plate_number' => $request->input('carPlatNumber')
