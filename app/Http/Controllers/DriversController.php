@@ -12,7 +12,7 @@ class DriversController extends Controller
     public function index()
     {
         try {
-            $drivers = User::select('user_profiles.name', 'user_profiles.phoneNumber', 'users.id', 'users.email', 'taxis.plate_number')
+            $drivers = User::select('user_profiles.name', 'user_profiles.phoneNumber', 'users.id','users.is_active', 'users.email', 'taxis.plate_number','taxis.lamp_number',)
                 ->leftJoin('user_profiles', 'users.id', '=', 'user_profiles.user_id')
                 ->leftJoin('taxis', 'users.id', '=', 'taxis.driver_id')
                 ->where('users.user_type', 'driver')->get();

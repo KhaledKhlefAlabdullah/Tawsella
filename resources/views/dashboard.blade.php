@@ -112,7 +112,6 @@
                                     style="display: none;">
                                     @csrf <!-- Add CSRF token for Laravel form submission -->
                                     @if ($errors->any())
-                                    
                                         <div class="alert alert-danger">
                                             <ul>
                                                 @foreach ($errors->all() as $error)
@@ -123,10 +122,13 @@
                                     @endif
                                     <div id="driver-field{{ $loop->index }}" class="form-group">
                                         <label for="driver_id" class="form-label">اسم السائق:</label><br>
-                                        <select id="driver_id{{ $loop->index }}" name="driver_id" class="form-input" required>
+                                        <select id="driver_id{{ $loop->index }}" name="driver_id" class="form-input"
+                                            required>
                                             <option value="">اختر السائق</option>
                                             @foreach ($drivers as $driver)
-                                                <option value="{{ $driver->id }}">{{ $driver->name }}</option>
+                                                @if ($driver->gender == $lifeTaxiMovement->gender)
+                                                    <option value="{{ $driver->id }}">{{ $driver->name }}</option>
+                                                @endif
                                             @endforeach
                                         </select>
                                     </div>
@@ -187,7 +189,7 @@
                                     document.getElementById('cancel' + index).style.display = 'block';
                                 }
 
-                                function showButtons(index){
+                                function showButtons(index) {
                                     document.getElementById('accept-form' + index).style.display = 'none';
                                     document.getElementById('reject-form' + index).style.display = 'none';
                                     document.getElementById('buttons' + index).style.display = 'block';

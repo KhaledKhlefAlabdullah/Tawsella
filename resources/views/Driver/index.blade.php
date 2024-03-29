@@ -26,9 +26,11 @@
                                 <th scope="col">#</th>
                                 <th scope="col"><p class="text-center">{{ __('السائق') }}</p></th>
                                 <th scope="col"><p class="text-center">{{ __('الايميل') }}</p></th>
-                                <th scope="col"><p class="text-center">{{ __('الرصيد') }}</p></th>
-                                <th scope="col"><p class="text-center">{{ __('رقم السيارة') }}</p></th>
-                                <th scope="col"><p class="text-center">{{ __('حالة الحساب') }}</p></th>
+                                <th scope="col"><p class="text-center">{{ __('رقم الجوال') }}</p></th>
+                                <th scope="col"><p class="text-center">{{ __('رقم لوحة السيارة') }}</p></th>
+                                <th scope="col"><p class="text-center">{{ __('رقم فانوس السيارة') }}</p></th>
+                                <th scope="col"><p class="text-center">{{ __('رصيد اليوم') }}</p></th>
+                                <th scope="col"><p class="text-center">{{ __('اجمالي الرصيد') }}</p></th>
                                 <th scope="col"><p class="text-center">{{ __('ادارة') }}</p></th>
                             </tr>
                         </thead>

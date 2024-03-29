@@ -43,22 +43,20 @@ class RegisteredUserController extends Controller
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
             ]);
 
-
             $user = User::create([
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'user_type' => $user_type,
                 'driver_sate' => $user_type == 'driver' ? 'ready' : null
             ]);
-
             
             UserProfile::create([
                 'user_id' => $user->id,
                 'name' => $request->input('name'),
+                'gender' => $user_type == 'driver' ? $request->gender : null,
                 'phoneNumber' => $request->input('phone_number'),
             ]);
             
-
             if ($request->wantsJson()) {
 
                 $token = createToken($user, 'register-token');
@@ -74,8 +72,9 @@ class RegisteredUserController extends Controller
         } catch (Exception $e) {
             if(request()->wantsJson())
                 return api_response(errors: [$e->getMessage()], message: 'register-error', code: 500);
+            }
+            return redirect()->back()->withErrors([$e->getMessage()])->withInput(); // Provide feedback on error
 
-        }
     }
     
 
@@ -86,13 +85,10 @@ class RegisteredUserController extends Controller
      */
     public function admin_store(Request $request)
     {
-        // $request->validate([
-        //     'avatar' => 'nullable|image|mimes:png,jpg',
-        //     // 'car_name' => ,
-        //     // 'lamp_number' => ,
-        //     // 'plate_number' => ,
-        //     // 'car_detailes' => 
-        // ]);
+        $request->validate([
+            'gender' => ['required','string','in:male,female']
+        ]);
+        //dd($request);
         return $this->store($request, 'driver');
     }
 }

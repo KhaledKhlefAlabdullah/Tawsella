@@ -63,11 +63,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/store-driver', [RegisteredUserController::class, 'admin_store'])->name('store-driver');
     Route::group(['prefix' => 'drivers'], function () {
         Route::get('/', [DriversController::class, 'index']);
+        Route::get('/{id}', [DriversController::class, 'show'])->name('drivers.show');
+        Route::get('/edit/{id}', [DriversController::class, 'edit'])->name('drivers.edit');
+        Route::put('update/{id}', [DriversController::class, 'update'])->name('drivers.update');
     });
-    Route::get('/drivers/{id}', [DriversController::class, 'show'])->name('drivers.show');
 
-    Route::get('/drivers/{id}/edit', [DriversController::class, 'edit'])->name('drivers.edit');
-    Route::put('/drivers/{id}', [DriversController::class, 'update'])->name('drivers.update');
 
     // Route::post('/drivers/set-state', [DriversController::class, 'setState'])->name('drivers.set_state');
 
@@ -103,7 +103,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //**************************************************************************** */
 
 
-    Route::post('/accept-reject-request/{id}',[TaxiMovementController::class,'accept_reject_request'])->name('accept.reject.request');
+    Route::post('/accept-reject-request/{id}', [TaxiMovementController::class, 'accept_reject_request'])->name('accept.reject.request');
 
     //*************************** START route taxi-movement *********************************** */
     Route::post('/accept-reject-request/{taxiMovement}', [TaxiMovementController::class, 'accept_reject_request'])->name('accept-reject-request');

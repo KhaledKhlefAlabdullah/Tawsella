@@ -27,6 +27,7 @@ class UserProfile extends Model
         'name',
         'avatar',
         'phoneNumber',
+        'gender'
     ];
 
     public function user(){
