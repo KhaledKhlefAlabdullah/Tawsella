@@ -50,7 +50,7 @@ class UserProfileController extends Controller
             $user = getAndCheckModelById(User::class, $id);
             $user->update(['email' => $request->input('email')]);
 
-            $userProfile = UserProfile::where('user_id',$id)->first();
+            $userProfile = UserProfile::where('user_id', $id)->first();
 
             $userProfile->update([
                 'name' => $request->input('name'),
@@ -76,15 +76,16 @@ class UserProfileController extends Controller
                 ]);
             }
 
-            if (Auth::user()->user_type == 'admin') {
+            if (!is_null(Auth::user())) {
+                if (Auth::user()->user_type == 'admin') {
 
-                $taxi = getAndCheckModelById(Taxi::class, $id);
-                $taxi->update([
-                    'lamp_number' => $request->input('carLampNumber'),
-                    'plate_number' => $request->input('carPlatNumber')
-                ]);
+                    $taxi = getAndCheckModelById(Taxi::class, $id);
+                    $taxi->update([
+                        'lamp_number' => $request->input('carLampNumber'),
+                        'plate_number' => $request->input('carPlatNumber')
+                    ]);
+                }
             }
-
             if ($request->wantsJson())
                 return api_response(message: 'profile-edite-success');
 
