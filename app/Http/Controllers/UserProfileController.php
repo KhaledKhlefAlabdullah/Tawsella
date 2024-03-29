@@ -89,7 +89,8 @@ class UserProfileController extends Controller
             if ($request->wantsJson())
                 return api_response(message: 'profile-edite-success');
 
-            return redirect()->view('');
+            return redirect()->back()->with('success','تم تعديل بيانات السائق بنجاح');
+
         } catch (Exception $e) {
             if ($request->wantsJson())
                 return api_response(errors: [$e->getMessage()], message: 'profile-edite-error', code: 500);
