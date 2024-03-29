@@ -57,7 +57,7 @@ class UserProfileController extends Controller
                 'phoneNumber' => $request->input('phoneNumber')
             ]);
 
-            if ($request->avatar) {
+            if ($request->has('avatar')) {
 
                 $avatar = $request->avatar;
 
