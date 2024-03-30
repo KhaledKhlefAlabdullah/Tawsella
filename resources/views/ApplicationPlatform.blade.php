@@ -5,23 +5,7 @@
         <div class="container">
             <div class="container mt-5">
                 <div class="row justify-content-center">
-                    <div class="col-md-6 card" style="margin: 10px">
-                        <h1 class="text-center mb-4">تنزيل التطبيق</h1>
-                        <div class="app-info">
-                            <!-- رابط الصورة لتطبيقك -->
-                            <img src="https://arabitechnomedia.com/wp-content/uploads/2015/06/2015-06-24_144521.jpg"
-                                alt="صورة التطبيق" class="app-image mb-3">
-                            <div>Uptodown App Store 5.86</div>
-                            <div>Uptodown.com</div>
-                        </div>
-                        <div class="store-info">
-                            <p>قم بتنزيل التطبيق من متجر Uptodown للاستمتاع بالمزيد من الميزات والخدمات!</p>
-                            <button type="button" class="btn btn-primary download-btn">
-                                تنزيل التطبيق <i class="bi bi-download"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="col-md-6 card" style="margin: 10px">
+                    <div class="col-md-6 card" style="padding: 10px">
                         <h1 class="text-center mb-4">تنزيل تطبيق السائق</h1>
                         <div class="app-info">
                             <!-- رابط الصورة لتطبيقك -->
@@ -37,6 +21,24 @@
                             </button>
                         </div>
                     </div>
+                    <div class="col-md-6 card" style="padding: 10px">
+                        <h1 class="text-center mb-4">تنزيل التطبيق</h1>
+                        <div class="app-info">
+                            <!-- رابط الصورة لتطبيقك -->
+                            <img src="https://arabitechnomedia.com/wp-content/uploads/2015/06/2015-06-24_144521.jpg"
+                                alt="صورة التطبيق" class="app-image mb-3">
+                            <div>Uptodown App Store 5.86</div>
+                            <div>Uptodown.com</div>
+                        </div>
+                        <div class="store-info">
+                            <p>قم بتنزيل التطبيق من متجر Uptodown للاستمتاع بالمزيد من الميزات والخدمات!</p>
+                            <button type="button" class="btn btn-primary download-btn">
+                                تنزيل التطبيق <i class="bi bi-download"></i>
+                            </button>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
             <div class="container mt-5">
