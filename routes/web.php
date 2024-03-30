@@ -52,7 +52,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //*****************************End route Contact ******************************** */
     //******************************************************************************* */
 
-
     //***************************start route dashboard ******************************** */
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     //***************************End route dashboard ******************************** */

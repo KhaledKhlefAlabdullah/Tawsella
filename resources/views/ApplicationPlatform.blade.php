@@ -30,23 +30,23 @@
                         <!-- عرض الصور -->
                         <div class="row">
                             <div class="col-md-4 mb-3">
-                                <img src="https://arabitechnomedia.com/wp-content/uploads/2015/06/2015-06-24_144521.jpg"
+                                <img src="https://arabitechnomedia.com/wp-content/uploads/2015/06/2015-06-24_144521.jpg" style="width: 100%;height: 100%;"
                                     alt="صورة التطبيق" class="app-imageph">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <img src="https://arabitechnomedia.com/wp-content/uploads/2015/06/2015-06-24_144521.jpg"
+                                <img src="https://arabitechnomedia.com/wp-content/uploads/2015/06/2015-06-24_144521.jpg" style="width: 100%;height: 100%;"
                                     alt="صورة التطبيق" class="app-imageph">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <img src="https://arabitechnomedia.com/wp-content/uploads/2015/06/2015-06-24_144521.jpg"
+                                <img src="https://arabitechnomedia.com/wp-content/uploads/2015/06/2015-06-24_144521.jpg" style="width: 100%;height: 100%;"
                                     alt="صورة التطبيق" class="app-imageph">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <img src="https://arabitechnomedia.com/wp-content/uploads/2015/06/2015-06-24_144521.jpg"
+                                <img src="https://arabitechnomedia.com/wp-content/uploads/2015/06/2015-06-24_144521.jpg" style="width: 100%;height: 100%;"
                                     alt="صورة التطبيق" class="app-imageph">
                             </div>
                             <div class="col-md-4 mb-3">
-                                <img src="https://arabitechnomedia.com/wp-content/uploads/2015/06/2015-06-24_144521.jpg"
+                                <img src="https://arabitechnomedia.com/wp-content/uploads/2015/06/2015-06-24_144521.jpg" style="width: 100%;height: 100%;"
                                     alt="صورة التطبيق" class="app-imageph">
                             </div>
                         </div>
