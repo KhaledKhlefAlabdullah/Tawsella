@@ -63,7 +63,7 @@
                         <img src="https://arabitechnomedia.com/wp-content/uploads/2015/06/2015-06-24_144521.jpg"
                             alt="صورة التطبيق" class="app-imageph img-fluid rounded">
                     </div>
-                    <div class="col-md-4 mb-3 col-4" style="height: 200px">
+                    <div class="col-md-4 mb-3 col-4">
                         <img src="https://arabitechnomedia.com/wp-content/uploads/2015/06/2015-06-24_144521.jpg"
                             alt="صورة التطبيق" class="app-imageph img-fluid rounded">
                     </div>
