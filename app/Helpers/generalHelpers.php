@@ -171,7 +171,7 @@ if (!function_exists('getReadyDrivers')) {
     {
         $drivers = User::where(['user_type' => 'driver', 'driver_state' => 'ready', 'is_active' => true])
             ->join('taxis', 'users.id', '=', 'taxis.driver_id')
-            ->leftJoin('user_profiles', 'users.id', '=', 'user_profiles.user_id')
+            ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
             ->select('users.id', 'user_profiles.name', 'user_profiles.avatar')
             ->get();
 

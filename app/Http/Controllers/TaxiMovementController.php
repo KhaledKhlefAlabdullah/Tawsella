@@ -257,11 +257,11 @@ class TaxiMovementController extends Controller
 
             $request = TaxiMovement::select(
                 'up.name',
-                'taxi_movements.my_address as ',
-                'taxi_movements.destnation_address as ',
-                'taxi_movements.gender as ',
-                'taxi_movements.start_latitude as ',
-                'taxi_movements.start_longitude as '
+                'taxi_movements.my_address as customer_address',
+                'taxi_movements.destnation_address as destnation_address',
+                'taxi_movements.gender as gender',
+                'taxi_movements.start_latitude as location_lat',
+                'taxi_movements.start_longitude as location_long'
                 )
                 ->join('user_profiles as up', 'taxi_movements.customer_id', '=', 'up.user_id')
                 ->where(['taxi_movements.driver_id'=>$driver_id,'is_completed'=>false,'is_cancled'=>false])
