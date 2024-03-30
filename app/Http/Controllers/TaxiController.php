@@ -83,7 +83,11 @@ class TaxiController extends Controller
     public function edit(Taxi $taxi)
     {
         try{
-            return view('taxis.edit', compact('taxi'));
+
+            $drivers = User::select('users.id','user_profiles.name','user_profiles.avatar')
+            ->join('user_profiles','users.id','=','user_profiles.user_id')->where('users.user_type','driver')->get();
+
+            return view('taxis.edit', compact('taxi','drivers'));
 
         }
         catch(Exception $e){
