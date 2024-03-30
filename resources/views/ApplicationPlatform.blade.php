@@ -5,7 +5,7 @@
         <div class="container">
             <div class="container mt-5">
                 <div class="row justify-content-center">
-                    <div class="col-md-6 card" style="padding: 10px">
+                    <div class="col-md-6 card" style="padding: 20px">
                         <h1 class="text-center mb-4">تنزيل تطبيق السائق</h1>
                         <div class="app-info">
                             <!-- رابط الصورة لتطبيقك -->
@@ -40,8 +40,6 @@
 
 
                 </div>
-            </div>
-            <div class="container mt-5">
                 <div class="row justify-content-center">
                     <div class="col-md-8">
                         <h1 class="text-center mb-4">عرض التطبيق</h1>
