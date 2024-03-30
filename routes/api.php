@@ -56,6 +56,7 @@ Route::group(['prefix' => 'info'], function () {
     Route::get('/addition', [AboutUsController::class, 'get_addition_information']);
 });
 
+Route::get('/movement-types', [TaxiMovementTypeController::class, 'index']);
 
 Route::get('/offers', [OfferController::class, 'index']);
 
