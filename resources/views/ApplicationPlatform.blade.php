@@ -5,7 +5,7 @@
         <div class="container">
             <div class="container mt-5">
                 <div class="row justify-content-center">
-                    <div class="col-md-6">
+                    <div class="col-md-6 card" style="margin: 10px">
                         <h1 class="text-center mb-4">تنزيل التطبيق</h1>
                         <div class="app-info">
                             <!-- رابط الصورة لتطبيقك -->
@@ -21,7 +21,7 @@
                             </button>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-6 card" style="margin: 10px">
                         <h1 class="text-center mb-4">تنزيل تطبيق السائق</h1>
                         <div class="app-info">
                             <!-- رابط الصورة لتطبيقك -->
