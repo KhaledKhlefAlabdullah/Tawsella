@@ -180,8 +180,7 @@
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-chevron-down "></i><span class="ms-auto">السيارات</span><i
-                    class="bi bi-cart4 "style="margin-left: 10px"></i>
+                <i class="bi bi-chevron-down "></i><span class="ms-auto">السيارات</span><i class="fa-regular fa-taxi"></i>
             </a>
             <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
@@ -284,12 +283,6 @@
                 <span class="ms-auto">الاعدادات</span>
                 <i class="bi bi-gear " style="margin-left: 10px"></i>
             </a>
-        </li><!-- End Blank Page Nav -->
-        <li class="nav-item">
-            <a class="nav-link nav-icon" href="{{ url('#') }}">
-                <span class="ms-auto">الاشعارات</span>
-                <i class="bi bi-bell " style="margin-left: 10px"></i>
-            </a><!-- End Notification Icon -->
         </li><!-- End Blank Page Nav -->
         <li class="nav-item">
             <form method="POST" action="{{ route('logout') }}">

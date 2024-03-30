@@ -16,11 +16,15 @@
                                 @method('PUT')
 
                                 <!-- اسم السائق -->
-                                <div class="mb-3">
-                                    <label for="driver_id" class="form-label">معرف السائق</label>
-                                    <input type="text" class="form-control" id="driver_id" name="driver_id"
-                                        value="{{ $taxi->driver_id }}" required>
-                                </div>
+                                <label for="driver_id" class="form-label">السائق</label>
+                                <select class="form-select" id="driver_id" name="driver_id" required>
+                                    @foreach ($drivers as $driver)
+                                        <option value="{{ $driver->id }}"
+                                            {{ $taxi->driver_id == $driver->id ? 'selected' : '' }}>
+                                            {{ $driver->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
 
                                 <!-- اسم السيارة -->
                                 <div class="mb-3">
