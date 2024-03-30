@@ -9,8 +9,8 @@
     <title>StarTaxi</title>
 
     <!-- Favicons -->
-    <link href="img/logo.png" rel="icon">
-    <link href="img/logo.png" rel="apple-touch-icon">
+    <link href="img/logoo.png" rel="icon">
+    <link href="img/logoo.png" rel="apple-touch-icon">
 
     <!-- Google Fonts -->
     <link href="https://fonts.gstatic.com" rel="preconnect">

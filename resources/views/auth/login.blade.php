@@ -11,7 +11,7 @@
 
                             <div class="d-flex justify-content-center py-4">
                                 <a href="/" class="logo d-flex align-items-center w-auto">
-                                    <img src="img/logo.png" alt="">
+                                    <img src="img/logoo.png" alt="">
                                 </a>
                             </div><!-- End Logo -->
 
@@ -67,7 +67,7 @@
                                                 </a>
                                             @endif
 
-                                            <div class="col-12">
+                                            <div class="col-4">
                                                 <button class="btn btn-primary w-100" type="submit"> تسجيل الدخول  </button>
                                             </div>
                                         </div>

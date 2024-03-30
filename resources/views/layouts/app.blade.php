@@ -11,8 +11,8 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <!-- Favicons -->
-    <link href="{{ asset('img/logo.png') }}" rel="icon">
-    <link href="{{ asset('img/logo.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('img/logoo.png') }}" rel="icon">
+    <link href="{{ asset('img/logoo.png') }}" rel="apple-touch-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet">
@@ -120,12 +120,12 @@
                     console.log(message);
 
                     alert(driver);
-                }); 
-        },200); 
+                });
+        },200);
     </script>
     <script>
         setTimeout(() => {
-      
+
             var userId = <?php echo json_encode(auth()->id()); ?>;
             Echo.private(`Taxi-movement.${userId}`)
                 .listen('.App\\Events\\CreateTaxiMovementEvent', (event) => {
@@ -138,7 +138,7 @@
                     var gender = event.gender;
                     var customer_address = event.customer_address;
                     var destnation_address = event.destnation_address;
-                    
+
                     alert("لقد وصل طلب جديد");
 
                     var newItem = document.createElement('li');
@@ -196,7 +196,7 @@
                                 </div>
                                 <button id="cancel${index}" class="btn" style="display: none;"
                                     onclick="showButtons(${index})"><i class="fa-solid fa-x"></i></button>
-                               
+
                                 <form id="accept-form${index}" method="POST"
                                     action="{{ url('/accept-reject-request/${request_id}') }}"
                                     style="display: none;">
@@ -212,7 +212,7 @@
                                     @endif
                                     <div id="driver-field${index}" class="form-group">
                                         <label for="driver_id" class="form-label">اسم السائق:</label><br>
-                                    
+
                                                 <select id="driver_id" name="driver_id" class="form-input" required>
                                         <option value="">اختر السائق</option>
                                         ${drivers.map(driver => `<option value="${driver.id}">${driver.name}</option>`).join('')}
@@ -245,7 +245,7 @@
                                     <input type="submit" class="form-submit">
                                 </form>
                     </div>
-                 
+
                     </li>
                     `;
                     console.log(55);
@@ -288,7 +288,7 @@
                                     document.getElementById('cancel' + index).style.display = 'none';
                                 }
                                 `;
-                               
+
 
                     // Get the HTML element to append the script to
                     var item = document.getElementById(`item${index}`);
@@ -299,9 +299,9 @@
                 });
         }, 1000); // Set a delay of 1 second (1000 milliseconds) to ensure proper rendering after the page load
 
-        
+
     </script>
-  
+
 </body>
 
 </html>
