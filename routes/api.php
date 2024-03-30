@@ -10,6 +10,7 @@ use App\Http\Controllers\UserProfileController;
 use App\Models\AboutUs;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DriversController;
+use Illuminate\Support\Facades\Broadcast;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,9 @@ use App\Http\Controllers\DriversController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
+
 Route::post('/found-customer/{id}', [TaxiMovementController::class, 'foundCostumer'])->name('found.customer');
 
 

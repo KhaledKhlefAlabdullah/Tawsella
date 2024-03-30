@@ -9,10 +9,6 @@
 
                             <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
                                 data-bs-toggle="dropdown">
-
-                                <img src="{{ asset('/img/profile-img.jpg') }}" alt="{{ __('Profile') }}"
-                                    class="rounded-circle">
-
                                 <span
                                     class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->user_type }}</span>
                             </a><!-- End Profile Image Icon -->
@@ -75,55 +71,7 @@
                             </ul><!-- End Profile Dropdown Items -->
                         </li><!-- End Profile Nav -->
 
-                        <li class="nav-item dropdown">
-
-                            <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-                                <i class="bi bi-bell"></i>
-                                <span class=" badge-number">
-                                    <div class="spinner-grow text-warning"
-                                        style="width: 10px;height: 10px;margin-bottom: 20px" role="status">
-                                        <div>
-                                            <span class="badge-numbe">
-                                                <h6>
-                                                    55
-                                                </h6>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </span>
-                            </a><!-- End Notification Icon -->
-
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-                                <li class="dropdown-header">
-                                    <a href="#">
-                                        <span
-                                            class="badge rounded-pill bg-primary p-2 ms-2">{{ __('عرض الكل') }}</span>
-                                    </a>
-
-
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-
-
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-
-                                <li class="notification-item">
-
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li class="dropdown-footer">
-                                    <a href="#">{{ __('عرض جميع الاشعارات') }}</a>
-                                </li>
-
-                            </ul><!-- End Notification Dropdown Items -->
-
-                        </li><!-- End Notification Nav -->
+                        
                     </ul>
                 </nav><!-- End Icons Navigation -->
             </div>
@@ -180,7 +128,7 @@
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-chevron-down "></i><span class="ms-auto">السيارات</span><i class="fa-regular fa-taxi"></i>
+                <i class="bi bi-chevron-down "></i><span class="ms-auto">السيارات</span><i class="bi bi-taxi-front-fill" style="margin-left: 10px"></i>
             </a>
             <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
@@ -201,8 +149,7 @@
         </li><!-- End Forms Nav -->
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#taxi-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-chevron-down "></i><span class="ms-auto">الطلبات الحية</span><i
-                    class="bi bi-cart4 "style="margin-left: 10px"></i>
+                <i class="bi bi-chevron-down "></i><span class="ms-auto">الطلبات الحية</span><i class="bi bi-hourglass" style="margin-left: 10px"></i>
             </a>
             <ul id="taxi-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
