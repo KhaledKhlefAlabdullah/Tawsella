@@ -27,8 +27,7 @@ Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
 Route::post('/found-customer/{id}', [TaxiMovementController::class, 'foundCostumer'])->name('found.customer');
 
-
-
+Route::get('/driver-request/{id}', [TaxiMovementController::class, 'get_request_data']);
 
 Route::middleware('auth:sanctum')->group(function () {
 

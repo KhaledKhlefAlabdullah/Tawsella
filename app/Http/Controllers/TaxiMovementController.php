@@ -236,37 +236,27 @@ class TaxiMovementController extends Controller
      */
     public function get_request_data(string $driver_id)
     {
-        /*
-            'gender' => $this->gender,
-            'customer_address' => $this->customer_address,
-            'destnation_address' => $this->customer_destnation_address,
-            'location_lat' => $this->location_lat,
-            'location_long' => $this->location_long,
-            'type' => $this->movement_type
-            'request_id' => $this->request_id,
-            'customer' => $customer_profile,
-            'taxiMovementInfo' => $this->getDriverData()
-
-             'my_address',
-        'destnation_address',
-        'gender',
-        'start_latitude',
-        'start_longitude',
-        */
         try {
 
             $request = TaxiMovement::select(
+                'taxi_movements.id',
                 'up.name',
+                'up.phoneNumber',
                 'taxi_movements.my_address as customer_address',
                 'taxi_movements.destnation_address as destnation_address',
                 'taxi_movements.gender as gender',
                 'taxi_movements.start_latitude as location_lat',
-                'taxi_movements.start_longitude as location_long'
+                'taxi_movements.start_longitude as location_long',
+                'tmt.type',
+                'tmt.price'
                 )
                 ->join('user_profiles as up', 'taxi_movements.customer_id', '=', 'up.user_id')
+                ->join('taxi_movement_types as tmt','taxi_movements.movement_type_id','=','tmt.id')
                 ->where(['taxi_movements.driver_id'=>$driver_id,'is_completed'=>false,'is_cancled'=>false])
                 ->whereDate('created_at', today())
                 ->first();
+
+            return api_response(data:$request,message:'success getting data');
         } catch (Exception $e) {
             return api_response(errors: $e->getMessage(), message: 'there error in getting data', code: 500);
         }
