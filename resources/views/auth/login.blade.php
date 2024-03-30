@@ -67,7 +67,7 @@
                                                 </a>
                                             @endif
 
-                                            <div class="col-12">
+                                            <div class="col-4">
                                                 <button class="btn btn-primary w-100" type="submit"> تسجيل الدخول  </button>
                                             </div>
                                         </div>
