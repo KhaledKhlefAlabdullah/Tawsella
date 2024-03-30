@@ -29,12 +29,10 @@ class UserProfileRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($id)],
-            'phoneNumber' => ['required', 'string', 'regex:/^\+[0-9]{9,20}$/', Rule::exists('user_profiles')->where(function ($query) use ($id) {
-                $query->where('user_id', $id);
-            })],
+            'phoneNumber' => ['required', 'string', 'regex:/^\+[0-9]{9,20}$/', Rule::unique('user_profiles')->ignore($id, 'user_id')],
             'avatar' => ['sometimes', 'image', 'max:10024'], // Example: max file size of 10MB
-            'plate_number' => ['required', 'string', 'max:255', Rule::unique('taxis')->ignore(Taxi::where('driver_id', $id)->pluck('id')->first())],
-            'lamp_number' => ['required', 'string', 'max:255', Rule::unique('taxis')->ignore(Taxi::where('driver_id', $id)->pluck('id')->first())],
+            'plate_number' => ['sometimes','required', 'string', 'max:255', Rule::unique('taxis')->ignore(Taxi::where('driver_id', $id)->pluck('id')->first())],
+            'lamp_number' => ['sometimes','required', 'string', 'max:255', Rule::unique('taxis')->ignore(Taxi::where('driver_id', $id)->pluck('id')->first())],
         ];
     }
 }
