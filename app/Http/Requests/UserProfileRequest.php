@@ -33,8 +33,8 @@ class UserProfileRequest extends FormRequest
                 $query->where('user_id', $id);
             })],
             'avatar' => ['sometimes', 'image', 'max:10024'], // Example: max file size of 10MB
-            'plate_number' => ['required', 'string', 'max:255', Rule::unique('taxis')->ignore(Taxi::where('driver_id', $id)->pluck('id')->first())],
-            'lamp_number' => ['required', 'string', 'max:255', Rule::unique('taxis')->ignore(Taxi::where('driver_id', $id)->pluck('id')->first())],
+            'plate_number' => ['sometimes','required', 'string', 'max:255', Rule::unique('taxis')->ignore(Taxi::where('driver_id', $id)->pluck('id')->first())],
+            'lamp_number' => ['sometimes','required', 'string', 'max:255', Rule::unique('taxis')->ignore(Taxi::where('driver_id', $id)->pluck('id')->first())],
         ];
     }
 }
