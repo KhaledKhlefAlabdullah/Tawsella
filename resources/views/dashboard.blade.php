@@ -126,9 +126,9 @@
                                             required>
                                             <option value="">اختر السائق</option>
                                             @foreach ($drivers as $driver)
-                                                @if ($driver->gender == $lifeTaxiMovement->gender)
+                                                {{-- @if ($driver->gender == $lifeTaxiMovement->gender) --}}
                                                     <option value="{{ $driver->id }}">{{ $driver->name }}</option>
-                                                @endif
+                                                {{-- @endif --}}
                                             @endforeach
                                         </select>
                                     </div>

@@ -97,4 +97,8 @@ class AcceptTaxiMovemntEvent extends BaseEvent
         // Default data if channel not recognized
         return [];
     }
+
+    public function broadcastAs(){
+        return 'accept-request';
+    }
 }

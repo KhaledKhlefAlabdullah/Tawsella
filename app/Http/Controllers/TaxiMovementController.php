@@ -130,9 +130,7 @@ class TaxiMovementController extends Controller
                 ]);
 
                 AcceptTaxiMovemntEvent::dispatch($taxiMovement);
-
-
-            } else if($request->input('state') == 'rejected'){
+            } else if ($request->input('state') == 'rejected') {
 
                 RejectTaxiMovemntEvent::dispatch(
                     $taxiMovement->customer_id,
@@ -143,9 +141,8 @@ class TaxiMovementController extends Controller
             return redirect()->back()->with('success', 'Request ' . $request->input('state') . ' successfully.');
         } catch (ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
-
-        } catch(Exception $e){
-            return redirect()->back()->withErrors(['error' => $e->getMessage().'An error occurred. Please try again.'])->withInput();
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage() . 'An error occurred. Please try again.'])->withInput();
         }
     }
 
@@ -201,7 +198,7 @@ class TaxiMovementController extends Controller
                 'end_latitude' => $request->input('end_lat'),
                 'end_longitude' => $request->input('end_lon')
             ]);
-            
+
             $movement_type = TaxiMovementType::findOrFail($taxiMovement->movement_type_id);
             if ($movement_type->is_onKM) {
                 $totalPrice = $request->input('way') * $movement_type->price;
@@ -235,19 +232,44 @@ class TaxiMovementController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Send Taxi movemnt request details
      */
-    public function edit(TaxiMovement $taxiMovement)
+    public function get_request_data(string $driver_id)
     {
-        //
-    }
+        /*
+            'gender' => $this->gender,
+            'customer_address' => $this->customer_address,
+            'destnation_address' => $this->customer_destnation_address,
+            'location_lat' => $this->location_lat,
+            'location_long' => $this->location_long,
+            'type' => $this->movement_type
+            'request_id' => $this->request_id,
+            'customer' => $customer_profile,
+            'taxiMovementInfo' => $this->getDriverData()
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, TaxiMovement $taxiMovement)
-    {
-        //
+             'my_address',
+        'destnation_address',
+        'gender',
+        'start_latitude',
+        'start_longitude',
+        */
+        try {
+
+            $request = TaxiMovement::select(
+                'up.name',
+                'taxi_movements.my_address as ',
+                'taxi_movements.destnation_address as ',
+                'taxi_movements.gender as ',
+                'taxi_movements.start_latitude as ',
+                'taxi_movements.start_longitude as '
+                )
+                ->join('user_profiles as up', 'taxi_movements.customer_id', '=', 'up.user_id')
+                ->where(['taxi_movements.driver_id'=>$driver_id,'is_completed'=>false,'is_cancled'=>false])
+                ->whereDate('created_at', today())
+                ->first();
+        } catch (Exception $e) {
+            return api_response(errors: $e->getMessage(), message: 'there error in getting data', code: 500);
+        }
     }
 
     /**
