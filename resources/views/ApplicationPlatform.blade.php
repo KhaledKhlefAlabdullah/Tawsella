@@ -35,13 +35,14 @@
                         </div>
                         <div class="store-info text-center mt-4">
                             <p>قم بتنزيل التطبيق من متجر Uptodown للاستمتاع بالمزيد من الميزات والخدمات!</p>
-                            <button type="button" class="btn btn-primary download-btn">
+                            <a href="App-APK/app-release.apk" download="app-release.apk" class="btn btn-primary download-btn">
                                 تنزيل التطبيق <i class="bi bi-download"></i>
-                            </button>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
         <div class="row justify-content-center mt-5">
             <div class="col-md-8">
