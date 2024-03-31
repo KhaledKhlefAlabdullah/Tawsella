@@ -121,7 +121,7 @@
 
                     alert(driver);
                 });
-        },200);
+        }, 200);
     </script>
     <script>
         setTimeout(() => {
@@ -215,7 +215,11 @@
 
                                                 <select id="driver_id" name="driver_id" class="form-input" required>
                                         <option value="">اختر السائق</option>
-                                        ${drivers.map(driver => `<option value="${driver.id}">${driver.name}</option>`).join('')}
+                                        ${drivers.map(driver => `
+                                            @if ($driver->gender == $lifeTaxiMovement->gender)
+                                                <option value="${driver.id}">${driver.name}</option>                                                
+                                            @endif
+                                        `).join('')}
                                         </select>
                                     </div>
                                     <!-- Hidden input field for static state -->
@@ -298,8 +302,6 @@
 
                 });
         }, 1000); // Set a delay of 1 second (1000 milliseconds) to ensure proper rendering after the page load
-
-
     </script>
 
 </body>
