@@ -218,6 +218,7 @@
                                         ${drivers.map(driver => `
                                             @if (${driver} == ${gender})
                                                 <option value="${driver.id}">${driver.name}</option>                                                
+
                                             @endif
                                         `).join('')}
                                         </select>
