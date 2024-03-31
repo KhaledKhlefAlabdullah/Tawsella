@@ -24,23 +24,23 @@
             <div class="container">
                 <div class="row">
                     <!-- Left side columns -->
-                    <div class="col-lg-6 mb-6 card" style="padding: 20px;">
+                    <div class="col-lg-5 mb-6 card" style="padding: 20px;">
                         <div class="text-center card-content">
                             <h4>مجموع مبالغ الطلبات</h4>
                         </div>
                     </div>
-                    <div class="col-lg-6 mb-6 card"style="padding: 20px;">
+                    <div class="col-lg-5 mb-6 card"style="padding: 20px;">
                         <div class="text-center card-content">
                             <h4>عدد الطلبات</h4>
                         </div>
                     </div>
-                    <div class="col-lg-6 mb-6 card"style="padding: 20px;">
+                    <div class="col-lg-5 mb-6 card"style="padding: 20px;">
                         <div class="text-center card-content">
                             <h4>عدد السائقين</h4>
                             <p>{{ $totalDrivers }}</p>
                         </div>
                     </div>
-                    <div class="col-lg-6 mb-6 card"style="padding: 20px;">
+                    <div class="col-lg-5 mb-6 card"style="padding: 20px;">
                         <div class="text-center card-content">
                             <h4>عدد السيارات</h4>
                             <p>{{ $totalTaxi }}</p>
