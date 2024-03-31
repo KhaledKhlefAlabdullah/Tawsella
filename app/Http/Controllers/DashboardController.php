@@ -25,7 +25,11 @@ class DashboardController extends Controller
                 ->where(['taxi_movements.is_don' => false,'taxi_movements.request_state' => 'pending'])
                 ->get();
 
-            $drivers = getReadyDrivers();
+            $drivers = $drivers = User::where(['user_type' => 'driver', 'driver_state' => 'ready', 'is_active' => true])
+            ->join('taxis', 'users.id', '=', 'taxis.driver_id')
+            ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
+            ->select('users.id', 'user_profiles.name', 'user_profiles.avatar')
+            ->get();
 
             return view('dashboard',['lifeTaxiMovements'=>$taxiMovement,'drivers' => $drivers]);
         }
