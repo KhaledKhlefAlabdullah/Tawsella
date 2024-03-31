@@ -190,6 +190,7 @@
                                             required>
                                             <option value="">اختر السائق</option>
                                             @foreach ($drivers as $driver)
+                                            @dd($drivers );
                                                 @if ($driver->gender == $lifeTaxiMovement->gender)
                                                     <option value="{{ $driver->id }}">{{ $driver->name }}</option>
                                                 @endif
