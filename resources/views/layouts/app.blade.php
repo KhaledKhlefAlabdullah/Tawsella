@@ -215,12 +215,7 @@
 
                                                 <select id="driver_id" name="driver_id" class="form-input" required>
                                         <option value="">اختر السائق</option>
-                                        ${drivers.map(driver => `
-                                            @if (${driver} == ${gender})
-                                                <option value="${driver.id}">${driver.name}</option>                                                
-
-                                            @endif
-                                        `).join('')}
+                                        ${drivers.map(driver => driver.gender == gender ? `<option value="${driver.id}">${driver.name}</option> ` : '').join('')}
                                         </select>
                                     </div>
                                     <!-- Hidden input field for static state -->
