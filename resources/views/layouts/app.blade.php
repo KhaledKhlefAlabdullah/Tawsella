@@ -217,7 +217,7 @@
                                         <option value="">اختر السائق</option>
                                         ${drivers.map(driver => `
                                             @if ($driver->gender == $lifeTaxiMovement->gender)
-                                                <option value="${driver.id}">${driver.name}</option>                                                
+                                                <option value="${driver.id}">${driver.name}</option>
                                             @endif
                                         `).join('')}
                                         </select>
