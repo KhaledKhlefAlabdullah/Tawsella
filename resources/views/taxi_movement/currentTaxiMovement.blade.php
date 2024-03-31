@@ -8,7 +8,7 @@
                 <h1>Current Taxi Movement</h1>
                 <div class="table-responsive"> <!-- تجعل الجدول متجاوبًا -->
                     <table class="table table-striped"> <!-- إضافة فئة table-striped لتظليل الصفوف بشكل بديل -->
-                        <thead class="table-dark"> <!-- تحديد لون خلفية العناوين -->
+                        <thead class="table"> <!-- تحديد لون خلفية العناوين -->
                             <tr>
                                 <th>العميل</th>
                                 <th>رقم العميل</th>
