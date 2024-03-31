@@ -40,7 +40,7 @@ class TaxiController extends Controller
 
             $request->validate([
                 'lat' => 'numeric|required',
-                'log' => 'numeric|required'
+                'long' => 'numeric|required'
             ]);
             
 
