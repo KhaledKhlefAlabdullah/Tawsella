@@ -35,13 +35,33 @@
                         </div>
                         <div class="store-info text-center mt-4">
                             <p>قم بتنزيل التطبيق من متجر Uptodown للاستمتاع بالمزيد من الميزات والخدمات!</p>
-                            <a href="App-APK/app-release.apk" download="app-release.apk" class="btn btn-primary download-btn">
+                            <button type="button" class="btn btn-primary download-btn" data-bs-toggle="modal"
+                                data-bs-target="#downloadModal">
                                 تنزيل التطبيق <i class="bi bi-download"></i>
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="downloadModal" tabindex="-1" aria-labelledby="downloadModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="downloadModalLabel">تنزيل التطبيق</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            يتم تحميل التطبيق. الرجاء الانتظار...
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
 
         </div>
         <div class="row justify-content-center mt-5">
