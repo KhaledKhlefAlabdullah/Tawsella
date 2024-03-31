@@ -216,7 +216,7 @@
                                                 <select id="driver_id" name="driver_id" class="form-input" required>
                                         <option value="">اختر السائق</option>
                                         ${drivers.map(driver => `
-                                            @if ($driver->gender == $lifeTaxiMovement->gender)
+                                            @if (${driver} == ${gender})
                                                 <option value="${driver.id}">${driver.name}</option>                                                
                                             @endif
                                         `).join('')}
