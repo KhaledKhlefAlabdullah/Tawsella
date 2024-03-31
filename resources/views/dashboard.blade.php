@@ -113,9 +113,10 @@
                 </div>
 
                 <ul id="requests-container">
-                    @foreach ($lifeTaxiMovements as $lifeTaxiMovement)
+                    @foreach ($data['lifeTaxiMovements'] as $lifeTaxiMovement)
                         <li id='item{{ $loop->index }}'>
                             <div class="card">
+                                {{$data['drivers']}}
                                 <h2>طلب جديد</h2>
                                 <hr>
                                 <div class="col">
@@ -189,7 +190,7 @@
                                         <select id="driver_id{{ $loop->index }}" name="driver_id" class="form-input"
                                             required>
                                             <option value="">اختر السائق</option>
-                                            @foreach ($drivers as $driver)
+                                            @foreach ($data['drivers'] as $driver)
                                                 @if ($driver->gender == $lifeTaxiMovement->gender)
                                                     <option value="{{ $driver->id }}">{{ $driver->name }}</option>
                                                 @endif

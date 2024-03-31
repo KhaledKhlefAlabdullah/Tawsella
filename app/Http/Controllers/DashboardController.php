@@ -27,7 +27,9 @@ class DashboardController extends Controller
 
             $drivers = getReadyDrivers();
             
-            return view('dashboard',['lifeTaxiMovements'=>$taxiMovement,'drivers' => $drivers]);
+            $data = ['drivers' => $drivers,'lifeTaxiMovements' => $taxiMovement];
+
+            return view('dashboard', compact('data'));
         }
         catch(Exception $e){
             return abort(500,'there error in getting current taxi movement'.$e->getMessage());
