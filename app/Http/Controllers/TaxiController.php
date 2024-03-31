@@ -39,9 +39,10 @@ class TaxiController extends Controller
         try{
 
             $request->validate([
-                'lat' => 'nomeric|required',
-                'log' => 'nomeric|required'
+                'lat' => 'numeric|required',
+                'log' => 'numeric|required'
             ]);
+            
 
             $taxi_id = Taxi::where('driver_id',$driver_id)->first()->id;
 
