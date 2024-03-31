@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\GetTaxiLocationsEvent;
 use App\Http\Requests\TaxiRequest;
 use App\Models\Taxi;
 use App\Models\User;
@@ -29,6 +30,31 @@ class TaxiController extends Controller
             return back()->with('error','هناك خطأ في جلب البيانات');
         }
         
+    }
+
+    /**
+     * Get the taxi location 
+     */
+    public function getTaxiLocation(Request $request, string $driver_id){
+        try{
+
+            $request->validate([
+                'lat' => 'nomeric|required',
+                'log' => 'nomeric|required'
+            ]);
+
+            $taxi_id = Taxi::where('driver_id',$driver_id)->first()->id;
+
+            GetTaxiLocationsEvent::dispatch(
+                $taxi_id,
+                $request->lat,
+                $request->long
+            );
+            return api_response(message:'location getting success');
+        }
+        catch(Exception $e){
+            return api_response(errors:$e->getMessage(),message:'there error in gettign taxi location',code:500);
+        }
     }
 
     /**
@@ -120,10 +146,13 @@ class TaxiController extends Controller
      * Remove the specified resource from storage.
      * @param  \App\Models\Taxi  $taxi
      */
-    public function destroy(Taxi $taxi)
+    public function destroy(string $id)
     {
         try{
+
+        $taxi = getAndCheckModelById(Taxi::class,$id);
         // حذف السجل المحدد
+
         $taxi->delete();
 
         // إعادة توجيه أو عرض رسالة نجاح

@@ -38,8 +38,15 @@
                                 <td>{{ $movement->car_plate_number }}</td>
                                 <td>{{ $movement->type }}</td>
                                 <td>{{ $movement->price }}</td>
-                                <td><a href="{{route('map')}}" class="btn btn-success">موقع السيارة</a></td>
-                            </tr>
+                                <td>
+                                    @if($movement->taxi_id)
+                                        <a href="{{ route('map', [$movement->taxi_id]) }}" class="btn btn-success">موقع السيارة</a>
+                                    @else
+                                        <!-- Handle the case when taxi_id is missing or null -->
+                                        <span class="text-danger">No taxi ID available</span>
+                                    @endif
+                                </td>
+                                                            </tr>
                             @endforeach
                         </tbody>
                     </table>

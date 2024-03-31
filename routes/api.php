@@ -10,6 +10,7 @@ use App\Http\Controllers\UserProfileController;
 use App\Models\AboutUs;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DriversController;
+use App\Http\Controllers\TaxiController;
 use Illuminate\Support\Facades\Broadcast;
 
 /*
@@ -28,6 +29,8 @@ Broadcast::routes(['middleware' => ['auth:sanctum']]);
 Route::post('/found-customer/{id}', [TaxiMovementController::class, 'foundCostumer'])->name('found.customer');
 
 Route::get('/driver-request/{id}', [TaxiMovementController::class, 'get_request_data']);
+
+Route::post('/get-taxi-location/{driver_id}',[TaxiController::class,'getTaxiLocation']);
 
 Route::middleware('auth:sanctum')->group(function () {
 

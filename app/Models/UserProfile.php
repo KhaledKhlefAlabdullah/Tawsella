@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class UserProfile extends Model
 {
-    use HasFactory,HasUuid,SoftDeletes;
+    use HasFactory,HasUuid;
 
     protected $keyType='string';
 

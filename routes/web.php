@@ -147,7 +147,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //*************************** End route calculations *********************************** */
     //**************************************************************************** */
 
-    Route::get('/view-map',[TaxiMovementController::class,'view_map'])->name('map');
+    Route::get('/view-map/{taxi_id}',[TaxiMovementController::class,'view_map'])->name('map');
 });
 
 Route::get('/drivers', [DriversController::class, 'index']);
