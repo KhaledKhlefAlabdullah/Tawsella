@@ -38,7 +38,7 @@
                                 <td>{{ $movement->car_plate_number }}</td>
                                 <td>{{ $movement->type }}</td>
                                 <td>{{ $movement->price }}</td>
-                                <td><a href="" class="btn btn-success">موقع السيارة</a></td>
+                                <td><a href="{{route('map')}}" class="btn btn-success">موقع السيارة</a></td>
                             </tr>
                             @endforeach
                         </tbody>
