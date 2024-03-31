@@ -249,6 +249,10 @@ class TaxiMovementController extends Controller
                 'way' => $request->input('way')
             ]);
 
+            getAndCheckModelById(User::class,Auth::id())->update([
+                'driver_state' => 'ready'
+            ]);
+
             $driverName = UserProfile::where('user_id', Auth::id())->first()->name;
 
             $customerName = UserProfile::where('user_id',  $taxiMovement->customer_id)->first()->name;

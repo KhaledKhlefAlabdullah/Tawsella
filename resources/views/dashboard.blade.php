@@ -34,7 +34,7 @@
                                         <i class="bi bi-currency-dollar"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>$3,264</h6>
+                                        <h6>${{$calcolations}}</h6>
                                         <hr>
                                     </div>
                                 </div>
@@ -48,14 +48,14 @@
                         <div class="card info-card customers-card">
 
                             <div class="card-body">
-                                <h5 class="card-title">الطلبات <span>| عدد</span></h5>
+                                <h5 class="card-title">الطلبات المكتملة <span>| عدد</span></h5>
 
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-people"></i>
+                                        <i class="bi bi-bookmark-star-fill"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>5</h6>
+                                        <h6>{{$requests}}</h6>
                                         <hr>
                                     </div>
                                 </div>
@@ -98,7 +98,7 @@
 
                                 <div class="d-flex align-items-center">
                                     <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-people"></i>
+                                        <i class="bi bi-taxi-front-fill"></i>
                                     </div>
                                     <div class="ps-3">
                                         <h6>{{ $totalTaxi }}</h6>
