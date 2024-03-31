@@ -47,7 +47,7 @@ class RegisteredUserController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'user_type' => $user_type,
-                'driver_sate' => 'ready'
+                'driver_state' => 'ready'
             ]);
             
             UserProfile::create([
