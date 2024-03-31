@@ -51,7 +51,7 @@ class TaxiController extends Controller
             ]);
 
             GetTaxiLocationsEvent::dispatch(
-                $taxi->id,
+                $taxi->driver_id,
                 $request->lat,
                 $request->long
             );
