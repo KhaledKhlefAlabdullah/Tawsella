@@ -61,7 +61,7 @@
                                 يتم تحميل التطبيق. الرجاء الانتظار...
                             </div>
                             <div class="modal-footer">
-                                <a href="App-APK/app-release.apk" download="app-release.apk" class="btn btn-primary">
+                                <a href="App-APK/app-release.apk" download="app-release.apk" class="btn btn-primary" data-bs-dismiss="modal">
                                     موافق
                                 </a>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
