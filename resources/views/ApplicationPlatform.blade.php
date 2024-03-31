@@ -69,7 +69,6 @@
                     </div>
                 </div>
 
-
                 <script>
                     function hideModal() {
                         $('#downloadModal').modal('hide');
