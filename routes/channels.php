@@ -24,6 +24,7 @@ Broadcast::channel('Taxi-movement.{admin_id}', function ($user, $admin_id) {
 
 
 Broadcast::channel('TaxiLocation.{admin_id}', function ($user, $admin_id) {
+
     return (int) $user->id === (int) $admin_id;
 });
 

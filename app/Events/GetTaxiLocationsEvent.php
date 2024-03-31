@@ -14,14 +14,16 @@ class GetTaxiLocationsEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    protected $driver_id;
     protected $lat;
     protected $long;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($lat, $long)
+    public function __construct($driver_id, $lat, $long)
     {
+        $this->driver_id = $driver_id;
         $this->lat = $lat;
         $this->long = $long;
     }
@@ -33,18 +35,19 @@ class GetTaxiLocationsEvent implements ShouldBroadcast
      */
     public function broadcastOn(): Channel
     {
-        return  new PrivateChannel('TaxiLocation.'.getAdminId());
+        return  new PrivateChannel('TaxiLocation.' . getAdminId());
     }
 
-    public function broadcastWith():array
+    public function broadcastWith(): array
     {
         return [
+            'driver_id' => $this->driver_id,
             'lat' => $this->lat,
             'long' => $this->long
         ];
     }
 
-    public function broadcastAs(){
-        return 'TaxiLocation';
-    }
+    // public function broadcastAs(){
+    //     return 'TaxiLocation';
+    // }
 }

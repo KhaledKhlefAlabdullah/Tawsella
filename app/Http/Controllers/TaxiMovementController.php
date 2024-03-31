@@ -42,7 +42,7 @@ class TaxiMovementController extends Controller
 
             // Query to get requests for the current day
             $taxiMovement = TaxiMovement::select(
-    
+
                 'taxi_movements.my_address',
                 'taxi_movements.destnation_address',
                 'taxi_movements.gender',
@@ -60,7 +60,7 @@ class TaxiMovementController extends Controller
                 'taxis.plate_number as car_plate_number',
                 'taxi_movement_types.type',
                 'taxi_movement_types.price'
-                )
+            )
                 ->leftJoin('users as driver', 'taxi_movements.driver_id', '=', 'driver.id')
                 ->leftJoin('users as customer', 'taxi_movements.customer_id', '=', 'customer.id')
                 ->leftJoin('user_profiles as driver_profile', 'taxi_movements.driver_id', '=', 'driver_profile.user_id')
@@ -83,8 +83,8 @@ class TaxiMovementController extends Controller
     public function view_map(string $taxi_id)
     {
         try {
-
-            $taxi = taxi::select('taxis.last_location_latitude as lat', 'taxis.last_location_longitude as long', 'up.name')
+       
+            $taxi = taxi::select('taxis.driver_id as driver_id','taxis.last_location_latitude as lat', 'taxis.last_location_longitude as long', 'up.name')
                 ->join('user_profiles as up', 'taxis.driver_id', '=', 'up.user_id')
                 ->where('taxis.id', $taxi_id)->first();
 
