@@ -35,7 +35,8 @@
                         </div>
                         <div class="store-info text-center mt-4">
                             <p>قم بتنزيل التطبيق من متجر Uptodown للاستمتاع بالمزيد من الميزات والخدمات!</p>
-                            <a href="App-APK/app-release.apk" download="app-release.apk" class="btn btn-primary download-btn">
+                            <a href="App-APK/app-release.apk" download="app-release.apk" class="btn btn-primary download-btn" data-bs-toggle="modal"
+                            data-bs-target="#downloadModal">
                                 تنزيل التطبيق <i class="bi bi-download"></i>
                             </a>
                         </div>
