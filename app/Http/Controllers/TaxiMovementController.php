@@ -252,7 +252,7 @@ class TaxiMovementController extends Controller
                 )
                 ->join('user_profiles as up', 'taxi_movements.customer_id', '=', 'up.user_id')
                 ->join('taxi_movement_types as tmt','taxi_movements.movement_type_id','=','tmt.id')
-                ->where(['taxi_movements.driver_id'=>$driver_id,'is_completed'=>false,'is_canceled'=>false])
+                ->where(['taxi_movements.driver_id'=>$driver_id,'is_completed'=>false,'is_canceled'=>false,'is_don' => true])
                 ->whereDate('created_at', today())
                 ->first();
 
