@@ -255,8 +255,9 @@ class TaxiMovementController extends Controller
                 ->where(['taxi_movements.driver_id'=>$driver_id,'is_completed'=>false,'is_canceled'=>false,'is_don' => true])
                 ->whereDate('taxi_movements.created_at', today())
                 ->first();
-
-            return $request;
+            if($request)
+                 return api_response(data:$request,message:'success getting data');
+            return api_response(message:'there now data');
         } catch (Exception $e) {
             return api_response(errors: $e->getMessage(), message: 'there error in getting data', code: 500);
         }
