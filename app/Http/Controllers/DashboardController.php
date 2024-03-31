@@ -31,7 +31,7 @@ class DashboardController extends Controller
             return view('dashboard',['lifeTaxiMovements' => $taxiMovement, 'drivers' => $drivers]);
         }
         catch(Exception $e){
-            return abort(500,'there error in getting current taxi movement'.$e->getMessage());
+            return redirect()->withErrors('there error in getting current taxi movement'.$e->getMessage())->withInput();
         }
     }
 }
