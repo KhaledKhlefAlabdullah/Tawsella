@@ -18,7 +18,6 @@ return new class extends Migration
             $table->text('service_description');
             $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

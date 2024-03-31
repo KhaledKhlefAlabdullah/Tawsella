@@ -18,7 +18,6 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->boolean('is_onKM')->default(false);
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 

@@ -41,12 +41,31 @@ class TaxiMovementController extends Controller
             $currentDate = Carbon::now()->toDateString();
 
             // Query to get requests for the current day
-            $taxiMovement = TaxiMovement::select('taxi_movements.my_address', 'taxi_movements.destnation_address', 'taxi_movements.gender', 'taxi_movements.start_latitude', 'taxi_movements.start_longitude', 'driver.email as driver_email', 'customer.email as customer_email', 'driver_profile.name as driver_name', 'driver_profile.phoneNumber as driver_phone', 'customer_profile.name as customer_name', 'customer_profile.phoneNumber as customer_phone', 'taxis.car_name as car_car_name', 'taxis.lamp_number as car_lamp_number', 'taxis.plate_number as car_plate_number', 'taxi_movement_types.type', 'taxi_movement_types.price')
+            $taxiMovement = TaxiMovement::select(
+    
+                'taxi_movements.my_address',
+                'taxi_movements.destnation_address',
+                'taxi_movements.gender',
+                'taxi_movements.start_latitude',
+                'taxi_movements.start_longitude',
+                'driver.email as driver_email',
+                'customer.email as customer_email',
+                'driver_profile.name as driver_name',
+                'driver_profile.phoneNumber as driver_phone',
+                'customer_profile.name as customer_name',
+                'customer_profile.phoneNumber as customer_phone',
+                'taxis.id as taxi_id',
+                'taxis.car_name as car_car_name',
+                'taxis.lamp_number as car_lamp_number',
+                'taxis.plate_number as car_plate_number',
+                'taxi_movement_types.type',
+                'taxi_movement_types.price'
+                )
                 ->leftJoin('users as driver', 'taxi_movements.driver_id', '=', 'driver.id')
                 ->leftJoin('users as customer', 'taxi_movements.customer_id', '=', 'customer.id')
                 ->leftJoin('user_profiles as driver_profile', 'taxi_movements.driver_id', '=', 'driver_profile.user_id')
                 ->leftJoin('user_profiles as customer_profile', 'taxi_movements.customer_id', '=', 'customer_profile.user_id')
-                ->leftJoin('taxis', 'taxi_movements.driver_id', '=', 'taxis.id')
+                ->leftJoin('taxis', 'taxi_movements.taxi_id', '=', 'taxis.id')
                 ->leftJoin('taxi_movement_types', 'taxi_movements.movement_type_id', '=', 'taxi_movement_types.id')
                 ->whereDate('taxi_movements.created_at', $currentDate)
                 ->where(['taxi_movements.is_completed' => false, 'taxi_movements.is_canceled' => false, 'taxi_movements.request_state' => 'accepted'])
@@ -61,18 +80,17 @@ class TaxiMovementController extends Controller
     /**
      * For View map for taxi location
      */
-    public function view_map(string $taxi_id){
-        try{
+    public function view_map(string $taxi_id)
+    {
+        try {
 
-            $taxi = taxi::select('taxis.last_location_latitude','taxis.last_location_longitude','up.name')
-            ->join('user_profiles as up','taxis.driver_id','=','up.user_id')
-            ->where('taxis.id' , $taxi_id)->first();
+            $taxi = taxi::select('taxis.last_location_latitude as lat', 'taxis.last_location_longitude as long', 'up.name')
+                ->join('user_profiles as up', 'taxis.driver_id', '=', 'up.user_id')
+                ->where('taxis.id', $taxi_id)->first();
 
-            return view('taxi_movement.map')->with('success','success to view map');
-
-        }
-        catch(Exception $e){
-            return redirect()->back()->withErrors($e->getMessage().' there an error in view map')->withInput();
+            return view('taxi_movement.map', ['taxi' => $taxi])->with('success', 'success to view map');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors($e->getMessage() . ' there an error in view map')->withInput();
         }
     }
 
@@ -267,15 +285,15 @@ class TaxiMovementController extends Controller
                 'taxi_movements.start_longitude as location_long',
                 'tmt.type',
                 'tmt.price'
-                )
+            )
                 ->join('user_profiles as up', 'taxi_movements.customer_id', '=', 'up.user_id')
-                ->join('taxi_movement_types as tmt','taxi_movements.movement_type_id','=','tmt.id')
-                ->where(['taxi_movements.driver_id'=>$driver_id,'is_completed'=>false,'is_canceled'=>false,'is_don' => true])
+                ->join('taxi_movement_types as tmt', 'taxi_movements.movement_type_id', '=', 'tmt.id')
+                ->where(['taxi_movements.driver_id' => $driver_id, 'is_completed' => false, 'is_canceled' => false, 'is_don' => true])
                 ->whereDate('taxi_movements.created_at', today())
                 ->first();
-            if($request)
-                 return api_response(data:$request,message:'success getting data');
-            return api_response(message:'there now data');
+            if ($request)
+                return api_response(data: $request, message: 'success getting data');
+            return api_response(message: 'there now data');
         } catch (Exception $e) {
             return api_response(errors: $e->getMessage(), message: 'there error in getting data', code: 500);
         }

@@ -22,6 +22,11 @@ Broadcast::channel('Taxi-movement.{admin_id}', function ($user, $admin_id) {
     return (int) $user->id === (int) $admin_id;
 });
 
+
+Broadcast::channel('TaxiLocation.{admin_id}', function ($user, $admin_id) {
+    return (int) $user->id === (int) $admin_id;
+});
+
 Broadcast::channel('customer.{customer_id}', function ($user, $customer_id) {
     return (int) $user->id === (int) $customer_id;
 });

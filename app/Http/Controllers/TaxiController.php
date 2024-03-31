@@ -120,10 +120,13 @@ class TaxiController extends Controller
      * Remove the specified resource from storage.
      * @param  \App\Models\Taxi  $taxi
      */
-    public function destroy(Taxi $taxi)
+    public function destroy(string $id)
     {
         try{
+
+        $taxi = getAndCheckModelById(Taxi::class,$id);
         // حذف السجل المحدد
+
         $taxi->delete();
 
         // إعادة توجيه أو عرض رسالة نجاح

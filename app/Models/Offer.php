@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Offer extends Model
 {
-    use HasFactory,HasUuid,SoftDeletes;
+    use HasFactory,HasUuid;
 
     protected $keyType = 'string';
     protected $primaryKey = 'id';
