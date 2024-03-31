@@ -47,7 +47,6 @@
 
 
                 <!-- Modal -->
-                <!-- Modal -->
                 <div class="modal fade" id="downloadModal" tabindex="-1" aria-labelledby="downloadModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog">
@@ -61,7 +60,7 @@
                                 يتم تحميل التطبيق. الرجاء الانتظار...
                             </div>
                             <div class="modal-footer">
-                                <a href="App-APK/app-release.apk" download="app-release.apk" class="btn btn-primary" data-bs-dismiss="modal">
+                                <a href="App-APK/app-release.apk" download="app-release.apk" class="btn btn-primary" onclick="hideModal()">
                                     موافق
                                 </a>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">إلغاء</button>
@@ -71,7 +70,11 @@
                 </div>
 
 
-
+                <script>
+                    function hideModal() {
+                        $('#downloadModal').modal('hide');
+                    }
+                </script>
             </div>
             <div class="row justify-content-center mt-5">
                 <div class="col-md-8">
