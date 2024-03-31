@@ -1,15 +1,14 @@
-<!-- current_taxi_movement.blade.php -->
-
 @extends('layouts.app')
 
 @section('content')
-    <main class="main" id="main">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <h1>Current Taxi Movement</h1>
-                    <table class="table">
-                        <thead>
+<main class="main" id="main">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Current Taxi Movement</h1>
+                <div class="table-responsive"> <!-- تجعل الجدول متجاوبًا -->
+                    <table class="table table-striped"> <!-- إضافة فئة table-striped لتظليل الصفوف بشكل بديل -->
+                        <thead class="table-dark"> <!-- تحديد لون خلفية العناوين -->
                             <tr>
                                 <th>العميل</th>
                                 <th>رقم العميل</th>
@@ -22,28 +21,31 @@
                                 <th>لوحة السيارة</th>
                                 <th>نوع الطلب</th>
                                 <th>التكلفة</th>
+                                <th>تتبع</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($taxiMovement as $movement)
-                                <tr>
-                                    <td>{{ $movement->customer_name }}</td>
-                                    <td>{{ $movement->customer_phone }}</td>
-                                    <td>{{ $movement->my_address }}</td>
-                                    <td>{{ $movement->destnation_address }}</td>
-                                    <td>{{ $movement->gender }}</td>
-                                    <td>{{ $movement->driver_name }}</td>
-                                    <td>{{ $movement->driver_phone }}</td>                                    
-                                    <td>{{ $movement->car_lamp_number }}</td>
-                                    <td>{{ $movement->car_plate_number }}</td>
-                                    <td>{{ $movement->type }}</td>
-                                    <td>{{ $movement->price }}</td>
-                                </tr>
+                            <tr>
+                                <td>{{ $movement->customer_name }}</td>
+                                <td>{{ $movement->customer_phone }}</td>
+                                <td>{{ $movement->my_address }}</td>
+                                <td>{{ $movement->destnation_address }}</td>
+                                <td>{{ $movement->gender }}</td>
+                                <td>{{ $movement->driver_name }}</td>
+                                <td>{{ $movement->driver_phone }}</td>
+                                <td>{{ $movement->car_lamp_number }}</td>
+                                <td>{{ $movement->car_plate_number }}</td>
+                                <td>{{ $movement->type }}</td>
+                                <td>{{ $movement->price }}</td>
+                                <td><a href="{{ route('') }}" class="btn btn-success">موقع السيارة</a></td>
+                            </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
+</main>
 @endsection
