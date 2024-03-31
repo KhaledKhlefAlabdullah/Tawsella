@@ -14,7 +14,7 @@ class TaxiMovementTypeController extends Controller
     public function index()
     {
         try {
-            $movementTypes = TaxiMovementType::select('id', 'type', 'price','description','is_onKM')->get();
+            $movementTypes = TaxiMovementType::select('id', 'type', 'price','description','is_onKM')->whereNotIn('id',['t-m-t-1','t-m-t-2'])->get();
 
             if (request()->wantsJson())
                 return api_response(data: $movementTypes, message: 'getting-movement-type-error');
