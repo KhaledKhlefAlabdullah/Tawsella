@@ -256,7 +256,7 @@ class TaxiMovementController extends Controller
                 ->whereDate('taxi_movements.created_at', today())
                 ->first();
 
-            return api_response(data:$request,message:'success getting data');
+            return $request;
         } catch (Exception $e) {
             return api_response(errors: $e->getMessage(), message: 'there error in getting data', code: 500);
         }
