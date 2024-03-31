@@ -23,29 +23,93 @@
         <section class="section dashboard">
             <div class="container">
                 <div class="row">
-                    <!-- Left side columns -->
-                    <div class="col-lg-12 mb-6 card" style="padding: 10px;">
-                        <div class="text-center card-content">
-                            <h4>مجموع مبالغ الطلبات</h4>
+                    <!-- Revenue Card -->
+                    <div class="col-xxl-6 col-md-6">
+                        <div class="card info-card revenue-card">
+                            <div class="card-body">
+                                <h5 class="card-title">مبالغ الطلبات <span>| مجموع </span></h5>
+
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-currency-dollar"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h6>$3,264</h6>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
-                    </div>
-                    <div class="col-lg-12 mb-6 card"style="padding: 10px;">
-                        <div class="text-center card-content">
-                            <h4>عدد الطلبات</h4>
+                    </div><!-- End Revenue Card -->
+                    <!-- Customers Card -->
+                    <div class="col-xxl-6 col-xl-6">
+
+                        <div class="card info-card customers-card">
+
+                            <div class="card-body">
+                                <h5 class="card-title">الطلبات <span>| عدد</span></h5>
+
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-people"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h6>5</h6>
+                                        <hr>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-lg-12 mb-6 card"style="padding: 10px;">
-                        <div class="text-center card-content">
-                            <h4>عدد السائقين</h4>
-                            <p>{{ $totalDrivers }}</p>
+
+                    </div><!-- End Customers Card -->
+
+                    <!-- Customers Card -->
+                    <div class="col-xxl-6 col-xl-6">
+
+                        <div class="card info-card customers-card">
+
+                            <div class="card-body">
+                                <h5 class="card-title">السائقين <span>| عدد</span></h5>
+
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-people"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h6>{{ $totalDrivers }}</h6>
+                                        <hr>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-lg-12 mb-6 card"style="padding: 10px;">
-                        <div class="text-center card-content">
-                            <h4>عدد السيارات</h4>
-                            <p>{{ $totalTaxi }}</p>
+
+                    </div><!-- End Customers Card -->
+
+                    <!-- Customers Card -->
+                    <div class="col-xxl-6 col-xl-6">
+
+                        <div class="card info-card customers-card">
+
+                            <div class="card-body">
+                                <h5 class="card-title">السيارات <span>| عدد</span></h5>
+
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-people"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h6>{{ $totalTaxi }}</h6>
+                                        <hr>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
-                    </div>
+
+                    </div><!-- End Customers Card -->
                 </div>
 
                 <ul id="requests-container">

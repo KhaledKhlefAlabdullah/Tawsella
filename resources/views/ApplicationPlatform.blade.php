@@ -45,7 +45,6 @@
                     </div>
                 </div>
 
-
                 <!-- Modal -->
                 <div class="modal fade" id="downloadModal" tabindex="-1" aria-labelledby="downloadModalLabel"
                     aria-hidden="true">
@@ -68,7 +67,6 @@
                         </div>
                     </div>
                 </div>
-
 
                 <script>
                     function hideModal() {
