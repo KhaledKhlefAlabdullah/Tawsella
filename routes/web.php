@@ -58,9 +58,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //******************************************************************************* */
 
     //***************************start route profile ******************************** */
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::group(['prefix' => 'profile'],function(){
+        Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('/update', [ProfileController::class, 'update'])->name('profile.update');
+        Route::delete('/delete', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    });
+    
     //***************************End route profile ******************************** */
     //***************************************************************************** */
 
@@ -100,15 +103,18 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //**************************************************************************** */
 
     //*************************** Start route offers *********************************** */
-    Route::get('/offers', [OfferController::class, 'index'])->name('offers.index');
+    Route::group(['prefix' => 'offers'],function(){
+        Route::get('/', [OfferController::class, 'index'])->name('offers.index');
 
-    Route::get('/offers/create', [OfferController::class, 'create'])->name('offers.create');
-    Route::post('/offers', [OfferController::class, 'store'])->name('offers.store');
-
-    Route::get('/offers/{offer}/edit', [OfferController::class, 'edit'])->name('offers.edit');
-    Route::put('/offers/{offer}', [OfferController::class, 'update'])->name('offers.update');
-
-    Route::delete('/offers/{offer}', [OfferController::class, 'destroy'])->name('offers.destroy');
+        Route::get('/create', [OfferController::class, 'create'])->name('offers.create');
+        Route::post('/store', [OfferController::class, 'store'])->name('offers.store');
+    
+        Route::get('/edit/{offer}', [OfferController::class, 'edit'])->name('offers.edit');
+        Route::put('/update/{offer}', [OfferController::class, 'update'])->name('offers.update');
+    
+        Route::delete('/delete/{offer}', [OfferController::class, 'destroy'])->name('offers.destroy');
+    });
+   
     //*************************** End route offers *********************************** */
     //**************************************************************************** */
 
@@ -116,7 +122,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::post('/accept-reject-request/{id}', [TaxiMovementController::class, 'accept_reject_request'])->name('accept.reject.request');
 
     //*************************** START route taxi-movement *********************************** */
-    Route::post('/accept-reject-request/{taxiMovement}', [TaxiMovementController::class, 'accept_reject_request'])->name('accept-reject-request');
 
 
     Route::get('/current-taxi-movement', [TaxiMovementController::class, 'currentTaxiMovement'])->name('current.taxi.movement');
@@ -124,20 +129,25 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //**************************************************************************** */
 
     //*************************** Start route calculations *********************************** */
-    Route::get('/calculations', [CalculationsController::class, 'index'])->name('calculations.index');
+    Route::group(['prefix' => 'calculations'],function(){
+        Route::get('/', [CalculationsController::class, 'index'])->name('calculations.index');
 
-    Route::get('/calculations/{calculations}', [CalculationsController::class, 'show'])->name('calculations.show');
-
-    Route::get('/calculations/create', [CalculationsController::class, 'create'])->name('calculations.create');
-    Route::post('/calculations', [CalculationsController::class, 'store'])->name('calculations.store');
-
-    Route::get('/calculations/{calculations}/edit', [CalculationsController::class, 'edit'])->name('calculations.edit');
-    Route::put('/calculations/{calculations}', [CalculationsController::class, 'update'])->name('calculations.update');
-
-    Route::delete('/calculations/{calculations}', [CalculationsController::class, 'destroy'])->name('calculations.destroy');
-
+        Route::get('/{calculations}', [CalculationsController::class, 'show'])->name('calculations.show');
+    
+        Route::get('/create', [CalculationsController::class, 'create'])->name('calculations.create');
+        Route::post('/store', [CalculationsController::class, 'store'])->name('calculations.store');
+    
+        Route::get('/edit/{calculations}', [CalculationsController::class, 'edit'])->name('calculations.edit');
+        Route::put('/update/{calculations}', [CalculationsController::class, 'update'])->name('calculations.update');
+    
+        Route::delete('/delete/{calculations}', [CalculationsController::class, 'destroy'])->name('calculations.destroy');
+    
+    });
+   
     //*************************** End route calculations *********************************** */
     //**************************************************************************** */
+
+    Route::get('/view-map',[TaxiMovementController::class,'view_map'])->name('map');
 });
 
 Route::get('/drivers', [DriversController::class, 'index']);

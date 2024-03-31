@@ -59,6 +59,24 @@ class TaxiMovementController extends Controller
     }
 
     /**
+     * For View map for taxi location
+     */
+    public function view_map(string $taxi_id){
+        try{
+
+            $taxi = taxi::select('taxis.last_location_latitude','taxis.last_location_longitude','up.name')
+            ->join('user_profiles as up','taxis.driver_id','=','up.user_id')
+            ->where('taxis.id' , $taxi_id)->first();
+
+            return view('taxi_movement.map')->with('success','success to view map');
+
+        }
+        catch(Exception $e){
+            return redirect()->back()->withErrors($e->getMessage().' there an error in view map')->withInput();
+        }
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(TaxiMovementRequest $request)
