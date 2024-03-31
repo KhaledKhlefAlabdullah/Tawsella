@@ -18,43 +18,46 @@ class TaxiController extends Controller
      */
     public function index()
     {
-        try{
+        try {
 
             // احصل على جميع السجلات وعرضها، يمكنك تخصيص هذه الوظيفة حسب احتياجاتك
-            $taxis = Taxi::select('user_profiles.name as driverName','taxis.id','taxis.car_name','taxis.lamp_number','taxis.plate_number')
-            ->join('user_profiles','taxis.driver_id','=','user_profiles.user_id')
-            ->get();
+            $taxis = Taxi::select('user_profiles.name as driverName', 'taxis.id', 'taxis.car_name', 'taxis.lamp_number', 'taxis.plate_number')
+                ->join('user_profiles', 'taxis.driver_id', '=', 'user_profiles.user_id')
+                ->get();
             return view('taxis.index', compact('taxis'));
+        } catch (Exception $e) {
+            return back()->with('error', 'هناك خطأ في جلب البيانات');
         }
-        catch(Exception $e){
-            return back()->with('error','هناك خطأ في جلب البيانات');
-        }
-        
     }
 
     /**
      * Get the taxi location 
      */
-    public function getTaxiLocation(Request $request, string $driver_id){
-        try{
+    public function getTaxiLocation(Request $request, string $driver_id)
+    {
+        try {
 
             $request->validate([
                 'lat' => 'numeric|required',
                 'long' => 'numeric|required'
             ]);
-            
 
-            $taxi_id = Taxi::where('driver_id',$driver_id)->first()->id;
+
+            $taxi = Taxi::where('driver_id', $driver_id)->first();
+
+            $taxi->update([
+                'last_location_latitude' => $request->input('lat'),
+                'last_location_longitude' => $request->input('long')
+            ]);
 
             GetTaxiLocationsEvent::dispatch(
-                $taxi_id,
+                $taxi->id,
                 $request->lat,
                 $request->long
             );
-            return api_response(message:'location getting success');
-        }
-        catch(Exception $e){
-            return api_response(errors:$e->getMessage(),message:'there error in gettign taxi location',code:500);
+            return api_response(message: 'location getting success');
+        } catch (Exception $e) {
+            return api_response(errors: $e->getMessage(), message: 'there error in gettign taxi location', code: 500);
         }
     }
 
@@ -64,20 +67,19 @@ class TaxiController extends Controller
     public function create()
     {
         try {
-            
+
             // get the drivers dont have taxi
             $drivers = User::where([
                 'users.user_type' => 'driver',
                 'users.is_active' => true
             ])
-            ->leftJoin('taxis', 'users.id', '=', 'taxis.driver_id')
-            ->whereNull('taxis.id')
-            ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
-            ->select('users.id', 'user_profiles.name','user_profiles.avatar')
-            ->get();
-            
-            return view('taxis.create', compact('drivers'));
+                ->leftJoin('taxis', 'users.id', '=', 'taxis.driver_id')
+                ->whereNull('taxis.id')
+                ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
+                ->select('users.id', 'user_profiles.name', 'user_profiles.avatar')
+                ->get();
 
+            return view('taxis.create', compact('drivers'));
         } catch (Exception $e) {
             abort(500, 'there error in redirect to the add taxi form');
         }
@@ -91,14 +93,14 @@ class TaxiController extends Controller
         try {
             // التحقق من البيانات المدخلة
             $validatedData = $request->validated();
-            
+
             // إنشاء سجل جديد
             Taxi::create($validatedData);
 
             // إعادة توجيه أو عرض رسالة نجاح
             return redirect()->back()->with('success', 'تم إنشاء سجل التاكسي بنجاح.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage().'An error occurred. Please try again.'])->withInput();
+            return redirect()->back()->withErrors(['error' => $e->getMessage() . 'An error occurred. Please try again.'])->withInput();
         }
     }
 
@@ -109,16 +111,14 @@ class TaxiController extends Controller
      */
     public function edit(Taxi $taxi)
     {
-        try{
+        try {
 
-            $drivers = User::select('users.id','user_profiles.name','user_profiles.avatar')
-            ->join('user_profiles','users.id','=','user_profiles.user_id')->where('users.user_type','driver')->get();
+            $drivers = User::select('users.id', 'user_profiles.name', 'user_profiles.avatar')
+                ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')->where('users.user_type', 'driver')->get();
 
-            return view('taxis.edit', compact('taxi','drivers'));
-
-        }
-        catch(Exception $e){
-            return redirect()->back()->withErrors(['error' => $e->getMessage().'An error occurred. Please try again.'])->withInput();
+            return view('taxis.edit', compact('taxi', 'drivers'));
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage() . 'An error occurred. Please try again.'])->withInput();
         }
     }
 
@@ -139,7 +139,7 @@ class TaxiController extends Controller
             // إعادة توجيه أو عرض رسالة نجاح
             return redirect()->route('taxis.index')->with('success', 'تم تحديث سجل التاكسي بنجاح.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage().'An error occurred. Please try again.'])->withInput();
+            return redirect()->back()->withErrors(['error' => $e->getMessage() . 'An error occurred. Please try again.'])->withInput();
         }
     }
 
@@ -149,18 +149,17 @@ class TaxiController extends Controller
      */
     public function destroy(string $id)
     {
-        try{
+        try {
 
-        $taxi = getAndCheckModelById(Taxi::class,$id);
-        // حذف السجل المحدد
+            $taxi = getAndCheckModelById(Taxi::class, $id);
+            // حذف السجل المحدد
 
-        $taxi->delete();
+            $taxi->delete();
 
-        // إعادة توجيه أو عرض رسالة نجاح
-        return redirect()->route('taxis.index')->with('success', 'تم حذف سجل التاكسي بنجاح.');
-        }
-        catch(Exception $e){
-            return redirect()->back()->withErrors(['error' => $e->getMessage().'An error occurred. Please try again.'])->withInput();
+            // إعادة توجيه أو عرض رسالة نجاح
+            return redirect()->route('taxis.index')->with('success', 'تم حذف سجل التاكسي بنجاح.');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage() . 'An error occurred. Please try again.'])->withInput();
         }
     }
 }
