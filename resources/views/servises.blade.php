@@ -8,15 +8,15 @@
                     <div class="col-md-6 mb-4">
                         <div class="card h-100">
                             <div class="card-body">
-                                <h5 class="card-title">{{ $movementType->type }}</h5>
+                                <h3 class="card-title">{{ $movementType->type }}</h3>
                                 <p class="card-text">{{ $movementType->description }}</p>
-                                <p class="card-text"><small class="text-muted">السعر: {{ $movementType->price }} ريال</small></p>
+                                <p class="card-text"><small class="text-muted">السعر: {{ $movementType->price }} LT</small></p>
                             </div>
                             <div class="card-footer">
                                 @if ($movementType->is_onKM)
-                                    <span class="badge bg-primary">معتمد على كيلومترات المشوار</span>
+                                    <span class="badge bg-primary">معتمد على كيلومترات </span>
                                 @else
-                                    <span class="badge bg-secondary">غير معتمد على كيلومترات المشوار</span>
+                                    <span class="badge bg-secondary">غير معتمد على كيلومترات</span>
                                 @endif
                             </div>
                         </div>
