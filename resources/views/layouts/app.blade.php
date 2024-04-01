@@ -100,6 +100,7 @@
     <script src="{{ asset('js/darkmode.js') }}"></script>
     <script src="{{ asset('js/darkmode-config.js') }}"></script>
     <script src="path/to/darkmode.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 
     <!-- Template Main JS File -->
@@ -115,9 +116,15 @@
                     var driver = event.driver;
                     var customer = event.customer;
                     var message = event.message;
-                    
 
-                    alert(`The driver ${driver} find the customer ${customer}`);
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "worning",
+                        title: message,
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
                 });
         }, 200);
     </script>
@@ -137,8 +144,13 @@
                     var customer_address = event.customer_address;
                     var destnation_address = event.destnation_address;
 
-                    alert("لقد وصل طلب جديد");
-
+                    Swal.fire({
+                        position: "top-end",
+                        icon: "info",
+                        title: "لقد وصل طلب جديد",
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
                     var newItem = document.createElement('li');
                     newItem.innerHTML = `
             <li id='item${index}'>

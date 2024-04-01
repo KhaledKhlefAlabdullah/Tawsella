@@ -83,8 +83,8 @@ class TaxiMovementController extends Controller
     public function view_map(string $taxi_id)
     {
         try {
-       
-            $taxi = taxi::select('taxis.driver_id as driver_id','taxis.last_location_latitude as lat', 'taxis.last_location_longitude as long', 'up.name')
+
+            $taxi = taxi::select('taxis.driver_id as driver_id', 'taxis.last_location_latitude as lat', 'taxis.last_location_longitude as long', 'up.name')
                 ->join('user_profiles as up', 'taxis.driver_id', '=', 'up.user_id')
                 ->where('taxis.id', $taxi_id)->first();
 
@@ -188,29 +188,36 @@ class TaxiMovementController extends Controller
 
     public function foundCustomer(Request $request, string $id)
     {
-        $request->validate([
-            'state' => 'required|boolean'
-        ]);
+        try {
+            $request->validate([
+                'state' => 'required|boolean'
+            ]);
 
-        $taxiMovement = getAndCheckModelById(TaxiMovement::class, $id);
+            $taxiMovement = getAndCheckModelById(TaxiMovement::class, $id);
 
-        $driver = UserProfile::where('user_id', $taxiMovement->driver_id)->first();
-        $customer = UserProfile::where('user_id', $taxiMovement->customer_id)->first();
+            $driver = UserProfile::where('user_id', $taxiMovement->driver_id)->first();
+            $customer = UserProfile::where('user_id', $taxiMovement->customer_id)->first();
 
-        $message = $request->input('state') ? 'تم ايجاد الزبون' : 'لم يتم العثور على الزبون';
+            $d_name = $driver->name;
+            $c_name = $customer->name;
 
-        MovementFindUnFindEvent::dispatch(
-            $driver->name ?? 'Unknown Driver',
-            $customer->name ?? 'Unknown Customer',
-            $message
-        );
+            $message = $request->input('state') ? 'السائق'.$d_name.' وجد العميل '.$c_name : 'السائق '.$d_name.' لم يعثلا على العميل '.$c_name;
 
-        if (!$request->input('state')) {
-            // حذف taxiMovement
-            $taxiMovement->delete();
+            MovementFindUnFindEvent::dispatch(
+                 $d_name ?? 'Unknown Driver',
+                 $c_name ?? 'Unknown Customer',
+                $message
+            );
+
+            if (!$request->input('state')) {
+                // حذف taxiMovement
+                $taxiMovement->delete();
+            }
+
+            return api_response(message: $message);
+        } catch (Exception $e) {
+            return api_response(errors: $e->getMessage(), message: 'there error in find/unfind customer', code: 500);
         }
-
-        return api_response(message:$message);
     }
 
 
@@ -312,7 +319,7 @@ class TaxiMovementController extends Controller
 
             $taxiMovement->delete();
 
-            return redirect()->back();
+            return redirect()->back()->with('success','تم حذف الطلب بنجاح');
         } catch (Exception $e) {
             return abort(500, 'there error in deleting this movemnt');
         }
