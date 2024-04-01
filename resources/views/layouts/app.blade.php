@@ -115,11 +115,9 @@
                     var driver = event.driver;
                     var customer = event.customer;
                     var message = event.message;
-                    console.log(driver);
-                    console.log(customer);
-                    console.log(message);
+                    
 
-                    alert(driver);
+                    alert(`The driver ${driver} find the customer ${customer}`);
                 });
         }, 200);
     </script>

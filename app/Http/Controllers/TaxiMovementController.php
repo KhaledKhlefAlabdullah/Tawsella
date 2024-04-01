@@ -210,7 +210,7 @@ class TaxiMovementController extends Controller
             $taxiMovement->delete();
         }
 
-        return api_response(null, $message, 200);
+        return api_response(message:$message);
     }
 
 
@@ -249,7 +249,7 @@ class TaxiMovementController extends Controller
                 'way' => $request->input('way')
             ]);
 
-            getAndCheckModelById(User::class,Auth::id())->update([
+            getAndCheckModelById(User::class, Auth::id())->update([
                 'driver_state' => 'ready'
             ]);
 
