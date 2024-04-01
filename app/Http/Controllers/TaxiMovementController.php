@@ -103,6 +103,16 @@ class TaxiMovementController extends Controller
 
             $validatedData = $request->validated();
 
+            // To check if the customer have request in last 4 menites dont create new one and return message 
+            $existsRequest = TaxiMovement::where('customer_id', $validatedData['customer_id'])
+            ->where('created_at', '>=', Carbon::now()->subMinutes(5))
+            ->latest()
+            ->first();
+
+            if($existsRequest){
+                return 'you previos request';
+            }
+
             $taxiMovement = TaxiMovement::create($validatedData);
 
             // 1
