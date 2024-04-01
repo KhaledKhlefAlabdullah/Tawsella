@@ -124,14 +124,7 @@ class TaxiMovementController extends Controller
             CreateTaxiMovementEvent::dispatch(
                 $taxiMovement
             );
-
-            // $request->input('customer_id'),
-            // $request->input('start_latitude'),
-            // $request->input('start_longitude'),
-            // $request->input('gender'),
-            // $request->input('my_address'),
-            // $request->input('destnation_address')
-
+            
             return api_response(message: 'create-movement-success');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'create-movement-error', code: 500);
