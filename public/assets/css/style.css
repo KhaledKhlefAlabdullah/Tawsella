@@ -10,7 +10,6 @@
 # General
 --------------------------------------------------------------*/
 body {
-    font-family: "Open Sans", sans-serif;
     color: #444444;
     direction: rtl;
     /* توجيه النص من اليمين لليسار */
@@ -396,7 +395,6 @@ p {
 }
 
 #hero .btn-get-started {
-    font-family: "Raleway", sans-serif;
     font-weight: 500;
     font-size: 14px;
     letter-spacing: 1px;
@@ -511,7 +509,6 @@ section {
     letter-spacing: 2px;
     text-transform: uppercase;
     color: #aaaaaa;
-    font-family: "Poppins", sans-serif;
 }
 
 .section-title h2::after {
@@ -529,7 +526,6 @@ section {
     font-size: 36px;
     font-weight: 700;
     text-transform: uppercase;
-    font-family: "Poppins", sans-serif;
     color: #2a2c39;
 }
 
@@ -573,7 +569,6 @@ section {
 }
 
 .about .content .btn-learn-more {
-    font-family: "Raleway", sans-serif;
     font-weight: 600;
     font-size: 14px;
     letter-spacing: 1px;
@@ -698,7 +693,6 @@ section {
 }
 
 .cta .cta-btn {
-    font-family: "Raleway", sans-serif;
     text-transform: uppercase;
     font-weight: 700;
     font-size: 14px;
@@ -1091,7 +1085,6 @@ section {
     font-size: 36px;
     color: #1484c4;
     font-weight: 600;
-    font-family: "Poppins", sans-serif;
     margin-bottom: 20px;
 }
 
@@ -1147,7 +1140,6 @@ section {
     transition: none;
     font-size: 14px;
     font-weight: 400;
-    font-family: "Raleway", sans-serif;
     font-weight: 600;
     transition: 0.3s;
 }
@@ -1538,7 +1530,6 @@ section {
     font-weight: 700;
     color: #fff;
     position: relative;
-    font-family: "Poppins", sans-serif;
     padding: 0;
     margin: 0 0 15px 0;
 }
