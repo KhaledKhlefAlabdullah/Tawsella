@@ -26,7 +26,7 @@ use Illuminate\Support\Facades\Broadcast;
 
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
-Route::post('/found-customer/{id}', [TaxiMovementController::class, 'foundCostumer'])->name('found.customer');
+Route::post('/found-customer/{id}', [TaxiMovementController::class, 'foundCustomer']);
 
 Route::get('/driver-request/{id}', [TaxiMovementController::class, 'get_request_data']);
 
