@@ -98,7 +98,6 @@ body {
 }
 
 body {
-    font-family: "Open Sans", sans-serif;
     background: #f6f9ff;
     color: #444444;
 }
@@ -128,7 +127,6 @@ a:hover {
     color: #fff;
     cursor: pointer;
     display: inline-block;
-    font-family: -apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
     font-size: 14px;
     font-weight: 600;
     line-height: 20px;
@@ -180,7 +178,6 @@ a:hover {
     color: #FFFFFF;
     cursor: pointer;
     display: inline-block;
-    font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
     font-weight: 500;
     height: 40px;
@@ -1262,7 +1259,6 @@ a:hover {
 }
 
 .iconslist .label {
-    font-family: var(--bs-font-monospace);
     display: inline-block;
     width: 100%;
     overflow: hidden;
