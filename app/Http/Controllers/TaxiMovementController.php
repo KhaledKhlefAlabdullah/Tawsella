@@ -157,7 +157,7 @@ class TaxiMovementController extends Controller
         try {
             $request->validate([
                 'state' => 'sometimes|string|required|in:accepted,rejected',
-                'driver_id' => 'sometimes|nullable|string|exists:users.id',
+                'driver_id' => 'sometimes|nullable|string|exists:users,id',
                 'message' => 'string|sometimes|nullable'
             ]);
 
