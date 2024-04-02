@@ -55,7 +55,7 @@
                                         <td>
                                             @if ($movement->taxi_id)
                                                 <a href="{{ route('map', ['selector' => 'completed', 'id' => $movement->movement_id]) }}"
-                                                    class="btn btn-success">موقع السيارة</a>
+                                                    class="btn btn-success">موقع العميل</a>
                                             @else
                                                 <!-- Handle the case when taxi_id is missing or null -->
                                                 <span class="text-danger">No taxi ID available</span>

@@ -245,7 +245,7 @@ class TaxiMovementController extends Controller
             $d_name = $driver->name;
             $c_name = $customer->name;
 
-            $message = $request->input('state') ? 'السائق' . $d_name . ' وجد العميل ' . $c_name : 'السائق ' . $d_name . ' لم يعثلا على العميل ' . $c_name;
+            $message = $request->input('state') ? ' السائق ' . $d_name . ' وجد العميل ' . $c_name : ' السائق' . $d_name . ' لم يعثلا على العميل ' . $c_name;
 
             MovementFindUnFindEvent::dispatch(
                 $d_name ?? 'Unknown Driver',

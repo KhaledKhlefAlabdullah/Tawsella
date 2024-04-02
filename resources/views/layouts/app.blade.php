@@ -119,7 +119,6 @@
 
                     Swal.fire({
                         position: "top-end",
-                        icon: "worning",
                         title: message,
                         showConfirmButton: false,
                         timer: 2500
@@ -146,13 +145,13 @@
 
                     Swal.fire({
                         position: "top-end",
-                        icon: "info",
                         title: "لقد وصل طلب جديد",
                         showConfirmButton: false,
                         timer: 2000
                     });
                     var newItem = document.createElement('li');
                     newItem.innerHTML = `
+
             <li id='item${index}'>
                 <div class="card">
                     <h2>طلب جديد</h2>
@@ -258,7 +257,6 @@
 
                     </li>
                     `;
-                    console.log(55);
 
                     document.getElementById('requests-container').appendChild(newItem);
 
