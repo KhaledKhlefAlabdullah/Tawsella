@@ -130,9 +130,7 @@ class TaxiMovementController extends Controller
                 ]);
 
                 AcceptTaxiMovemntEvent::dispatch($taxiMovement);
-
-
-            } else if($request->input('state') == 'rejected'){
+            } else if ($request->input('state') == 'rejected') {
 
                 RejectTaxiMovemntEvent::dispatch(
                     $taxiMovement->customer_id,
@@ -143,9 +141,8 @@ class TaxiMovementController extends Controller
             return redirect()->back()->with('success', 'Request ' . $request->input('state') . ' successfully.');
         } catch (ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
-
-        } catch(Exception $e){
-            return redirect()->back()->withErrors(['error' => $e->getMessage().'An error occurred. Please try again.'])->withInput();
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors(['error' => $e->getMessage() . 'An error occurred. Please try again.'])->withInput();
         }
     }
 
@@ -262,6 +259,22 @@ class TaxiMovementController extends Controller
             return redirect()->back();
         } catch (Exception $e) {
             return abort(500, 'there error in deleting this movemnt');
+        }
+    }
+
+
+    // الدالة لعرض الطلبات المكتملة
+    public function completedRequests()
+    {
+        try {
+            // الحصول على الطلبات المكتملة من قاعدة البيانات
+            $completedRequests = TaxiMovement::where('is_completed', true)->get();
+
+            // إعادة عرض النتائج في الواجهة
+            return view('taxi_movement.completedRequests', ['completedRequests' => $completedRequests]);
+        } catch (Exception $e) {
+            // إذا حدث خطأ، إرجاع رسالة خطأ
+            return abort(500, 'حدث خطأ أثناء استعراض الطلبات المكتملة');
         }
     }
 }

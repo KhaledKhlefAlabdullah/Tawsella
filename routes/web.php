@@ -110,6 +110,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 
     Route::get('/current-taxi-movement', [TaxiMovementController::class, 'currentTaxiMovement'])->name('current.taxi.movement');
+
+    Route::get('/completed-requests', [TaxiMovementController::class, 'completedRequests'])->name('completed.requests');
+
     //*************************** End route taxi-movement *********************************** */
     //**************************************************************************** */
 
