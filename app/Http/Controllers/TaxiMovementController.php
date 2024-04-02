@@ -27,7 +27,7 @@ class TaxiMovementController extends Controller
      */
     public function currentTaxiMovement()
     {
-        $currentDate = Carbon::now()->toDateString();
+        $currentDate = Carbon::now()->format('Y-m-d');
 
         $taxiMovement = $this->get_data(['taxi_movements.is_completed' => false, 'taxi_movements.is_canceled' => false, 'taxi_movements.request_state' => 'accepted', 'taxi_movements.created_at' => $currentDate]);
 
