@@ -7,6 +7,15 @@
                 {{ session('success') }}
             </div>
         @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div id="map" class="map"></div>
         @vite('resources/js/app.js')
         <script>
@@ -26,7 +35,7 @@
             setTimeout(() => {
                 Echo.private(`TaxiLocation.${admin_id}`)
                     .listen('.App\\Events\\GetTaxiLocationsEvent', (e) => {
-                        console.log(e.lat+','+ e.long);
+                        console.log(e.lat + ',' + e.long);
                         if (e.driver_id == driver_id) {
                             // Remove previous marker
                             map.removeLayer(prevMarker);

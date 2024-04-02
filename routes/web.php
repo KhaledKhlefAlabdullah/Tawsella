@@ -125,6 +125,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
 
     Route::get('/current-taxi-movement', [TaxiMovementController::class, 'currentTaxiMovement'])->name('current.taxi.movement');
+
+    Route::get('/completed-requests', [TaxiMovementController::class, 'completedRequests'])->name('completed.requests');
+
     //*************************** End route taxi-movement *********************************** */
     //**************************************************************************** */
 
@@ -147,7 +150,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //*************************** End route calculations *********************************** */
     //**************************************************************************** */
 
-    Route::get('/view-map/{taxi_id}',[TaxiMovementController::class,'view_map'])->name('map');
+    Route::get('/view-map/{selector}/{id}',[TaxiMovementController::class,'view_map'])->name('map');
 });
 
 Route::get('/drivers', [DriversController::class, 'index']);

@@ -21,28 +21,40 @@ use Illuminate\Validation\ValidationException;
 
 class TaxiMovementController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        try {
-        } catch (Exception $e) {
-        }
-    }
 
     /**
      * Show the form for creating a new resource.
      */
     public function currentTaxiMovement()
     {
+        $currentDate = Carbon::now()->toDateString();
+
+        $taxiMovement = $this->get_data(['taxi_movements.is_completed' => false, 'taxi_movements.is_canceled' => false, 'taxi_movements.request_state' => 'accepted', 'taxi_movements.created_at' => $currentDate]);
+
+        return view('taxi_movement.currentTaxiMovement', ['taxiMovement' => $taxiMovement]);
+    }
+
+
+    // الدالة لعرض الطلبات المكتملة
+    public function completedRequests()
+    {
+
+        // الحصول على الطلبات المكتملة من قاعدة البيانات
+        $completedRequests = $this->get_data(['is_completed' => true]);
+        // إعادة عرض النتائج في الواجهة
+        return view('taxi_movement.completedRequests', ['completedRequests' => $completedRequests]);
+    }
+
+    /**
+     * Get data by condations
+     */
+    public function get_data($condations)
+    {
         try {
 
-            $currentDate = Carbon::now()->toDateString();
-
             // Query to get requests for the current day
-            $taxiMovement = TaxiMovement::select(
-
+            $data = TaxiMovement::select(
+                'taxi_movements.id as movement_id',
                 'taxi_movements.my_address',
                 'taxi_movements.destnation_address',
                 'taxi_movements.gender',
@@ -67,30 +79,35 @@ class TaxiMovementController extends Controller
                 ->leftJoin('user_profiles as customer_profile', 'taxi_movements.customer_id', '=', 'customer_profile.user_id')
                 ->leftJoin('taxis', 'taxi_movements.taxi_id', '=', 'taxis.id')
                 ->leftJoin('taxi_movement_types', 'taxi_movements.movement_type_id', '=', 'taxi_movement_types.id')
-                ->whereDate('taxi_movements.created_at', $currentDate)
-                ->where(['taxi_movements.is_completed' => false, 'taxi_movements.is_canceled' => false, 'taxi_movements.request_state' => 'accepted'])
+                ->where($condations)
                 ->get();
 
-            return view('taxi_movement.currentTaxiMovement', ['taxiMovement' => $taxiMovement]);
+            return $data;
         } catch (Exception $e) {
-            return abort(500, 'there error in getting current taxi movement' . $e->getMessage());
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
     /**
      * For View map for taxi location
      */
-    public function view_map(string $taxi_id)
+    public function view_map(string $selector, string $id)
     {
         try {
 
-            $taxi = taxi::select('taxis.driver_id as driver_id', 'taxis.last_location_latitude as lat', 'taxis.last_location_longitude as long', 'up.name')
-                ->join('user_profiles as up', 'taxis.driver_id', '=', 'up.user_id')
-                ->where('taxis.id', $taxi_id)->first();
+            if ($selector == 'taxi') {
+                $data = Taxi::select('taxi_movements.last_location_latitude as lat', 'taxi_movements.last_location_longitude as long', 'up.name')
+                    ->join('user_profiles as up', 'taxi_movements.customer_id', '=', 'up.user_id')
+                    ->where('taxis.id', $id)->first();
+            } else if ($selector == 'completed') {
+                $data = TaxiMovement::select('taxis.driver_id as driver_id', 'taxis.end_latitude as lat', 'taxis.end_longitude as long', 'up.name')
+                    ->join('user_profiles as up', 'taxis.driver_id', '=', 'up.user_id')
+                    ->where('taxis.id', $id)->first();
+            }
 
-            return view('taxi_movement.map', ['taxi' => $taxi])->with('success', 'success to view map');
+            return view('taxi_movement.map', ['data' => $data])->with('success', 'success to view map');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors($e->getMessage() . ' there an error in view map')->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -105,11 +122,11 @@ class TaxiMovementController extends Controller
 
             // To check if the customer have request in last 4 menites dont create new one and return message 
             $existsRequest = TaxiMovement::where('customer_id', $validatedData['customer_id'])
-            ->where('created_at', '>=', Carbon::now()->subMinutes(5))
-            ->latest()
-            ->first();
+                ->where('created_at', '>=', Carbon::now()->subMinutes(5))
+                ->latest()
+                ->first();
 
-            if($existsRequest){
+            if ($existsRequest) {
                 return 'you previos request';
             }
 
@@ -124,7 +141,7 @@ class TaxiMovementController extends Controller
             CreateTaxiMovementEvent::dispatch(
                 $taxiMovement
             );
-            
+
             return api_response(message: 'create-movement-success');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'create-movement-error', code: 500);
@@ -181,7 +198,7 @@ class TaxiMovementController extends Controller
         } catch (ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage() . 'An error occurred. Please try again.'])->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -204,11 +221,11 @@ class TaxiMovementController extends Controller
             $d_name = $driver->name;
             $c_name = $customer->name;
 
-            $message = $request->input('state') ? 'السائق'.$d_name.' وجد العميل '.$c_name : 'السائق '.$d_name.' لم يعثلا على العميل '.$c_name;
+            $message = $request->input('state') ? 'السائق' . $d_name . ' وجد العميل ' . $c_name : 'السائق ' . $d_name . ' لم يعثلا على العميل ' . $c_name;
 
             MovementFindUnFindEvent::dispatch(
-                 $d_name ?? 'Unknown Driver',
-                 $c_name ?? 'Unknown Customer',
+                $d_name ?? 'Unknown Driver',
+                $c_name ?? 'Unknown Customer',
                 $message
             );
 
@@ -322,9 +339,9 @@ class TaxiMovementController extends Controller
 
             $taxiMovement->delete();
 
-            return redirect()->back()->with('success','تم حذف الطلب بنجاح');
+            return redirect()->back()->with('success', 'تم حذف الطلب بنجاح');
         } catch (Exception $e) {
-            return abort(500, 'there error in deleting this movemnt');
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 }

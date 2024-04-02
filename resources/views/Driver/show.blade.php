@@ -2,7 +2,20 @@
 
 @section('content')
     <main id="main" class="main">
-
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="pagetitle">
             <h1>Profile</h1>
             <nav>
@@ -21,10 +34,10 @@
                     <div class="card">
                         <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
                             <div class="social-links mt-2">
-                                <img src="{{ asset('assets/'.$driver->avatar) }}"
+                                <img src="{{ asset('assets/' . $driver->avatar) }}"
                                     style="width: 150px;height: 130px;border-radius: 50%" alt="">
                             </div>
-                           
+
                             <h2>{{ $driver->name }} <a href="#"><i class="bi bi-award"></i></a></h2>
                             <h3>({{ $driver->role->name ?? 'driver' }})</h3>
 
@@ -84,7 +97,9 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">Phone</div>
-                                        <div class="col-lg-9 col-md-8"><a href="https://wa.me/{{ $driver->phoneNumber }}">{{ $driver->phoneNumber }}</a></div>
+                                        <div class="col-lg-9 col-md-8"><a
+                                                href="https://wa.me/{{ $driver->phoneNumber }}">{{ $driver->phoneNumber }}</a>
+                                        </div>
                                     </div>
 
                                     <div class="row">
@@ -109,17 +124,18 @@
                                         @csrf
                                     </form>
 
-                                    <form method="post" action="{{ route('drivers.update', $driver->id) }}" class="mt-6 space-y-6">
+                                    <form method="post" action="{{ route('drivers.update', $driver->id) }}"
+                                        class="mt-6 space-y-6">
                                         @csrf
                                         @method('put')
-                                    
+
                                         <div class="mb-3">
                                             <x-input-label for="name" :value="__('الاسم')" />
                                             <x-text-input id="name" name="name" type="text" class="form-control"
                                                 :value="old('name', $driver->name)" required autofocus autocomplete="name" />
                                             <x-input-error class="mt-2" :messages="$errors->get('name')" />
                                         </div>
-                                    
+
                                         <div class="mb-3">
                                             <x-input-label for="email" :value="__('البريد الالكتروني')" />
                                             <x-text-input id="email" name="email" type="email" class="form-control"
@@ -128,32 +144,36 @@
                                         </div>
                                         <div class="mb-3">
                                             <x-input-label for="avatar" :value="__('صور الملف الشخصي')" />
-                                            <input id="avatar" name="avatar" type="file" class="form-control" accept="image/*" />
+                                            <input id="avatar" name="avatar" type="file" class="form-control"
+                                                accept="image/*" />
                                             <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
                                         </div>
                                         <div class="mb-3">
                                             <x-input-label for="phoneNumber" :value="__('رقم الجوال')" />
-                                            <x-text-input id="phoneNumber" name="phoneNumber" type="tel" class="form-control"
-                                                :value="old('phoneNumber', $driver->phoneNumber)" required autocomplete="phoneNumber" />
+                                            <x-text-input id="phoneNumber" name="phoneNumber" type="tel"
+                                                class="form-control" :value="old('phoneNumber', $driver->phoneNumber)" required
+                                                autocomplete="phoneNumber" />
                                             <x-input-error class="mt-2" :messages="$errors->get('phoneNumber')" />
                                         </div>
                                         <div class="mb-3">
                                             <x-input-label for="plate_number" :value="__('رقم لوحة السيارة')" />
-                                            <x-text-input id="plate_number" name="plate_number" type="text" class="form-control"
-                                                :value="old('plate_number', $driver->plate_number)" required autocomplete="plate_number" />
+                                            <x-text-input id="plate_number" name="plate_number" type="text"
+                                                class="form-control" :value="old('plate_number', $driver->plate_number)" required
+                                                autocomplete="plate_number" />
                                             <x-input-error class="mt-2" :messages="$errors->get('plate_number')" />
                                         </div>
                                         <div class="mb-3">
                                             <x-input-label for="lamp_number" :value="__('رقم فانوس السيارة')" />
-                                            <x-text-input id="lamp_number" name="lamp_number" type="text" class="form-control"
-                                                :value="old('lamp_number', $driver->lamp_number)" required autocomplete="lamp_number" />
+                                            <x-text-input id="lamp_number" name="lamp_number" type="text"
+                                                class="form-control" :value="old('lamp_number', $driver->lamp_number)" required
+                                                autocomplete="lamp_number" />
                                             <x-input-error class="mt-2" :messages="$errors->get('lamp_number')" />
                                         </div>
                                         <div class="d-flex align-items-center gap-4">
                                             <x-primary-button class="btn btn-success">
                                                 {{ __('حفظ') }}
                                             </x-primary-button>
-                                    
+
                                             @if (session('status') === 'profile-updated')
                                                 <p x-data="{ show: true }" x-show="show" x-transition
                                                     x-init="setTimeout(() => show = false, 2000)" class="text-sm text-gray-600">
@@ -162,7 +182,7 @@
                                             @endif
                                         </div>
                                     </form>
-                                    
+
 
                                 </div>
 

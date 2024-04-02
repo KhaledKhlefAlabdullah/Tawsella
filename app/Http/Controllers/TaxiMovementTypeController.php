@@ -23,7 +23,7 @@ class TaxiMovementTypeController extends Controller
         } catch (Exception $e) {
             if (request()->wantsJson())
                 return api_response(errors: [$e->getMessage()], message: 'getting-movement-type-success', code: 500);
-            return abort(500, 'there error in getting the movements type');
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
     /**

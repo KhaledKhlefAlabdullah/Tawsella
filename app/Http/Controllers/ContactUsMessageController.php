@@ -24,7 +24,7 @@ class ContactUsMessageController extends Controller
 
             return view('contctus', [$contct_us]);
         } catch (Exception $e) {
-            return abort(500,'there error in getting constct us messages');
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -61,7 +61,7 @@ class ContactUsMessageController extends Controller
 
             return view();
         } catch (Exception $e) {
-            return abort(500,'there error in answered the contact us message');
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -76,7 +76,7 @@ class ContactUsMessageController extends Controller
 
             return view('contact_us.show', ['contactDetails' => $contactDetails]);
         } catch (Exception $e) {
-            return abort(500, 'There was an error in getting the contact us message details with error'.$e->getMessage());
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -93,7 +93,7 @@ class ContactUsMessageController extends Controller
 
         }
         catch(Exception $e){
-            return abort(500,'there error in deleting the contact us message');
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 }

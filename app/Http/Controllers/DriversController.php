@@ -26,7 +26,7 @@ class DriversController extends Controller
 
             return view('Driver.index', ['drivers' => $combinedAccounts]);
         } catch (Exception $e) {
-            return abort(500, 'there error in getting the drivers data');
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -43,7 +43,7 @@ class DriversController extends Controller
             // إعادة عرض بيانات السائق
             return view('Driver.show', ['driver' => $driver]);
         } catch (Exception $e) {
-            return abort(500, 'There was an error in getting the driver data');
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -58,7 +58,7 @@ class DriversController extends Controller
             }
             return view('Driver.show', ['driver' => $driver]);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage().'An error occurred. Please try again.'])->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -101,7 +101,7 @@ class DriversController extends Controller
 
             return redirect()->back()->with('success', 'Driver deleted successfully');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage() . 'An error occurred. Please try again.'])->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 

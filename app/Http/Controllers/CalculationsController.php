@@ -17,7 +17,7 @@ class CalculationsController extends Controller
             $calculations = Calculations::all();
             return view('calculations.index', ['calculations' => $calculations]);
         } catch (Exception $e) {
-            return abort(500, 'There was an error in getting calculations');
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 

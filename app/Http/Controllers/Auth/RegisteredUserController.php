@@ -73,7 +73,7 @@ class RegisteredUserController extends Controller
             if(request()->wantsJson())
                 return api_response(errors: [$e->getMessage()], message: 'register-error', code: 500);
             }
-            return redirect()->back()->withErrors([$e->getMessage()])->withInput(); // Provide feedback on error
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
 
     }
     

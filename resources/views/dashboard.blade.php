@@ -7,6 +7,15 @@
                 {{ session('success') }}
             </div>
         @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         <div class="pagetitle">
             <h1>لوحة التحكم</h1>
@@ -34,7 +43,7 @@
                                         <i class="bi bi-currency-dollar"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>${{$calcolations}}</h6>
+                                        <h6>${{ $calcolations }}</h6>
                                         <hr>
                                     </div>
                                 </div>
@@ -55,7 +64,7 @@
                                         <i class="bi bi-bookmark-star-fill"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>{{$requests}}</h6>
+                                        <h6>{{ $requests }}</h6>
                                         <hr>
                                     </div>
                                 </div>

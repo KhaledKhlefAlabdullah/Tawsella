@@ -95,7 +95,7 @@ class UserProfileController extends Controller
             if ($request->wantsJson())
                 return api_response(errors: [$e->getMessage()], message: 'profile-edite-error', code: 500);
 
-            return abort(message: 'there error in update user details', code: 500);
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 }

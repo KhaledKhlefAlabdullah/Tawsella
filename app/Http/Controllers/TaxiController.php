@@ -26,7 +26,7 @@ class TaxiController extends Controller
                 ->get();
             return view('taxis.index', compact('taxis'));
         } catch (Exception $e) {
-            return back()->with('error', 'هناك خطأ في جلب البيانات');
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -81,7 +81,7 @@ class TaxiController extends Controller
 
             return view('taxis.create', compact('drivers'));
         } catch (Exception $e) {
-            abort(500, 'there error in redirect to the add taxi form');
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -100,7 +100,7 @@ class TaxiController extends Controller
             // إعادة توجيه أو عرض رسالة نجاح
             return redirect()->back()->with('success', 'تم إنشاء سجل التاكسي بنجاح.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage() . 'An error occurred. Please try again.'])->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -118,7 +118,7 @@ class TaxiController extends Controller
 
             return view('taxis.edit', compact('taxi', 'drivers'));
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage() . 'An error occurred. Please try again.'])->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -139,7 +139,7 @@ class TaxiController extends Controller
             // إعادة توجيه أو عرض رسالة نجاح
             return redirect()->route('taxis.index')->with('success', 'تم تحديث سجل التاكسي بنجاح.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage() . 'An error occurred. Please try again.'])->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -159,7 +159,7 @@ class TaxiController extends Controller
             // إعادة توجيه أو عرض رسالة نجاح
             return redirect()->route('taxis.index')->with('success', 'تم حذف سجل التاكسي بنجاح.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(['error' => $e->getMessage() . 'An error occurred. Please try again.'])->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 }

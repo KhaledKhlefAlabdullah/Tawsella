@@ -19,7 +19,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h1>الطلبات الحالية</h1>
+                    <h1>الطلبات المكتملة</h1>
                     <div class="table-responsive"> <!-- تجعل الجدول متجاوبًا -->
                         <table class="table table-striped"> <!-- إضافة فئة table-striped لتظليل الصفوف بشكل بديل -->
                             <thead class="table"> <!-- تحديد لون خلفية العناوين -->
@@ -35,11 +35,11 @@
                                     <th>لوحة السيارة</th>
                                     <th>نوع الطلب</th>
                                     <th>التكلفة</th>
-                                    <th>تتبع</th>
+                                    <th>موقع النهاية</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($taxiMovement as $movement)
+                                @foreach ($completedRequests as $movement)
                                     <tr>
                                         <td>{{ $movement->customer_name }}</td>
                                         <td>{{ $movement->customer_phone }}</td>
@@ -54,7 +54,7 @@
                                         <td>{{ $movement->price }}</td>
                                         <td>
                                             @if ($movement->taxi_id)
-                                                <a href="{{ route('map', ['selector' => 'taxi', 'id' => $movement->taxi_id]) }}"
+                                                <a href="{{ route('map', ['selector' => 'completed', 'id' => $movement->movement_id]) }}"
                                                     class="btn btn-success">موقع السيارة</a>
                                             @else
                                                 <!-- Handle the case when taxi_id is missing or null -->

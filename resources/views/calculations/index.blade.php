@@ -3,6 +3,20 @@
 
 @section('content')
     <main class="main" id="main">
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="container">
             <h1>Calculations</h1>
             <table class="table">
@@ -23,8 +37,7 @@
                             <td>{{ $calculation->taxi_movement_id }}</td>
                             <td>{{ $calculation->calculate }}</td>
                             <td>
-                                <a href="{{ route('calculations.show', $calculation->id) }}"
-                                    class="btn btn-primary">عرض</a>
+                                <a href="{{ route('calculations.show', $calculation->id) }}" class="btn btn-primary">عرض</a>
                                 <a href="{{ route('calculations.edit', $calculation->id) }}"
                                     class="btn btn-success">تعديل</a>
                                 <form action="{{ route('calculations.destroy', $calculation->id) }}" method="POST"
