@@ -116,12 +116,12 @@ class TaxiMovementController extends Controller
         try {
 
             if ($selector == 'taxi') {
-                $data = Taxi::select('taxi_movements.last_location_latitude as lat', 'taxi_movements.last_location_longitude as long', 'up.name')
-                    ->join('user_profiles as up', 'taxi_movements.customer_id', '=', 'up.user_id')
+                $data = Taxi::select('taxis.last_location_latitude as lat', 'taxis.last_location_longitude as long', 'up.name')
+                    ->join('user_profiles as up', 'taxis.driver_id', '=', 'up.user_id')
                     ->where('taxis.id', $id)->first();
             } else if ($selector == 'completed') {
                 $data = TaxiMovement::select('taxi_movements.driver_id as driver_id', 'taxi_movements.end_latitude as lat', 'taxi_movements.end_longitude as long', 'up.name')
-                    ->join('user_profiles as up', 'taxi_movements.driver_id', '=', 'up.user_id')
+                    ->join('user_profiles as up', 'taxi_movements.customer_id', '=', 'up.user_id')
                     ->where('taxi_movements.id', $id)->first();
             }
 
