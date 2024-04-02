@@ -29,7 +29,27 @@ class TaxiMovementController extends Controller
     {
         $currentDate = Carbon::now()->format('Y-m-d');
 
-        $taxiMovement = $this->get_data(['taxi_movements.is_completed' => false, 'taxi_movements.is_canceled' => false, 'taxi_movements.request_state' => 'accepted', 'taxi_movements.created_at' => $currentDate]);
+        $taxiMovement = $this->get_data([
+            'taxi_movements.id as movement_id',
+            'taxi_movements.my_address',
+            'taxi_movements.destnation_address',
+            'taxi_movements.gender',
+            'taxi_movements.start_latitude',
+            'taxi_movements.start_longitude',
+            'driver.email as driver_email',
+            'customer.email as customer_email',
+            'driver_profile.name as driver_name',
+            'driver_profile.phoneNumber as driver_phone',
+            'customer_profile.name as customer_name',
+            'customer_profile.phoneNumber as customer_phone',
+            'taxis.id as taxi_id',
+            'taxis.car_name as car_car_name',
+            'taxis.lamp_number as car_lamp_number',
+            'taxis.plate_number as car_plate_number',
+            'taxi_movement_types.type',
+            ], ['taxi_movements.is_completed' => false, 'taxi_movements.is_canceled' => false, 'taxi_movements.request_state' => 'accepted'])
+            ->whereDate('taxi_movements.created_at', $currentDate)
+            ->get();
 
         return view('taxi_movement.currentTaxiMovement', ['taxiMovement' => $taxiMovement]);
     }
@@ -40,7 +60,27 @@ class TaxiMovementController extends Controller
     {
 
         // الحصول على الطلبات المكتملة من قاعدة البيانات
-        $completedRequests = $this->get_data(['is_completed' => true]);
+        $completedRequests = $this->get_data([
+            'taxi_movements.id as movement_id',
+            'taxi_movements.my_address',
+            'taxi_movements.destnation_address',
+            'taxi_movements.gender',
+            'taxi_movements.start_latitude',
+            'taxi_movements.start_longitude',
+            'driver.email as driver_email',
+            'customer.email as customer_email',
+            'driver_profile.name as driver_name',
+            'driver_profile.phoneNumber as driver_phone',
+            'customer_profile.name as customer_name',
+            'customer_profile.phoneNumber as customer_phone',
+            'taxis.id as taxi_id',
+            'taxis.car_name as car_car_name',
+            'taxis.lamp_number as car_lamp_number',
+            'taxis.plate_number as car_plate_number',
+            'taxi_movement_types.type',
+            'taxi_movement_types.price'
+        ], ['is_completed' => true])
+            ->get();
         // إعادة عرض النتائج في الواجهة
         return view('taxi_movement.completedRequests', ['completedRequests' => $completedRequests]);
     }
@@ -48,39 +88,19 @@ class TaxiMovementController extends Controller
     /**
      * Get data by condations
      */
-    public function get_data($condations)
+    public function get_data($columns, $condations)
     {
         try {
 
             // Query to get requests for the current day
-            $data = TaxiMovement::select(
-                'taxi_movements.id as movement_id',
-                'taxi_movements.my_address',
-                'taxi_movements.destnation_address',
-                'taxi_movements.gender',
-                'taxi_movements.start_latitude',
-                'taxi_movements.start_longitude',
-                'driver.email as driver_email',
-                'customer.email as customer_email',
-                'driver_profile.name as driver_name',
-                'driver_profile.phoneNumber as driver_phone',
-                'customer_profile.name as customer_name',
-                'customer_profile.phoneNumber as customer_phone',
-                'taxis.id as taxi_id',
-                'taxis.car_name as car_car_name',
-                'taxis.lamp_number as car_lamp_number',
-                'taxis.plate_number as car_plate_number',
-                'taxi_movement_types.type',
-                'taxi_movement_types.price'
-            )
+            $data = TaxiMovement::select($columns)
                 ->leftJoin('users as driver', 'taxi_movements.driver_id', '=', 'driver.id')
                 ->leftJoin('users as customer', 'taxi_movements.customer_id', '=', 'customer.id')
                 ->leftJoin('user_profiles as driver_profile', 'taxi_movements.driver_id', '=', 'driver_profile.user_id')
                 ->leftJoin('user_profiles as customer_profile', 'taxi_movements.customer_id', '=', 'customer_profile.user_id')
                 ->leftJoin('taxis', 'taxi_movements.taxi_id', '=', 'taxis.id')
                 ->leftJoin('taxi_movement_types', 'taxi_movements.movement_type_id', '=', 'taxi_movement_types.id')
-                ->where($condations)
-                ->get();
+                ->where($condations);
 
             return $data;
         } catch (Exception $e) {
@@ -196,10 +216,9 @@ class TaxiMovementController extends Controller
                 );
 
                 $message = 'رفض';
-
             }
 
-            return redirect()->back()->with('success', 'تم '.$message.' الطلب بنجاح');
+            return redirect()->back()->with('success', 'تم ' . $message . ' الطلب بنجاح');
         } catch (ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (Exception $e) {

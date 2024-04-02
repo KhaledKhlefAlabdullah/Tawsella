@@ -34,7 +34,6 @@
                                     <th>فانوس السيارة</th>
                                     <th>لوحة السيارة</th>
                                     <th>نوع الطلب</th>
-                                    <th>التكلفة</th>
                                     <th>تتبع</th>
                                 </tr>
                             </thead>
@@ -51,7 +50,6 @@
                                         <td>{{ $movement->car_lamp_number }}</td>
                                         <td>{{ $movement->car_plate_number }}</td>
                                         <td>{{ $movement->type }}</td>
-                                        <td>{{ $movement->price }}</td>
                                         <td>
                                             @if ($movement->taxi_id)
                                                 <a href="{{ route('map', ['selector' => 'taxi', 'id' => $movement->taxi_id]) }}"
