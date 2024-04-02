@@ -34,15 +34,19 @@ class CalculationsController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'driver_id' => 'required',
-            'taxi_movement_id' => 'required',
-            'calculate' => 'required|numeric',
-        ]);
+        try {
+            $data = $request->validate([
+                'driver_id' => 'required',
+                'taxi_movement_id' => 'required',
+                'calculate' => 'required|numeric',
+            ]);
 
-        Calculations::create($data);
+            Calculations::create($data);
 
-        return redirect()->route('calculations.index')->with('success', 'Calculation created successfully');
+            return redirect()->route('calculations.index')->with('success', 'تم إنشاء الحساب بنجاح');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+        }
     }
 
 
@@ -69,15 +73,19 @@ class CalculationsController extends Controller
      */
     public function update(Request $request, Calculations $calculations)
     {
-        $data = $request->validate([
-            'driver_id' => 'required',
-            'taxi_movement_id' => 'required',
-            'calculate' => 'required|numeric',
-        ]);
+        try {
+            $data = $request->validate([
+                'driver_id' => 'required',
+                'taxi_movement_id' => 'required',
+                'calculate' => 'required|numeric',
+            ]);
 
-        $calculations->update($data);
+            $calculations->update($data);
 
-        return redirect()->route('calculations.index')->with('success', 'Calculation updated successfully');
+            return redirect()->route('calculations.index')->with('success', 'تم تحديث الحساب بنجاح');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+        }
     }
 
 
@@ -86,8 +94,12 @@ class CalculationsController extends Controller
      */
     public function destroy(Calculations $calculations)
     {
-        $calculations->delete();
+        try {
+            $calculations->delete();
 
-        return redirect()->route('calculations.index')->with('success', 'Calculation deleted successfully');
+            return redirect()->route('calculations.index')->with('success', 'تم حذف سجل الحساب بنجاح');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+        }
     }
 }

@@ -105,7 +105,7 @@ class TaxiMovementController extends Controller
                     ->where('taxis.id', $id)->first();
             }
 
-            return view('taxi_movement.map', ['data' => $data])->with('success', 'success to view map');
+            return view('taxi_movement.map', ['data' => $data])->with('success', 'تم عرض الخريطة بنحاح');
         } catch (Exception $e) {
             return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
@@ -127,7 +127,7 @@ class TaxiMovementController extends Controller
                 ->first();
 
             if ($existsRequest) {
-                return 'you previos request';
+                $existsRequest->delete();
             }
 
             $taxiMovement = TaxiMovement::create($validatedData);
@@ -157,7 +157,7 @@ class TaxiMovementController extends Controller
         try {
             $request->validate([
                 'state' => 'sometimes|string|required|in:accepted,rejected',
-                'driver_id' => 'sometimes|nullable|string',
+                'driver_id' => 'sometimes|nullable|string|exists:users.id',
                 'message' => 'string|sometimes|nullable'
             ]);
 
@@ -186,15 +186,20 @@ class TaxiMovementController extends Controller
                 ]);
 
                 AcceptTaxiMovemntEvent::dispatch($taxiMovement);
+
+                $message = 'قبول';
             } else if ($request->input('state') == 'rejected') {
 
                 RejectTaxiMovemntEvent::dispatch(
                     $taxiMovement->customer_id,
                     $request->input('message')
                 );
+
+                $message = 'رفض';
+
             }
 
-            return redirect()->back()->with('success', 'Request ' . $request->input('state') . ' successfully.');
+            return redirect()->back()->with('success', 'تم '.$message.' الطلب بنجاح');
         } catch (ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (Exception $e) {

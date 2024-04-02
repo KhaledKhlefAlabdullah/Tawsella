@@ -99,7 +99,7 @@ class DriversController extends Controller
 
             $driver->delete();
 
-            return redirect()->back()->with('success', 'Driver deleted successfully');
+            return redirect()->back()->with('success', 'تم حذف السائق بنجاح');
         } catch (Exception $e) {
             return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }

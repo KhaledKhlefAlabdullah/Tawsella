@@ -36,12 +36,11 @@ class OfferController extends Controller
                 return api_response(data: $offers, message: 'getting offers success');
 
             return view('offers.index', ['offers' => $offers]);
-
         } catch (Exception $e) {
             if (request()->wantsJson())
                 return api_response(errors: $e->getMessage(), message: 'getting offers error', code: 500);
             return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
-            }
+        }
     }
 
     /**
@@ -60,20 +59,24 @@ class OfferController extends Controller
      */
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'movement_type_id' => 'required',
-            'offer' => 'required',
-            'value_of_discount' => 'required|numeric',
-            'valide_date' => 'required|date',
-            'description' => 'sometimes|string|nullable'
-        ]);
+        try {
+            $data = $request->validate([
+                'movement_type_id' => 'required',
+                'offer' => 'required',
+                'value_of_discount' => 'required|numeric',
+                'valide_date' => 'required|date',
+                'description' => 'sometimes|string|nullable'
+            ]);
 
-        // تعيين admin_id بمعرف المستخدم الحالي
-        $data['admin_id'] = Auth::id();
+            // تعيين admin_id بمعرف المستخدم الحالي
+            $data['admin_id'] = Auth::id();
 
-        Offer::create($data);
+            Offer::create($data);
 
-        return redirect()->route('offers.index')->with('success', 'تم إنشاء العرض بنجاح.');
+            return redirect()->route('offers.index')->with('success', 'تم إنشاء العرض بنجاح.');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+        }
     }
 
     /**
@@ -100,17 +103,21 @@ class OfferController extends Controller
      */
     public function update(Request $request, Offer $offer)
     {
-        $data = $request->validate([
-            'movement_type_id' => 'required',
-            'admin_id' => 'required',
-            'offer' => 'required',
-            'value_of_discount' => 'required|numeric',
-            'valide_date' => 'required|date',
-        ]);
+        try {
+            $data = $request->validate([
+                'movement_type_id' => 'required',
+                'admin_id' => 'required',
+                'offer' => 'required',
+                'value_of_discount' => 'required|numeric',
+                'valide_date' => 'required|date',
+            ]);
 
-        $offer->update($data);
+            $offer->update($data);
 
-        return redirect()->route('offers.index')->with('success', 'تم تحديث العرض بنجاح.');
+            return redirect()->route('offers.index')->with('success', 'تم تحديث العرض بنجاح.');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+        }
     }
 
     /**
@@ -118,8 +125,12 @@ class OfferController extends Controller
      */
     public function destroy(Offer $offer)
     {
-        $offer->delete();
+        try {
+            $offer->delete();
 
-        return redirect()->route('offers.index')->with('success', 'تم حذف العرض بنجاح.');
+            return redirect()->route('offers.index')->with('success', 'تم حذف العرض بنجاح.');
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+        }
     }
 }

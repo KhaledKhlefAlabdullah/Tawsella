@@ -111,7 +111,7 @@ class AboutUsController extends Controller
 
             AboutUs::create($validatedData);
 
-            return redirect()->route('aboutus.index')->with('success', 'تم إنشاء نبذة عنا بنجاح.');
+            return redirect()->route('aboutus.index')->with('success', 'تم إضافة معلومات إضافية بنجاح.');
 
         }
         catch(Exception $e){
@@ -129,14 +129,14 @@ class AboutUsController extends Controller
      /**
      * Update Additional info records 
      */
-    public function update_additional_info(AboutUsRequest $request){
+    public function update_additional_info(AboutUsRequest $request, AboutUs $aboutUs){
         try{
 
             $validatedData = $request->validated();
 
-            AboutUs::create($validatedData);
+            $aboutUs->update($validatedData);
 
-            return redirect()->route('aboutus.index')->with('success', 'تم إنشاء نبذة عنا بنجاح.');
+            return redirect()->route('aboutus.index')->with('success', 'تم تعديل البيانات بنجاح.');
 
         }
         catch(Exception $e){
