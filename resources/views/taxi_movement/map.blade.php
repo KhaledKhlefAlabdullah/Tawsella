@@ -19,15 +19,15 @@
         <div id="map" class="map"></div>
         @vite('resources/js/app.js')
         <script>
-            var map = L.map('map').setView([{{ $taxi->lat }}, {{ $taxi->long }}], 10);
+            var map = L.map('map').setView([{{ $data->lat }}, {{ $data->long }}], 10);
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
 
-            var marker = L.marker([{{ $taxi->lat }}, {{ $taxi->long }}]).addTo(map);
-            marker.bindPopup(JSON.stringify('{{ $taxi->name }}')).openPopup();
+            var marker = L.marker([{{ $data->lat }}, {{ $data->long }}]).addTo(map);
+            marker.bindPopup(JSON.stringify('{{ $data->name }}')).openPopup();
 
-            var driver_id = <?php echo json_encode($taxi->driver_id); ?>;
+            var driver_id = <?php echo json_encode($data->driver_id); ?>;
             var admin_id = <?php echo json_encode(auth()->id()); ?>;
 
             var prevMarker = marker;
@@ -42,7 +42,7 @@
 
                             // Add new marker with updated position
                             var newMarker = L.marker([e.lat, e.long]).addTo(map);
-                            newMarker.bindPopup(JSON.stringify('{{ $taxi->name }}')).openPopup();
+                            newMarker.bindPopup(JSON.stringify('{{ $data->name }}')).openPopup();
 
                             // Update prevMarker reference
                             prevMarker = newMarker;
