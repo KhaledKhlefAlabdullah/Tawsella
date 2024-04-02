@@ -17,7 +17,7 @@ class CalculationsController extends Controller
             $calculations = Calculations::all();
             return view('calculations.index', ['calculations' => $calculations]);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -45,7 +45,7 @@ class CalculationsController extends Controller
 
             return redirect()->route('calculations.index')->with('success', 'تم إنشاء الحساب بنجاح');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -84,7 +84,7 @@ class CalculationsController extends Controller
 
             return redirect()->route('calculations.index')->with('success', 'تم تحديث الحساب بنجاح');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -99,7 +99,7 @@ class CalculationsController extends Controller
 
             return redirect()->route('calculations.index')->with('success', 'تم حذف سجل الحساب بنجاح');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 }

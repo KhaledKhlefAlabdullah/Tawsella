@@ -31,7 +31,7 @@ class AboutUsController extends Controller
                 return api_response(errors: [$e->getMessage()], message: 'successfully getting about us details', code: 500);
             }
 
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -88,7 +88,7 @@ class AboutUsController extends Controller
 
             return redirect()->route('aboutus.index')->with('success', 'تم إنشاء نبذة عنا بنجاح.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -115,7 +115,7 @@ class AboutUsController extends Controller
 
         }
         catch(Exception $e){
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -140,7 +140,7 @@ class AboutUsController extends Controller
 
         }
         catch(Exception $e){
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -153,7 +153,7 @@ class AboutUsController extends Controller
             $aboutUs->delete();
             return redirect()->route('aboutus.index')->with('success', 'تم حذف نبذة عنا بنجاح.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 }

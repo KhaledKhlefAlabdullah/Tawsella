@@ -23,7 +23,7 @@ class TaxiMovementTypeController extends Controller
         } catch (Exception $e) {
             if (request()->wantsJson())
                 return api_response(errors: [$e->getMessage()], message: 'getting-movement-type-success', code: 500);
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
     /**
@@ -46,7 +46,7 @@ class TaxiMovementTypeController extends Controller
 
             return redirect()->route('taxi_movement_types.index')->with('success', 'تم إنشاء نوع الحركة بنجاح.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -81,7 +81,7 @@ class TaxiMovementTypeController extends Controller
 
             return redirect()->route('taxi_movement_types.index')->with('success', 'تم تحديث نوع الحركة بنجاح.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -94,7 +94,7 @@ class TaxiMovementTypeController extends Controller
             $taxiMovementType->delete();
             return redirect()->route('taxi_movement_types.index')->with('success', 'تم حذف نوع الحركة بنجاح.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 }

@@ -39,7 +39,7 @@ class OfferController extends Controller
         } catch (Exception $e) {
             if (request()->wantsJson())
                 return api_response(errors: $e->getMessage(), message: 'getting offers error', code: 500);
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -75,7 +75,7 @@ class OfferController extends Controller
 
             return redirect()->route('offers.index')->with('success', 'تم إنشاء العرض بنجاح.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -116,7 +116,7 @@ class OfferController extends Controller
 
             return redirect()->route('offers.index')->with('success', 'تم تحديث العرض بنجاح.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -130,7 +130,7 @@ class OfferController extends Controller
 
             return redirect()->route('offers.index')->with('success', 'تم حذف العرض بنجاح.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البياانت الرجاء المحاولة مؤة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 }
