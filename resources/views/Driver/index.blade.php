@@ -95,7 +95,7 @@
                                         <p class="text-center">{{ $driver->total_previous }}</p>
                                     </td>
                                     <td>
-                                        <x-driver-actions :delete-route="route('drivers.destroy', ['id' => $driver->driver_id])" :edit-route="route('drivers.edit', ['id' => $driver->driver_id])" :show-route="route('drivers.show', ['id' => $driver->driver_id])" />
+                                        <x-buttons :delete-route="route('drivers.destroy', ['id' => $driver->driver_id])" :edit-route="route('drivers.edit', ['id' => $driver->driver_id])" :show-route="route('drivers.show', ['id' => $driver->driver_id])" />
 
                                         {{-- <div class="btn-group" role="group" aria-label="Driver Actions">
                                                 <form action="{{ route('drivers.destroy', ['id' => $driver->driver_id]) }}" method="POST" style="display: inline;">
