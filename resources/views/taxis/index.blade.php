@@ -57,7 +57,7 @@
                                         <p class="text-center">{{ $loop->iteration }}</p>
                                     </td>
                                     <td>
-                                        <p class="text-center">{{ $taxi->driverName ?? 'Unknown' }}</p>
+                                        <p class="text-center">{{ $taxi->driverName ?? 'لا يوجد سائق' }}</p>
                                     </td>
                                     <td>
                                         <p class="text-center">{{ $taxi->car_name }}</p>
