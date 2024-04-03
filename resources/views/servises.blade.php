@@ -38,7 +38,7 @@
                                 @else
                                     <span class="badge bg-secondary">غير معتمد على كيلومترات</span>
                                 @endif
-                                <a href="{{ route('taxi_movement_types.edit', $movementType->id) }}" class="btn btn-success btn-sm mx-1">تعديل</a>
+                                <a href="{{ route('taxi_movement_types.edit', '01932a72-fcf9-4c70-918c-99b6dbc4ec99') }}" class="btn btn-success btn-sm mx-1">تعديل</a>
                                 <form method="POST" action="{{ route('taxi_movement_types.destroy', $movementType->id) }}" class="d-inline">
                                     @csrf
                                     @method('DELETE')
