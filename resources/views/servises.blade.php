@@ -31,7 +31,6 @@
                                 <p class="card-text">{{ $movementType->description }}</p>
                                 <p class="card-text"><small class="text-muted">السعر: {{ $movementType->price }} LT</small></p>
                             </div>
-                            <p>{{$movementType->id}}</p>
                             <div class="card-footer">
                                 @if ($movementType->is_onKM)
                                     <span class="badge bg-primary">معتمد على كيلومترات</span>
