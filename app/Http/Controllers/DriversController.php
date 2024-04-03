@@ -131,15 +131,18 @@ class DriversController extends Controller
         $combinedAccounts = [];
         foreach ($drivers as $driver) {
             $driver_id = $driver->id;
+            $total_today = $this->todayAccounts($driver_id);
+            $total_previous = $this->totalAccounts($driver_id);
+
             $combinedAccounts[] = (object)[
                 'driver_id' => $driver_id,
                 'name' => $driver->name,
                 'email' => $driver->email,
                 'phoneNumber' => $driver->phoneNumber,
                 // Get driver accounts for today
-                'total_today' => $this->todayAccounts($driver_id) ?? 0,
+                'total_today' => $total_today,
                 // Get total account for each driver
-                'total_previous' => $this->totalAccounts($driver_id) ?? 0,
+                'total_previous' => $total_previous,
                 'is_active' => $driver->is_active,
                 'plate_number' => $driver->plate_number,
                 'lamp_number' => $driver->lamp_number
@@ -162,7 +165,7 @@ class DriversController extends Controller
                 ->whereDate('created_at', $today)
                 ->sum('totalPrice');
 
-            return $todayAccounts;
+            return $todayAccounts ?? 0;
         } catch (Exception $e) {
             return redirect()->back()->withErrors($e->getMessage() . 'هناك خطأ في حساب المبالغ التي استلمها السائق اليوم')->withInput();
         }
@@ -177,7 +180,7 @@ class DriversController extends Controller
             $totalAccounts = Calculations::where('driver_id', $driver_id)
                 ->sum('totalPrice');
 
-            return $totalAccounts;
+            return $totalAccounts ?? 0;
         } catch (Exception $e) {
             return redirect()->back()->withErrors($e->getMessage() . 'هناك خطأ في حساب المبالغ التي استلمها السائق')->withInput();
         }
