@@ -109,7 +109,7 @@ class TaxiMovementTypeController extends Controller
         $movementType->delete();
 
         // إعادة التوجيه مع رسالة نجاح
-        return redirect()->route('taxi_movement_types.index')->with('success', 'تم حذف الحركة بنجاح.');
+        return redirect()->route('servises')->with('success', 'تم حذف الحركة بنجاح.');
     } catch (Exception $e) {
         // إذا حدث خطأ، يتم التعامل معه وإعادة التوجيه مع رسالة الخطأ
         return redirect()->back()->withErrors('حدث خطأ أثناء محاولة حذف الحركة. الخطأ: ' . $e->getMessage());
