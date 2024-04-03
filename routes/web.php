@@ -28,7 +28,7 @@ Route::get('/', function () {
 });
 
 //*****************************End route Servises ******************************** */
-Route::get('/serve', [TaxiMovementTypeController::class, 'index']);
+Route::get('/serve', [TaxiMovementTypeController::class, 'index'])->name('servises');
 
 Route::get('/taxi_movement_types/create', [TaxiMovementTypeController::class, 'create'])->name('taxi_movement_types.create');
 Route::post('/taxi_movement_types', [TaxiMovementTypeController::class, 'store'])->name('taxi_movement_types.store');

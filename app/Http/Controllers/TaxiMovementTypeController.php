@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TaxiMovementType;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 
 class TaxiMovementTypeController extends Controller
 {
@@ -38,17 +39,30 @@ class TaxiMovementTypeController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        try {
-            $data = $request->validated();
+{
+    try {
+        // تحقق من صحة البيانات المدخلة باستخدام القواعد المحددة في نموذج البيانات
+        $validatedData = $request->validate([
+            'type' => ['required'],
+            'price' => ['required', 'numeric'],
+            'description' => ['required'],
+            'is_onKM' => ['required', 'boolean'],
+        ]);
 
-            TaxiMovementType::create($data);
+        // إنشاء نوع حركة تاكسي جديد وحفظه في قاعدة البيانات
+        TaxiMovementType::create($validatedData);
 
-            return redirect()->route('servises')->with('success', 'تم إنشاء نوع الحركة بنجاح.');
-        } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
-        }
+        // إعادة توجيه المستخدم برسالة نجاح
+        return redirect()->route('servises')->with('success', 'تم إنشاء نوع الحركة بنجاح.');
+    } catch (ValidationException $e) {
+        // إذا حدث خطأ في التحقق من الصحة، يُعاد توجيه المستخدم مع رسالة الخطأ والبيانات المدخلة
+        return redirect()->back()->withErrors($e->errors())->withInput();
+    } catch (Exception $e) {
+        // إذا حدث خطأ آخر، يُعاد توجيه المستخدم مع رسالة الخطأ والبيانات المدخلة
+        return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى. الخطأ: ' . $e->getMessage())->withInput();
     }
+}
+
 
     /**
      * Display the specified resource.
