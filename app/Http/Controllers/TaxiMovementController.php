@@ -79,7 +79,7 @@ class TaxiMovementController extends Controller
             'taxis.plate_number as car_plate_number',
             'taxi_movement_types.type',
             'taxi_movement_types.price'
-        ], ['is_completed' => true])
+            ], ['is_completed' => true])
             ->get();
         // إعادة عرض النتائج في الواجهة
         return view('taxi_movement.completedRequests', ['completedRequests' => $completedRequests]);
@@ -103,6 +103,7 @@ class TaxiMovementController extends Controller
                 ->where($condations);
 
             return $data;
+
         } catch (Exception $e) {
             return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
@@ -339,8 +340,9 @@ class TaxiMovementController extends Controller
                 'taxi_movements.start_latitude as location_lat',
                 'taxi_movements.start_longitude as location_long',
                 'tmt.type',
-                'tmt.price'
-            )
+                'tmt.price',
+                'tmt.is_onKM'
+                )
                 ->join('user_profiles as up', 'taxi_movements.customer_id', '=', 'up.user_id')
                 ->join('taxi_movement_types as tmt', 'taxi_movements.movement_type_id', '=', 'tmt.id')
                 ->where(['taxi_movements.driver_id' => $driver_id, 'is_completed' => false, 'is_canceled' => false, 'is_don' => true])
