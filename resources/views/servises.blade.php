@@ -35,6 +35,11 @@
                                     <span class="badge bg-secondary">غير معتمد على كيلومترات</span>
                                 @endif
                             </div>
+                            <form method="POST" action="{{ route('taxi_movement_types.destroy', $movementType->id) }}" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('هل أنت متأكد من حذف هذا النوع؟')">حذف</button>
+                            </form>
                         </div>
                     </div>
                 @endforeach
