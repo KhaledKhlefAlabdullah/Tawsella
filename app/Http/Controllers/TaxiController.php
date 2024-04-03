@@ -22,7 +22,7 @@ class TaxiController extends Controller
 
             // احصل على جميع السجلات وعرضها، يمكنك تخصيص هذه الوظيفة حسب احتياجاتك
             $taxis = Taxi::select('user_profiles.name as driverName', 'taxis.id', 'taxis.car_name', 'taxis.lamp_number', 'taxis.plate_number')
-                ->join('user_profiles', 'taxis.driver_id', '=', 'user_profiles.user_id')
+                ->leftJoin('user_profiles', 'taxis.driver_id', '=', 'user_profiles.user_id')
                 ->get();
             return view('taxis.index', compact('taxis'));
         } catch (Exception $e) {
