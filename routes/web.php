@@ -33,6 +33,9 @@ Route::get('/serve', [TaxiMovementTypeController::class, 'index'])->name('servis
 Route::get('/taxi_movement_types/create', [TaxiMovementTypeController::class, 'create'])->name('taxi_movement_types.create');
 Route::post('/taxi_movement_types', [TaxiMovementTypeController::class, 'store'])->name('taxi_movement_types.store');
 
+Route::get('/taxi_movement_types/{movementType}/edit', [TaxiMovementTypeController::class, 'edit'])->name('taxi_movement_types.edit');
+Route::put('/taxi_movement_types/{movementType}', [TaxiMovementTypeController::class, 'update'])->name('taxi_movement_types.update');
+
 Route::delete('/taxi_movement_types/{movementType}', [TaxiMovementTypeController::class, 'destroy'])->name('taxi_movement_types.destroy');
 
 //*****************************End route Servises ******************************** */

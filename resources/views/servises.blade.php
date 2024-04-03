@@ -40,6 +40,7 @@
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('هل أنت متأكد من حذف هذا النوع؟')">حذف</button>
                             </form>
+                            <a href="{{route('taxi_movement_types.edit')}}">تعديل</a>
                         </div>
                     </div>
                 @endforeach

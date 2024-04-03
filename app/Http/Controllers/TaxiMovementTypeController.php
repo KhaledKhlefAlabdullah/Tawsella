@@ -93,7 +93,7 @@ class TaxiMovementTypeController extends Controller
 
             $taxiMovementType->update($data);
 
-            return redirect()->route('taxi_movement_types.index')->with('success', 'تم تحديث نوع الحركة بنجاح.');
+            return redirect()->route('servises')->with('success', 'تم تحديث نوع الحركة بنجاح.');
         } catch (Exception $e) {
             return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
