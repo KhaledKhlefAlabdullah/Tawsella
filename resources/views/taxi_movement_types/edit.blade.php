@@ -1,23 +1,9 @@
 @extends('layouts.app')
 
 @section('content')
-    <main id="main" class="main">
-        @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+    <main class="main" id="main">
         <div class="container">
-            <div class="row">
+            <div class="row justify-content-center">
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-header">تعديل نوع حركة تاكسي</div>
@@ -31,7 +17,7 @@
                                     <label for="type" class="col-md-4 col-form-label text-md-right">النوع</label>
 
                                     <div class="col-md-6">
-                                        <input id="type" type="text" class="form-control @error('type') is-invalid @enderror" name="type" value="{{ $movementType->type }}" required>
+                                        <input id="type" type="text" class="form-control @error('type') is-invalid @enderror" name="type" value="{{ $movementType->type }}" required autofocus>
 
                                         @error('type')
                                             <span class="invalid-feedback" role="alert">
