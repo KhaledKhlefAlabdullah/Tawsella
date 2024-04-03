@@ -102,13 +102,18 @@ class TaxiMovementTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TaxiMovementType $taxiMovementType)
-    {
-        try {
-            $taxiMovementType->delete();
-            return redirect()->route('taxi_movement_types.index')->with('success', 'تم حذف نوع الحركة بنجاح.');
-        } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
-        }
+    public function destroy(TaxiMovementType $movementType)
+{
+    try {
+        // حذف الحركة المحددة
+        $movementType->delete();
+
+        // إعادة التوجيه مع رسالة نجاح
+        return redirect()->route('taxi_movement_types.index')->with('success', 'تم حذف الحركة بنجاح.');
+    } catch (Exception $e) {
+        // إذا حدث خطأ، يتم التعامل معه وإعادة التوجيه مع رسالة الخطأ
+        return redirect()->back()->withErrors('حدث خطأ أثناء محاولة حذف الحركة. الخطأ: ' . $e->getMessage());
     }
+}
+
 }
