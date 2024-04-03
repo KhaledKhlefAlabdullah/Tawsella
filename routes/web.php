@@ -29,6 +29,9 @@ Route::get('/', function () {
 
 //*****************************End route Servises ******************************** */
 Route::get('/serve', [TaxiMovementTypeController::class, 'index']);
+
+Route::get('/taxi_movement_types/create', [TaxiMovementTypeController::class, 'create'])->name('taxi_movement_types.create');
+Route::post('/taxi_movement_types', [TaxiMovementTypeController::class, 'store'])->name('taxi_movement_types.store');
 //*****************************End route Servises ******************************** */
 //******************************************************************************* */
 //***************************start route AppPlatform ******************************** */
@@ -63,7 +66,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::patch('/update', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/delete', [ProfileController::class, 'destroy'])->name('profile.destroy');
     });
-    
+
     //***************************End route profile ******************************** */
     //***************************************************************************** */
 
@@ -108,13 +111,13 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
         Route::get('/create', [OfferController::class, 'create'])->name('offers.create');
         Route::post('/store', [OfferController::class, 'store'])->name('offers.store');
-    
+
         Route::get('/edit/{offer}', [OfferController::class, 'edit'])->name('offers.edit');
         Route::put('/update/{offer}', [OfferController::class, 'update'])->name('offers.update');
-    
+
         Route::delete('/delete/{offer}', [OfferController::class, 'destroy'])->name('offers.destroy');
     });
-   
+
     //*************************** End route offers *********************************** */
     //**************************************************************************** */
 
@@ -136,17 +139,17 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/', [CalculationsController::class, 'index'])->name('calculations.index');
 
         Route::get('/{calculations}', [CalculationsController::class, 'show'])->name('calculations.show');
-    
+
         Route::get('/create', [CalculationsController::class, 'create'])->name('calculations.create');
         Route::post('/store', [CalculationsController::class, 'store'])->name('calculations.store');
-    
+
         Route::get('/edit/{calculations}', [CalculationsController::class, 'edit'])->name('calculations.edit');
         Route::put('/update/{calculations}', [CalculationsController::class, 'update'])->name('calculations.update');
-    
+
         Route::delete('/delete/{calculations}', [CalculationsController::class, 'destroy'])->name('calculations.destroy');
-    
+
     });
-   
+
     //*************************** End route calculations *********************************** */
     //**************************************************************************** */
 

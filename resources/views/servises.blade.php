@@ -17,6 +17,7 @@
             </div>
         @endif
         <div class="container">
+            <a href="{{route('taxi_movement_types.create')}}">اضافة خدمة</a>
             <div class="row">
                 @foreach ($movementTypes as $movementType)
                     <div class="col-md-6 mb-4">
