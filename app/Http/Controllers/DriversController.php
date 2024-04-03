@@ -109,7 +109,7 @@ class DriversController extends Controller
     {
         $query = User::select('users.id', 'user_profiles.name', 'users.email', 'user_profiles.phoneNumber', 'user_profiles.avatar', 'users.id', 'users.is_active', 'taxis.plate_number', 'taxis.lamp_number')
             ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
-            ->join('taxis', 'users.id', '=', 'taxis.driver_id')
+            ->leftJoin('taxis', 'users.id', '=', 'taxis.driver_id')
             ->where('users.user_type', 'driver');
 
         // Apply the specified method
