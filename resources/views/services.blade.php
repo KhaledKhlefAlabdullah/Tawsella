@@ -19,12 +19,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8">
-                    <a href="{{ route('taxi_movement_types.create') }}" class="btn btn-primary mb-3">إضافة خدمة جديدة</a>
+                    <a href="{{ route('service.create') }}" class="btn btn-primary mb-3">إضافة خدمة جديدة</a>
                 </div>
             </div>
-            <div>
+            <div class="row">
                 @foreach ($movementTypes as $movementType)
-                    <div class="col-md-6 mb-4">
+                    <div class="col-md-6 mb-4 ">
                         <div class="card h-100">
                             <div class="card-body">
                                 <h3 class="card-title">{{ $movementType->type }}</h3>
@@ -44,8 +44,8 @@
                                     <span class="badge bg-secondary">غير معتمد على كيلومترات</span>
                                 @endif
                                 <x-buttons 
-                                :delete-route="route('taxi_movement_types.edit', $movementType->id) " 
-                                :edit-route="route('taxi_movement_types.destroy', $movementType->id)" 
+                                :delete-route="route('service.destroy', $movementType->id) " 
+                                :edit-route="route('service.edit', $movementType->id)" 
                                 :showDeleteButton="true"
                                 :showEditButton="true"
                                 :showDetailsButton="false" />
@@ -66,8 +66,8 @@
                             <div class="card-footer">
                                 <span class="badge bg-primary"> سعر ثابت </span>
                                 <x-buttons 
-                                :delete-route="route('taxi_movement_types.edit', $movement->id)" 
-                                :edit-route="route('taxi_movement_types.destroy', $movement->id)" 
+                                :delete-route="route('service.destroy', $movement->id)" 
+                                :edit-route="route('service.edit', $movement->id)" 
                                 :showDeleteButton="true"
                                 :showEditButton="true"
                                 :showDetailsButton="false" />

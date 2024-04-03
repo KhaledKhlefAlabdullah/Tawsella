@@ -27,16 +27,17 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+Route::middleware(['auth', 'admin'])->group(function () {
+
 //*****************************End route services ******************************** */
-Route::get('/serve', [TaxiMovementTypeController::class, 'index'])->name('services');
-
-Route::get('/taxi_movement_types/create', [TaxiMovementTypeController::class, 'create'])->name('taxi_movement_types.create');
-Route::post('/taxi_movement_types', [TaxiMovementTypeController::class, 'store'])->name('taxi_movement_types.store');
-
-Route::get('/taxi_movement_types/{movementType}/edit', [TaxiMovementTypeController::class, 'edit'])->name('taxi_movement_types.edit');
-Route::put('/taxi_movement_types/{movementType}', [TaxiMovementTypeController::class, 'update'])->name('taxi_movement_types.update');
-
-Route::delete('/taxi_movement_types/{movementType}', [TaxiMovementTypeController::class, 'destroy'])->name('taxi_movement_types.destroy');
+Route::group(['prefix' => 'services'], function () {
+    Route::get('/',[TaxiMovementTypeController::class,'index'])->name('services');
+    Route::get('/cretae',[TaxiMovementTypeController::class,'create'])->name('service.create');
+    Route::post('/store',[TaxiMovementTypeController::class,'store'])->name('service.store');
+    Route::get('/edit/{movementType}',[TaxiMovementTypeController::class,'edit'])->name('service.edit');
+    Route::put('/update/{movementType}',[TaxiMovementTypeController::class,'update'])->name('service.update');
+    Route::delete('/delete/{movementType}',[TaxiMovementTypeController::class,'destroy'])->name('service.destroy');
+});
 
 //*****************************End route services ******************************** */
 //******************************************************************************* */
@@ -50,7 +51,6 @@ Route::get('/Applatform', function () {
 //************************************ ROUTE **************************************** */
 //************************************ ROUTE **************************************** */
 
-Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/profiles', function () {
         return view('profile.profile');
     });
@@ -67,7 +67,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //******************************************************************************* */
 
     //***************************start route profile ******************************** */
-    Route::group(['prefix' => 'profile'],function(){
+    Route::group(['prefix' => 'profile'], function () {
         Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
         Route::patch('/update', [ProfileController::class, 'update'])->name('profile.update');
         Route::delete('/delete', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -112,7 +112,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //**************************************************************************** */
 
     //*************************** Start route offers *********************************** */
-    Route::group(['prefix' => 'offers'],function(){
+    Route::group(['prefix' => 'offers'], function () {
         Route::get('/', [OfferController::class, 'index'])->name('offers.index');
 
         Route::get('/create', [OfferController::class, 'create'])->name('offers.create');
@@ -141,7 +141,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     //**************************************************************************** */
 
     //*************************** Start route calculations *********************************** */
-    Route::group(['prefix' => 'calculations'],function(){
+    Route::group(['prefix' => 'calculations'], function () {
         Route::get('/', [CalculationsController::class, 'index'])->name('calculations.index');
 
         Route::get('/{calculations}', [CalculationsController::class, 'show'])->name('calculations.show');
@@ -153,13 +153,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::put('/update/{calculations}', [CalculationsController::class, 'update'])->name('calculations.update');
 
         Route::delete('/delete/{calculations}', [CalculationsController::class, 'destroy'])->name('calculations.destroy');
-
     });
 
     //*************************** End route calculations *********************************** */
     //**************************************************************************** */
 
-    Route::get('/view-map/{selector}/{id}',[TaxiMovementController::class,'view_map'])->name('map');
+    Route::get('/view-map/{selector}/{id}', [TaxiMovementController::class, 'view_map'])->name('map');
 });
 
 Route::get('/drivers', [DriversController::class, 'index']);

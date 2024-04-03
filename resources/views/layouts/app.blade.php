@@ -101,7 +101,25 @@
     <script src="{{ asset('js/darkmode-config.js') }}"></script>
     <script src="path/to/darkmode.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <script>
+        function confirmDelete() {
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: "لن يمكنك التراجع عن هذا الإجراء!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'نعم، احذفه!',
+                cancelButtonText: 'إلغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteForm').submit();
+                }
+            });
+            return false; // Prevent default form submission
+        }
+    </script>
 
     <!-- Template Main JS File -->
     <script src="{{ asset('js/main.js') }}"></script>
