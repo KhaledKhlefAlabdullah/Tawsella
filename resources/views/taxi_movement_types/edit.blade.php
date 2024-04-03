@@ -23,6 +23,7 @@
                         <div class="card-header">تعديل نوع حركة تاكسي</div>
 
                         <div class="card-body">
+                            @dd($movementType->id)
                             <form method="POST" action="{{ route('taxi_movement_types.update', $movementType->id) }}">
                                 @csrf
                                 @method('PUT')
