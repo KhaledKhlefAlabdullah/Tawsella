@@ -5,14 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
-use App\Http\Requests\DriverStateRequest;
-use App\Http\Requests\UpdateDriverRequest;
 use App\Models\Calculations;
-use App\Models\Taxi;
-use App\Models\UserProfile;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 
 class DriversController extends Controller
 {
@@ -163,10 +158,9 @@ class DriversController extends Controller
             // Get today's date
             $today = Carbon::now()->toDateString();
 
-            $todayAccounts = Calculations::select('driver_id', DB::raw('SUM(totalPrice) as total_today'))
+            $todayAccounts = Calculations::where('driver_id', $driver_id)
                 ->whereDate('created_at', $today)
-                ->where('driver_id',$driver_id)
-                ->get();
+                ->sum('totalPrice');
 
             return $todayAccounts;
         } catch (Exception $e) {
@@ -179,14 +173,12 @@ class DriversController extends Controller
      */
     public function totalAccounts(string $driver_id)
     {
-        try{
-            $totalAccounts = Calculations::select('driver_id', DB::raw('SUM(totalPrice) as total_previous'))
-                ->where('driver_id',$driver_id)
-            ->get();
+        try {
+            $totalAccounts = Calculations::where('driver_id', $driver_id)
+                ->sum('totalPrice');
 
             return $totalAccounts;
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             return redirect()->back()->withErrors($e->getMessage() . 'هناك خطأ في حساب المبالغ التي استلمها السائق')->withInput();
         }
     }
