@@ -15,12 +15,14 @@ class TaxiMovementTypeController extends Controller
     public function index()
     {
         try {
-            $movementTypes = TaxiMovementType::select('id', 'type', 'price', 'description', 'is_onKM')->whereNotIn('id', ['t-m-t-1', 't-m-t-2'])->get();
+            $movements = TaxiMovementType::select('id', 'type', 'price', 'description')->whereNotIn('id', ['t-m-t-1', 't-m-t-2'])->get();
 
             if (request()->wantsJson())
-                return api_response(data: $movementTypes, message: 'getting-movement-type-error');
+                return api_response(data: $movements, message: 'getting-movement-type-error');
 
-            return view('servises', ['movementTypes' => $movementTypes]);
+            $movementTypes = TaxiMovementType::select('id', 'type', 'price', 'description', 'is_onKM')->whereIn('id', ['t-m-t-1', 't-m-t-2'])->get();
+
+            return view('services', ['movementTypes' => $movementTypes ,'movements' => $movements]);
         } catch (Exception $e) {
             if (request()->wantsJson())
                 return api_response(errors: [$e->getMessage()], message: 'getting-movement-type-success', code: 500);
@@ -53,7 +55,7 @@ class TaxiMovementTypeController extends Controller
         TaxiMovementType::create($validatedData);
 
         // إعادة توجيه المستخدم برسالة نجاح
-        return redirect()->route('servises')->with('success', 'تم إنشاء نوع الحركة بنجاح.');
+        return redirect()->route('services')->with('success', 'تم إنشاء نوع الحركة بنجاح.');
     } catch (ValidationException $e) {
         // إذا حدث خطأ في التحقق من الصحة، يُعاد توجيه المستخدم مع رسالة الخطأ والبيانات المدخلة
         return redirect()->back()->withErrors($e->errors())->withInput();
@@ -92,7 +94,7 @@ class TaxiMovementTypeController extends Controller
 
             $taxiMovementType->update($data);
 
-            return redirect()->route('servises')->with('success', 'تم تحديث نوع الحركة بنجاح.');
+            return redirect()->route('services')->with('success', 'تم تحديث نوع الحركة بنجاح.');
         } catch (Exception $e) {
             return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
@@ -115,7 +117,7 @@ class TaxiMovementTypeController extends Controller
 
     //         $taxiMovementType->update($data);
 
-    //         return redirect()->route('servises')->with('success', 'تم تحديث نوع الحركة بنجاح.');
+    //         return redirect()->route('services')->with('success', 'تم تحديث نوع الحركة بنجاح.');
     //     } catch (Exception $e) {
     //         return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
     //     }
@@ -131,7 +133,7 @@ class TaxiMovementTypeController extends Controller
         $movementType->delete();
 
         // إعادة التوجيه مع رسالة نجاح
-        return redirect()->route('servises')->with('success', 'تم حذف الحركة بنجاح.');
+        return redirect()->route('services')->with('success', 'تم حذف الحركة بنجاح.');
     } catch (Exception $e) {
         // إذا حدث خطأ، يتم التعامل معه وإعادة التوجيه مع رسالة الخطأ
         return redirect()->back()->withErrors('حدث خطأ أثناء محاولة حذف الحركة. الخطأ: ' . $e->getMessage());

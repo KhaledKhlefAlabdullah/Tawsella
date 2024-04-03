@@ -27,8 +27,8 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
-//*****************************End route Servises ******************************** */
-Route::get('/serve', [TaxiMovementTypeController::class, 'index'])->name('servises');
+//*****************************End route services ******************************** */
+Route::get('/serve', [TaxiMovementTypeController::class, 'index'])->name('services');
 
 Route::get('/taxi_movement_types/create', [TaxiMovementTypeController::class, 'create'])->name('taxi_movement_types.create');
 Route::post('/taxi_movement_types', [TaxiMovementTypeController::class, 'store'])->name('taxi_movement_types.store');
@@ -38,7 +38,7 @@ Route::put('/taxi_movement_types/{movementType}', [TaxiMovementTypeController::c
 
 Route::delete('/taxi_movement_types/{movementType}', [TaxiMovementTypeController::class, 'destroy'])->name('taxi_movement_types.destroy');
 
-//*****************************End route Servises ******************************** */
+//*****************************End route services ******************************** */
 //******************************************************************************* */
 //***************************start route AppPlatform ******************************** */
 Route::get('/Applatform', function () {
