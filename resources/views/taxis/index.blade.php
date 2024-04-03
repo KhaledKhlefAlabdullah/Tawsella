@@ -53,7 +53,9 @@
                         <tbody>
                             @foreach ($taxis as $taxi)
                                 <tr>
-                                    <td><p class="text-center">{{ $loop->iteration }}</p></td>
+                                    <td>
+                                        <p class="text-center">{{ $loop->iteration }}</p>
+                                    </td>
                                     <td>
                                         <p class="text-center">{{ $taxi->driverName }}</p>
                                     </td>
@@ -67,25 +69,12 @@
                                         <p class="text-center">{{ $taxi->plate_number }}</p>
                                     </td>
                                     <td class="d-flex align-items-center justify-content-center">
-                                        <div class="btn-group m-r-4" role="group" aria-label="Driver Actions">
-                                            <form action="{{ route('taxis.destroy', $taxi->id) }}" method="POST"
-                                                style="display: inline;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger"
-                                                    title="{{ __('Delete') }}"><i class="fas fa-trash"></i></button>
-                                            </form>
-
-                                            <span class="pipe">|</span>
-
-                                            <a href="{{ route('taxis.edit', $taxi->id) }}" class="btn btn-primary rounded"
-                                                title="{{ __('Edit') }}"><i class="fas fa-pencil-alt"></i></a>
-
-                                            <span class="pipe">|</span>
-
-                                            <a href="" class="btn btn-info rounded"
-                                                title="{{ __('latest_location') }}"><i class="fas fa-info-circle"></i></a>
-                                        </div>
+                                        <x-buttons 
+                                        :delete-route="route('taxis.destroy', $taxi->id) " 
+                                        :edit-route="route('taxis.edit', $taxi->id)" 
+                                        :showDeleteButton="true"
+                                        :showEditButton="true"
+                                        :showDetailsButton="false" />
                                     </td>
                                 </tr>
                             @endforeach

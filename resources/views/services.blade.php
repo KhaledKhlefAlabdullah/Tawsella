@@ -43,15 +43,12 @@
                                 @else
                                     <span class="badge bg-secondary">غير معتمد على كيلومترات</span>
                                 @endif
-                                <a href="{{ route('taxi_movement_types.edit', $movementType->id) }}"
-                                    class="btn btn-success btn-sm mx-1">تعديل</a>
-                                <form method="POST" action="{{ route('taxi_movement_types.destroy', $movementType->id) }}"
-                                    class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm"
-                                        onclick="return confirm('هل أنت متأكد من حذف هذا النوع؟')">حذف</button>
-                                </form>
+                                <x-buttons 
+                                :delete-route="route('taxi_movement_types.edit', $movementType->id) " 
+                                :edit-route="route('taxi_movement_types.destroy', $movementType->id)" 
+                                :showDeleteButton="true"
+                                :showEditButton="true"
+                                :showDetailsButton="false" />
                             </div>
                         </div>
                     </div>
@@ -68,15 +65,12 @@
                             </div>
                             <div class="card-footer">
                                 <span class="badge bg-primary"> سعر ثابت </span>
-                                <a href="{{ route('taxi_movement_types.edit', $movement->id) }}"
-                                    class="btn btn-success btn-sm mx-1">تعديل</a>
-                                <form method="POST" action="{{ route('taxi_movement_types.destroy', $movement->id) }}"
-                                    class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger btn-sm"
-                                        onclick="return confirm('هل أنت متأكد من حذف هذا النوع؟')">حذف</button>
-                                </form>
+                                <x-buttons 
+                                :delete-route="route('taxi_movement_types.edit', $movement->id)" 
+                                :edit-route="route('taxi_movement_types.destroy', $movement->id)" 
+                                :showDeleteButton="true"
+                                :showEditButton="true"
+                                :showDetailsButton="false" />
                             </div>
                         </div>
                     </div>
