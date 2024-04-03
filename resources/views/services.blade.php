@@ -24,28 +24,37 @@
             </div>
             <div>
                 @foreach ($movementTypes as $movementType)
-                <div class="col-md-6 mb-4">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h3 class="card-title">{{ $movementType->type }}</h3>
-                            <p class="card-text">{{ $movementType->description }}</p>
-                            <p class="card-text"><small class="text-muted">السعر: {{ $movementType->price }} LT</small></p>
-                        </div>
-                        <div class="card-footer">
-                            @if ($movementType->is_onKM)
-                                <span class="badge bg-primary">معتمد على كيلومترات</span>
-                            @else
-                                <span class="badge bg-secondary">غير معتمد على كيلومترات</span>
-                            @endif
-                            <a href="{{ route('taxi_movement_types.edit', $movementType->id) }}" class="btn btn-success btn-sm mx-1">تعديل</a>
-                            <form method="POST" action="{{ route('taxi_movement_types.destroy', $movementType->id) }}" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('هل أنت متأكد من حذف هذا النوع؟')">حذف</button>
-                            </form>
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h3 class="card-title">{{ $movementType->type }}</h3>
+                                <p class="card-text">{{ $movementType->description }}</p>
+                                <p class="card-text"><small class="text-muted">السعر: {{ $movementType->price }}
+                                        @if ($movementType->is_onKM)
+                                            $
+                                        @else
+                                            TL
+                                        @endif
+                                    </small></p>
+                            </div>
+                            <div class="card-footer">
+                                @if ($movementType->is_onKM)
+                                    <span class="badge bg-primary">معتمد على كيلومترات</span>
+                                @else
+                                    <span class="badge bg-secondary">غير معتمد على كيلومترات</span>
+                                @endif
+                                <a href="{{ route('taxi_movement_types.edit', $movementType->id) }}"
+                                    class="btn btn-success btn-sm mx-1">تعديل</a>
+                                <form method="POST" action="{{ route('taxi_movement_types.destroy', $movementType->id) }}"
+                                    class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('هل أنت متأكد من حذف هذا النوع؟')">حذف</button>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
                 @endforeach
             </div>
             <div class="row">
@@ -59,7 +68,8 @@
                             </div>
                             <div class="card-footer">
                                 <span class="badge bg-primary"> سعر ثابت </span>
-                                <a href="{{ route('taxi_movement_types.edit', $movement->id) }}" class="btn btn-success btn-sm mx-1">تعديل</a>
+                                <a href="{{ route('taxi_movement_types.edit', $movement->id) }}"
+                                    class="btn btn-success btn-sm mx-1">تعديل</a>
                                 <form method="POST" action="{{ route('taxi_movement_types.destroy', $movement->id) }}"
                                     class="d-inline">
                                     @csrf

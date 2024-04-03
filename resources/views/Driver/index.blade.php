@@ -89,13 +89,15 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <p class="text-center">{{ $driver->total_today}}</p>
+                                        <p class="text-center">{{ $driver->total_today }}</p>
                                     </td>
                                     <td>
-                                        <p class="text-center">{{ $driver->total_previous}}</p>
+                                        <p class="text-center">{{ $driver->total_previous }}</p>
                                     </td>
                                     <td>
-                                            <div class="btn-group" role="group" aria-label="Driver Actions">
+                                        <x-driver-actions :delete-route="route('drivers.destroy', ['id' => $driver->driver_id])" :edit-route="route('drivers.edit', ['id' => $driver->driver_id])" :show-route="route('drivers.show', ['id' => $driver->driver_id])" />
+
+                                        {{-- <div class="btn-group" role="group" aria-label="Driver Actions">
                                                 <form action="{{ route('drivers.destroy', ['id' => $driver->driver_id]) }}" method="POST" style="display: inline;">
                                                     @csrf
                                                     @method('DELETE')
@@ -109,7 +111,7 @@
                                                 <span class="pipe">|</span>
                                         
                                                 <a href="{{ route('drivers.show', ['id' => $driver->driver_id]) }}" class="btn btn-info rounded" title="{{ __('Details') }}"><i class="fas fa-info-circle"></i></a>
-                                            </div>
+                                            </div> --}}
                                     </td>
 
 
