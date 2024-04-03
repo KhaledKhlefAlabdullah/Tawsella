@@ -86,8 +86,8 @@ class TaxiMovementTypeController extends Controller
             $data = $request->validate([
                 'type' => 'required',
                 'price' => 'required|numeric',
-                'description' => 'required|numeric',
-                'is_onKM' => 'required|numeric',
+                'description' => 'required|string',
+                'is_onKM' => 'required|string',
             ]);
 
             $taxiMovementType->update($data);
