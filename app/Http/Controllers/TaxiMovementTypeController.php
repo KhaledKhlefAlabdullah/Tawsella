@@ -44,7 +44,7 @@ class TaxiMovementTypeController extends Controller
 
             TaxiMovementType::create($data);
 
-            return redirect()->route('taxi_movement_types.index')->with('success', 'تم إنشاء نوع الحركة بنجاح.');
+            return redirect()->route('servises')->with('success', 'تم إنشاء نوع الحركة بنجاح.');
         } catch (Exception $e) {
             return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
