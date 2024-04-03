@@ -80,15 +80,14 @@ class TaxiMovementTypeController extends Controller
         return view('taxi_movement_types.edit', ['movementType' => $taxiMovementType]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, TaxiMovementType $taxiMovementType)
     {
         try {
             $data = $request->validate([
                 'type' => 'required',
                 'price' => 'required|numeric',
+                'description' => 'required|numeric',
+                'is_onKM' => 'required|numeric',
             ]);
 
             $taxiMovementType->update($data);
@@ -98,6 +97,29 @@ class TaxiMovementTypeController extends Controller
             return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
+    // public function edit(TaxiMovementType $taxiMovementType)
+    // {
+    //     return view('taxi_movement_types.edit', ['movementType' => $taxiMovementType]);
+    // }
+
+    // /**
+    //  * Update the specified resource in storage.
+    //  */
+    // public function update(Request $request, TaxiMovementType $taxiMovementType)
+    // {
+    //     try {
+    //         $data = $request->validate([
+    //             'type' => 'required',
+    //             'price' => 'required|numeric',
+    //         ]);
+
+    //         $taxiMovementType->update($data);
+
+    //         return redirect()->route('servises')->with('success', 'تم تحديث نوع الحركة بنجاح.');
+    //     } catch (Exception $e) {
+    //         return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+    //     }
+    // }
 
     /**
      * Remove the specified resource from storage.
