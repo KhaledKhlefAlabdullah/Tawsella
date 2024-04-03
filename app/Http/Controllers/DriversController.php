@@ -6,6 +6,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\Calculations;
+use App\Models\Taxi;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -91,6 +92,11 @@ class DriversController extends Controller
     {
         try {
             $driver = getAndCheckModelById(User::class, $id);
+
+            $taxi = Taxi::where('driver_id',$id)->first();
+            $taxi->update([
+                'driver_id' => null
+            ]);
 
             $driver->delete();
 

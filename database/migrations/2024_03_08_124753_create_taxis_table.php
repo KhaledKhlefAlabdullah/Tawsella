@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('taxis', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
-            $table->string('driver_id');
+            $table->string('driver_id')->nullable();
             $table->string('car_name');
             $table->string('lamp_number');
             $table->string('plate_number');
