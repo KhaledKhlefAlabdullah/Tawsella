@@ -39,7 +39,7 @@
                             <h3>({{ Auth::user()->role->name ?? 'Default Role' }})</h3>
                             <div class="social-links mt-2">
                                 <a href="#"><i class="bi bi-award"></i></a>
-                                <img src="{{ asset('/img/FSN.png') }}" style="width: 50px;height: 50px;" alt="">
+                                <img src="{{ asset('/img/logo.png') }}" style="width: 50px;height: 50px;" alt="">
                             </div>
                         </div>
                     </div>
