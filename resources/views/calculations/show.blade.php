@@ -22,7 +22,7 @@
             <h1 class="my-4">عرض الحساب</h1>
             <div class="card">
                 <div class="card-body">
-                    <div class="row m-2">
+                    <div class="row m-4">
                         <!-- Revenue Card -->
                         <div class="col-xxl-6 col-md-6">
                             <div class="card info-card revenue-card">
@@ -78,6 +78,28 @@
                                         </div>
                                         <div class="ps-3">
                                             <h6>{{ $details['totalWay'] }}</h6>
+                                            <hr>
+                                        </div>
+                                    </div>
+    
+                                </div>
+                            </div>
+    
+                        </div><!-- End Customers Card -->
+                        <!-- Customers Card -->
+                        <div class="col-xxl-6 col-xl-6">
+    
+                            <div class="card info-card customers-card">
+    
+                                <div class="card-body">
+                                    {{-- <h5 >المسافة التي قطعها السائق <span>| المسافة</span></h5> --}}
+    
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-people"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h6></h6>
                                             <hr>
                                         </div>
                                     </div>
