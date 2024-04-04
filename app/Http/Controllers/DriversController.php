@@ -137,7 +137,7 @@ class DriversController extends Controller
         $combinedAccounts = [];
         foreach ($drivers as $driver) {
             $driver_id = $driver->id;
-            $unBring = Calculations::where('driver_id',$driver_id)->sum('totalPrice');
+            $unBring = Calculations::where(['driver_id' => $driver_id, 'is_bring' => false])->sum('totalPrice');
             $combinedAccounts[] = (object)[
                 'driver_id' => $driver_id,
                 'name' => $driver->name,
