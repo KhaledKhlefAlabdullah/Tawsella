@@ -124,7 +124,9 @@
                                 <th scope="col"> عنوان الوجهة</th>
                                 <th scope="col"> المسافة </th>
                                 <th scope="col">المبلغ الاجمالي </th>
-                                <th scope="col"><i class="bi bi-geo-alt-fill"></i></th>
+                                <th scope="col">المسافة</i></th>
+                                <th scope="col">التاريخ</i></th>
+                                {{-- <th scope="col"><i class="bi bi-geo-alt-fill"></i></th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -151,6 +153,9 @@
                                     </td>
                                     <td>
                                         {{ $movement->way }}
+                                    </td>
+                                    <td>
+                                        {{ $movement->date }} KM
                                     </td>
                                     {{-- <td>
                                         @if ($movement->taxi_id)
