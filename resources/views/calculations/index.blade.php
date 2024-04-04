@@ -36,10 +36,12 @@
                             <th scope="row">{{ $index + 1 }}</th>
 
                             <td>{{ $calculation->name }}</td>
-                            <td>{{ $calculation->taxi_movement_id }}</td>
+                            <td>{{ $calculation->plate_number }}</td>
                             <td>
+                                {{ $calculation->today_account }}
                             </td>
                             <td>
+                                {{ $calculation->all_account }}
                             </td>
                             <td>
                                 <a href="{{ route('calculations.show', $calculation->id) }}" class="btn btn-primary">عرض</a>
