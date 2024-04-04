@@ -17,18 +17,76 @@
                 </ul>
             </div>
         @endif
+      
         <div class="container">
             <h1 class="my-4">عرض الحساب</h1>
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">بيانات الحساب</h5>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Driver ID: {{ $calculations->driver_id }}</li>
-                        <li class="list-group-item">Taxi Movement ID: {{ $calculations->taxi_movement_id }}</li>
-                        <li class="list-group-item">Calculate: {{ $calculations->calculate }}</li>
-                        <li class="list-group-item">Created At: {{ $calculations->created_at }}</li>
-                        <li class="list-group-item">Updated At: {{ $calculations->updated_at }}</li>
-                    </ul>
+                    <div class="row">
+                        <!-- Revenue Card -->
+                        <div class="col-xxl-6 col-md-6">
+                            <div class="card info-card revenue-card">
+                                <div class="card-body">
+                                    <h5 class="card-title">مبالغ طلبات السائق <span>| مجموع </span></h5>
+    
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-currency-dollar"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h6>LT{{ $totalMount }}</h6>
+                                            <hr>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- End Revenue Card -->
+                        <!-- Customers Card -->
+                        <div class="col-xxl-6 col-xl-6">
+    
+                            <div class="card info-card customers-card">
+    
+                                <div class="card-body">
+                                    <h5 class="card-title">الطلبات المكتملة للسائق<span>| عدد</span></h5>
+    
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-bookmark-star-fill"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h6>{{ $driverMovements }}</h6>
+                                            <hr>
+                                        </div>
+                                    </div>
+    
+                                </div>
+                            </div>
+    
+                        </div><!-- End Customers Card -->
+    
+                        <!-- Customers Card -->
+                        <div class="col-xxl-6 col-xl-6">
+    
+                            <div class="card info-card customers-card">
+    
+                                <div class="card-body">
+                                    <h5 class="card-title">المسافة التي قطعها السائق <span>| المسافة</span></h5>
+    
+                                    <div class="d-flex align-items-center">
+                                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-people"></i>
+                                        </div>
+                                        <div class="ps-3">
+                                            <h6>{{ $totalWay }}</h6>
+                                            <hr>
+                                        </div>
+                                    </div>
+    
+                                </div>
+                            </div>
+    
+                        </div><!-- End Customers Card -->
+                    </div>
                 </div>
             </div>
         </div>
