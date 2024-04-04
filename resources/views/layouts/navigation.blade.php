@@ -84,7 +84,7 @@
                             <i class="bi bi-list toggle-sidebar-btn"></i>
                         </div>
                         <div class="col-3">
-                            <a href="{{ url('/') }}" class="logo d-flex align-items-center">
+                            <a class="logo d-flex align-items-center">
                                 <img src="{{ asset('/img/logoo.png') }}"
                                     style="width: 150px;height: 50px;padding: 3px;" alt="">
                             </a>
