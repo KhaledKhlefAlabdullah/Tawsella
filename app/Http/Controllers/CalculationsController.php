@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Calculations;
+use App\Models\User;
 use App\Models\UserProfile;
 use Exception;
 use Illuminate\Http\Request;
@@ -11,15 +12,39 @@ use Illuminate\Support\Carbon;
 class CalculationsController extends Controller
 {
 
-
-    /*
-    
-    
-    $total_today = $this->todayAccounts($driver_id);
-    $total_previous = $this->totalAccounts($driver_id);
-
-*/
     /**
+     * Display a listing of the resource.
+     */
+    public function index()
+    {
+        try {
+            $drivers = User::select('users.id','up.name','t.plate_number')
+            ->join('user_profiles as up','users.id','=','up.user_id')
+            ->join('taxis as t','users.id','=','t.driver_id')->get();
+            $combinedAccounts = [];
+            foreach ($drivers as $driver) {
+                $driver_id = $driver->id;
+                $total_today = $this->todayAccounts($driver_id);
+                $total_previous = $this->totalAccounts($driver_id);
+
+                $combinedAccounts[] = (object)[
+                    'driver_id' => $driver_id,
+                    'name' => $driver->name,
+                    'plate_number' => $driver->plate_number,
+                    'today_account' => $total_today,
+                    'all_account' => $total_previous
+                ];
+            }
+
+
+            return view('calculations.index', ['calculations' => $combinedAccounts]);
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+        }
+    }
+
+
+     /**
      * Calculate today accounts
      */
     public function todayAccounts(string $driver_id)
@@ -50,23 +75,6 @@ class CalculationsController extends Controller
             return $totalAccounts ?? 0;
         } catch (Exception $e) {
             return redirect()->back()->withErrors($e->getMessage() . 'هناك خطأ في حساب المبالغ التي استلمها السائق')->withInput();
-        }
-    }
-    
-    
-    
-
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        $namedriver = UserProfile::all();
-        try {
-            $calculations = Calculations::all();
-            return view('calculations.index', ['calculations' => $calculations]);
-        } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
