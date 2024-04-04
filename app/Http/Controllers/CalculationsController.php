@@ -13,11 +13,8 @@ class CalculationsController extends Controller
 
 
     /*
-    
-    
     $total_today = $this->todayAccounts($driver_id);
     $total_previous = $this->totalAccounts($driver_id);
-
 */
     /**
      * Calculate today accounts
@@ -52,9 +49,9 @@ class CalculationsController extends Controller
             return redirect()->back()->withErrors($e->getMessage() . 'هناك خطأ في حساب المبالغ التي استلمها السائق')->withInput();
         }
     }
-    
-    
-    
+
+
+
 
     /**
      * Display a listing of the resource.
@@ -151,5 +148,5 @@ class CalculationsController extends Controller
             return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
-    
+
 }
