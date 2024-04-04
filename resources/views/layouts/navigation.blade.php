@@ -80,7 +80,7 @@
                 <div class="row">
                     <div class="d-flex align-items-center justify-content-between">
                         <i class="bi bi-list toggle-sidebar-btn"></i>
-                        <a href="{{ url('/') }}" class="logo d-flex align-items-center">
+                        <a class="logo d-flex align-items-center">
                             <img src="{{ asset('/img/logoo.png') }}" style="width: 150px;height: 50px;padding: 3px;"
                                 alt="">
                         </a>
@@ -176,7 +176,7 @@
             </a>
             <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="{{ route('services') }}">
+                    <a href="{{ url('/serve') }}">
                         <div class="ms-auto" style="margin-right: 30px">
                             <span>الخدمات</span><i class="bi bi-circle" style="margin-left: 10px"></i>
                         </div>
@@ -224,6 +224,13 @@
 
             </a>
         </li><!-- End Profile Page Nav -->
+
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="{{ url('/Contact') }}">
+                <span class="ms-auto">التواصل</span>
+                <i class="bi bi-envelope " style="margin-left: 10px"></i>
+            </a>
+        </li><!-- End Contact Page Nav -->
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="{{ url('/profiles') }}">
