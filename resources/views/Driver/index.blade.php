@@ -54,6 +54,9 @@
                                     <p class="text-center">{{ __('حالة الحساب') }}</p>
                                 </th>
                                 <th scope="col">
+                                    <p class="text-center">{{ __('المبلغ غير المسلم') }}</p>
+                                </th>
+                                <th scope="col">
                                     <p class="text-center">{{ __('ادارة') }}</p>
                                 </th>
                             </tr>
@@ -81,6 +84,12 @@
                                         <span class="badge {{ $driver->is_active ? 'bg-success' : 'bg-danger' }} ">
                                             <center>{{ $driver->is_active ? __('Active') : __('Inactive') }}</center>
                                         </span>
+                                    </td>
+                                    <td>
+                                        <p class="text-center">{{ $driver->unBring }}</p>
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('calculations.bring', $driver->driver_id) }}" class="btn btn-primary">استلام</a>
                                     </td>
                                     <td>
                                         <x-buttons 
