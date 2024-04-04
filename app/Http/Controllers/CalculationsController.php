@@ -110,8 +110,9 @@ class CalculationsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Calculations $calculations)
+    public function show(string $driver_id)
     {
+        $calculations=Calculations::where('driver_id',$driver_id)->get();
         return view('calculations.show', ['calculations' => $calculations]);
     }
 
