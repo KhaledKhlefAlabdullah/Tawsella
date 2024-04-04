@@ -34,7 +34,7 @@
                                             <i class="bi bi-currency-dollar"></i>
                                         </div>
                                         <div class="ps-3">
-                                            <h6>LT{{ $details->totalMount }}</h6>
+                                            <h6>LT{{ $details['totalMount'] }}</h6>
                                             <hr>
                                         </div>
                                     </div>
@@ -54,7 +54,7 @@
                                             <i class="bi bi-bookmark-star-fill"></i>
                                         </div>
                                         <div class="ps-3">
-                                            <h6>{{ $details->driverMovements }}</h6>
+                                            <h6>{{ $details['driverMovements'] }}</h6>
                                             <hr>
                                         </div>
                                     </div>
@@ -77,7 +77,7 @@
                                             <i class="bi bi-people"></i>
                                         </div>
                                         <div class="ps-3">
-                                            <h6>{{ $details->totalWay }}</h6>
+                                            <h6>{{ $details['totalWay'] }}</h6>
                                             <hr>
                                         </div>
                                     </div>
