@@ -126,12 +126,13 @@ class CalculationsController extends Controller
             ];
 
             $movements = TaxiMovement::select(
-                'taxi_movements.my_address as move_address',
-                'taxi_movements.destnation_address',
-                'taxi_movements.start_latitude',
-                'taxi_movements.start_longitude',
-                'taxi_movements.end_latitude',
-                'taxi_movements.end_longitude',
+                'taxi_movements.my_address as saddress',
+                'taxi_movements.destnation_address as eaddress',
+                'taxi_movements.start_latitude as slat',
+                'taxi_movements.start_longitude as along',
+                'taxi_movements.end_latitude as elat',
+                'taxi_movements.end_longitude as elong',
+                'taxi_movements.created_at as date',
                 'c.totalPrice',
                 'c.way' 
             )
