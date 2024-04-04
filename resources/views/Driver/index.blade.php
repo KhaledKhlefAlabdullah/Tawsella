@@ -54,12 +54,6 @@
                                     <p class="text-center">{{ __('حالة الحساب') }}</p>
                                 </th>
                                 <th scope="col">
-                                    <p class="text-center">{{ __('رصيد اليوم') }}</p>
-                                </th>
-                                <th scope="col">
-                                    <p class="text-center">{{ __('اجمالي الرصيد') }}</p>
-                                </th>
-                                <th scope="col">
                                     <p class="text-center">{{ __('ادارة') }}</p>
                                 </th>
                             </tr>
@@ -87,12 +81,6 @@
                                         <span class="badge {{ $driver->is_active ? 'bg-success' : 'bg-danger' }} ">
                                             <center>{{ $driver->is_active ? __('Active') : __('Inactive') }}</center>
                                         </span>
-                                    </td>
-                                    <td>
-                                        <p class="text-center">{{ $driver->total_today }}</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-center">{{ $driver->total_previous }}</p>
                                     </td>
                                     <td>
                                         <x-buttons 
