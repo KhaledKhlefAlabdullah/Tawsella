@@ -134,7 +134,7 @@ class CalculationsController extends Controller
                 'taxi_movements.end_longitude as elong',
                 'taxi_movements.created_at as date',
                 'c.totalPrice',
-                'c.way' 
+                'c.way'
             )
                 ->join('calculations as c', 'taxi_movements.id', '=', 'c.taxi_movement_id')
                 ->where(['taxi_movements.driver_id' => $driver_id, 'taxi_movements.is_completed' => true])
@@ -180,22 +180,16 @@ class CalculationsController extends Controller
      * Bring The mounts
      */
     public function bring(string $id){
-        try{
-
-            $calculations = Calculations::where(['driver_id' => $id, 'is_bring' => false])->get();
-
-            foreach($calculations as $calculation){
-                $calculation->update([
-                    'is_bring' => true
-                ]);
-            }
+        try {
+            Calculations::where(['driver_id' => $id, 'is_bring' => false])
+                       ->update(['is_bring' => true]);
 
             return redirect()->route('drivers.index')->with('success', 'تم إستلام المبلغ بنجاح');
-        }
-        catch(Exception $e){
+        } catch(Exception $e) {
             return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
+    
 
     /**
      * Remove the specified resource from storage.
