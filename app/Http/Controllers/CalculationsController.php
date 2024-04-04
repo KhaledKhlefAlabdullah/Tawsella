@@ -182,7 +182,7 @@ class CalculationsController extends Controller
     public function bring(string $id){
         try{
 
-            $calculations = Calculations::where(['driver_id' => $id, 'is_bring' => false])->get();
+            $calculations = Calculations::where('driver_id', $id)->whereNot('is_bring', true)->get();
 
             foreach($calculations as $calculation){
                 $calculation->update([
