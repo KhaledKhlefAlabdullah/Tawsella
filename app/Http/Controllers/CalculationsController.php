@@ -190,7 +190,7 @@ class CalculationsController extends Controller
                 ]);
             }
 
-            return redirect()->route('Driver.index')->with('success', 'تم إستلام المبلغ بنجاح');
+            return redirect()->route('drivers.index')->with('success', 'تم إستلام المبلغ بنجاح');
         }
         catch(Exception $e){
             return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
