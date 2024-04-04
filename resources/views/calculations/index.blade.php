@@ -38,10 +38,8 @@
                             <td>{{ $calculation->driver_id }}</td>
                             <td>{{ $calculation->taxi_movement_id }}</td>
                             <td>
-                                {{}}
                             </td>
                             <td>
-                                {{}}
                             </td>
                             <td>
                                 <a href="{{ route('calculations.show', $calculation->id) }}" class="btn btn-primary">عرض</a>
