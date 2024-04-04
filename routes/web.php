@@ -54,12 +54,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/profiles', function () {
         return view('profile.profile');
     });
-    //***************************start route Contact ******************************** */
-    Route::get('/Contact', function () {
-        return view('Contact');
-    });
-    //*****************************End route Contact ******************************** */
-    //******************************************************************************* */
 
     //***************************start route dashboard ******************************** */
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
