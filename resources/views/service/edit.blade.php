@@ -9,7 +9,7 @@
                         <div class="card-header">تعديل نوع حركة تاكسي</div>
 
                         <div class="card-body">
-                            <form method="POST" action="{{ route('taxi_movement_types.update', $movementType->id) }}">
+                            <form method="POST" action="{{ route('service.update', ['movementType' => $movementType->id]) }}">
                                 @csrf
                                 @method('PUT')
 
@@ -45,7 +45,7 @@
                                     <label for="description" class="col-md-4 col-form-label text-md-right">الوصف</label>
 
                                     <div class="col-md-6">
-                                        <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description" required>{{ $movementType->description }}</textarea>
+                                        <textarea id="description" class="form-control @error('description') is-invalid @enderror" name="description">{{ $movementType->description }}</textarea>
 
                                         @error('description')
                                             <span class="invalid-feedback" role="alert">

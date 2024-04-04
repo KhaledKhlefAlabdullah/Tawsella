@@ -89,30 +89,21 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <p class="text-center">{{ $driver->total_today}}</p>
+                                        <p class="text-center">{{ $driver->total_today }}</p>
                                     </td>
                                     <td>
-                                        <p class="text-center">{{ $driver->total_previous}}</p>
+                                        <p class="text-center">{{ $driver->total_previous }}</p>
                                     </td>
                                     <td>
-                                            <div class="btn-group" role="group" aria-label="Driver Actions">
-                                                <form action="{{ route('drivers.destroy', ['id' => $driver->driver_id]) }}" method="POST" style="display: inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger" title="{{ __('Delete') }}"><i class="fas fa-trash"></i></button>
-                                                </form>
-                                        
-                                                <span class="pipe">|</span>
-                                        
-                                                <a href="{{ route('drivers.edit', ['id' => $driver->driver_id]) }}" class="btn btn-primary rounded" title="{{ __('Edit') }}"><i class="fas fa-pencil-alt"></i></a>
-                                                
-                                                <span class="pipe">|</span>
-                                        
-                                                <a href="{{ route('drivers.show', ['id' => $driver->driver_id]) }}" class="btn btn-info rounded" title="{{ __('Details') }}"><i class="fas fa-info-circle"></i></a>
-                                            </div>
+                                        <x-buttons 
+                                        :delete-route="route('drivers.destroy', ['id' => $driver->driver_id])" 
+                                        :edit-route="route('drivers.edit', ['id' => $driver->driver_id])" 
+                                        :show-route="route('drivers.show', ['id' => $driver->driver_id])" 
+                                        :showDeleteButton="true" 
+                                        :showEditButton="true" 
+                                        :showDetailsButton="true" 
+                                    />
                                     </td>
-
-
                                 </tr>
                             @endforeach
 

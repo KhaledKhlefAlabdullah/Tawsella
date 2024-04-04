@@ -5,14 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
-use App\Http\Requests\DriverStateRequest;
-use App\Http\Requests\UpdateDriverRequest;
 use App\Models\Calculations;
 use App\Models\Taxi;
-use App\Models\UserProfile;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\Rule;
 
 class DriversController extends Controller
 {
@@ -20,7 +16,7 @@ class DriversController extends Controller
     {
         try {
 
-            $drivers = $this->getDrivers(['users.user_type' => 'driver'],'get');
+            $drivers = $this->getDrivers(['users.user_type' => 'driver'], 'get');
 
             $combinedAccounts = $this->getCalculations($drivers);
 
@@ -34,7 +30,7 @@ class DriversController extends Controller
     {
         try {
             // العثور على بيانات السائق باستخدام المعرف الممرر
-            $driver = $this->getDrivers(['users.id' => $id,'users.user_type' => 'driver'],'first');
+            $driver = $this->getDrivers(['users.id' => $id, 'users.user_type' => 'driver'], 'first');
             // التحقق مما إذا كان السائق موجودًا
             if (!$driver) {
                 return abort(404, 'Driver not found');
@@ -51,10 +47,10 @@ class DriversController extends Controller
     {
         try {
 
-            $driver = $this->getDrivers(['users.id' => $id,'users.user_type' => 'driver'],'first');
+            $driver = $this->getDrivers(['users.id' => $id, 'users.user_type' => 'driver'], 'first');
 
             if (!$driver) {
-                return redirect()->back()->withErrors(['driver is not exists'.'An error occurred. Please try again.'])->withInput();
+                return redirect()->back()->withErrors(['driver is not exists' . 'An error occurred. Please try again.'])->withInput();
             }
             return view('Driver.show', ['driver' => $driver]);
         } catch (Exception $e) {
@@ -97,6 +93,11 @@ class DriversController extends Controller
         try {
             $driver = getAndCheckModelById(User::class, $id);
 
+            $taxi = Taxi::where('driver_id',$id)->first();
+            $taxi->update([
+                'driver_id' => null
+            ]);
+
             $driver->delete();
 
             return redirect()->back()->with('success', 'تم حذف السائق بنجاح');
@@ -112,12 +113,11 @@ class DriversController extends Controller
      */
     public function getDrivers(array $conditions, $method)
     {
-        $query = User::select('user_profiles.name', 'users.email', 'user_profiles.phoneNumber', 'user_profiles.avatar', 'users.id', 'users.is_active', 'taxis.plate_number', 'taxis.lamp_number')
-                    ->leftJoin('user_profiles', 'users.id', '=', 'user_profiles.user_id')
-                    ->leftJoin('taxis', 'users.id', '=', 'taxis.driver_id')
-                    ->leftJoin('calculations', 'users.id', '=', 'calculations.driver_id')
-                    ->where('users.user_type', 'driver');
-    
+        $query = User::select('users.id', 'user_profiles.name', 'users.email', 'user_profiles.phoneNumber', 'user_profiles.avatar', 'users.id', 'users.is_active', 'taxis.plate_number', 'taxis.lamp_number')
+            ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
+            ->leftJoin('taxis', 'users.id', '=', 'taxis.driver_id')
+            ->where('users.user_type', 'driver');
+
         // Apply the specified method
         if ($method === 'get') {
             return $query->get();
@@ -128,46 +128,67 @@ class DriversController extends Controller
         }
     }
 
-        /**
+    /**
      * Get Drivers calculations
      */
     public function getCalculations($drivers)
     {
-        // Get today's date
-        $today = Carbon::now()->toDateString();
-
-        // Get driver accounts for today
-        $todayAccounts = Calculations::select('driver_id', DB::raw('SUM(totalPrice) as total_today'))
-            ->whereDate('created_at', $today)
-            ->groupBy('driver_id')
-            ->get();
-
-        // Get total account for each driver
-        $totalAccounts = Calculations::select('driver_id', DB::raw('SUM(totalPrice) as total_previous'))
-            ->groupBy('driver_id')
-            ->get();
-
         // Combine today's and previous accounts
         $combinedAccounts = [];
         foreach ($drivers as $driver) {
             $driver_id = $driver->id;
-            $todayTotal = $todayAccounts->firstWhere('driver_id', $driver_id)->total_today ?? 0;
-            $previousTotal = $totalAccounts->firstWhere('driver_id', $driver_id)->total_previous ?? 0;
+            $total_today = $this->todayAccounts($driver_id);
+            $total_previous = $this->totalAccounts($driver_id);
 
             $combinedAccounts[] = (object)[
                 'driver_id' => $driver_id,
                 'name' => $driver->name,
                 'email' => $driver->email,
                 'phoneNumber' => $driver->phoneNumber,
-                'total_today' => $todayTotal,
-                'total_previous' => $previousTotal,
+                // Get driver accounts for today
+                'total_today' => $total_today,
+                // Get total account for each driver
+                'total_previous' => $total_previous,
                 'is_active' => $driver->is_active,
                 'plate_number' => $driver->plate_number,
-                'lamp_number' => $driver->lamp_number,
+                'lamp_number' => $driver->lamp_number
             ];
         }
 
         return $combinedAccounts;
     }
 
+    /**
+     * Calculate today accounts
+     */
+    public function todayAccounts(string $driver_id)
+    {
+        try {
+            // Get today's date
+            $today = Carbon::now()->toDateString();
+
+            $todayAccounts = Calculations::where('driver_id', $driver_id)
+                ->whereDate('created_at', $today)
+                ->sum('totalPrice');
+
+            return $todayAccounts ?? 0;
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors($e->getMessage() . 'هناك خطأ في حساب المبالغ التي استلمها السائق اليوم')->withInput();
+        }
+    }
+
+    /**
+     * Get the all previos accounts for driver
+     */
+    public function totalAccounts(string $driver_id)
+    {
+        try {
+            $totalAccounts = Calculations::where('driver_id', $driver_id)
+                ->sum('totalPrice');
+
+            return $totalAccounts ?? 0;
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors($e->getMessage() . 'هناك خطأ في حساب المبالغ التي استلمها السائق')->withInput();
+        }
+    }
 }

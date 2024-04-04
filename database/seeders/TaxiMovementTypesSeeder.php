@@ -57,13 +57,13 @@ class TaxiMovementTypesSeeder extends Seeder
             ['type' => 'الحمران', 'price' => 1400],
         ];
 
-        foreach ($movementTypes as $movementType) {
-            DB::table('taxi_movement_types')->insert([
-                'id' => Str::uuid(),
-                'type' => $movementType['type'],
-                'price' => $movementType['price']
-            ]);
-        }   
+        // foreach ($movementTypes as $movementType) {
+        //     DB::table('taxi_movement_types')->insert([
+        //         'id' => Str::uuid(),
+        //         'type' => $movementType['type'],
+        //         'price' => $movementType['price']
+        //     ]);
+        // }   
         
         DB::table('taxi_movement_types')->insert([
             'id' => 't-m-t-1',
@@ -74,6 +74,7 @@ class TaxiMovementTypesSeeder extends Seeder
         DB::table('taxi_movement_types')->insert([
             'id' => 't-m-t-2',
             'type' => 'طلب خارجي',
+            'is_onKM' => true,
             'price' => 0.5
         ]);
     }

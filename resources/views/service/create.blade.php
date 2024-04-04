@@ -9,7 +9,7 @@
                     <div class="card-header">إضافة نوع حركة تاكسي جديد</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('taxi_movement_types.store') }}">
+                        <form method="POST" action="{{ route('service.store') }}">
                             @csrf
 
                             <div class="form-group row">
@@ -17,7 +17,11 @@
 
                                 <div class="col-md-6">
                                     <input id="type" type="text" class="form-control @error('type') is-invalid @enderror" name="type" value="{{ old('type') }}" required>
-
+                                    @if (session('success'))
+                                    <div class="alert alert-success">
+                                        {{ session('success') }}
+                                    </div>
+                                @endif
                                     @error('type')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>

@@ -176,7 +176,7 @@
             </a>
             <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="{{ url('/serve') }}">
+                    <a href="{{ route('services') }}">
                         <div class="ms-auto" style="margin-right: 30px">
                             <span>الخدمات</span><i class="bi bi-circle" style="margin-left: 10px"></i>
                         </div>
