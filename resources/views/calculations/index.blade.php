@@ -45,8 +45,6 @@
                             </td>
                             <td>
                                 <x-buttons 
-                                        :delete-route="route('drivers.destroy', ['id' => $driver->driver_id])" 
-                                        :edit-route="route('drivers.edit', ['id' => $driver->driver_id])" 
                                         :show-route="route('calculations.show', $calculation->driver_id)" 
                                         :showDeleteButton="false" 
                                         :showEditButton="false" 
