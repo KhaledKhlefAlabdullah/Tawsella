@@ -152,10 +152,10 @@
                                         {{ $movement->totalPrice }}
                                     </td>
                                     <td>
-                                        {{ $movement->way }}
+                                        {{ $movement->way }} KM
                                     </td>
                                     <td>
-                                        {{ $movement->date }} KM
+                                        {{ $movement->date }} 
                                     </td>
                                     {{-- <td>
                                         @if ($movement->taxi_id)
