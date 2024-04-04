@@ -34,14 +34,14 @@
                     @foreach ($calculations as $index=> $calculation)
                         <tr>
                             <th scope="row">{{ $index + 1 }}</th>
-                            
+
                             <td>{{ $calculation->driver_id }}</td>
                             <td>{{ $calculation->taxi_movement_id }}</td>
                             <td>
-                                {{$total_today}}
+                                {{}}
                             </td>
                             <td>
-                                {{$total_previous}}
+                                {{}}
                             </td>
                             <td>
                                 <a href="{{ route('calculations.show', $calculation->id) }}" class="btn btn-primary">عرض</a>
