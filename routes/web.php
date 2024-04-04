@@ -76,7 +76,7 @@ Route::get('/Applatform', function () {
     // For create the drivers acounts
     Route::post('/store-driver', [RegisteredUserController::class, 'admin_store'])->name('store-driver');
     Route::group(['prefix' => 'drivers'], function () {
-        Route::get('/', [DriversController::class, 'index']);
+        Route::get('/', [DriversController::class, 'index'])->name('drivers.index');
         Route::get('/{id}', [DriversController::class, 'show'])->name('drivers.show');
         Route::get('/edit/{id}', [DriversController::class, 'edit'])->name('drivers.edit');
         Route::put('/update/{id}', [UserProfileController::class, 'update'])->name('drivers.update');
@@ -156,7 +156,6 @@ Route::get('/Applatform', function () {
     Route::get('/view-map/{selector}/{id}', [TaxiMovementController::class, 'view_map'])->name('map');
 });
 
-Route::get('/drivers', [DriversController::class, 'index']);
 
 
 

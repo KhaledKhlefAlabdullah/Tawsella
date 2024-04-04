@@ -114,7 +114,7 @@
             </a>
             <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
-                    <a href="{{ url('/drivers/') }}">
+                    <a href="{{ route('drivers.index') }}">
                         <div class="ms-auto" style="margin-right: 30px">
                             <span>عرض السائقين</span><i class="bi bi-circle" style="margin-left: 10px"></i>
                         </div>
