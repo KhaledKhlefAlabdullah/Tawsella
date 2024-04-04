@@ -27,7 +27,7 @@
                         <div class="col-xxl-6 col-md-6">
                             <div class="card info-card revenue-card">
                                 <div class="card-body">
-                                    <h5 class="card-title">مبالغ طلبات السائق <span>| مجموع </span></h5>
+                                    <h5 >مبالغ طلبات السائق <span>| مجموع </span></h5>
     
                                     <div class="d-flex align-items-center">
                                         <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -47,7 +47,7 @@
                             <div class="card info-card customers-card">
     
                                 <div class="card-body">
-                                    <h5 class="card-title">الطلبات المكتملة للسائق<span>| عدد</span></h5>
+                                    <h5>الطلبات المكتملة للسائق<span>| عدد</span></h5>
     
                                     <div class="d-flex align-items-center">
                                         <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
@@ -70,7 +70,7 @@
                             <div class="card info-card customers-card">
     
                                 <div class="card-body">
-                                    <h5 class="card-title">المسافة التي قطعها السائق <span>| المسافة</span></h5>
+                                    <h5 >المسافة التي قطعها السائق <span>| المسافة</span></h5>
     
                                     <div class="d-flex align-items-center">
                                         <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
