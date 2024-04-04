@@ -83,7 +83,7 @@
                             <i class="bi bi-list toggle-sidebar-btn"></i>
                         </div>
                         <a class="logo d-flex align-items-center">
-                            <img src="{{ asset('/img/logoo.png') }}" 
+                            <img src="{{ asset('/img/logoo.png') }}" style="width: 100px;height: 60px;margin: 10px"
                                 alt="">
                             <span class="d-none d-lg-block" style="font-family: 'Cairo', sans-serif ;color: white; ">{{ __('الشهباء') }}</span>
                         </a>
