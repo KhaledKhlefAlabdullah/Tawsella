@@ -26,11 +26,11 @@ class TaxiRequest extends FormRequest
         $id = $this->route('id');
 
         return [
-            'driver_id' => 'required|exists:users,id',
-            'car_name' => 'required|string',
-            'lamp_number' => 'required|string',
-            'plate_number' => 'required|string'.Rule::unique('taxis')->ignore(Taxi::where('id', $id)->pluck('id')->first()),
-            'car_detailes' => 'nullable|string'.Rule::unique('taxis')->ignore(Taxi::where('id', $id)->pluck('id')->first()),
+            'driver_id' => ['required','exists:users,id'],
+            'car_name' => ['required','string'],
+            'lamp_number' => ['required','string'],
+            'plate_number' => ['required','string', Rule::unique('taxis')->ignore(Taxi::where('id', $id)->pluck('id')->first())],
+            'car_detailes' => ['nullable','string', Rule::unique('taxis')->ignore(Taxi::where('id', $id)->pluck('id')->first())],
         ];
     }
 }
