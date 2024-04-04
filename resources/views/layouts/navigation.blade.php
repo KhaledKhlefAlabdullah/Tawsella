@@ -78,21 +78,18 @@
             <div class="col-4"></div>
             <div class="col-4">
                 <div class="row">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div class="col-3"></div>
-                        <div class="col-3">
-                            <i class="bi bi-list toggle-sidebar-btn"></i>
-                        </div>
-                        <div class="col-3">
-                            <a class="logo d-flex align-items-center">
-                                <img src="{{ asset('/img/logoo.png') }}"
-                                    style="width: 150px;height: 50px;padding: 3px;" alt="">
-                            </a>
-                        </div>
-                        <div class="col-3"></div>
-
-                    </div><!-- End Logo -->
+                    <div class="col-lg-3 d-lg-block d-none"></div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <i class="bi bi-list toggle-sidebar-btn"></i>
+                    </div>
+                    <div class="col-lg-3 col-md-6 col-sm-6">
+                        <a class="logo d-flex align-items-center">
+                            <img src="{{ asset('/img/logoo.png') }}" style="width: 150px;height: 50px;padding: 3px;" alt="">
+                        </a>
+                    </div>
+                    <div class="col-lg-3 d-lg-block d-none"></div>
                 </div>
+
             </div>
         </div>
     </div>
