@@ -44,16 +44,15 @@
                                 {{ $calculation->all_account }}
                             </td>
                             <td>
-                                <a href="{{ route('calculations.show', $calculation->driver_id) }}" class="btn btn-primary">عرض</a>
-                                <a href="{{ route('calculations.edit', $calculation->driver_id) }}"
-                                    class="btn btn-success">تعديل</a>
-                                <form action="{{ route('calculations.destroy', $calculation->driver_id) }}" method="POST"
-                                    style="display: inline;">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-danger"
-                                        onclick="return confirm('Are you sure you want to delete?')">حذف</button>
-                                </form>
+                                <x-buttons 
+                                        :delete-route="route('drivers.destroy', ['id' => $driver->driver_id])" 
+                                        :edit-route="route('drivers.edit', ['id' => $driver->driver_id])" 
+                                        :show-route="route('calculations.show', $calculation->driver_id)" 
+                                        :showDeleteButton="false" 
+                                        :showEditButton="false" 
+                                        :showDetailsButton="true" 
+                                    />
+                               
                             </td>
                         </tr>
                     @endforeach
