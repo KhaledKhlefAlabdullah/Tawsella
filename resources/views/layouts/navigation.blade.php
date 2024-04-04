@@ -76,20 +76,16 @@
                 </nav><!-- End Icons Navigation -->
             </div>
             <div class="col-4"></div>
-            <div class="col-4">
+            <div class="col-lg-4 d-lg-block d-none">
                 <div class="row">
-                    <div class="col-lg-3 d-lg-block d-none"></div>
-                    <div class="col-lg-3 col-md-6 col-sm-6">
+                    <div class="d-flex align-items-center justify-content-between">
                         <i class="bi bi-list toggle-sidebar-btn"></i>
-                    </div>
-                    <div class="col-lg-3 col-md-6 col-sm-6">
                         <a class="logo d-flex align-items-center">
-                            <img src="{{ asset('/img/logoo.png') }}" style="width: 150px;height: 50px;padding: 3px;" alt="">
+                            <img src="{{ asset('/img/logoo.png') }}" style="width: 150px;height: 50px;padding: 3px;"
+                                alt="">
                         </a>
-                    </div>
-                    <div class="col-lg-3 d-lg-block d-none"></div>
+                    </div><!-- End Logo -->
                 </div>
-
             </div>
         </div>
     </div>
@@ -132,8 +128,7 @@
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-chevron-down "></i><span class="ms-auto">السيارات</span><i class="bi bi-taxi-front-fill"
-                    style="margin-left: 10px"></i>
+                <i class="bi bi-chevron-down "></i><span class="ms-auto">السيارات</span><i class="bi bi-taxi-front-fill" style="margin-left: 10px"></i>
             </a>
             <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
@@ -154,8 +149,7 @@
         </li><!-- End Forms Nav -->
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#taxi-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-chevron-down "></i><span class="ms-auto">الطلبات</span><i class="bi bi-hourglass"
-                    style="margin-left: 10px"></i>
+                <i class="bi bi-chevron-down "></i><span class="ms-auto">الطلبات</span><i class="bi bi-hourglass" style="margin-left: 10px"></i>
             </a>
             <ul id="taxi-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
