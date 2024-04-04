@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Taxi;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TaxiRequest extends FormRequest
 {
@@ -21,12 +23,14 @@ class TaxiRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->route('id');
+
         return [
             'driver_id' => 'required|exists:users,id',
             'car_name' => 'required|string',
             'lamp_number' => 'required|string',
-            'plate_number' => 'required|string|unique:taxis,plate_number',
-            'car_detailes' => 'nullable|string',
+            'plate_number' => 'required|string'.Rule::unique('taxis')->ignore(Taxi::where('id', $id)->pluck('id')->first()),
+            'car_detailes' => 'nullable|string'.Rule::unique('taxis')->ignore(Taxi::where('id', $id)->pluck('id')->first()),
         ];
     }
 }
