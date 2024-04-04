@@ -21,7 +21,7 @@
                                     @foreach ($drivers as $driver)
                                         <option value="{{ $driver->id }}"
                                             {{ $taxi->driver_id == $driver->id ? 'selected' : '' }}>
-                                            {{ $taxi->driver_id == $driver->id ? $driver->name : '' }}
+                                            {{ $driver->name }}
                                         </option>
                                     @endforeach
                                 </select>
