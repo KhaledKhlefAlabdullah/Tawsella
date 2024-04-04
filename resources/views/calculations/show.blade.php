@@ -24,9 +24,9 @@
                 <div class="container">
                     <div class="row m-4">
                         <!-- Revenue Card -->
-                        <div class="col-xxl-6 col-md-6 m-2">
+                        <div class="col-xxl-6 col-md-6">
                             <div class="card info-card revenue-card">
-                                <div class="card-body">
+                                <div class="card-body m-2">
                                     <h5>مبالغ طلبات السائق <span>| مجموع </span></h5>
 
                                     <div class="d-flex align-items-center">
@@ -43,11 +43,11 @@
                             </div>
                         </div><!-- End Revenue Card -->
                         <!-- Customers Card -->
-                        <div class="col-xxl-6 col-xl-6 m-2">
+                        <div class="col-xxl-6 col-xl-6">
 
                             <div class="card info-card customers-card">
 
-                                <div class="card-body">
+                                <div class="card-body m-2">
                                     <h5>الطلبات المكتملة للسائق<span>| عدد</span></h5>
 
                                     <div class="d-flex align-items-center">
@@ -67,11 +67,11 @@
                         </div><!-- End Customers Card -->
 
                         <!-- Customers Card -->
-                        <div class="col-xxl-6 col-xl-6 m-2">
+                        <div class="col-xxl-6 col-xl-6">
 
                             <div class="card info-card customers-card">
 
-                                <div class="card-body">
+                                <div class="card-body m-2">
                                     <h5>المسافة التي قطعها السائق <span>| المسافة</span></h5>
 
                                     <div class="d-flex align-items-center">
@@ -90,11 +90,11 @@
 
                         </div><!-- End Customers Card -->
                         <!-- Customers Card -->
-                        <div class="col-xxl-6 col-xl-6 m-2">
+                        <div class="col-xxl-6 col-xl-6">
 
                             <div class="card info-card customers-card">
 
-                                <div class="card-body">
+                                <div class="card-body m-2">
                                     {{-- <h5 >المسافة التي قطعها السائق <span>| المسافة</span></h5> --}}
 
                                     <div class="d-flex align-items-center">
