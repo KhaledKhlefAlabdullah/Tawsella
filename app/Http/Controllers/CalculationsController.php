@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Calculations;
+use App\Models\TaxiMovement;
 use App\Models\User;
 use App\Models\UserProfile;
 use Exception;
@@ -18,9 +19,10 @@ class CalculationsController extends Controller
     public function index()
     {
         try {
-            $drivers = User::select('users.id','up.name','t.plate_number')
-            ->join('user_profiles as up','users.id','=','up.user_id')
-            ->join('taxis as t','users.id','=','t.driver_id')->get();
+
+            $drivers = User::select('users.id', 'up.name', 't.plate_number')
+                ->join('user_profiles as up', 'users.id', '=', 'up.user_id')
+                ->join('taxis as t', 'users.id', '=', 't.driver_id')->get();
             $combinedAccounts = [];
             foreach ($drivers as $driver) {
                 $driver_id = $driver->id;
@@ -44,7 +46,7 @@ class CalculationsController extends Controller
     }
 
 
-     /**
+    /**
      * Calculate today accounts
      */
     public function todayAccounts(string $driver_id)
@@ -112,8 +114,36 @@ class CalculationsController extends Controller
      */
     public function show(string $driver_id)
     {
-        $calculations=Calculations::where('driver_id',$driver_id)->get();
-        return view('calculations.show', ['calculations' => $calculations]);
+        try {
+
+            $driverMovements = TaxiMovement::where(['driver_id' => $driver_id, 'is_completed' => true])->count();
+            $totalMount = $this->totalAccounts($driver_id);
+            $totalWay = Calculations::where('driver_id', $driver_id)->sum('way');
+            $details = [
+                'driverMovements' => $driverMovements,
+                'totalMount' => $totalMount,
+                'totalWay' => $totalWay
+            ];
+
+            $movements = TaxiMovement::select(
+                'taxi_movements.my_address as saddress',
+                'taxi_movements.destnation_address as eaddress',
+                'taxi_movements.start_latitude as slat',
+                'taxi_movements.start_longitude as along',
+                'taxi_movements.end_latitude as elat',
+                'taxi_movements.end_longitude as elong',
+                'taxi_movements.created_at as date',
+                'c.totalPrice',
+                'c.way' 
+            )
+                ->join('calculations as c', 'taxi_movements.id', '=', 'c.taxi_movement_id')
+                ->where(['taxi_movements.driver_id' => $driver_id, 'taxi_movements.is_completed' => true])
+                ->get();
+
+            return view('calculations.show', ['details' => $details, 'movements' => $movements]);
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+        }
     }
 
 
@@ -160,5 +190,4 @@ class CalculationsController extends Controller
             return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
-
 }
