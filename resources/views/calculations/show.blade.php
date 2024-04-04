@@ -22,7 +22,7 @@
             <h1 class="my-4">عرض الحساب</h1>
             <div class="card">
                 <div class="card-body">
-                    <div class="row">
+                    <div class="row m-2">
                         <!-- Revenue Card -->
                         <div class="col-xxl-6 col-md-6">
                             <div class="card info-card revenue-card">
