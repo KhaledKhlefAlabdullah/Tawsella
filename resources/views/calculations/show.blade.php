@@ -122,7 +122,6 @@
                                 <th scope="col">#</th>
                                 <th scope="col">عنوان البداية </th>
                                 <th scope="col">عنوان الوجهة</th>
-                                <th scope="col">المسافة</th>
                                 <th scope="col">المبلغ الاجمالي</th>
                                 <th scope="col">المسافة</i></th>
                                 <th scope="col">التاريخ</i></th>
@@ -145,9 +144,6 @@
 
                                     <td>{{ $movement->saddress }}</td>
                                     <td>{{ $movement->eaddress }}</td>
-                                    <td>
-                                        {{ $movement->date }}
-                                    </td>
                                     <td>
                                         {{ $movement->totalPrice }}
                                     </td>

@@ -52,12 +52,18 @@ class AuthenticatedSessionController extends Controller
             return redirect()->intended(RouteServiceProvider::HOME);
         } catch (AuthenticationException $e) {
             // Catch AuthenticationException and return an unauthorized response
-            return api_response(errors: [$e->getMessage(), 'Unauthorized'], message: 'Invalid credentials', code: 401);
+            if ($request->wantsJson())
+                return api_response(errors: [$e->getMessage(), 'Unauthorized'], message: 'Invalid credentials', code: 401);
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         } catch (ValidationValidationException $e) {
             // Catch ValidationException and return a validation error response
-            return api_response(errors: [$e->errors()], message: 'Validation Error', code: 422);
+            if ($request->wantsJson())
+                return api_response(errors: [$e->errors()], message: 'Validation Error', code: 422);
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'login error', code: 500);
+            if ($request->wantsJson())
+                return api_response(errors: [$e->getMessage()], message: 'login error', code: 500);
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -70,7 +76,7 @@ class AuthenticatedSessionController extends Controller
             if (request()->wantsJson()) {
                 $request->user()->currentAccessToken()->delete();
 
-                return api_response(message:'Logout successfully');
+                return api_response(message: 'Logout successfully');
             }
 
             Auth::guard('web')->logout();
@@ -84,10 +90,10 @@ class AuthenticatedSessionController extends Controller
             if (request()->wantsJson()) {
 
                 // Handle any exceptions that might occur during logout
-                return api_response(errors:[$e->getMessage()],message:'there error in logout try agin');
+                return api_response(errors: [$e->getMessage()], message: 'there error in logout try agin');
             }
         }
 
-        return abort(500,'there error in logout try agin');
+        return abort(500, 'there error in logout try agin');
     }
 }
