@@ -34,10 +34,7 @@
                     @foreach ($calculations as $index=> $calculation)
                         <tr>
                             <th scope="row">{{ $index + 1 }}</th>
-                            <?php
-                                $total_today = todayAccounts($calculation->driver_id);
-                                $total_previous = totalAccounts($calculation->driver_id);
-                            ?>
+                            
                             <td>{{ $calculation->driver_id }}</td>
                             <td>{{ $calculation->taxi_movement_id }}</td>
                             <td>
