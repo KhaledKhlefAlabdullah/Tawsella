@@ -25,17 +25,27 @@
                         <th scope="col">ID</th>
                         <th scope="col">السائق </th>
                         <th scope="col">معرف حركة سيارات الأجرة</th>
-                        <th scope="col">حساب </th>
+                        <th scope="col">الرصيد اليومي </th>
+                        <th scope="col">الرصيد الكلي </th>
                         <th scope="col">الإجراء</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($calculations as $index=> $calculation)
                         <tr>
-                            <th scope="row">{{ $index + 1 }}</th>   
+                            <th scope="row">{{ $index + 1 }}</th>
+                            <?php
+                                $total_today = $this->todayAccounts($calculation->driver_id);
+                                $total_previous = $this->totalAccounts($calculation->driver_id);
+                            ?>
                             <td>{{ $calculation->driver_id }}</td>
                             <td>{{ $calculation->taxi_movement_id }}</td>
-                            <td>{{ $calculation->calculate }}</td>
+                            <td>
+                                {{$total_today}}
+                            </td>
+                            <td>
+                                {{$total_previous}}
+                            </td>
                             <td>
                                 <a href="{{ route('calculations.show', $calculation->id) }}" class="btn btn-primary">عرض</a>
                                 <a href="{{ route('calculations.edit', $calculation->id) }}"
