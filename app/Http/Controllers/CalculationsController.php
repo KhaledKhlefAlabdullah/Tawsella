@@ -132,8 +132,8 @@ class CalculationsController extends Controller
                 'taxi_movements.start_longitude',
                 'taxi_movements.end_latitude',
                 'taxi_movements.end_longitude',
-                'calculations.totalPrice',
-                'calculations.way'
+                'c.totalPrice',
+                'c.way' 
             )
                 ->join('calculations as c', 'taxi_movements.id', '=', 'c.taxi_movement_id')
                 ->where(['taxi_movements.driver_id' => $driver_id, 'taxi_movements.is_completed' => true])
