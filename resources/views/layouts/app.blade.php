@@ -78,7 +78,7 @@
         </div>
         <div class="credits">
 
-            <h6><b> الشركة المصممة : <a href="https://abdalrhmanal.github.io/CV-MY">Smart Code Enginer Company</a></b>
+            <h6><b> الشركة المصممة : <a href="">Smart Code Enginer Company</a></b>
             </h6>
         </div>
     </footer><!-- End Footer -->

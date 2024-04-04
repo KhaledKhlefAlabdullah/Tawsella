@@ -139,6 +139,7 @@ Route::get('/Applatform', function () {
         Route::get('/', [CalculationsController::class, 'index'])->name('calculations.index');
 
         Route::get('/{calculations}', [CalculationsController::class, 'show'])->name('calculations.show');
+        Route::get('/bring/{calculations}', [CalculationsController::class, 'bring'])->name('calculations.bring');
 
         Route::get('/create', [CalculationsController::class, 'create'])->name('calculations.create');
         Route::post('/store', [CalculationsController::class, 'store'])->name('calculations.store');

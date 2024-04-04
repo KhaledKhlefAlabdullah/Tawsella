@@ -176,6 +176,26 @@ class CalculationsController extends Controller
         }
     }
 
+    /**
+     * Bring The mounts
+     */
+    public function bring(string $id){
+        try{
+
+            $calculations = Calculations::where(['driver_id' => $id, 'is_bring' => false])->get();
+
+            foreach($calculations as $calculation){
+                $calculation->update([
+                    'is_bring' => true
+                ]);
+            }
+
+            return redirect()->back()->with('success', 'تم إنشاء الحساب بنجاح');
+        }
+        catch(Exception $e){
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+        }
+    }
 
     /**
      * Remove the specified resource from storage.

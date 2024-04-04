@@ -294,7 +294,7 @@ class TaxiMovementController extends Controller
                 $totalPrice = $movement_type->price;
             }
 
-            Calculations::create([
+            $Calculation = Calculations::create([
                 'driver_id' => Auth::id(),
                 'taxi_movement_id' => $id,
                 'totalPrice' => $totalPrice,
@@ -317,7 +317,8 @@ class TaxiMovementController extends Controller
                 $customerName,
                 'تم اكمال طلب الزبون من ' . $from . 'إلى ' . $to
             );
-            return api_response(message: 'success');
+            
+            return api_response(data: $Calculation->totalPrice ,message: 'success');
         } catch (Exception $e) {
             return api_response(errors: $e->getMessage(), message: 'error', code: 500);
         }
