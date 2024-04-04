@@ -24,7 +24,7 @@
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">السائق </th>
-                        <th scope="col">معرف حركة سيارات الأجرة</th>
+                        <th scope="col">رقم السيارة</th>
                         <th scope="col">الرصيد اليومي </th>
                         <th scope="col">الرصيد الكلي </th>
                         <th scope="col">الإجراء</th>
