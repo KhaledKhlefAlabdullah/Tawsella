@@ -44,10 +44,10 @@
                                 {{ $calculation->all_account }}
                             </td>
                             <td>
-                                <a href="{{ route('calculations.show', $calculation->id) }}" class="btn btn-primary">عرض</a>
-                                <a href="{{ route('calculations.edit', $calculation->id) }}"
+                                <a href="{{ route('calculations.show', $calculation->driver_id) }}" class="btn btn-primary">عرض</a>
+                                <a href="{{ route('calculations.edit', $calculation->driver_id) }}"
                                     class="btn btn-success">تعديل</a>
-                                <form action="{{ route('calculations.destroy', $calculation->id) }}" method="POST"
+                                <form action="{{ route('calculations.destroy', $calculation->driver_id) }}" method="POST"
                                     style="display: inline;">
                                     @csrf
                                     @method('DELETE')
