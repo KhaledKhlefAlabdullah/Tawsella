@@ -5,9 +5,56 @@ namespace App\Http\Controllers;
 use App\Models\Calculations;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class CalculationsController extends Controller
 {
+
+
+    /*
+    
+    
+    $total_today = $this->todayAccounts($driver_id);
+    $total_previous = $this->totalAccounts($driver_id);
+
+*/
+    /**
+     * Calculate today accounts
+     */
+    public function todayAccounts(string $driver_id)
+    {
+        try {
+            // Get today's date
+            $today = Carbon::now()->toDateString();
+
+            $todayAccounts = Calculations::where('driver_id', $driver_id)
+                ->whereDate('created_at', $today)
+                ->sum('totalPrice');
+
+            return $todayAccounts ?? 0;
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors($e->getMessage() . 'هناك خطأ في حساب المبالغ التي استلمها السائق اليوم')->withInput();
+        }
+    }
+
+    /**
+     * Get the all previos accounts for driver
+     */
+    public function totalAccounts(string $driver_id)
+    {
+        try {
+            $totalAccounts = Calculations::where('driver_id', $driver_id)
+                ->sum('totalPrice');
+
+            return $totalAccounts ?? 0;
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors($e->getMessage() . 'هناك خطأ في حساب المبالغ التي استلمها السائق')->withInput();
+        }
+    }
+    
+    
+    
+
     /**
      * Display a listing of the resource.
      */

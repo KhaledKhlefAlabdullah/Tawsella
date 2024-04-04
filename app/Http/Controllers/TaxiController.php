@@ -8,7 +8,6 @@ use App\Models\Taxi;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class TaxiController extends Controller
 {
