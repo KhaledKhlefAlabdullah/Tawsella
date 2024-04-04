@@ -30,9 +30,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($calculations as $calculation)
+                    @foreach ($calculations as $index=> $calculation)
                         <tr>
-                            <th scope="row">{{ $calculation->id }}</th>
+                            <th scope="row">{{ $index + 1 }}</th>   
                             <td>{{ $calculation->driver_id }}</td>
                             <td>{{ $calculation->taxi_movement_id }}</td>
                             <td>{{ $calculation->calculate }}</td>

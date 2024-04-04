@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Calculations;
+use App\Models\UserProfile;
 use Exception;
 use Illuminate\Http\Request;
 
@@ -13,6 +14,7 @@ class CalculationsController extends Controller
      */
     public function index()
     {
+        $namedriver = UserProfile::all();
         try {
             $calculations = Calculations::all();
             return view('calculations.index', ['calculations' => $calculations]);
