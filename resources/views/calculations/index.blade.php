@@ -35,7 +35,7 @@
                         <tr>
                             <th scope="row">{{ $index + 1 }}</th>
 
-                            <td>{{ $calculation->driver_id }}</td>
+                            <td>{{ $calculation->name }}</td>
                             <td>{{ $calculation->taxi_movement_id }}</td>
                             <td>
                             </td>
