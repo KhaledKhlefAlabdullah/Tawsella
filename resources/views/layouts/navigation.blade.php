@@ -75,15 +75,22 @@
                     </ul>
                 </nav><!-- End Icons Navigation -->
             </div>
-            <div class="col-5"></div>
-            <div class="col-3">
+            <div class="col-4"></div>
+            <div class="col-4">
                 <div class="row">
                     <div class="d-flex align-items-center justify-content-between">
-                        <i class="bi bi-list toggle-sidebar-btn"></i>
-                        <a href="{{ url('/') }}" class="logo d-flex align-items-center">
-                            <img src="{{ asset('/img/logoo.png') }}" style="width: 150px;height: 50px;padding: 3px;"
-                                alt="">
-                        </a>
+                        <div class="col-1"></div>
+                        <div class="col-1">
+                            <i class="bi bi-list toggle-sidebar-btn"></i>
+                        </div>
+                        <div class="col-1">
+                            <a href="{{ url('/') }}" class="logo d-flex align-items-center">
+                                <img src="{{ asset('/img/logoo.png') }}"
+                                    style="width: 150px;height: 50px;padding: 3px;" alt="">
+                            </a>
+                        </div>
+                        <div class="col-1"></div>
+
                     </div><!-- End Logo -->
                 </div>
             </div>
@@ -128,7 +135,8 @@
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-chevron-down "></i><span class="ms-auto">السيارات</span><i class="bi bi-taxi-front-fill" style="margin-left: 10px"></i>
+                <i class="bi bi-chevron-down "></i><span class="ms-auto">السيارات</span><i class="bi bi-taxi-front-fill"
+                    style="margin-left: 10px"></i>
             </a>
             <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
@@ -149,7 +157,8 @@
         </li><!-- End Forms Nav -->
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#taxi-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-chevron-down "></i><span class="ms-auto">الطلبات</span><i class="bi bi-hourglass" style="margin-left: 10px"></i>
+                <i class="bi bi-chevron-down "></i><span class="ms-auto">الطلبات</span><i class="bi bi-hourglass"
+                    style="margin-left: 10px"></i>
             </a>
             <ul id="taxi-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
