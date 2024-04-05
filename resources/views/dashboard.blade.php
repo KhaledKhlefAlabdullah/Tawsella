@@ -150,7 +150,7 @@
                                         <div class="col-lg-6 mb-6">
                                             <div class="text-center card-content" style="margin: 10px;">
                                                 <h4>الجنس: <span
-                                                        style="color: {{ $lifeTaxiMovement->gender ? '#4154f1' : 'pink' }}">{{ $lifeTaxiMovement->gender }}</span>
+                                                        style="color: {{ $lifeTaxiMovement->gender == 'male' ? '#4154f1' : 'pink' }}">{{ $lifeTaxiMovement->gender == 'male' ? 'ذكر' : 'انثى' }}</span>
                                                 </h4>
                                             </div>
                                         </div>
