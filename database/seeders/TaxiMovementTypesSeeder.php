@@ -65,17 +65,17 @@ class TaxiMovementTypesSeeder extends Seeder
             ]);
         }   
         
-        DB::table('taxi_movement_types')->insert([
-            'id' => 't-m-t-1',
-            'type' => 'طلب داخلي',
-            'price' => 50
-        ]);
+        // DB::table('taxi_movement_types')->insert([
+        //     'id' => 't-m-t-1',
+        //     'type' => 'طلب داخلي',
+        //     'price' => 50
+        // ]);
 
-        DB::table('taxi_movement_types')->insert([
-            'id' => 't-m-t-2',
-            'type' => 'طلب خارجي',
-            'is_onKM' => true,
-            'price' => 0.5
-        ]);
+        // DB::table('taxi_movement_types')->insert([
+        //     'id' => 't-m-t-2',
+        //     'type' => 'طلب خارجي',
+        //     'is_onKM' => true,
+        //     'price' => 0.5
+        // ]);
     }
 }
