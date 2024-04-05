@@ -219,7 +219,7 @@
                         <div class="col-lg-6 mb-6">
                 
                             <div class="text-center card-content" style="margin: 10px;">
-                                // <h4>التوقيت: {{ date('Y-m-d H:i:s', strtotime(${time})) }}</h4>
+                                ${time}
                             </div>
                         </div>
                     <hr>
