@@ -46,7 +46,7 @@
                                 <x-buttons 
                                 :delete-route="route('service.destroy', $movementType->id) " 
                                 :edit-route="route('service.edit', $movementType->id)" 
-                                :showDeleteButton="true"
+                                :showDeleteButton="false"
                                 :showEditButton="true"
                                 :showDetailsButton="false" />
                             </div>
