@@ -78,7 +78,7 @@ class TaxiMovementController extends Controller
             'taxis.lamp_number as car_lamp_number',
             'taxis.plate_number as car_plate_number',
             'taxi_movement_types.type',
-            'taxi_movement_types.price',
+            'c.totalPrice as price',
             'taxi_movements.created_at as date',
             ], ['is_completed' => true])
             ->get();
@@ -101,6 +101,7 @@ class TaxiMovementController extends Controller
                 ->leftJoin('user_profiles as customer_profile', 'taxi_movements.customer_id', '=', 'customer_profile.user_id')
                 ->leftJoin('taxis', 'taxi_movements.taxi_id', '=', 'taxis.id')
                 ->leftJoin('taxi_movement_types', 'taxi_movements.movement_type_id', '=', 'taxi_movement_types.id')
+                ->leftJoin('calculations as c','users.id','=','c.driver_id')
                 ->where($condations);
 
             return $data;

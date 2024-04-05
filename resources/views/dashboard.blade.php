@@ -43,7 +43,7 @@
                                         <i class="bi bi-currency-dollar"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>${{ $calcolations }}</h6>
+                                        <h6>LT {{ $calcolations }}</h6>
                                         <hr>
                                     </div>
                                 </div>
