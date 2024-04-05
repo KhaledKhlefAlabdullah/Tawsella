@@ -54,6 +54,9 @@
                                     <p class="text-center">{{ __('حالة الحساب') }}</p>
                                 </th>
                                 <th scope="col">
+                                    <p class="text-center">{{ __('حالة السائق') }}</p>
+                                </th>
+                                <th scope="col">
                                     <p class="text-center">{{ __('المبلغ غير المسلم') }}</p>
                                 </th>
                                 <th scope="col">
