@@ -68,17 +68,19 @@ class CalculationsController extends Controller
     /**
      * Get the all previos accounts for driver
      */
-    public function totalAccounts(string $driver_id)
-    {
-        try {
-            $totalAccounts = Calculations::where('driver_id', $driver_id)
-                ->sum('totalPrice');
+    public function totalAccounts(string $driver_id, bool $is_bring = false)
+{
+    try {
+        $totalAccounts = Calculations::where('driver_id', $driver_id)
+            ->where('is_bring', $is_bring)
+            ->sum('totalPrice');
 
-            return $totalAccounts ?? 0;
-        } catch (Exception $e) {
-            return redirect()->back()->withErrors($e->getMessage() . 'هناك خطأ في حساب المبالغ التي استلمها السائق')->withInput();
-        }
+        return $totalAccounts ?? 0;
+    } catch (Exception $e) {
+        return redirect()->back()->withErrors($e->getMessage() . 'هناك خطأ في حساب المبالغ التي استلمها السائق')->withInput();
     }
+}
+
 
     /**
      * Show the form for creating a new resource.
