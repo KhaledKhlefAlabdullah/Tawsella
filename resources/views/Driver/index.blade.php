@@ -94,7 +94,7 @@
                                                 <center>مستعد للعمل</center>
                                             </span>
                                         @elseif ($driver->state == 'in_break')
-                                            <span class="badge bg-primay ">
+                                            <span class="badge bg-primary">
                                                 <center>في استراحة</center>
                                             </span>
                                         @else
