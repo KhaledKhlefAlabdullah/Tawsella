@@ -112,39 +112,79 @@ class CalculationsController extends Controller
     /**
      * Display the specified resource.
      */
+    // public function show(string $driver_id)
+    // {
+    //     try {
+
+    //         $driverMovements = TaxiMovement::where(['driver_id' => $driver_id, 'is_completed' => true])->count();
+    //         $totalMount = $this->totalAccounts($driver_id);
+    //         $totalWay = Calculations::where('driver_id', $driver_id)->sum('way');
+    //         $details = [
+    //             'driverMovements' => $driverMovements,
+    //             'totalMount' => $totalMount,
+    //             'totalWay' => $totalWay
+    //         ];
+
+    //         $movements = TaxiMovement::select(
+    //             'taxi_movements.my_address as saddress',
+    //             'taxi_movements.destnation_address as eaddress',
+    //             'taxi_movements.start_latitude as slat',
+    //             'taxi_movements.start_longitude as along',
+    //             'taxi_movements.end_latitude as elat',
+    //             'taxi_movements.end_longitude as elong',
+    //             'taxi_movements.created_at as date',
+    //             'c.totalPrice',
+    //             'c.way'
+    //         )
+    //             ->join('calculations as c', 'taxi_movements.id', '=', 'c.taxi_movement_id')
+    //             ->where(['taxi_movements.driver_id' => $driver_id, 'taxi_movements.is_completed' => true])
+    //             ->get();
+
+    //         return view('calculations.show', ['details' => $details, 'movements' => $movements]);
+    //     } catch (Exception $e) {
+    //         return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+    //     }
+    // }
+
     public function show(string $driver_id)
-    {
-        try {
+{
+    try {
+        $driverMovements = TaxiMovement::where(['driver_id' => $driver_id, 'is_completed' => true])->count();
+        $totalMount = $this->totalAccounts($driver_id);
+        $totalWay = Calculations::where('driver_id', $driver_id)->sum('way');
+        $details = [
+            'driverMovements' => $driverMovements,
+            'totalMount' => $totalMount,
+            'totalWay' => $totalWay
+        ];
 
-            $driverMovements = TaxiMovement::where(['driver_id' => $driver_id, 'is_completed' => true])->count();
-            $totalMount = $this->totalAccounts($driver_id);
-            $totalWay = Calculations::where('driver_id', $driver_id)->sum('way');
-            $details = [
-                'driverMovements' => $driverMovements,
-                'totalMount' => $totalMount,
-                'totalWay' => $totalWay
-            ];
+        $movements = TaxiMovement::select(
+            'taxi_movements.my_address as saddress',
+            'taxi_movements.destnation_address as eaddress',
+            'taxi_movements.start_latitude as slat',
+            'taxi_movements.start_longitude as along',
+            'taxi_movements.end_latitude as elat',
+            'taxi_movements.end_longitude as elong',
+            'taxi_movements.created_at as date',
+            'c.totalPrice',
+            'c.way'
+        )
+        ->join('calculations as c', 'taxi_movements.id', '=', 'c.taxi_movement_id')
+        ->where([
+            'taxi_movements.driver_id' => $driver_id,
+            'taxi_movements.is_completed' => true
+        ])
+        ->whereHas('calculations', function($query) {
+            $query->where('is_bring', false);
+        })
+        ->get();
 
-            $movements = TaxiMovement::select(
-                'taxi_movements.my_address as saddress',
-                'taxi_movements.destnation_address as eaddress',
-                'taxi_movements.start_latitude as slat',
-                'taxi_movements.start_longitude as along',
-                'taxi_movements.end_latitude as elat',
-                'taxi_movements.end_longitude as elong',
-                'taxi_movements.created_at as date',
-                'c.totalPrice',
-                'c.way'
-            )
-                ->join('calculations as c', 'taxi_movements.id', '=', 'c.taxi_movement_id')
-                ->where(['taxi_movements.driver_id' => $driver_id, 'taxi_movements.is_completed' => true])
-                ->get();
-
-            return view('calculations.show', ['details' => $details, 'movements' => $movements]);
-        } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
-        }
+        return view('calculations.show', ['details' => $details, 'movements' => $movements]);
+    } catch (Exception $e) {
+        return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
     }
+}
+
 
 
     /**
@@ -189,7 +229,7 @@ class CalculationsController extends Controller
             return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
-    
+
 
     /**
      * Remove the specified resource from storage.
