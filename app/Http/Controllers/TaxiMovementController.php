@@ -95,12 +95,12 @@ class TaxiMovementController extends Controller
 
             // Query to get requests for the current day
             $data = TaxiMovement::select($columns)
-                ->leftJoin('users as driver', 'taxi_movements.driver_id', '=', 'driver.id')
-                ->leftJoin('users as customer', 'taxi_movements.customer_id', '=', 'customer.id')
-                ->leftJoin('user_profiles as driver_profile', 'taxi_movements.driver_id', '=', 'driver_profile.user_id')
-                ->leftJoin('user_profiles as customer_profile', 'taxi_movements.customer_id', '=', 'customer_profile.user_id')
-                ->leftJoin('taxis', 'taxi_movements.taxi_id', '=', 'taxis.id')
-                ->leftJoin('taxi_movement_types', 'taxi_movements.movement_type_id', '=', 'taxi_movement_types.id')
+                ->join('users as driver', 'taxi_movements.driver_id', '=', 'driver.id')
+                ->join('users as customer', 'taxi_movements.customer_id', '=', 'customer.id')
+                ->join('user_profiles as driver_profile', 'taxi_movements.driver_id', '=', 'driver_profile.user_id')
+                ->join('user_profiles as customer_profile', 'taxi_movements.customer_id', '=', 'customer_profile.user_id')
+                ->join('taxis', 'taxi_movements.taxi_id', '=', 'taxis.id')
+                ->join('taxi_movement_types', 'taxi_movements.movement_type_id', '=', 'taxi_movement_types.id')
                 ->leftJoin('calculations as c','driver.id','=','c.driver_id')
                 ->where($condations);
 
