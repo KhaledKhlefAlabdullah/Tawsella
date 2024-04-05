@@ -89,11 +89,11 @@
                                         </span>
                                     </td>
                                     <td>
-                                        @if ($driver->state == 'ready')
+                                        @if ($driver->driver_state == 'ready')
                                             <span class="badge bg-success ">
                                                 <center>مستعد للعمل</center>
                                             </span>
-                                        @elseif ($driver->state == 'in_break')
+                                        @elseif ($driver->driver_state == 'in_break')
                                             <span class="badge bg-primay ">
                                                 <center>في استراحة</center>
                                             </span>
