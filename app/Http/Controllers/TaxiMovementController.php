@@ -101,7 +101,7 @@ class TaxiMovementController extends Controller
                 ->leftJoin('user_profiles as customer_profile', 'taxi_movements.customer_id', '=', 'customer_profile.user_id')
                 ->leftJoin('taxis', 'taxi_movements.taxi_id', '=', 'taxis.id')
                 ->leftJoin('taxi_movement_types', 'taxi_movements.movement_type_id', '=', 'taxi_movement_types.id')
-                ->leftJoin('calculations as c','users.id','=','c.driver_id')
+                ->leftJoin('calculations as c','driver.id','=','c.driver_id')
                 ->where($condations);
 
             return $data;
