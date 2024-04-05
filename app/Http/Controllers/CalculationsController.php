@@ -145,16 +145,28 @@ class CalculationsController extends Controller
     //         return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
     //     }
     // }
+    public function accountsNotDelivered(string $driver_id)
+    {
+        try {
+            $accounts = Calculations::where('driver_id', $driver_id)
+                ->where('is_bring', false)
+                ->get();
+
+            return $accounts;
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors($e->getMessage() . 'هناك خطأ في جلب المبالغ التي لم تسلم للسائق')->withInput();
+        }
+    }
 
     public function show(string $driver_id)
 {
     try {
         $driverMovements = TaxiMovement::where(['driver_id' => $driver_id, 'is_completed' => true])->count();
-        $totalMount = $this->totalAccounts($driver_id);
+        $accountsNotDelivered = $this->accountsNotDelivered($driver_id);
         $totalWay = Calculations::where('driver_id', $driver_id)->sum('way');
         $details = [
             'driverMovements' => $driverMovements,
-            'totalMount' => $totalMount,
+            'totalMount' => $accountsNotDelivered,
             'totalWay' => $totalWay
         ];
 
