@@ -119,7 +119,7 @@ class TaxiMovementController extends Controller
         try {
 
             if ($selector == 'taxi') {
-                $data = Taxi::select('taxis.last_location_latitude as lat', 'taxis.last_location_longitude as long', 'up.name')
+                $data = Taxi::select('taxis.last_location_latitude as lat','taxis.driver_id', 'taxis.last_location_longitude as long', 'up.name')
                     ->join('user_profiles as up', 'taxis.driver_id', '=', 'up.user_id')
                     ->where('taxis.id', $id)->first();
             } else if ($selector == 'completed') {
