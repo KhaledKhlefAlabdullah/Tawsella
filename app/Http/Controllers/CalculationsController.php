@@ -224,6 +224,11 @@ class CalculationsController extends Controller
     public function bring(string $id)
     {
         try {
+            
+            $bringCout = Calculations::where(['driver_id' => $id, 'is_bring' => false])->count();
+            if($bringCout == 0){
+                return redirect()->route('drivers.index')->with('success', 'السائق ليس لديه أي ملغ بعد');
+            }
             Calculations::where(['driver_id' => $id, 'is_bring' => false])
                 ->update(['is_bring' => true]);
 
