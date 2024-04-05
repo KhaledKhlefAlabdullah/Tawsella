@@ -34,9 +34,9 @@
 
             Echo.private(`TaxiLocation.${admin_id}`)
                 .listen('.App\\Events\\GetTaxiLocationsEvent', (e) => {
-                    
+                                            console.log('com');
+
                     if (e.driver_id == driver_id) {
-                        console.log('com');
 
                         // Remove previous marker
                         map.removeLayer(prevMarker);

@@ -35,7 +35,7 @@ class GetTaxiLocationsEvent implements ShouldBroadcast
      */
     public function broadcastOn(): Channel
     {
-        return  new PrivateChannel('TaxiLocation.' . getAdminId());
+        return  new PrivateChannel('TaxiLocation.'. getAdminId());
     }
 
     public function broadcastWith(): array
