@@ -102,6 +102,7 @@ class TaxiMovementController extends Controller
                 ->join('user_profiles as customer_profile', 'taxi_movements.customer_id', '=', 'customer_profile.user_id')
                 ->join('taxis', 'taxi_movements.taxi_id', '=', 'taxis.id')
                 ->join('taxi_movement_types', 'taxi_movements.movement_type_id', '=', 'taxi_movement_types.id')
+                ->distinct()
                 ->where($condations);
 
             return $data;
