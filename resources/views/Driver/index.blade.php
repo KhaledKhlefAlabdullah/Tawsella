@@ -53,9 +53,9 @@
                                 <th scope="col">
                                     <p class="text-center">{{ __('حالة الحساب') }}</p>
                                 </th>
-                                {{-- <th scope="col">
+                                <th scope="col">
                                     <p class="text-center">{{ __('حالة السائق') }}</p>
-                                </th> --}}
+                                </th>
                                 <th scope="col">
                                     <p class="text-center">{{ __('المبلغ غير المسلم') }}</p>
                                 </th>
@@ -88,12 +88,12 @@
                                             <center>{{ $driver->is_active ? __('Active') : __('Inactive') }}</center>
                                         </span>
                                     </td>
-                                    {{-- <td>
-                                        @if ($driver->driver_state == 'ready')
+                                    <td>
+                                        @if ($driver->state == 'ready')
                                             <span class="badge bg-success ">
                                                 <center>مستعد للعمل</center>
                                             </span>
-                                        @elseif ($driver->driver_state == 'in_break')
+                                        @elseif ($driver->state == 'in_break')
                                             <span class="badge bg-primay ">
                                                 <center>في استراحة</center>
                                             </span>
@@ -102,7 +102,7 @@
                                                 <center>مشغول</center>
                                             </span>
                                         @endif
-                                    </td> --}}
+                                    </td>
                                     <td>
                                         <p class="text-center">{{ $driver->unBring }}</p>
                                     </td>

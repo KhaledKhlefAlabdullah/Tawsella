@@ -144,6 +144,7 @@ class DriversController extends Controller
                 'email' => $driver->email,
                 'phoneNumber' => $driver->phoneNumber,
                 'is_active' => $driver->is_active,
+                'state' => $driver->driver_state,
                 'unBring' => $unBring,
                 'plate_number' => $driver->plate_number,
                 'lamp_number' => $driver->lamp_number
