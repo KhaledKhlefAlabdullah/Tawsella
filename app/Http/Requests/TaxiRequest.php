@@ -25,12 +25,16 @@ class TaxiRequest extends FormRequest
     public function rules(): array
     {
         
-        /**
-         * $id = request()->route('id');
-         * 
-         * , Rule::unique(Taxi::class)->ignore($id)
-, Rule::unique(Taxi::class)->ignore($id)
-         */
+        if (request()->isMethod('put')) {
+             $id = request()->route('id');
+             return [
+                'driver_id' => ['required','exists:users,id'],
+                'car_name' => ['required','string'],
+                'lamp_number' => ['required','string', Rule::unique(Taxi::class)->ignore($id)],
+                'plate_number' => ['required','string', Rule::unique(Taxi::class)->ignore($id)],
+                'car_detailes' => ['nullable','string']
+            ];
+        }
 
         return [
             'driver_id' => ['required','exists:users,id'],
