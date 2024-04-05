@@ -81,23 +81,6 @@
                         </div>
                     </div><!-- End Total Way Card -->
 
-                    <!-- Placeholder Card -->
-                    <div class="col-xxl-6 col-xl-6">
-                        <div class="card info-card customers-card">
-                            <div class="card-body m-2">
-                                <div class="d-flex align-items-center">
-                                    <div
-                                        class="card-icon rounded-circle bg-secondary d-flex align-items-center justify-content-center">
-                                        <i class="bi bi-people text-white"></i>
-                                    </div>
-                                    <div class="ps-3">
-                                        <h6>Placeholder</h6>
-                                        <hr>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div><!-- End Placeholder Card -->
                 </div>
 
                 <div class="container">
