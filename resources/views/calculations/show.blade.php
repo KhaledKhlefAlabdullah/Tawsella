@@ -22,97 +22,83 @@
             <h1 class="my-4">عرض الحساب</h1>
             <div class="card">
                 <div class="container">
-                    <div class="row m-4">
-                        <!-- Revenue Card -->
-                        <div class="col-xxl-6 col-md-6">
-                            <div class="card info-card revenue-card">
-                                <div class="card-body m-2">
-                                    <h5>مبالغ طلبات السائق <span>| مجموع </span></h5>
+                    <div class="container">
+                        <div class="row m-4">
+                            <!-- Revenue Card -->
+                            <div class="col-xxl-6 col-md-6">
+                                <div class="card info-card revenue-card">
+                                    <div class="card-body m-2">
+                                        <h5>مبالغ طلبات السائق <span>| مجموع </span></h5>
 
-                                    <div class="d-flex align-items-center">
-                                        <div
-                                            class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="bi bi-currency-dollar"></i>
-                                        </div>
-                                        <div class="ps-3">
-                                            <h6>{{ $details['totalMount'] }}</h6>
-                                            <hr>
+                                        <div class="d-flex align-items-center">
+                                            <div class="card-icon rounded-circle bg-primary d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-currency-dollar text-white"></i>
+                                            </div>
+                                            <div class="ps-3">
+                                                <h6>{{ $details['totalMount'] }}</h6>
+                                                <hr>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div><!-- End Revenue Card -->
-                        <!-- Customers Card -->
-                        <div class="col-xxl-6 col-xl-6">
+                            </div><!-- End Revenue Card -->
+                            <!-- Customers Card -->
+                            <div class="col-xxl-6 col-xl-6">
+                                <div class="card info-card customers-card">
+                                    <div class="card-body m-2">
+                                        <h5>الطلبات المكتملة للسائق<span>| عدد</span></h5>
 
-                            <div class="card info-card customers-card">
-
-                                <div class="card-body m-2">
-                                    <h5>الطلبات المكتملة للسائق<span>| عدد</span></h5>
-
-                                    <div class="d-flex align-items-center">
-                                        <div
-                                            class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="bi bi-bookmark-star-fill"></i>
-                                        </div>
-                                        <div class="ps-3">
-                                            <h6>{{ $details['driverMovements'] }}</h6>
-                                            <hr>
+                                        <div class="d-flex align-items-center">
+                                            <div class="card-icon rounded-circle bg-success d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-bookmark-star-fill text-white"></i>
+                                            </div>
+                                            <div class="ps-3">
+                                                <h6>{{ $details['driverMovements'] }}</h6>
+                                                <hr>
+                                            </div>
                                         </div>
                                     </div>
-
                                 </div>
-                            </div>
+                            </div><!-- End Customers Card -->
 
-                        </div><!-- End Customers Card -->
+                            <!-- Total Way Card -->
+                            <div class="col-xxl-6 col-xl-6">
+                                <div class="card info-card customers-card">
+                                    <div class="card-body m-2">
+                                        <h5>المسافة التي قطعها السائق <span>| المسافة</span></h5>
 
-                        <!-- Customers Card -->
-                        <div class="col-xxl-6 col-xl-6">
-
-                            <div class="card info-card customers-card">
-
-                                <div class="card-body m-2">
-                                    <h5>المسافة التي قطعها السائق <span>| المسافة</span></h5>
-
-                                    <div class="d-flex align-items-center">
-                                        <div
-                                            class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="bi bi-people"></i>
-                                        </div>
-                                        <div class="ps-3">
-                                            <h6>{{ $details['totalWay'] }}</h6>
-                                            <hr>
+                                        <div class="d-flex align-items-center">
+                                            <div class="card-icon rounded-circle bg-info d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-people text-white"></i>
+                                            </div>
+                                            <div class="ps-3">
+                                                <h6>{{ $details['totalWay'] }}</h6>
+                                                <hr>
+                                            </div>
                                         </div>
                                     </div>
-
                                 </div>
-                            </div>
+                            </div><!-- End Total Way Card -->
 
-                        </div><!-- End Customers Card -->
-                        <!-- Customers Card -->
-                        <div class="col-xxl-6 col-xl-6">
-
-                            <div class="card info-card customers-card">
-
-                                <div class="card-body m-2">
-                                    {{-- <h5 >المسافة التي قطعها السائق <span>| المسافة</span></h5> --}}
-
-                                    <div class="d-flex align-items-center">
-                                        <div
-                                            class="card-icon rounded-circle d-flex align-items-center justify-content-center">
-                                            <i class="bi bi-people"></i>
-                                        </div>
-                                        <div class="ps-3">
-                                            <h6></h6>
-                                            <hr>
+                            <!-- Placeholder Card -->
+                            <div class="col-xxl-6 col-xl-6">
+                                <div class="card info-card customers-card">
+                                    <div class="card-body m-2">
+                                        <div class="d-flex align-items-center">
+                                            <div class="card-icon rounded-circle bg-secondary d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-people text-white"></i>
+                                            </div>
+                                            <div class="ps-3">
+                                                <h6>Placeholder</h6>
+                                                <hr>
+                                            </div>
                                         </div>
                                     </div>
-
                                 </div>
-                            </div>
-
-                        </div><!-- End Customers Card -->
+                            </div><!-- End Placeholder Card -->
+                        </div>
                     </div>
+
                 </div>
                 <div class="container">
                     <h1>الطلبات التي قام بها السائق</h1>
