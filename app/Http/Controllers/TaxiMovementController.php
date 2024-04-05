@@ -79,7 +79,7 @@ class TaxiMovementController extends Controller
             'taxis.plate_number as car_plate_number',
             'taxi_movement_types.type',
             'taxi_movement_types.price',
-            'taxi_movement_types.created_at as date',
+            'taxi_movements.created_at as date',
             ], ['is_completed' => true])
             ->get();
         // إعادة عرض النتائج في الواجهة
