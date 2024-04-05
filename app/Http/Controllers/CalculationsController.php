@@ -150,7 +150,7 @@ class CalculationsController extends Controller
 {
     try {
         $driverMovements = TaxiMovement::where(['driver_id' => $driver_id, 'is_completed' => true])->count();
-        $totalMount = $this->totalAccounts($driver_id)->where('is_bring', false);
+        $totalMount = $this->totalAccounts($driver_id);
         $totalWay = Calculations::where('driver_id', $driver_id)->sum('way');
         $details = [
             'driverMovements' => $driverMovements,
