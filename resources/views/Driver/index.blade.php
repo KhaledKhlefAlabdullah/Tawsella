@@ -53,9 +53,9 @@
                                 <th scope="col">
                                     <p class="text-center">{{ __('حالة الحساب') }}</p>
                                 </th>
-                                <th scope="col">
+                                {{-- <th scope="col">
                                     <p class="text-center">{{ __('حالة السائق') }}</p>
-                                </th>
+                                </th> --}}
                                 <th scope="col">
                                     <p class="text-center">{{ __('المبلغ غير المسلم') }}</p>
                                 </th>
@@ -88,7 +88,7 @@
                                             <center>{{ $driver->is_active ? __('Active') : __('Inactive') }}</center>
                                         </span>
                                     </td>
-                                    <td>
+                                    {{-- <td>
                                         @if ($driver->driver_state == 'ready')
                                             <span class="badge bg-success ">
                                                 <center>مستعد للعمل</center>
@@ -102,7 +102,7 @@
                                                 <center>مشغول</center>
                                             </span>
                                         @endif
-                                    </td>
+                                    </td> --}}
                                     <td>
                                         <p class="text-center">{{ $driver->unBring }}</p>
                                     </td>
