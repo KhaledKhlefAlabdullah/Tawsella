@@ -34,6 +34,7 @@
 
             Echo.private(`TaxiLocation.${admin_id}`)
                 .listen('.App\\Events\\GetTaxiLocationsEvent', (e) => {
+                    
                     if (e.driver_id == driver_id) {
                         console.log('com');
 

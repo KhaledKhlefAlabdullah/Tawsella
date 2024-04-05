@@ -35,6 +35,7 @@
                                     <th>لوحة السيارة</th>
                                     <th>نوع الطلب</th>
                                     <th>التكلفة</th>
+                                    <th>التاريخ</th>
                                     <th>موقع النهاية</th>
                                 </tr>
                             </thead>
@@ -52,6 +53,9 @@
                                         <td>{{ $movement->car_plate_number }}</td>
                                         <td>{{ $movement->type }}</td>
                                         <td>{{ $movement->price }}</td>
+                                        <td>
+                                             {{ date('Y-m-d', strtotime($movement->date)) }}
+                                        </td>
                                         <td>
                                             @if ($movement->taxi_id)
                                                 <a href="{{ route('map', ['selector' => 'completed', 'id' => $movement->movement_id]) }}"

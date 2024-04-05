@@ -195,7 +195,9 @@
                             </div>
                             <div class="col-lg-6 mb-6">
                                 <div class="text-center card-content" style="margin: 10px;">
-                                    <h4>جنس العميل: ${gender}</h4>
+                                    <h4>الجنس: <span
+                                                        style="color: ${ gender == 'male' ? '#4154f1' : 'pink' }">${ gender == 'male' ? 'ذكر' : 'انثى' }</span>
+                                                </h4>
                                 </div>
                             </div>
                         </div>
