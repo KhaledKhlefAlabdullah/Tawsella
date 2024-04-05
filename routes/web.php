@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\GetTaxiLocationsEvent;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CalculationsController;
 use App\Http\Controllers\DashboardController;
@@ -29,27 +30,27 @@ Route::get('/', function () {
 
 Route::middleware(['auth', 'admin'])->group(function () {
 
-//*****************************End route services ******************************** */
-Route::group(['prefix' => 'services'], function () {
-    Route::get('/',[TaxiMovementTypeController::class,'index'])->name('services');
-    Route::get('/cretae',[TaxiMovementTypeController::class,'create'])->name('service.create');
-    Route::post('/store',[TaxiMovementTypeController::class,'store'])->name('service.store');
-    Route::get('/edit/{movementType}',[TaxiMovementTypeController::class,'edit'])->name('service.edit');
-    Route::put('/update/{movementType}',[TaxiMovementTypeController::class,'update'])->name('service.update');
-    Route::delete('/delete/{movementType}',[TaxiMovementTypeController::class,'destroy'])->name('service.destroy');
-});
+    //*****************************End route services ******************************** */
+    Route::group(['prefix' => 'services'], function () {
+        Route::get('/', [TaxiMovementTypeController::class, 'index'])->name('services');
+        Route::get('/cretae', [TaxiMovementTypeController::class, 'create'])->name('service.create');
+        Route::post('/store', [TaxiMovementTypeController::class, 'store'])->name('service.store');
+        Route::get('/edit/{movementType}', [TaxiMovementTypeController::class, 'edit'])->name('service.edit');
+        Route::put('/update/{movementType}', [TaxiMovementTypeController::class, 'update'])->name('service.update');
+        Route::delete('/delete/{movementType}', [TaxiMovementTypeController::class, 'destroy'])->name('service.destroy');
+    });
 
-//*****************************End route services ******************************** */
-//******************************************************************************* */
-//***************************start route AppPlatform ******************************** */
-Route::get('/Applatform', function () {
-    return view('ApplicationPlatform');
-});
-//*****************************End route AppPlatform ******************************** */
-//******************************************************************************* */
+    //*****************************End route services ******************************** */
+    //******************************************************************************* */
+    //***************************start route AppPlatform ******************************** */
+    Route::get('/Applatform', function () {
+        return view('ApplicationPlatform');
+    });
+    //*****************************End route AppPlatform ******************************** */
+    //******************************************************************************* */
 
-//************************************ ROUTE **************************************** */
-//************************************ ROUTE **************************************** */
+    //************************************ ROUTE **************************************** */
+    //************************************ ROUTE **************************************** */
 
     Route::get('/profiles', function () {
         return view('profile.profile');
@@ -156,7 +157,124 @@ Route::get('/Applatform', function () {
     Route::get('/view-map/{selector}/{id}', [TaxiMovementController::class, 'view_map'])->name('map');
 });
 
+Route::get('test', function () {
 
+    $locations = [
+        ['la' => 40.7128, 'lo' => -74.0060], // New York City
+        ['la' => 51.5074, 'lo' => -0.1278], // London
+        ['la' => 48.8566, 'lo' => 2.3522],  // Paris
+        ['la' => 35.6895, 'lo' => 139.6917], // Tokyo
+        ['la' => -33.8688, 'lo' => 151.2093], // Sydney
+        ['la' => 40.7128, 'lo' => -74.0060], // New York City
+        ['la' => 51.5074, 'lo' => -0.1278], // London
+        ['la' => 48.8566, 'lo' => 2.3522],  // Paris
+        ['la' => 35.6895, 'lo' => 139.6917], // Tokyo
+        ['la' => -33.8688, 'lo' => 151.2093], // Sydney
+        ['la' => 40.7128, 'lo' => -74.0060], // New York City
+        ['la' => 51.5074, 'lo' => -0.1278], // London
+        ['la' => 48.8566, 'lo' => 2.3522],  // Paris
+        ['la' => 35.6895, 'lo' => 139.6917], // Tokyo
+        ['la' => -33.8688, 'lo' => 151.2093], // Sydney
+        ['la' => 40.7128, 'lo' => -74.0060], // New York City
+        ['la' => 51.5074, 'lo' => -0.1278], // London
+        ['la' => 48.8566, 'lo' => 2.3522],  // Paris
+        ['la' => 35.6895, 'lo' => 139.6917], // Tokyo
+        ['la' => -33.8688, 'lo' => 151.2093], // Sydney
+        ['la' => 40.7128, 'lo' => -74.0060], // New York City
+        ['la' => 51.5074, 'lo' => -0.1278], // London
+        ['la' => 48.8566, 'lo' => 2.3522],  // Paris
+        ['la' => 35.6895, 'lo' => 139.6917], // Tokyo
+        ['la' => -33.8688, 'lo' => 151.2093], // Sydney
+        ['la' => 40.7128, 'lo' => -74.0060], // New York City
+        ['la' => 51.5074, 'lo' => -0.1278], // London
+        ['la' => 48.8566, 'lo' => 2.3522],  // Paris
+        ['la' => 35.6895, 'lo' => 139.6917], // Tokyo
+        ['la' => -33.8688, 'lo' => 151.2093], // Sydney
+        ['la' => 40.7128, 'lo' => -74.0060], // New York City
+        ['la' => 51.5074, 'lo' => -0.1278], // London
+        ['la' => 48.8566, 'lo' => 2.3522],  // Paris
+        ['la' => 35.6895, 'lo' => 139.6917], // Tokyo
+        ['la' => -33.8688, 'lo' => 151.2093], // Sydney
+        ['la' => 40.7128, 'lo' => -74.0060], // New York City
+        ['la' => 51.5074, 'lo' => -0.1278], // London
+        ['la' => 48.8566, 'lo' => 2.3522],  // Paris
+        ['la' => 35.6895, 'lo' => 139.6917], // Tokyo
+        ['la' => -33.8688, 'lo' => 151.2093], // Sydney
+        ['la' => 40.7128, 'lo' => -74.0060], // New York City
+        ['la' => 51.5074, 'lo' => -0.1278], // London
+        ['la' => 48.8566, 'lo' => 2.3522],  // Paris
+        ['la' => 35.6895, 'lo' => 139.6917], // Tokyo
+        ['la' => -33.8688, 'lo' => 151.2093], // Sydney
+        ['la' => 40.7128, 'lo' => -74.0060], // New York City
+        ['la' => 51.5074, 'lo' => -0.1278], // London
+        ['la' => 48.8566, 'lo' => 2.3522],  // Paris
+        ['la' => 35.6895, 'lo' => 139.6917], // Tokyo
+        ['la' => -33.8688, 'lo' => 151.2093], // Sydney
+        ['la' => 40.7128, 'lo' => -74.0060], // New York City
+        ['la' => 51.5074, 'lo' => -0.1278], // London
+        ['la' => 48.8566, 'lo' => 2.3522],  // Paris
+        ['la' => 35.6895, 'lo' => 139.6917], // Tokyo
+        ['la' => -33.8688, 'lo' => 151.2093], // Sydney
+        ['la' => 40.7128, 'lo' => -74.0060], // New York City
+        ['la' => 51.5074, 'lo' => -0.1278], // London
+        ['la' => 48.8566, 'lo' => 2.3522],  // Paris
+        ['la' => 35.6895, 'lo' => 139.6917], // Tokyo
+        ['la' => -33.8688, 'lo' => 151.2093], // Sydney
+        ['la' => 40.7128, 'lo' => -74.0060], // New York City
+        ['la' => 51.5074, 'lo' => -0.1278], // London
+        ['la' => 48.8566, 'lo' => 2.3522],  // Paris
+        ['la' => 35.6895, 'lo' => 139.6917], // Tokyo
+        ['la' => -33.8688, 'lo' => 151.2093], // Sydney
+        ['la' => 40.7128, 'lo' => -74.0060], // New York City
+        ['la' => 51.5074, 'lo' => -0.1278], // London
+        ['la' => 48.8566, 'lo' => 2.3522],  // Paris
+        ['la' => 35.6895, 'lo' => 139.6917], // Tokyo
+        ['la' => -33.8688, 'lo' => 151.2093], // Sydney
+        ['la' => 40.7128, 'lo' => -74.0060], // New York City
+        ['la' => 51.5074, 'lo' => -0.1278], // London
+        ['la' => 48.8566, 'lo' => 2.3522],  // Paris
+        ['la' => 35.6895, 'lo' => 139.6917], // Tokyo
+        ['la' => -33.8688, 'lo' => 151.2093], // Sydney
+        ['la' => 40.7128, 'lo' => -74.0060], // New York City
+        ['la' => 51.5074, 'lo' => -0.1278], // London
+        ['la' => 48.8566, 'lo' => 2.3522],  // Paris
+        ['la' => 35.6895, 'lo' => 139.6917], // Tokyo
+        ['la' => -33.8688, 'lo' => 151.2093], // Sydney
+        ['la' => 40.7128, 'lo' => -74.0060], // New York City
+        ['la' => 51.5074, 'lo' => -0.1278], // London
+        ['la' => 48.8566, 'lo' => 2.3522],  // Paris
+        ['la' => 35.6895, 'lo' => 139.6917], // Tokyo
+        ['la' => -33.8688, 'lo' => 151.2093], // Sydney
+        ['la' => 40.7128, 'lo' => -74.0060], // New York City
+        ['la' => 51.5074, 'lo' => -0.1278], // London
+        ['la' => 48.8566, 'lo' => 2.3522],  // Paris
+        ['la' => 35.6895, 'lo' => 139.6917], // Tokyo
+        ['la' => -33.8688, 'lo' => 151.2093], // Sydney
+        ['la' => 40.7128, 'lo' => -74.0060], // New York City
+        ['la' => 51.5074, 'lo' => -0.1278], // London
+        ['la' => 48.8566, 'lo' => 2.3522],  // Paris
+        ['la' => 35.6895, 'lo' => 139.6917], // Tokyo
+        ['la' => -33.8688, 'lo' => 151.2093], // Sydney
+        ['la' => 40.7128, 'lo' => -74.0060], // New York City
+        ['la' => 51.5074, 'lo' => -0.1278], // London
+        ['la' => 48.8566, 'lo' => 2.3522],  // Paris
+        ['la' => 35.6895, 'lo' => 139.6917], // Tokyo
+        ['la' => -33.8688, 'lo' => 151.2093], // Sydney
+        ['la' => 40.7128, 'lo' => -74.0060], // New York City
+        ['la' => 51.5074, 'lo' => -0.1278], // London
+        ['la' => 48.8566, 'lo' => 2.3522],  // Paris
+        ['la' => 35.6895, 'lo' => 139.6917], // Tokyo
+        ['la' => -33.8688, 'lo' => 151.2093], // Sydney
+    ];
+
+    foreach ($locations as $loc) {
+        GetTaxiLocationsEvent::dispatch(
+            'ddd',
+            $loc['la'],
+            $loc['lon']
+        );
+    }
+});
 
 
 require __DIR__ . '/auth.php';
