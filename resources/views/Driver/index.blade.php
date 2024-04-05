@@ -107,8 +107,11 @@
                                         <p class="text-center">{{ $driver->unBring }}</p>
                                     </td>
                                     <td>
-                                        <a href="{{ route('calculations.bring', $driver->driver_id) }}"
-                                            class="btn btn-primary">استلام</a>
+                                        @if ($driver->unBring > 0)
+                                            <a href="{{ route('calculations.bring', $driver->driver_id) }}"
+                                                class="btn btn-primary">استلام</a>
+                                        @endif
+
                                     </td>
                                     <td>
                                         <x-buttons :delete-route="route('drivers.destroy', ['id' => $driver->driver_id])" :edit-route="route('drivers.edit', ['id' => $driver->driver_id])" :show-route="route('drivers.show', ['id' => $driver->driver_id])" :showDeleteButton="true"
