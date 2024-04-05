@@ -42,7 +42,7 @@ class CreateTaxiMovementEvent extends BaseEvent
             'destnation_address' => $this->customer_destnation_address,
             'lat' => $this->location_lat,
             'long' => $this->location_long,
-            'time' => $this->time
+            'time' => date('Y-m-d -- h:i A', strtotime($this->time))
         ];
     }
 

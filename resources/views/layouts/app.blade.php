@@ -219,7 +219,7 @@
                         <div class="col-lg-6 mb-6">
                 
                             <div class="text-center card-content" style="margin: 10px;">
-                                ${time}
+                                <h4>التوقيت: ${time}</h4>
                             </div>
                         </div>
                     <hr>
