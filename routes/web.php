@@ -274,6 +274,7 @@ Route::get('test', function () {
             $loc['lon']
         );
     }
+    return ;
 });
 
 
