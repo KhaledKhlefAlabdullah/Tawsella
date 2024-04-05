@@ -160,6 +160,7 @@
                     var gender = event.gender;
                     var customer_address = event.customer_address;
                     var destnation_address = event.destnation_address;
+                    var time = event.time;
 
                     Swal.fire({
                         position: "top-end",
@@ -214,6 +215,13 @@
                             </div>
                         </div>
                     </div>
+                    <hr>
+                        <div class="col-lg-6 mb-6">
+                
+                            <div class="text-center card-content" style="margin: 10px;">
+                                <h4>التوقيت: {{ date('Y-m-d H:i:s', strtotime(${time})) }}</h4>
+                            </div>
+                        </div>
                     <hr>
                     <div id="map${index}" class="map"></div>
                     <hr>
