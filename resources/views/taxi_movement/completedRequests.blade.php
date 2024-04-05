@@ -46,7 +46,7 @@
                                         <td>{{ $movement->customer_phone }}</td>
                                         <td>{{ $movement->my_address }}</td>
                                         <td>{{ $movement->destnation_address }}</td>
-                                        <td>{{ $movement->gender }}</td>
+                                        <td>{{ $movement->gender == 'male' ? 'ذكر' : 'انثى' }}</td>
                                         <td>{{ $movement->driver_name }}</td>
                                         <td>{{ $movement->driver_phone }}</td>
                                         <td>{{ $movement->car_lamp_number }}</td>
