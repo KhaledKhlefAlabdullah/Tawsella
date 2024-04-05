@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Models\Taxi;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use Mockery\Generator\Method;
 
 class TaxiRequest extends FormRequest
 {
@@ -23,13 +24,19 @@ class TaxiRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->route('taxi')->id;
+        
+        /**
+         * $id = request()->route('id');
+         * 
+         * , Rule::unique(Taxi::class)->ignore($id)
+, Rule::unique(Taxi::class)->ignore($id)
+         */
 
         return [
             'driver_id' => ['required','exists:users,id'],
             'car_name' => ['required','string'],
-            'lamp_number' => ['required','string', Rule::unique(Taxi::class)->ignore($id)],
-            'plate_number' => ['required','string', Rule::unique(Taxi::class)->ignore($id)],
+            'lamp_number' => ['required','string'],
+            'plate_number' => ['required','string'],
             'car_detailes' => ['nullable','string']
         ];
     }
