@@ -81,6 +81,7 @@ class TaxiMovementController extends Controller
             'c.totalPrice as price',
             'taxi_movements.created_at as date',
             ], ['is_completed' => true])
+            ->join('calculations as c','driver.id','=','c.driver_id')
             ->get();
         // إعادة عرض النتائج في الواجهة
         return view('taxi_movement.completedRequests', ['completedRequests' => $completedRequests]);
@@ -101,7 +102,6 @@ class TaxiMovementController extends Controller
                 ->join('user_profiles as customer_profile', 'taxi_movements.customer_id', '=', 'customer_profile.user_id')
                 ->join('taxis', 'taxi_movements.taxi_id', '=', 'taxis.id')
                 ->join('taxi_movement_types', 'taxi_movements.movement_type_id', '=', 'taxi_movement_types.id')
-                ->leftJoin('calculations as c','driver.id','=','c.driver_id')
                 ->where($condations);
 
             return $data;
