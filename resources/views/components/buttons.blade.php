@@ -5,19 +5,17 @@
         <form action="{{ $deleteRoute }}" method="POST" style="display: inline;" id="deleteForm">
             @csrf
             @method('DELETE')
-            <button type="button" class="btn btn-danger" title="{{ __('Delete') }}" onclick="confirmDelete();"><i class="fas fa-trash"></i></button>
+            <button type="button" class="btn btn-danger" title="{{ __('Delete') }}" onclick="confirmDelete();"><i class="bi bi-trash-fill"></i></button>
         </form>
     @endif
 
     @if ($showEditButton && $editRoute)
         <span class="pipe">|</span>
-        <a href="{{ $editRoute }}" class="btn btn-primary rounded" title="{{ __('Edit') }}"><i
-                class="fas fa-pencil-alt"></i></a>
+        <a href="{{ $editRoute }}" class="btn btn-primary rounded" title="{{ __('Edit') }}"><i class="bi bi-pencil"></i></a>
     @endif
 
     @if ($showDetailsButton && $showRoute)
         <span class="pipe">|</span>
-        <a href="{{ $showRoute }}" class="btn btn-info rounded" title="{{ __('Details') }}"><i
-                class="fas fa-info-circle"></i></a>
+        <a href="{{ $showRoute }}" class="btn btn-info rounded" title="{{ __('Details') }}"><i class="bi bi-info-circle-fill"></i></a>
     @endif
 </div>
