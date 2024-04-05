@@ -56,6 +56,7 @@ class CalculationsController extends Controller
             $today = Carbon::now()->toDateString();
 
             $todayAccounts = Calculations::where('driver_id', $driver_id)
+                ->where('is_bring', false)
                 ->whereDate('created_at', $today)
                 ->sum('totalPrice');
 
