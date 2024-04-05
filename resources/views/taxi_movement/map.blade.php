@@ -32,7 +32,8 @@
 
             var prevMarker = marker;
 
-            Echo.private(`TaxiLocation.${admin_id}`)
+            setTimeout(() => {
+                Echo.private(`TaxiLocation.${admin_id}`)
                 .listen('.App\\Events\\GetTaxiLocationsEvent', (e) => {
                                             console.log('com');
 
@@ -49,6 +50,8 @@
                         prevMarker = newMarker;
                     }
                 });
+            }, 2000);
+            
         </script>
 
 
