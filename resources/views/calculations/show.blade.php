@@ -21,7 +21,6 @@
         <div class="container">
             <h1 class="my-4">عرض الحساب</h1>
             <div class="card">
-                <div class="container">
                     <div class="container">
                         <div class="row m-4">
                             <!-- Revenue Card -->
@@ -99,7 +98,6 @@
                         </div>
                     </div>
 
-                </div>
                 <div class="container">
                     <h1>الطلبات التي قام بها السائق</h1>
                     <table class="table">
