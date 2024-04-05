@@ -271,7 +271,7 @@ Route::get('test', function () {
         GetTaxiLocationsEvent::dispatch(
             'ddd',
             $loc['la'],
-            $loc['lon']
+            $loc['lo']
         );
     }
     return ;
