@@ -113,7 +113,7 @@ class DriversController extends Controller
      */
     public function getDrivers(array $conditions, $method)
     {
-        $query = User::select('users.id', 'user_profiles.name', 'users.email', 'user_profiles.phoneNumber', 'user_profiles.avatar', 'users.id', 'users.is_active', 'taxis.plate_number', 'taxis.lamp_number')
+        $query = User::select('users.id', 'user_profiles.name', 'users.email', 'user_profiles.phoneNumber', 'user_profiles.avatar', 'users.id', 'users.is_active', 'users.driver_state as state', 'taxis.plate_number', 'taxis.lamp_number')
             ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
             ->leftJoin('taxis', 'users.id', '=', 'taxis.driver_id')
             ->where('users.user_type', 'driver');

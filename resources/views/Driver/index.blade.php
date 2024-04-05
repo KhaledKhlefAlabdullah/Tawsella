@@ -86,20 +86,30 @@
                                         </span>
                                     </td>
                                     <td>
+                                        @if ($driver->state == 'ready')
+                                            <span class="badge bg-success ">
+                                                <center>مستعد للعمل</center>
+                                            </span>
+                                        @elseif ($driver->state == 'in_break')
+                                            <span class="badge bg-primay ">
+                                                <center>في استراحة</center>
+                                            </span>
+                                        @else
+                                            <span class="badge bg-danger ">
+                                                <center>مشغول</center>
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td>
                                         <p class="text-center">{{ $driver->unBring }}</p>
                                     </td>
                                     <td>
-                                        <a href="{{ route('calculations.bring', $driver->driver_id) }}" class="btn btn-primary">استلام</a>
+                                        <a href="{{ route('calculations.bring', $driver->driver_id) }}"
+                                            class="btn btn-primary">استلام</a>
                                     </td>
                                     <td>
-                                        <x-buttons 
-                                        :delete-route="route('drivers.destroy', ['id' => $driver->driver_id])" 
-                                        :edit-route="route('drivers.edit', ['id' => $driver->driver_id])" 
-                                        :show-route="route('drivers.show', ['id' => $driver->driver_id])" 
-                                        :showDeleteButton="true" 
-                                        :showEditButton="true" 
-                                        :showDetailsButton="true" 
-                                    />
+                                        <x-buttons :delete-route="route('drivers.destroy', ['id' => $driver->driver_id])" :edit-route="route('drivers.edit', ['id' => $driver->driver_id])" :show-route="route('drivers.show', ['id' => $driver->driver_id])" :showDeleteButton="true"
+                                            :showEditButton="true" :showDetailsButton="true" />
                                     </td>
                                 </tr>
                             @endforeach
