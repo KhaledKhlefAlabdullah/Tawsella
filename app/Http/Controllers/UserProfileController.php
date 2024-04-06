@@ -26,9 +26,9 @@ class UserProfileController extends Controller
                 ->where('user_profiles.user_id', getMyId())
                 ->first();
 
-            return api_response(data: $profile, message: 'user profile details getting success');
+            return api_response(data: $profile, message: 'تفاصيل ملف تعريف المستخدم تحقق النجاح');
         } catch (Exception $e) {
-            return api_response(errors: $e->getMessage(), message: 'user profile details getting error', code: 500);
+            return api_response(errors: $e->getMessage(), message: 'تفاصيل ملف تعريف المستخدم تحصل على خطأ', code: 500);
         }
     }
 
@@ -87,13 +87,13 @@ class UserProfileController extends Controller
                 }
             }
             if ($request->wantsJson())
-                return api_response(message: 'profile-edite-success');
+                return api_response(message: 'تم تعديل البيانات بنجاح');
 
             return redirect()->back()->with('success','تم تعديل بيانات السائق بنجاح');
 
         } catch (Exception $e) {
             if ($request->wantsJson())
-                return api_response(errors: [$e->getMessage()], message: 'profile-edite-error', code: 500);
+                return api_response(errors: [$e->getMessage()], message: 'حدث خطأ في تعديل البيانات', code: 500);
 
             return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }

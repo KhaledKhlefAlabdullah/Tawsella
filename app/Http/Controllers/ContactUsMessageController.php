@@ -39,9 +39,9 @@ class ContactUsMessageController extends Controller
 
             ContactUsMessage::create($validatedData);
 
-            return api_response(message: 'send contact us message success');
+            return api_response(message: 'أرسل رسالة اتصل بنا بنجاح');
         } catch (Exception $e) {
-            return api_response(errors: $e->getMessage(), message: 'send contact us message error', code: 500);
+            return api_response(errors: $e->getMessage(), message: 'إرسال خطأ في رسالة اتصل بنا', code: 500);
         }
     }
 
@@ -56,7 +56,7 @@ class ContactUsMessageController extends Controller
                 'is_answerd' => true
             ]);
 
-            // this to send request by the email to the cutomer 
+            // this to send request by the email to the cutomer
             Mail::to($contactUsMessage->email)->send(new ContactUsMails($request->message));
 
             return view();
