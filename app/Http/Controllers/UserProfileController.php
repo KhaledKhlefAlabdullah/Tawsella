@@ -59,23 +59,23 @@ class UserProfileController extends Controller
 
             if ($request->has('avatar')) {
 
-                $avatar = $request->avatar;
+                if (!is_null($request->has('avatar'))) {
+                    $avatar = $request->avatar;
 
-                $path = 'images/profiles';
+                    $path = 'images/profiles';
 
-                if ($userProfile->avatar == '/images/profile_images/user_profile.png') {
+                    if ($userProfile->avatar == '/images/profile_images/user_profile.png') {
 
-                    $avatar_path = storeProfileAvatar($avatar, $path);
-                } else {
+                        $avatar_path = storeProfileAvatar($avatar, $path);
+                    } else {
 
-                    if (!is_null($avatar)) {
                         $avatar_path = editProfileAvatar($userProfile->avatar, $path, $avatar);
                     }
-                }
 
-                $userProfile->update([
-                    'avatar' => $avatar_path
-                ]);
+                    $userProfile->update([
+                        'avatar' => $avatar_path
+                    ]);
+                }
             }
 
             if ($request->wantsJson())
