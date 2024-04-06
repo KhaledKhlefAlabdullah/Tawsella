@@ -25,7 +25,7 @@ class UserProfileRequest extends FormRequest
     {
 
         $id = $this->route('id');
-
+        
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($id)],
@@ -34,5 +34,6 @@ class UserProfileRequest extends FormRequest
             'plate_number' => ['sometimes','required', 'string', 'max:255', Rule::unique('taxis')->ignore(Taxi::where('driver_id', $id)->pluck('id')->first())],
             'lamp_number' => ['sometimes','required', 'string', 'max:255', Rule::unique('taxis')->ignore(Taxi::where('driver_id', $id)->pluck('id')->first())],
         ];
+        
     }
 }
