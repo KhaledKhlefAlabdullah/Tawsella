@@ -127,17 +127,11 @@ class TaxiController extends Controller
      *
      * @param  \App\Models\Taxi  $taxi
      */
-    public function update(Request $request, string $id)
+    public function update(TaxiRequest $request, string $id)
     {
         try {
             // التحقق من البيانات المدخلة
-            $validatedData = $request->validate([
-                'driver_id' => ['required', 'exists:users,id'],
-                'car_name' => ['required', 'string'],
-                'lamp_number' => ['required', 'string', Rule::unique('taxis', 'lamp_number')->ignore($id,'id')],
-                'plate_number' => ['required', 'string', Rule::unique('taxis', 'plate_number')->ignore($id,'id')],
-                'car_detailes' => ['nullable', 'string']
-            ]);
+            $validatedData = $request->validated();
 
             $taxi = getAndCheckModelById(Taxi::class, $id);
 
@@ -147,7 +141,7 @@ class TaxiController extends Controller
             // إعادة توجيه أو عرض رسالة نجاح
             return redirect()->route('taxis.index')->with('success', 'تم تحديث سجل التاكسي بنجاح.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هناك خطأ ربما هناك بيانات مكررة انتبه انه لا يمكن ان  يتكرر رقم الفانوس ورقم اللوحة لدى أكثر من سيارة');
         }
     }
 
