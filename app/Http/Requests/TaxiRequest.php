@@ -26,8 +26,8 @@ class TaxiRequest extends FormRequest
     {
         
         if (request()->isMethod('put')) {
-             $id = request()->route('id');
-             return [
+            $id = $this->taxi->id;
+            return [
                 'driver_id' => ['required','exists:users,id'],
                 'car_name' => ['required','string'],
                 'lamp_number' => ['required','string', Rule::unique(Taxi::class)->ignore($id)],
