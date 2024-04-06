@@ -31,7 +31,7 @@
             var admin_id = <?php echo json_encode(auth()->id()); ?>;
 
             var prevMarker = marker;
-
+            
             setTimeout(() => {
                 Echo.private(`TaxiLocation.${admin_id}`)
                 .listen('.App\\Events\\GetTaxiLocationsEvent', (e) => {
