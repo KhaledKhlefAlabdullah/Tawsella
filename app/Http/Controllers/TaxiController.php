@@ -8,6 +8,7 @@ use App\Models\Taxi;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class TaxiController extends Controller
 {
@@ -126,11 +127,19 @@ class TaxiController extends Controller
      *
      * @param  \App\Models\Taxi  $taxi
      */
-    public function update(TaxiRequest $request, Taxi $taxi)
+    public function update(Request $request, string $id)
     {
         try {
             // التحقق من البيانات المدخلة
-            $validatedData = $request->validated();
+            $validatedData = $request->validate([
+                'driver_id' => ['required', 'exists:users,id'],
+                'car_name' => ['required', 'string'],
+                'lamp_number' => ['required', 'string', Rule::unique('taxis', 'lamp_number')->ignore($id)],
+                'plate_number' => ['required', 'string', Rule::unique('taxis', 'plate_number')->ignore($id)],
+                'car_detailes' => ['nullable', 'string']
+            ]);
+
+            $taxi = getAndCheckModelById(Taxi::class, $id);
 
             // تحديث السجل بالبيانات المحدثة
             $taxi->update($validatedData);
