@@ -228,14 +228,6 @@
 
             </a>
         </li><!-- End Profile Page Nav -->
-
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="{{ url('/Contact') }}">
-                <span class="ms-auto">التواصل</span>
-                <i class="bi bi-envelope " style="margin-left: 10px"></i>
-            </a>
-        </li><!-- End Contact Page Nav -->
-
         <li class="nav-item">
             <a class="nav-link collapsed" href="{{ url('/profiles') }}">
                 <span class="ms-auto">الاعدادات</span>
