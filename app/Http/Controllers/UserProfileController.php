@@ -59,7 +59,7 @@ class UserProfileController extends Controller
 
             if ($request->has('avatar')) {
 
-                if (!is_null($request->has('avatar'))) {
+                if (!empty($request->input('avatar'))) {
                     $avatar = $request->avatar;
 
                     $path = 'images/profiles';
