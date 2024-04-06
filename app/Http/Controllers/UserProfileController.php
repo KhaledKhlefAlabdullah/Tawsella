@@ -68,7 +68,9 @@ class UserProfileController extends Controller
                     $avatar_path = storeProfileAvatar($avatar, $path);
                 } else {
 
-                    $avatar_path = editProfileAvatar($userProfile->avatar, $path, $avatar);
+                    if (!is_null($avatar)) {
+                        $avatar_path = editProfileAvatar($userProfile->avatar, $path, $avatar);
+                    }
                 }
 
                 $userProfile->update([
@@ -79,8 +81,7 @@ class UserProfileController extends Controller
             if ($request->wantsJson())
                 return api_response(message: 'profile-edite-success');
 
-            return redirect()->back()->with('success','تم تعديل بيانات السائق بنجاح');
-
+            return redirect()->back()->with('success', 'تم تعديل بيانات السائق بنجاح');
         } catch (Exception $e) {
             if ($request->wantsJson())
                 return api_response(errors: [$e->getMessage()], message: 'profile-edite-error', code: 500);
