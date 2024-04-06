@@ -30,7 +30,7 @@ class UserProfileRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($id)],
             'phoneNumber' => ['required', 'string', 'regex:/^\+[0-9]{9,20}$/', Rule::unique('user_profiles')->ignore($id, 'user_id')],
-            'avatar' => ['sometimes','nullable','file','mimes:png,jpg,jpeg', 'max:10024'], // Example: max file size of 10MB
+            'avatar' => ['sometimes','nullable','image','mimes:png,jpg,jpeg', 'max:10024'], // Example: max file size of 10MB
         ];
         
     }
