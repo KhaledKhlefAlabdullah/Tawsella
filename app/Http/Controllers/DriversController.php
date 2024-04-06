@@ -78,13 +78,13 @@ class DriversController extends Controller
                 $message = 'Driver is Ready';
             } else {
                 // إذا كانت القيمة المرسلة غير صالحة
-                return api_response(null, 'Invalid state value', 400);
+                return api_response(message:'Invalid state value', code:400);
             }
 
             $driver->save();
-            return api_response(null, $message, 200);
+            return api_response($message, 200);
         } catch (Exception $e) {
-            return api_response(null, 'Failed to update driver state', 500, null, ['error' => $e->getMessage()]);
+            return api_response( message:'Failed to update driver state', code:500,errors: ['error' => $e->getMessage()]);
         }
     }
 
@@ -94,10 +94,11 @@ class DriversController extends Controller
             $driver = getAndCheckModelById(User::class, $id);
 
             $taxi = Taxi::where('driver_id',$id)->first();
-            $taxi->update([
-                'driver_id' => null
-            ]);
-
+            if($taxi){
+                $taxi->update([
+                    'driver_id' => null
+                ]);
+            }
             $driver->delete();
 
             return redirect()->back()->with('success', 'تم حذف السائق بنجاح');
@@ -116,7 +117,7 @@ class DriversController extends Controller
         $query = User::select('users.id', 'user_profiles.name', 'users.email', 'user_profiles.phoneNumber', 'user_profiles.avatar', 'users.id', 'users.is_active', 'users.driver_state', 'taxis.plate_number', 'taxis.lamp_number')
             ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
             ->leftJoin('taxis', 'users.id', '=', 'taxis.driver_id')
-            ->where('users.user_type', 'driver');
+            ->where($conditions);
 
         // Apply the specified method
         if ($method === 'get') {
