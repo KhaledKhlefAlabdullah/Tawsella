@@ -145,7 +145,7 @@
                                         <div class="mb-3">
                                             <x-input-label for="avatar" :value="__('صور الملف الشخصي')" />
                                             <input id="avatar" name="avatar" type="file" class="form-control"
-                                                accept="image/*" />
+                                                accept="image/png,jpg,jpeg" />
                                             <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
                                         </div>
                                         <div class="mb-3">
