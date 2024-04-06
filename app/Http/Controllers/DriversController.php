@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Http\Request;
 use App\Models\Calculations;
 use App\Models\Taxi;
+use App\Models\TaxiMovement;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -99,6 +100,7 @@ class DriversController extends Controller
                     'driver_id' => null
                 ]);
             }
+
             $driver->delete();
 
             return redirect()->back()->with('success', 'تم حذف السائق بنجاح');

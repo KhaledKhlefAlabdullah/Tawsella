@@ -127,6 +127,8 @@ class TaxiMovementController extends Controller
                 $data = TaxiMovement::select('taxi_movements.driver_id as driver_id', 'taxi_movements.end_latitude as lat', 'taxi_movements.end_longitude as long', 'up.name')
                     ->join('user_profiles as up', 'taxi_movements.customer_id', '=', 'up.user_id')
                     ->where('taxi_movements.id', $id)->first();
+
+                    return view('taxi_movement.map_completed', ['data' => $data])->with('success', 'تم عرض الخريطة بنحاح');
             }
 
             return view('taxi_movement.map', ['data' => $data])->with('success', 'تم عرض الخريطة بنحاح');

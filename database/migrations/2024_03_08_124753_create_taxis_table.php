@@ -22,7 +22,7 @@ return new class extends Migration
             $table->double('last_location_longitude')->nullable();
             $table->foreign('driver_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
-
+            $table->SoftDeletes();
         });
     }
 

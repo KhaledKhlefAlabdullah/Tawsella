@@ -26,32 +26,6 @@
 
             var marker = L.marker([{{ $data->lat }}, {{ $data->long }}]).addTo(map);
             marker.bindPopup('{{ $data->name }}').openPopup();
-
-            var driver_id = <?php echo json_encode($data->driver_id); ?>;
-            var admin_id = <?php echo json_encode(auth()->id()); ?>;
-
-            var prevMarker = marker;
-
-            setTimeout(() => {
-                Echo.private(`TaxiLocation.${admin_id}`)
-                .listen('.App\\Events\\GetTaxiLocationsEvent', (e) => {
-
-                    if (e.driver_id == driver_id) {
-                        console.log(e.lat, e.long);
-
-                        // Remove previous marker
-                        map.removeLayer(prevMarker);
-
-                        // Add new marker with updated position
-                        var newMarker = L.marker([e.lat, e.long]).addTo(map);
-                        newMarker.bindPopup('{{ $data->name }}').openPopup();
-
-                        // Update prevMarker reference
-                        prevMarker = newMarker;
-                    }
-                });
-            }, 2000);
-            
         </script>
 
 
