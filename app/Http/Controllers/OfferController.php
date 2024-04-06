@@ -33,12 +33,12 @@ class OfferController extends Controller
                 ->get();
 
             if (request()->wantsJson())
-                return api_response(data: $offers, message: 'getting offers success');
+                return api_response(data: $offers, message: 'تم الحصول على العروض بنجاح');
 
             return view('offers.index', ['offers' => $offers]);
         } catch (Exception $e) {
             if (request()->wantsJson())
-                return api_response(errors: $e->getMessage(), message: 'getting offers error', code: 500);
+                return api_response(errors: $e->getMessage(), message: 'فشل الحصول على العروض', code: 500);
             return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }

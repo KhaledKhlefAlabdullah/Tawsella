@@ -102,7 +102,7 @@ class TaxiMovementController extends Controller
                 ->join('user_profiles as customer_profile', 'taxi_movements.customer_id', '=', 'customer_profile.user_id')
                 ->join('taxis', 'taxi_movements.taxi_id', '=', 'taxis.id')
                 ->join('taxi_movement_types', 'taxi_movements.movement_type_id', '=', 'taxi_movement_types.id')
-                ->distinct() 
+                ->distinct()
                 ->where($condations);
 
             return $data;
@@ -144,7 +144,7 @@ class TaxiMovementController extends Controller
 
             $validatedData = $request->validated();
 
-            // To check if the customer have request in last 4 menites dont create new one and return message 
+            // To check if the customer have request in last 4 menites dont create new one and return message
             $existsRequest = TaxiMovement::where('customer_id', $validatedData['customer_id'])
                 ->where('created_at', '>=', Carbon::now()->subMinutes(5))
                 ->latest()
@@ -166,9 +166,9 @@ class TaxiMovementController extends Controller
                 $taxiMovement
             );
 
-            return api_response(message: 'create-movement-success');
+            return api_response(message: 'تم انشاء الطلب بنجاح');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'create-movement-error', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'حدث خطأ اثناء انشاء الطلب', code: 500);
         }
     }
 
@@ -264,7 +264,7 @@ class TaxiMovementController extends Controller
 
             return api_response(message: $message);
         } catch (Exception $e) {
-            return api_response(errors: $e->getMessage(), message: 'there error in find/unfind customer', code: 500);
+            return api_response(errors: $e->getMessage(), message: 'حدث خطأ في ايجاد او عدم ايجاد الزبون', code: 500);
         }
     }
 
@@ -320,7 +320,7 @@ class TaxiMovementController extends Controller
                 $customerName,
                 'تم اكمال طلب الزبون من ' . $from . 'إلى ' . $to
             );
-            
+
             return api_response(data: $Calculation->totalPrice ,message: 'success');
         } catch (Exception $e) {
             return api_response(errors: $e->getMessage(), message: 'error', code: 500);
@@ -353,10 +353,10 @@ class TaxiMovementController extends Controller
                 ->whereDate('taxi_movements.created_at', today())
                 ->first();
             if ($request)
-                return api_response(data: $request, message: 'success getting data');
+                return api_response(data: $request, message: 'نجح في الحول على بيانات');
             return api_response(message: 'there now data');
         } catch (Exception $e) {
-            return api_response(errors: $e->getMessage(), message: 'there error in getting data', code: 500);
+            return api_response(errors: $e->getMessage(), message: 'حدث خطأ في الحصول على بيانات', code: 500);
         }
     }
 

@@ -50,7 +50,7 @@ class DriversController extends Controller
             $driver = $this->getDrivers(['users.id' => $id, 'users.user_type' => 'driver'], 'first');
 
             if (!$driver) {
-                return redirect()->back()->withErrors(['driver is not exists' . 'An error occurred. Please try again.'])->withInput();
+                return redirect()->back()->withErrors(["السائق غير موجود حدث خطأ يرجى المحاولة مرة اخرى"])->withInput();
             }
             return view('Driver.show', ['driver' => $driver]);
         } catch (Exception $e) {
@@ -66,7 +66,7 @@ class DriversController extends Controller
             // التحقق من وجود السائق في قاعدة البيانات
             $driver = User::where('id', $driverId)->where('user_type', 'driver')->first();
             if (!$driver) {
-                return api_response(null, 'Driver not found', 404);
+                return api_response(null, 'السائق غير موجود', 404);
             }
 
             // تحديث حالة السائق بناءً على القيمة المرسلة في الطلب
@@ -78,13 +78,13 @@ class DriversController extends Controller
                 $message = 'Driver is Ready';
             } else {
                 // إذا كانت القيمة المرسلة غير صالحة
-                return api_response(message:'Invalid state value', code:400);
+                return api_response(null, 'Invalid state value', 400);
             }
 
             $driver->save();
             return api_response($message, 200);
         } catch (Exception $e) {
-            return api_response( message:'Failed to update driver state', code:500,errors: ['error' => $e->getMessage()]);
+            return api_response(null, 'Failed to update driver state', 500, null, ['error' => $e->getMessage()]);
         }
     }
 

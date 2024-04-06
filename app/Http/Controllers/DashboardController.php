@@ -13,7 +13,7 @@ class DashboardController extends Controller
     public function index()
     {
         try{
- 
+
             $currentDate = Carbon::now()->toDateString();
 
             // Query to get requests for the current day
@@ -38,12 +38,12 @@ class DashboardController extends Controller
                 ->get();
 
             $drivers = getReadyDrivers();
-            
-            
+
+
             return view('dashboard',['lifeTaxiMovements' => $taxiMovement, 'drivers' => $drivers]);
         }
         catch(Exception $e){
-            return redirect()->back()->withErrors('there error in getting current taxi movement'.$e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هناك خطأ في الحصول على حركة سيارات الأجرة الحالية'.$e->getMessage())->withInput();
         }
     }
 }

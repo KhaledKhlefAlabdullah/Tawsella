@@ -31,7 +31,7 @@ class TaxiController extends Controller
     }
 
     /**
-     * Get the taxi location 
+     * Get the taxi location
      */
     public function getTaxiLocation(Request $request, string $driver_id)
     {
@@ -55,9 +55,9 @@ class TaxiController extends Controller
                 $request->lat,
                 $request->long
             );
-            return api_response(message: 'location getting success');
+            return api_response(message: 'تم الحصول على الموقع بنجاح');
         } catch (Exception $e) {
-            return api_response(errors: $e->getMessage(), message: 'there error in gettign taxi location', code: 500);
+            return api_response(errors: $e->getMessage(), message: 'هناك خطأ في الحصول على موقع سيارة الأجرة', code: 500);
         }
     }
 

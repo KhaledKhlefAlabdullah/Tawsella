@@ -25,9 +25,9 @@ class PasswordController extends Controller
         ]);
 
         if(request()->wantsJson()){
-            return api_response(message:'successfully change password');
+            return api_response(message:'تغيير كلمة المرور بنجاح');
         }
 
-        return back()->with('status', 'password-updated');
+        return back()->with('status', 'تم تحديث كلمة السر');
     }
 }

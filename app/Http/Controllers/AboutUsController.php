@@ -19,16 +19,16 @@ class AboutUsController extends Controller
             $aboutUsRecords = AboutUs::select('title', 'description', 'complaints_number')->first();
 
             if (request()->wantsJson()) {
-                return api_response(data: $aboutUsRecords, message: 'successfully getting about us details');
+                return api_response(data: $aboutUsRecords, message: 'نجحنا في الحصول على التفاصيل عنا');
             }
-                      
+
             $additional_info = AboutUs::where('is_general', false)->select('title', 'description')->get();
 
             return view('aboutus.index', ['aboutUsRecords' => $aboutUsRecords, 'additional_info' => $additional_info]);
 
         } catch (Exception $e) {
             if (request()->wantsJson()) {
-                return api_response(errors: [$e->getMessage()], message: 'successfully getting about us details', code: 500);
+                return api_response(errors: [$e->getMessage()], message: 'نجحنا في الحصول على التفاصيل عنا', code: 500);
             }
 
             return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
@@ -37,7 +37,7 @@ class AboutUsController extends Controller
 
 
     /**
-     * Get the additional information 
+     * Get the additional information
      */
     public function get_addition_information()
     {
@@ -45,9 +45,9 @@ class AboutUsController extends Controller
 
             $data = AboutUs::where('is_general', false)->select('title', 'description')->get();
 
-            return api_response(data: $data, message: 'getting additional information success');
+            return api_response(data: $data, message: 'الحصول على معلومات إضافية ناجحة');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'getting additional information error', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'الحصول على خطأ معلومات إضافية', code: 500);
         }
     }
 
@@ -102,7 +102,7 @@ class AboutUsController extends Controller
     }
 
     /**
-     * Create Additional info records 
+     * Create Additional info records
      */
     public function store_additional_info(AboutUsRequest $request){
         try{
@@ -127,7 +127,7 @@ class AboutUsController extends Controller
     }
 
      /**
-     * Update Additional info records 
+     * Update Additional info records
      */
     public function update_additional_info(AboutUsRequest $request, AboutUs $aboutUs){
         try{

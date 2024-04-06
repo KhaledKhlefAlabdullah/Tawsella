@@ -49,14 +49,14 @@ class RegisteredUserController extends Controller
                 'user_type' => $user_type,
                 'driver_state' => $user_type == 'driver' ? 'ready': null
             ]);
-            
+
             UserProfile::create([
                 'user_id' => $user->id,
                 'name' => $request->input('name'),
                 'gender' => $user_type == 'driver' ? $request->gender : null,
                 'phoneNumber' => $request->input('phone_number'),
             ]);
-            
+
             if ($request->wantsJson()) {
 
                 $token = createToken($user, 'register-token');
@@ -64,7 +64,7 @@ class RegisteredUserController extends Controller
                 return api_response(data: ['token' => $token, 'user_id' => $user->id], message: 'register-success');
             }
 
-            Session::flash('success', 'Driver account created successfully.');
+            Session::flash('success', 'تم إنشاء حساب السائق بنجاح.');
 
             // Redirect back or to any other page
             return redirect()->back();
@@ -76,7 +76,7 @@ class RegisteredUserController extends Controller
             return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
 
     }
-    
+
 
     /**
      * Admin register to create driver account
