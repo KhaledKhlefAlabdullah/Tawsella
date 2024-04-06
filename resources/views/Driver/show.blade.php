@@ -188,22 +188,14 @@
                                             </p>
                                         </header>
 
-                                        <form method="post" action="{{ route('password.update') }}"
+                                        <form method="post" action="{{ route('password.driver.update', $driver->id) }}"
                                             class="mt-6 space-y-6">
                                             @csrf
                                             @method('put')
 
                                             <div class="mb-3">
-                                                <label for="update_password_current_password"
-                                                    class="form-label">{{ __('Current Password') }}</label>
-                                                <input id="update_password_current_password" name="current_password"
-                                                    type="password" class="form-control" autocomplete="current-password">
-                                                <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
-                                            </div>
-
-                                            <div class="mb-3">
                                                 <label for="update_password_password"
-                                                    class="form-label">{{ __('New Password') }}</label>
+                                                    class="form-label">{{ __('كلمة المرور الجديدة') }}</label>
                                                 <input id="update_password_password" name="password" type="password"
                                                     class="form-control" autocomplete="new-password">
                                                 <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
@@ -211,7 +203,7 @@
 
                                             <div class="mb-3">
                                                 <label for="update_password_password_confirmation"
-                                                    class="form-label">{{ __('Confirm Password') }}</label>
+                                                    class="form-label">{{ __('تأكيد كلمة المرور') }}</label>
                                                 <input id="update_password_password_confirmation"
                                                     name="password_confirmation" type="password" class="form-control"
                                                     autocomplete="new-password">

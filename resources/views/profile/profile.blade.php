@@ -247,7 +247,7 @@
                                             <div class="mb-3">
                                                 <label for="update_password_password"
                                                     class="form-label">{{ __('كلمة السر الجديدة') }}</label>
-                                                <input id="update_password_password" name="password" type="password"
+                                                <input id="update_password_password" name="new_password" type="password"
                                                     class="form-control" autocomplete="new-password">
                                                 <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
                                             </div>
@@ -256,7 +256,7 @@
                                                 <label for="update_password_password_confirmation"
                                                     class="form-label">{{ __('تأكيد كلمة السر') }}</label>
                                                 <input id="update_password_password_confirmation"
-                                                    name="password_confirmation" type="password" class="form-control"
+                                                    name="new_password_confirmation" type="password" class="form-control"
                                                     autocomplete="new-password">
                                                 <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
                                             </div>
