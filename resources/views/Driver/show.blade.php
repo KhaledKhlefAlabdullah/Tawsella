@@ -142,12 +142,11 @@
                                                 :value="old('email', $driver->email)" required autocomplete="username" />
                                             <x-input-error class="mt-2" :messages="$errors->get('email')" />
                                         </div>
-                                        <div class="mb-3">
+                                        {{-- <div class="mb-3">
                                             <x-input-label for="avatar" :value="__('صور الملف الشخصي')" />
-                                            <input id="avatar" name="avatar" type="file" class="form-control"
-                                                accept="image/png,jpg,jpeg" />
+                                            <input id="avatar" name="avatar" type="file" class="form-control" accept="image/*" />
                                             <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
-                                        </div>
+                                        </div> --}}
                                         <div class="mb-3">
                                             <x-input-label for="phoneNumber" :value="__('رقم الجوال')" />
                                             <x-text-input id="phoneNumber" name="phoneNumber" type="tel"
