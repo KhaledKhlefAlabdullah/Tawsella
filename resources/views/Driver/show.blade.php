@@ -155,20 +155,6 @@
                                                 autocomplete="phoneNumber" />
                                             <x-input-error class="mt-2" :messages="$errors->get('phoneNumber')" />
                                         </div>
-                                        <div class="mb-3">
-                                            <x-input-label for="plate_number" :value="__('رقم لوحة السيارة')" />
-                                            <x-text-input id="plate_number" name="plate_number" type="text"
-                                                class="form-control" :value="old('plate_number', $driver->plate_number)" required
-                                                autocomplete="plate_number" />
-                                            <x-input-error class="mt-2" :messages="$errors->get('plate_number')" />
-                                        </div>
-                                        <div class="mb-3">
-                                            <x-input-label for="lamp_number" :value="__('رقم فانوس السيارة')" />
-                                            <x-text-input id="lamp_number" name="lamp_number" type="text"
-                                                class="form-control" :value="old('lamp_number', $driver->lamp_number)" required
-                                                autocomplete="lamp_number" />
-                                            <x-input-error class="mt-2" :messages="$errors->get('lamp_number')" />
-                                        </div>
                                         <div class="d-flex align-items-center gap-4">
                                             <x-primary-button class="btn btn-success">
                                                 {{ __('حفظ') }}

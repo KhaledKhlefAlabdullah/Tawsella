@@ -76,16 +76,6 @@ class UserProfileController extends Controller
                 ]);
             }
 
-            if (!is_null(Auth::user())) {
-                if (Auth::user()->user_type == 'admin') {
-
-                    $taxi = Taxi::where('driver_id', $id)->first();
-                    $taxi->update([
-                        'lamp_number' => $request->input('plate_number'),
-                        'plate_number' => $request->input('lamp_number')
-                    ]);
-                }
-            }
             if ($request->wantsJson())
                 return api_response(message: 'profile-edite-success');
 
