@@ -15,8 +15,8 @@ return new class extends Migration
             $table->uuid('id')->primary()->unique();
             $table->string('driver_id')->nullable();
             $table->string('car_name');
-            $table->string('lamp_number')->unique();
-            $table->string('plate_number')->unique();
+            $table->string('lamp_number')->unique()->nullable();
+            $table->string('plate_number')->unique()->nullable();
             $table->string('car_detailes');
             $table->double('last_location_latitude')->nullable();
             $table->double('last_location_longitude')->nullable();
