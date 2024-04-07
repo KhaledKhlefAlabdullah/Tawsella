@@ -15,12 +15,12 @@ class TaxiMovementTypeController extends Controller
     public function index()
     {
         try {
-            $movements = TaxiMovementType::select('id', 'type', 'price', 'description')->whereNotIn('id', ['t-m-t-1', 't-m-t-2','t-m-t-3'])->get();
+            $movements = TaxiMovementType::select('id', 'type', 'price','payment', 'description')->whereNotIn('id', ['t-m-t-1', 't-m-t-2','t-m-t-3'])->get();
 
             if (request()->wantsJson())
                 return api_response(data: $movements, message: ' نجح الحصول على انواع الطلبات');
 
-            $movementTypes = TaxiMovementType::select('id', 'type', 'price', 'description', 'is_onKM')->whereIn('id', ['t-m-t-1', 't-m-t-2','t-m-t-3'])->get();
+            $movementTypes = TaxiMovementType::select('id', 'type', 'price','payment', 'description', 'is_onKM')->whereIn('id', ['t-m-t-1', 't-m-t-2','t-m-t-3'])->get();
 
             return view('services', ['movementTypes' => $movementTypes, 'movements' => $movements]);
         } catch (Exception $e) {
@@ -47,8 +47,10 @@ class TaxiMovementTypeController extends Controller
             $validatedData = $request->validate([
                 'type' => ['required'],
                 'price' => ['required', 'numeric'],
-                'description' => ['required'],
+                'description' => ['nullable'],
                 'is_onKM' => ['required', 'boolean'],
+                'payment' => ['required','in:$,TL']
+
             ]);
 
             // إنشاء نوع حركة تاكسي جديد وحفظه في قاعدة البيانات
@@ -82,6 +84,7 @@ class TaxiMovementTypeController extends Controller
                 'price' => 'required|numeric',
                 'description' => 'nullable|string',
                 'is_onKM' => 'required|boolean',
+                'payment' => 'required|in:$,TL'
             ]);
             $movementType->update($data);
 

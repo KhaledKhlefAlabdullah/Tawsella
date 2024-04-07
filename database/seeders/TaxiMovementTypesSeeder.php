@@ -61,28 +61,32 @@ class TaxiMovementTypesSeeder extends Seeder
             DB::table('taxi_movement_types')->insert([
                 'id' => Str::uuid(),
                 'type' => $movementType['type'],
-                'price' => $movementType['price']
+                'price' => $movementType['price'],
+                'payment' => 'TL'
             ]);
         }   
         
         DB::table('taxi_movement_types')->insert([
             'id' => 't-m-t-1',
             'type' => 'طلب داخلي',
-            'price' => 50
+            'price' => 50,
+            'payment' => 'TL'
         ]);
 
         DB::table('taxi_movement_types')->insert([
             'id' => 't-m-t-2',
             'type' => 'طلب خارجي',
             'is_onKM' => true,
-            'price' => 0.5
+            'price' => 0.5,
+            'payment' => '$'
         ]);
 
         DB::table('taxi_movement_types')->insert([
             'id' => 't-m-t-3',
             'type' => 'استأجار سيارة لمدة زمنية',
             'description' => 'تواصل معنا على الرقم',
-            'price' => 1000
+            'price' => 1000,
+            'payment' => '$'
         ]);
     }
 }

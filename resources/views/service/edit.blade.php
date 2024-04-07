@@ -72,6 +72,23 @@
                                     </div>
                                 </div>
 
+                                <div class="form-group row">
+                                    <label for="payment" class="col-md-4 col-form-label text-md-right">عملة الدفع</label>
+
+                                    <div class="col-md-6">
+                                        <select id="is_onKM" class="form-control @error('payment') is-invalid @enderror" name="payment" required>
+                                            <option value="$" {{ $movementType->payment == '$' ? 'selected' : '' }}>دولار $</option>
+                                            <option value="TL" {{ $movementType->payment == 'TL' ? 'selected' : '' }}>ليرة تركي TL</option>
+                                        </select>
+
+                                        @error('payment')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
                                 <div class="form-group row mb-0">
                                     <div class="col-md-6 offset-md-4">
                                         <button type="submit" class="btn btn-primary">
