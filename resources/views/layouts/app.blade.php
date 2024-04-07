@@ -101,7 +101,7 @@
     <script src="path/to/darkmode.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        function confirmDelete() {
+        function confirmDelete(deletedroute) {
             Swal.fire({
                 title: 'هل أنت متأكد؟',
                 text: "لن يمكنك التراجع عن هذا الإجراء!",
@@ -113,7 +113,7 @@
                 cancelButtonText: 'إلغاء'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    document.getElementById('deleteForm').submit();
+                    document.getElementById(`deleteForm${deletedroute}`).submit();
                 }
             });
             return false; // Prevent default form submission

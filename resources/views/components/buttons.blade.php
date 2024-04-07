@@ -2,10 +2,10 @@
 
 <div class="btn-group" role="group" aria-label="Driver Actions">
     @if ($showDeleteButton && $deleteRoute)
-        <form action="{{ $deleteRoute }}" method="POST" style="display: inline;" id="deleteForm">
+        <form action="{{ $deleteRoute }}" method="POST" style="display: inline;" id="deleteForm{{$deleteRoute}}">
             @csrf
             @method('DELETE')
-            <button type="button" class="btn btn-danger" title="{{ __('Delete') }}" onclick="confirmDelete();"><i class="bi bi-trash-fill"></i></button>
+            <button type="button" class="btn btn-danger" title="{{ __('Delete') }}" onclick="confirmDelete('{{$deleteRoute}}');"><i class="bi bi-trash-fill"></i></button>
         </form>
     @endif
 
