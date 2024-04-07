@@ -148,12 +148,12 @@ class TaxiMovementController extends Controller
 
             // To check if the customer have request in last 4 menites dont create new one and return message
             $existsRequest = TaxiMovement::where('customer_id', $validatedData['customer_id'])
-                ->where('created_at', '>=', Carbon::now()->subMinutes(5))
+                ->where('created_at', '>=', Carbon::now()->subMinutes(10))
                 ->latest()
                 ->first();
 
             if ($existsRequest) {
-                $existsRequest->delete();
+                return api_response(message: 'لقد قمت بطلب سيارة قبل قليل انتظر قليلاً من فضلك ريثما يتم معالجة طلبك');
             }
 
             $taxiMovement = TaxiMovement::create($validatedData);
