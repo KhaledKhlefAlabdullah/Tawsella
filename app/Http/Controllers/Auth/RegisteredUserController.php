@@ -3,18 +3,15 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Models\Taxi;
 use App\Models\User;
 use App\Models\UserProfile;
-use App\Providers\RouteServiceProvider;
 use Exception;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Illuminate\Validation\Rule;
 
 use function PHPUnit\Framework\isNull;
 
@@ -38,16 +35,30 @@ class RegisteredUserController extends Controller
         try {
             $request->validate([
                 'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
                 'phone_number' => ['required', 'string', 'regex:/^\+[0-9]{9,20}$/'],
                 'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            ]);
+            ], [
+                'name.required' => 'حقل الاسم مطلوب.',
+                'name.string' => 'حقل الاسم يجب أن يكون نصًا.',
+                'name.max' => 'حقل الاسم يجب ألا يتجاوز 255 حرفًا.',
+                'email.required' => 'حقل البريد الإلكتروني مطلوب.',
+                'email.string' => 'حقل البريد الإلكتروني يجب أن يكون نصًا.',
+                'email.email' => 'البريد الإلكتروني غير صحيح.',
+                'email.max' => 'حقل البريد الإلكتروني يجب ألا يتجاوز 255 حرفًا.',
+                'email.unique' => 'البريد الإلكتروني موجود من قبل في قاعدة البيانات.',
+                'phone_number.required' => 'حقل رقم الهاتف مطلوب.',
+                'phone_number.string' => 'حقل رقم الهاتف يجب أن يكون نصًا.',
+                'phone_number.regex' => 'رقم الهاتف غير صحيح.',
+                'password.required' => 'حقل كلمة المرور مطلوب.',
+                'password.confirmed' => 'تأكيد كلمة المرور غير متطابق.',
+            ]);;
 
             $user = User::create([
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'user_type' => $user_type,
-                'driver_state' => $user_type == 'driver' ? 'ready': null
+                'driver_state' => $user_type == 'driver' ? 'ready' : null
             ]);
 
             UserProfile::create([
@@ -68,13 +79,12 @@ class RegisteredUserController extends Controller
 
             // Redirect back or to any other page
             return redirect()->back();
-
         } catch (Exception $e) {
-            if(request()->wantsJson())
-                return api_response(errors: [$e->getMessage()], message: 'register-error', code: 500);
+            if (request()->wantsJson()) {
+                return api_response(message: $e->getMessage(), code: 500);
             }
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
-
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى :' . $e->getMessage())->withInput();
+        }
     }
 
 
@@ -86,7 +96,7 @@ class RegisteredUserController extends Controller
     public function admin_store(Request $request)
     {
         $request->validate([
-            'gender' => ['required','string','in:male,female']
+            'gender' => ['required', 'string', 'in:male,female']
         ]);
         //dd($request);
         return $this->store($request, 'driver');

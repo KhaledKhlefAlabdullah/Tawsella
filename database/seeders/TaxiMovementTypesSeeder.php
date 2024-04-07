@@ -77,5 +77,12 @@ class TaxiMovementTypesSeeder extends Seeder
             'is_onKM' => true,
             'price' => 0.5
         ]);
+
+        DB::table('taxi_movement_types')->insert([
+            'id' => 't-m-t-3',
+            'type' => 'استأجار سيارة لمدة زمنية',
+            'description' => 'تواصل معنا على الرقم',
+            'price' => 1000
+        ]);
     }
 }

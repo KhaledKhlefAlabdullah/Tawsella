@@ -15,12 +15,12 @@ class TaxiMovementTypeController extends Controller
     public function index()
     {
         try {
-            $movements = TaxiMovementType::select('id', 'type', 'price', 'description')->whereNotIn('id', ['t-m-t-1', 't-m-t-2'])->get();
+            $movements = TaxiMovementType::select('id', 'type', 'price', 'description')->whereNotIn('id', ['t-m-t-1', 't-m-t-2','t-m-t-3'])->get();
 
             if (request()->wantsJson())
                 return api_response(data: $movements, message: ' نجح الحصول على انواع الطلبات');
 
-            $movementTypes = TaxiMovementType::select('id', 'type', 'price', 'description', 'is_onKM')->whereIn('id', ['t-m-t-1', 't-m-t-2'])->get();
+            $movementTypes = TaxiMovementType::select('id', 'type', 'price', 'description', 'is_onKM')->whereIn('id', ['t-m-t-1', 't-m-t-2','t-m-t-3'])->get();
 
             return view('services', ['movementTypes' => $movementTypes, 'movements' => $movements]);
         } catch (Exception $e) {
