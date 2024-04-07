@@ -17,12 +17,12 @@ class TaxiMovementTypeController extends Controller
         try {
             $movements = TaxiMovementType::select('id', 'type', 'price','payment', 'description')->whereNotIn('id', ['t-m-t-1', 't-m-t-2','t-m-t-3'])->get();
 
-            if (request()->wantsJson())
-                return api_response(data: $movements, message: ' نجح الحصول على انواع الطلبات');
-
             $movementTypes = TaxiMovementType::select('id', 'type', 'price','payment', 'description', 'is_onKM')->whereIn('id', ['t-m-t-1', 't-m-t-2','t-m-t-3'])->get();
+            if (request()->wantsJson())
+                return api_response(data: $movementTypes, message: ' نجح الحصول على انواع الطلبات');
 
             return view('services', ['movementTypes' => $movementTypes, 'movements' => $movements]);
+
         } catch (Exception $e) {
             if (request()->wantsJson())
                 return api_response(errors: [$e->getMessage()], message: 'حدث خطأ في الحصول على انواع الطلبات', code: 500);
