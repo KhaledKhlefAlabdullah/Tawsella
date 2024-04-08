@@ -134,7 +134,12 @@
                                                 :value="old('name', Auth::user()->name)" required autofocus autocomplete="name" />
                                             <x-input-error class="mt-2" :messages="$errors->get('name')" />
                                         </div>
-
+                                        {{-- <div class="mb-3">
+                                            <x-input-label for="phoneNumber" :value="__('الايميل')" />
+                                            <x-text-input id="phoneNumber" name="phoneNumber" type="email" class="form-control"
+                                                :value="old('phoneNumber', Auth::user()->userProfile->phoneNumber)" required autocomplete="phoneNumber" aria-placeholder="+996000000000" />
+                                            <x-input-error class="mt-2" :messages="$errors->get('phoneNumber')" />
+                                        </div> --}}
                                         <div class="mb-3">
                                             <x-input-label for="email" :value="__('الايميل')" />
                                             <x-text-input id="email" name="email" type="email" class="form-control"
