@@ -31,7 +31,7 @@ class ContactUsMessagesRequest extends FormRequest
             'admin_id' => ['string','required','exists:users,id'],
             'description' => ['string','required',''],
             'email' => ['string','required','email'],
-            'phone_number' => ['string','sometimes','required','regex:/^(00|\+)[0-9]{9,20}
+            'phone_number' => ['string','sometimes','required','regex:/^(00|\+)[0-9]{9,20}$/
 ']
         ];
     }

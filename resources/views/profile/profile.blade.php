@@ -17,14 +17,7 @@
             </div>
         @endif
         <div class="pagetitle">
-            <h1>Profile</h1>
-            <nav>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="profile.html">All Users</a></li>
-                    <li class="breadcrumb-item">Users</li>
-                    <li class="breadcrumb-item active">Profile</li>
-                </ol>
-            </nav>
+            <h1>الملف  الشخصي</h1>
         </div><!-- End Page Title -->
 
         <section class="section profile">
@@ -35,11 +28,9 @@
                         <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
                             <img src="img/logoo.png" alt="Profile" class="rounded-circle">
-                            <h2>{{ Auth::user()->name }}</h2>
-                            <h3>({{ Auth::user()->role->name ?? 'Default Role' }})</h3>
+                            <h2>{{ Auth::user()->user_profile->name }}</h2>
                             <div class="social-links mt-2">
                                 <a href="#"><i class="bi bi-award"></i></a>
-                                <img src="{{ asset('/img/logo.png') }}" style="width: 50px;height: 50px;" alt="">
                             </div>
                         </div>
                     </div>
@@ -62,12 +53,6 @@
                                     <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">
                                         تعديل الملف</button>
                                 </li>
-
-                                <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab"
-                                        data-bs-target="#profile-settings">الاعدادات</button>
-                                </li>
-
                                 <li class="nav-item">
                                     <button class="nav-link" data-bs-toggle="tab"
                                         data-bs-target="#profile-change-password">تغيير كلمةا لسر</button>
@@ -88,18 +73,11 @@
 
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label ">الاسم الكامل</div>
-                                        <div class="col-lg-9 col-md-8">{{ Auth::user()->name }}</div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">الدور</div>
-                                        <div class="col-lg-9 col-md-8">({{ Auth::user()->role->name ?? 'Default Role' }})
-                                        </div>
+                                        <div class="col-lg-9 col-md-8">{{ Auth::user()->user_profile->name }}</div>
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">الهاتف</div>
-                                        <div class="col-lg-9 col-md-8"><a href="https://wa.me/+963992819597">+963 992 819
-                                                597</a></div>
+                                        <div class="col-lg-9 col-md-8"><a href="https://wa.me/{{Auth::user()->user_profile->phoneNumber}}">{{Auth::user()->user_profile->phoneNumber}}</a></div>
                                     </div>
 
                                     <div class="row">
@@ -131,15 +109,15 @@
                                         <div class="mb-3">
                                             <x-input-label for="name" :value="__('الاسم')" />
                                             <x-text-input id="name" name="name" type="text" class="form-control"
-                                                :value="old('name', Auth::user()->name)" required autofocus autocomplete="name" />
+                                                :value="old('name', Auth::user()->user_profile->name ?? null)" required autofocus autocomplete="name" />
                                             <x-input-error class="mt-2" :messages="$errors->get('name')" />
                                         </div>
-                                        {{-- <div class="mb-3">
-                                            <x-input-label for="phoneNumber" :value="__('الايميل')" />
-                                            <x-text-input id="phoneNumber" name="phoneNumber" type="email" class="form-control"
-                                                :value="old('phoneNumber', Auth::user()->userProfile->phoneNumber)" required autocomplete="phoneNumber" aria-placeholder="+996000000000" />
+                                        <div class="mb-3">
+                                            <x-input-label for="phoneNumber" :value="__('رقم الجوال')" />
+                                            <x-text-input id="phoneNumber" name="phoneNumber" type="text" class="form-control"
+                                                :value="old('phoneNumber', Auth::user()->userProfile->phoneNumber ?? null)" required autocomplete="phoneNumber" aria-placeholder="+000000000" />
                                             <x-input-error class="mt-2" :messages="$errors->get('phoneNumber')" />
-                                        </div> --}}
+                                        </div>
                                         <div class="mb-3">
                                             <x-input-label for="email" :value="__('الايميل')" />
                                             <x-text-input id="email" name="email" type="email" class="form-control"
@@ -179,51 +157,6 @@
                                         </div>
                                     </form>
                                 </div>
-
-
-                                <div class="tab-pane fade pt-3" id="profile-settings">
-
-                                    <!-- Settings Form -->
-                                    <form>
-
-                                        <div class="row mb-3">
-                                            <label for="fullName" class="col-md-4 col-lg-3 col-form-label">اشعارات البريد الالكتروني</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="changesMade"
-                                                        checked>
-                                                    <label class="form-check-label" for="changesMade">
-                                                        لم يتم التحقق من عنوان بريدك الإلكتروني                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="newProducts"
-                                                        checked>
-                                                    <label class="form-check-label" for="newProducts">
-                                                        معلومات عن المنتجات والخدمات الجديدة                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="proOffers">
-                                                    <label class="form-check-label" for="proOffers">
-                                                        العروض التسويقية والترويجية
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="securityNotify"
-                                                        checked disabled>
-                                                    <label class="form-check-label" for="securityNotify">
-                                                        تنبيهات أمنية
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">حفظ التغييرات</button>
-                                        </div>
-                                    </form><!-- End settings Form -->
-
-                                </div>
-
                                 <div class="tab-pane fade pt-3" id="profile-change-password">
                                     <section>
                                         <header>
