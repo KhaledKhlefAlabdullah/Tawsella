@@ -35,7 +35,14 @@ class TaxiMovementTypeController extends Controller
         try {
             $movement = getAndCheckModelById(TaxiMovementType::class, 't-m-t-3');
 
-            return api_response(data: $movement, message: ' نجح الحصول على  البيانات');
+            $data = [
+                'id' => $movement->id,
+                'type' => $movement->type,
+                'price' => $movement->price,
+                'payment' => $movement->payment,
+                'description' => $movement->description
+            ];
+            return api_response(data: $data, message: ' نجح الحصول على  البيانات');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'حدث خطأ في الحصول على انواع الطلبات', code: 500);
         }
