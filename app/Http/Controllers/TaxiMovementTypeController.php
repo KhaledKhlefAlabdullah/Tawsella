@@ -33,7 +33,7 @@ class TaxiMovementTypeController extends Controller
     public function getMovement3()
     {
         try {
-            $movement = getAndCheckModelById(TaxiMovementType::class, 't-m-t-3')->select('id', 'type', 'price', 'payment', 'description');
+            $movement = getAndCheckModelById(TaxiMovementType::class, 't-m-t-3');
 
             return api_response(data: $movement, message: ' نجح الحصول على  البيانات');
         } catch (Exception $e) {
