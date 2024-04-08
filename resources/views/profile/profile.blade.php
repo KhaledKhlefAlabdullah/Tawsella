@@ -77,7 +77,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">الهاتف</div>
-                                        <div class="col-lg-9 col-md-8"><a href="https://wa.me/{{Auth::user()->user_profile->phoneNumber  ?? '+352000000'}}">{{Auth::user()->user_profile->phoneNumber  ?? '+352000000'}}</a></div>
+                                        <div class="col-lg-9 col-md-8"><a href="https://wa.me/{{Auth::user()->user_profile->phoneNumber  ?? '+000000000'}}">{{Auth::user()->user_profile->phoneNumber  ?? 'لا يوجد رقم'}}</a></div>
                                     </div>
 
                                     <div class="row">
