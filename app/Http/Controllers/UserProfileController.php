@@ -48,7 +48,8 @@ class UserProfileController extends Controller
 
             $request->validated();
             $user = getAndCheckModelById(User::class, $id);
-            $user->update(['email' => $request->input('email')]);
+            if(request()->has('email'))
+                $user->update(['email' => $request->input('email')]);
 
             $userProfile = UserProfile::where('user_id', $id)->first();
 
@@ -86,7 +87,7 @@ class UserProfileController extends Controller
             if ($request->wantsJson())
                 return api_response(errors: [$e->getMessage()], message: 'حدث خطأ في تعديل البيانات', code: 500);
 
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى. الاخطاء:' . $e->getMessage())->withInput();
         }
     }
 }
