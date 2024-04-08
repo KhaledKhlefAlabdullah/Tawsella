@@ -42,6 +42,8 @@ class UserProfileController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    // تلقا بشقك 
+// غير قابل للتعديل
     public function update(UserProfileRequest $request, string $id)
     {
         try {

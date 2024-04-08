@@ -23,6 +23,8 @@ class UserProfileRequest extends FormRequest
      */
     public function rules(): array
     {
+// تلقا بشقك 
+// غير قابل للتعديل
 
         $id = $this->id;
 
