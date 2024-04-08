@@ -29,7 +29,8 @@ class UserProfileRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
-            'phoneNumber' => ['required', 'string', 'regex:/^\+[0-9]{9,20}$/'],
+            'phoneNumber' => ['required', 'string', '/^(00|\+)[0-9]{9,20}$/
+'],
             'avatar' => ['sometimes','nullable','mimes:png,jpg,jpeg', 'max:10024'], // Example: max file size of 10MB
         ];
         
