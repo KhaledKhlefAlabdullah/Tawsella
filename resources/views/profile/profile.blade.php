@@ -28,7 +28,7 @@
                         <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
                             <img src="img/logoo.png" alt="Profile" class="rounded-circle">
-                            <h2>{{ Auth::user()->user_profile->name }}</h2>
+                            <h2>{{ Auth::user()->user_profile->name ?? 'لا يوجد اسم' }}</h2>
                             <div class="social-links mt-2">
                                 <a href="#"><i class="bi bi-award"></i></a>
                             </div>
@@ -73,11 +73,11 @@
 
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label ">الاسم الكامل</div>
-                                        <div class="col-lg-9 col-md-8">{{ Auth::user()->user_profile->name }}</div>
+                                        <div class="col-lg-9 col-md-8">{{ Auth::user()->user_profile->name ?? 'لا يوجد اسم' }}</div>
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">الهاتف</div>
-                                        <div class="col-lg-9 col-md-8"><a href="https://wa.me/{{Auth::user()->user_profile->phoneNumber}}">{{Auth::user()->user_profile->phoneNumber}}</a></div>
+                                        <div class="col-lg-9 col-md-8"><a href="https://wa.me/{{Auth::user()->user_profile->phoneNumber  ?? '+352000000'}}">{{Auth::user()->user_profile->phoneNumber  ?? '+352000000'}}</a></div>
                                     </div>
 
                                     <div class="row">
@@ -109,7 +109,7 @@
                                         <div class="mb-3">
                                             <x-input-label for="name" :value="__('الاسم')" />
                                             <x-text-input id="name" name="name" type="text" class="form-control"
-                                                :value="old('name', Auth::user()->user_profile->name ?? null)" required autofocus autocomplete="name" />
+                                                :value="old('name', Auth::user()->user_profile->name ?? 'لا يوجد اسم' ?? null)" required autofocus autocomplete="name" />
                                             <x-input-error class="mt-2" :messages="$errors->get('name')" />
                                         </div>
                                         <div class="mb-3">
