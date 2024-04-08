@@ -25,13 +25,12 @@ class UserProfileRequest extends FormRequest
     {
 
         $id = $this->id;
-        
+
         return [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['sometimes',,'string', 'email', 'max:255'],
+            'email' => ['sometimes', 'string', 'email', 'max:255'],
             'phoneNumber' => ['required', 'string', 'regex:/^(00|\+)[0-9]{9,20}'],
-            'avatar' => ['sometimes','nullable','mimes:png,jpg,jpeg', 'max:10024'], // Example: max file size of 10MB
+            'avatar' => ['sometimes', 'nullable', 'mimes:png,jpg,jpeg', 'max:10024'], // Example: max file size of 10MB
         ];
-        
     }
 }
