@@ -173,6 +173,7 @@ if (!function_exists('getReadyDrivers')) {
             ->join('taxis', 'users.id', '=', 'taxis.driver_id')
             ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
             ->select('users.id', 'user_profiles.name', 'user_profiles.gender', 'user_profiles.avatar')
+            ->whereNull('users.deleted_at')
             ->get();
 
         if (empty($drivers)) {
