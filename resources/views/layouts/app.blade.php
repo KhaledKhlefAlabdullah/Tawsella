@@ -9,7 +9,9 @@
     <meta content="" name="description">
     <meta content="" name="keywords">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Favicons -->
     <link href="{{ asset('img/logoo.png') }}" rel="icon">
     <link href="{{ asset('img/logoo.png') }}" rel="apple-touch-icon">
@@ -216,7 +218,7 @@
                     </div>
                     <hr>
                         <div class="col-lg-6 mb-6">
-                
+
                             <div class="text-center card-content" style="margin: 10px;">
                                 <h4>التوقيت: ${time}</h4>
                             </div>
