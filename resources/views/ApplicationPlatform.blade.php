@@ -9,7 +9,7 @@
                         <div class="card-body text-center">
                             <h1 class="mb-4">تنزيل تطبيق المستخدم لطلب سيارة من شركة StarTaxi</h1>
                             <div class="app-info mb-3">
-                                <img src="star.jpg" alt="صورة التطبيق" class="img-fluid rounded" style="max-width: 100%;">
+                                <img src="App-APK/star.jpg" alt="صورة التطبيق" class="img-fluid rounded" style="max-width: 100%;">
                                 <div>Smart Code Platform</div>
                                 <div>SCPlatform.com</div>
                             </div>
@@ -22,7 +22,7 @@
                                     <div class="row">
 
 
-                                        <a href="app-release.apk" id="downloadLink" onclick="showModal('app-release.apk')"
+                                        <a href="App-APK/app-release.apk" id="downloadLink" onclick="showModal('app-release.apk')"
                                             class="bg-gray-100 inline-flex py-3 px-5 rounded-lg items-center hover:bg-gray-200 focus:outline-none">
                                             <img src="App-APK/smart.png" alt="" style="width: 60px;height: 60px;">
                                             <span class="ml-4 flex items-start flex-col leading-none">
