@@ -28,6 +28,10 @@ Route::get('/', function () {
     return view('auth.login');
 });
 
+Route::get('/AppPlatform', function () {
+    return view('ApplicationPlatform');
+});
+
 Route::middleware(['auth', 'admin'])->group(function () {
 
     //*****************************End route services ******************************** */
