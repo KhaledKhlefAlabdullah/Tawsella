@@ -9,6 +9,7 @@ use App\Models\UserProfile;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 use function Laravel\Prompts\error;
 
@@ -43,15 +44,22 @@ class UserProfileController extends Controller
      * Update the specified resource in storage.
      */
     // تلقا بشقك 
-// غير قابل للتعديل
+    // غير قابل للتعديل
     public function update(UserProfileRequest $request, string $id)
     {
         try {
 
             $request->validated();
             $user = getAndCheckModelById(User::class, $id);
-            if(request()->has('email'))
-                $user->update(['email' => $request->input('email')]);
+            if (request()->has('email'))
+                $user->update([
+                    'email' => $request->input('email')
+                ]);
+                
+            if (request()->has('password'))
+                $user->update([
+                    'password' => Hash::make($request->password),
+                ]);
 
             $userProfile = UserProfile::where('user_id', $id)->first();
 
