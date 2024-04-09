@@ -17,8 +17,9 @@ return new class extends Migration
             $table->float('price');
             $table->text('description')->nullable();
             $table->boolean('is_onKM')->default(false);
+            $table->enum('payment',['TL','$']);
             $table->timestamps();
-        });
+            $table->SoftDeletes();        });
     }
 
     /**

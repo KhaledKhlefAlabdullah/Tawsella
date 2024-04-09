@@ -170,10 +170,11 @@
                                 </div>
                                 <hr>
                                 <div class="col-lg-6 mb-6">
-                        
+
                                     <div class="text-center card-content" style="margin: 10px;">
-                                        <h4>التوقيت: {{ date('Y-m-d -- h:i A', strtotime($lifeTaxiMovement->time))}}</h4>
+                                        <h4>التوقيت: {{ date('Y-m-d -- h:i A', strtotime($lifeTaxiMovement->time . ' +3 hours')) }}</h4>
                                     </div>
+
                                 </div>
                                 <hr>
                                 <div id="map{{ $loop->index }}" class="map"></div>

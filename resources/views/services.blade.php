@@ -29,13 +29,7 @@
                             <div class="card-body">
                                 <h3 class="card-title">{{ $movementType->type }}</h3>
                                 <p class="card-text">{{ $movementType->description }}</p>
-                                <p class="card-text"><small class="text-muted">السعر: {{ $movementType->price }}
-                                        @if ($movementType->is_onKM)
-                                            $
-                                        @else
-                                            TL
-                                        @endif
-                                    </small></p>
+                                <p class="card-text"><small class="text-muted">السعر: {{ $movementType->price.' '.$movementType->payment  }}</small></p>
                             </div>
                             <div class="card-footer">
                                 @if ($movementType->is_onKM)
@@ -61,7 +55,7 @@
                             <div class="card-body">
                                 <h3 class="card-title">{{ $movement->type }}</h3>
                                 <p class="card-text">{{ $movement->description }}</p>
-                                <p class="card-text"><small class="text-muted">السعر: {{ $movement->price }} LT</small></p>
+                                <p class="card-text"><small class="text-muted">السعر: {{ $movement->price.' '.$movement->payment}}</small></p>
                             </div>
                             <div class="card-footer">
                                 <span class="badge bg-primary"> سعر ثابت </span>

@@ -70,11 +70,12 @@
                                     </td>
                                     <td class="d-flex align-items-center justify-content-center">
                                         <x-buttons 
-                                        :delete-route="route('taxis.destroy', $taxi->id) " 
+                                        :delete-route="route('taxis.destroy', $taxi->id)" 
                                         :edit-route="route('taxis.edit', $taxi->id)" 
                                         :showDeleteButton="true"
                                         :showEditButton="true"
                                         :showDetailsButton="false" />
+                                       
                                     </td>
                                 </tr>
                             @endforeach

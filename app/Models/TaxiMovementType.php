@@ -5,10 +5,10 @@ namespace App\Models;
 use App\Models\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 class TaxiMovementType extends Model
 {
-    use HasFactory, HasUuid;
+    use HasFactory, HasUuid ,SoftDeletes;
 
     protected $keyType = 'string';
     protected $primaryKey = 'id';
@@ -18,7 +18,8 @@ class TaxiMovementType extends Model
         'type',
         'description',
         'is_onKM',
-        'price'
+        'price',
+        'payment'
     ];
 
     public function type_movements()

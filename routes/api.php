@@ -11,6 +11,7 @@ use App\Models\AboutUs;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DriversController;
 use App\Http\Controllers\TaxiController;
+use App\Models\User;
 use Illuminate\Support\Facades\Broadcast;
 
 /*
@@ -64,9 +65,19 @@ Route::group(['prefix' => 'info'], function () {
 
 Route::get('/movement-types', [TaxiMovementTypeController::class, 'index']);
 
+Route::get('/get-car', [TaxiMovementTypeController::class, 'getMovement3']);
+
 Route::get('/offers', [OfferController::class, 'index']);
 
 Route::post('/contact-us', [ContactUsMessageController::class, 'store']);
+
+Route::get('/phone',function(){
+
+    $phone = User::where('user_type','admin')->first()->user_profile->phoneNumber ?? '+3520000000';
+    
+    return $phone;
+});
+
 
 require __DIR__ . '/auth.php';
 

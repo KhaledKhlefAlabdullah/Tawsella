@@ -9,6 +9,7 @@ use App\Models\UserProfile;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 use function Laravel\Prompts\error;
 
@@ -26,9 +27,9 @@ class UserProfileController extends Controller
                 ->where('user_profiles.user_id', getMyId())
                 ->first();
 
-            return api_response(data: $profile, message: 'user profile details getting success');
+            return api_response(data: $profile, message: 'تفاصيل ملف تعريف المستخدم تحقق النجاح');
         } catch (Exception $e) {
-            return api_response(errors: $e->getMessage(), message: 'user profile details getting error', code: 500);
+            return api_response(errors: $e->getMessage(), message: 'تفاصيل ملف تعريف المستخدم تحصل على خطأ', code: 500);
         }
     }
 
@@ -42,13 +43,23 @@ class UserProfileController extends Controller
     /**
      * Update the specified resource in storage.
      */
+    // تلقا بشقك 
+    // غير قابل للتعديل
     public function update(UserProfileRequest $request, string $id)
     {
         try {
 
             $request->validated();
             $user = getAndCheckModelById(User::class, $id);
-            $user->update(['email' => $request->input('email')]);
+            if (request()->has('email'))
+                $user->update([
+                    'email' => $request->input('email')
+                ]);
+                
+            if (request()->has('password'))
+                $user->update([
+                    'password' => Hash::make($request->password),
+                ]);
 
             $userProfile = UserProfile::where('user_id', $id)->first();
 
@@ -59,43 +70,34 @@ class UserProfileController extends Controller
 
             if ($request->has('avatar')) {
 
-                $avatar = $request->avatar;
+                if (!empty($request->input('avatar'))) {
+                    $avatar = $request->avatar;
 
-                $path = 'images/profiles';
+                    $path = 'images/profiles';
 
-                if ($userProfile->avatar == '/images/profile_images/user_profile.png') {
+                    if ($userProfile->avatar == '/images/profile_images/user_profile.png') {
 
-                    $avatar_path = storeProfileAvatar($avatar, $path);
-                } else {
+                        $avatar_path = storeProfileAvatar($avatar, $path);
+                    } else {
 
-                    $avatar_path = editProfileAvatar($userProfile->avatar, $path, $avatar);
-                }
+                        $avatar_path = editProfileAvatar($userProfile->avatar, $path, $avatar);
+                    }
 
-                $userProfile->update([
-                    'avatar' => $avatar_path
-                ]);
-            }
-
-            if (!is_null(Auth::user())) {
-                if (Auth::user()->user_type == 'admin') {
-
-                    $taxi = Taxi::where('driver_id', $id)->first();
-                    $taxi->update([
-                        'lamp_number' => $request->input('plate_number'),
-                        'plate_number' => $request->input('lamp_number')
+                    $userProfile->update([
+                        'avatar' => $avatar_path
                     ]);
                 }
             }
+
             if ($request->wantsJson())
-                return api_response(message: 'profile-edite-success');
+                return api_response(message: 'تم تعديل البيانات بنجاح');
 
-            return redirect()->back()->with('success','تم تعديل بيانات السائق بنجاح');
-
+            return redirect()->back()->with('success', 'تم تعديل بيانات السائق بنجاح');
         } catch (Exception $e) {
             if ($request->wantsJson())
-                return api_response(errors: [$e->getMessage()], message: 'profile-edite-error', code: 500);
+                return api_response(errors: [$e->getMessage()], message: 'حدث خطأ في تعديل البيانات', code: 500);
 
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى. الاخطاء:' . $e->getMessage())->withInput();
         }
     }
 }

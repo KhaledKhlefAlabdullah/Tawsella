@@ -8,6 +8,7 @@ use App\Models\Taxi;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class TaxiController extends Controller
 {
@@ -23,6 +24,7 @@ class TaxiController extends Controller
             $taxis = Taxi::select('user_profiles.name as driverName', 'taxis.id', 'taxis.car_name', 'taxis.lamp_number', 'taxis.plate_number')
                 ->leftJoin('user_profiles', 'taxis.driver_id', '=', 'user_profiles.user_id')
                 ->get();
+
             return view('taxis.index', compact('taxis'));
         } catch (Exception $e) {
             return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
@@ -30,7 +32,7 @@ class TaxiController extends Controller
     }
 
     /**
-     * Get the taxi location 
+     * Get the taxi location
      */
     public function getTaxiLocation(Request $request, string $driver_id)
     {
@@ -54,9 +56,9 @@ class TaxiController extends Controller
                 $request->lat,
                 $request->long
             );
-            return api_response(message: 'location getting success');
+            return api_response(message: 'تم الحصول على الموقع بنجاح');
         } catch (Exception $e) {
-            return api_response(errors: $e->getMessage(), message: 'there error in gettign taxi location', code: 500);
+            return api_response(errors: $e->getMessage(), message: 'هناك خطأ في الحصول على موقع سيارة الأجرة', code: 500);
         }
     }
 
@@ -126,11 +128,13 @@ class TaxiController extends Controller
      *
      * @param  \App\Models\Taxi  $taxi
      */
-    public function update(TaxiRequest $request, Taxi $taxi)
+    public function update(TaxiRequest $request, string $id)
     {
         try {
             // التحقق من البيانات المدخلة
             $validatedData = $request->validated();
+
+            $taxi = getAndCheckModelById(Taxi::class, $id);
 
             // تحديث السجل بالبيانات المحدثة
             $taxi->update($validatedData);
@@ -138,7 +142,7 @@ class TaxiController extends Controller
             // إعادة توجيه أو عرض رسالة نجاح
             return redirect()->route('taxis.index')->with('success', 'تم تحديث سجل التاكسي بنجاح.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هناك خطأ ربما هناك بيانات مكررة انتبه انه لا يمكن ان  يتكرر رقم الفانوس ورقم اللوحة لدى أكثر من سيارة');
         }
     }
 
@@ -151,6 +155,11 @@ class TaxiController extends Controller
         try {
 
             $taxi = getAndCheckModelById(Taxi::class, $id);
+
+            $taxi->update([
+                'lamp_number' => null,
+                'plate_number' => null
+            ]);
             // حذف السجل المحدد
 
             $taxi->delete();

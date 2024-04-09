@@ -17,14 +17,7 @@
             </div>
         @endif
         <div class="pagetitle">
-            <h1>Profile</h1>
-            <nav>
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="profile.html">All Users</a></li>
-                    <li class="breadcrumb-item">Users</li>
-                    <li class="breadcrumb-item active">Profile</li>
-                </ol>
-            </nav>
+            <h1>الملف  الشخصي</h1>
         </div><!-- End Page Title -->
 
         <section class="section profile">
@@ -35,11 +28,9 @@
                         <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
 
                             <img src="img/logoo.png" alt="Profile" class="rounded-circle">
-                            <h2>{{ Auth::user()->name }}</h2>
-                            <h3>({{ Auth::user()->role->name ?? 'Default Role' }})</h3>
+                            <h2>{{ Auth::user()->user_profile->name ?? 'لا يوجد اسم' }}</h2>
                             <div class="social-links mt-2">
                                 <a href="#"><i class="bi bi-award"></i></a>
-                                <img src="{{ asset('/img/logo.png') }}" style="width: 50px;height: 50px;" alt="">
                             </div>
                         </div>
                     </div>
@@ -55,27 +46,21 @@
 
                                 <li class="nav-item">
                                     <button class="nav-link active" data-bs-toggle="tab"
-                                        data-bs-target="#profile-overview">Overview</button>
+                                        data-bs-target="#profile-overview">ملخص البيانات</button>
                                 </li>
 
                                 <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit
-                                        Profile</button>
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">
+                                        تعديل الملف</button>
                                 </li>
-
-                                <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab"
-                                        data-bs-target="#profile-settings">Settings</button>
-                                </li>
-
                                 <li class="nav-item">
                                     <button class="nav-link" data-bs-toggle="tab"
-                                        data-bs-target="#profile-change-password">Change Password</button>
+                                        data-bs-target="#profile-change-password">تغيير كلمةا لسر</button>
                                 </li>
                                 @can('is-admin')
                                     <li class="nav-item">
-                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-delete">Delere
-                                            Accont</button>
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-delete">
+                                            حذف الحساب</button>
                                     </li>
                                 @endcan
 
@@ -84,26 +69,19 @@
 
                                 <div class="tab-pane fade show active profile-overview" id="profile-overview">
 
-                                    <h5 class="card-title">Profile Details</h5>
+                                    <h5 class="card-title">تفاصيل الملف</h5>
 
                                     <div class="row">
-                                        <div class="col-lg-3 col-md-4 label ">Full Name</div>
-                                        <div class="col-lg-9 col-md-8">{{ Auth::user()->name }}</div>
+                                        <div class="col-lg-3 col-md-4 label ">الاسم الكامل</div>
+                                        <div class="col-lg-9 col-md-8">{{ Auth::user()->user_profile->name ?? 'لا يوجد اسم' }}</div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-3 col-md-4 label">الهاتف</div>
+                                        <div class="col-lg-9 col-md-8"><a href="https://wa.me/{{Auth::user()->user_profile->phoneNumber  ?? '+000000000'}}">{{Auth::user()->user_profile->phoneNumber  ?? 'لا يوجد رقم'}}</a></div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Roles</div>
-                                        <div class="col-lg-9 col-md-8">({{ Auth::user()->role->name ?? 'Default Role' }})
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Phone</div>
-                                        <div class="col-lg-9 col-md-8"><a href="https://wa.me/+963992819597">+963 992 819
-                                                597</a></div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Email</div>
+                                        <div class="col-lg-3 col-md-4 label">الايميل</div>
                                         <div class="col-lg-9 col-md-8">{{ Auth::user()->email }}</div>
                                     </div>
 
@@ -112,11 +90,11 @@
                                 <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
                                     <header>
                                         <h2 class="text-lg font-medium text-gray-900">
-                                            {{ __('Profile Information') }}
+                                            {{ __('معلومات الحساب') }}
                                         </h2>
 
                                         <p class="mt-1 text-sm text-gray-600">
-                                            {{ __("Update your account's profile information and email address.") }}
+                                            {{ __("قم بتحديث معلومات الملف الشخصي لحسابك وعنوان البريد الإلكتروني.") }}
                                         </p>
                                     </header>
 
@@ -129,14 +107,19 @@
                                         @method('patch')
 
                                         <div class="mb-3">
-                                            <x-input-label for="name" :value="__('Name')" />
+                                            <x-input-label for="name" :value="__('الاسم')" />
                                             <x-text-input id="name" name="name" type="text" class="form-control"
-                                                :value="old('name', Auth::user()->name)" required autofocus autocomplete="name" />
+                                                :value="old('name', Auth::user()->user_profile->name ?? 'لا يوجد اسم' ?? null)" required autofocus autocomplete="name" />
                                             <x-input-error class="mt-2" :messages="$errors->get('name')" />
                                         </div>
-
                                         <div class="mb-3">
-                                            <x-input-label for="email" :value="__('Email')" />
+                                            <x-input-label for="phoneNumber" :value="__('رقم الجوال')" />
+                                            <x-text-input id="phoneNumber" name="phoneNumber" type="text" class="form-control"
+                                                :value="old('phoneNumber', Auth::user()->userProfile->phoneNumber ?? null)" required autocomplete="phoneNumber" aria-placeholder="+000000000" />
+                                            <x-input-error class="mt-2" :messages="$errors->get('phoneNumber')" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <x-input-label for="email" :value="__('الايميل')" />
                                             <x-text-input id="email" name="email" type="email" class="form-control"
                                                 :value="old('email', Auth::user()->email)" required autocomplete="username" />
                                             <x-input-error class="mt-2" :messages="$errors->get('email')" />
@@ -144,16 +127,16 @@
                                             @if (Auth::user() instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && !Auth::user()->hasVerifiedEmail())
                                                 <div class="mt-2">
                                                     <p class="text-sm text-gray-800">
-                                                        {{ __('Your email address is unverified.') }}
+                                                        {{ __('لم يتم التحقق من عنوان بريدك الإلكتروني.') }}
                                                         <button form="send-verification"
                                                             class="btn btn-link text-sm hover:underline">
-                                                            {{ __('Click here to re-send the verification email.') }}
+                                                            {{ __('انقر هنا لإعادة إرسال رسالة التحقق عبر البريد الإلكتروني.') }}
                                                         </button>
                                                     </p>
 
                                                     @if (session('status') === 'verification-link-sent')
                                                         <p class="mt-2 font-medium text-sm text-green-600">
-                                                            {{ __('A new verification link has been sent to your email address.') }}
+                                                            {{ __('تم إرسال رابط تحقق جديد إلى عنوان بريدك الإلكتروني.') }}
                                                         </p>
                                                     @endif
                                                 </div>
@@ -162,75 +145,27 @@
 
                                         <div class="d-flex align-items-center gap-4">
                                             <x-primary-button>
-                                                {{ __('Save') }}
+                                                {{ __('حفظ ') }}
                                             </x-primary-button>
 
                                             @if (session('status') === 'profile-updated')
                                                 <p x-data="{ show: true }" x-show="show" x-transition
                                                     x-init="setTimeout(() => show = false, 2000)" class="text-sm text-gray-600">
-                                                    {{ __('Saved.') }}
+                                                    {{ __('تم الحفظ.') }}
                                                 </p>
                                             @endif
                                         </div>
                                     </form>
                                 </div>
-
-
-                                <div class="tab-pane fade pt-3" id="profile-settings">
-
-                                    <!-- Settings Form -->
-                                    <form>
-
-                                        <div class="row mb-3">
-                                            <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Email
-                                                Notifications</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="changesMade"
-                                                        checked>
-                                                    <label class="form-check-label" for="changesMade">
-                                                        Changes made to your account
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="newProducts"
-                                                        checked>
-                                                    <label class="form-check-label" for="newProducts">
-                                                        Information on new products and services
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="proOffers">
-                                                    <label class="form-check-label" for="proOffers">
-                                                        Marketing and promo offers
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="securityNotify"
-                                                        checked disabled>
-                                                    <label class="form-check-label" for="securityNotify">
-                                                        Security alerts
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                                        </div>
-                                    </form><!-- End settings Form -->
-
-                                </div>
-
                                 <div class="tab-pane fade pt-3" id="profile-change-password">
                                     <section>
                                         <header>
                                             <h2 class="text-lg font-medium text-gray-900">
-                                                {{ __('Update Password') }}
+                                                {{ __('تحديث كلمة السر') }}
                                             </h2>
 
                                             <p class="mt-1 text-sm text-gray-600">
-                                                {{ __('Ensure your account is using a long, random password to stay secure.') }}
+                                                {{ __('تأكد من أن حسابك يستخدم كلمة مرور طويلة وعشوائية ليظل آمنًا.') }}
                                             </p>
                                         </header>
 
@@ -241,7 +176,7 @@
 
                                             <div class="mb-3">
                                                 <label for="update_password_current_password"
-                                                    class="form-label">{{ __('Current Password') }}</label>
+                                                    class="form-label">{{ __('كلمة السر الحالية') }}</label>
                                                 <input id="update_password_current_password" name="current_password"
                                                     type="password" class="form-control" autocomplete="current-password">
                                                 <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
@@ -249,29 +184,29 @@
 
                                             <div class="mb-3">
                                                 <label for="update_password_password"
-                                                    class="form-label">{{ __('New Password') }}</label>
-                                                <input id="update_password_password" name="password" type="password"
+                                                    class="form-label">{{ __('كلمة السر الجديدة') }}</label>
+                                                <input id="update_password_password" name="new_password" type="password"
                                                     class="form-control" autocomplete="new-password">
                                                 <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
                                             </div>
 
                                             <div class="mb-3">
                                                 <label for="update_password_password_confirmation"
-                                                    class="form-label">{{ __('Confirm Password') }}</label>
+                                                    class="form-label">{{ __('تأكيد كلمة السر') }}</label>
                                                 <input id="update_password_password_confirmation"
-                                                    name="password_confirmation" type="password" class="form-control"
+                                                    name="new_password_confirmation" type="password" class="form-control"
                                                     autocomplete="new-password">
                                                 <x-input-error :messages="$errors->updatePassword->get('password_confirmation')" class="mt-2" />
                                             </div>
 
                                             <div class="d-flex align-items-center gap-4">
                                                 <button type="submit"
-                                                    class="btn btn-primary">{{ __('Save') }}</button>
+                                                    class="btn btn-primary">{{ __('حفظ') }}</button>
 
                                                 @if (session('status') === 'password-updated')
                                                     <p x-data="{ show: true }" x-show="show" x-transition
                                                         x-init="setTimeout(() => show = false, 2000)" class="text-sm text-gray-600">
-                                                        {{ __('Saved.') }}</p>
+                                                        {{ __('تم الحفظ.') }}</p>
                                                 @endif
                                             </div>
                                         </form>
@@ -281,16 +216,16 @@
                                     <section class="space-y-6">
                                         <header>
                                             <h2 class="text-lg font-medium text-gray-900">
-                                                {{ __('Delete Account') }}
+                                                {{ __('حذف الحساب') }}
                                             </h2>
 
                                             <p class="mt-1 text-sm text-gray-600">
-                                                {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Before deleting your account, please download any data or information that you wish to retain.') }}
+                                                {{ __('بمجرد حذف حسابك، سيتم حذف جميع موارده وبياناته نهائيًا. قبل حذف حسابك، يرجى تنزيل أي بيانات أو معلومات ترغب في الاحتفاظ بها.') }}
                                             </p>
                                         </header>
 
                                         <x-danger-button x-data=""
-                                            x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')">{{ __('Delete Account') }}</x-danger-button>
+                                            x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')">{{ __('حذف الحساب') }}</x-danger-button>
 
                                         <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
                                             <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
@@ -302,26 +237,26 @@
                                                 </h2>
 
                                                 <p class="mt-1 text-sm text-gray-600">
-                                                    {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
+                                                    {{ __('بمجرد حذف حسابك، سيتم حذف جميع موارده وبياناته نهائيًا. الرجاء إدخال كلمة المرور الخاصة بك لتأكيد رغبتك في حذف حسابك نهائيًا.') }}
                                                 </p>
 
                                                 <div class="mt-6">
-                                                    <x-input-label for="password" value="{{ __('Password') }}"
+                                                    <x-input-label for="password" value="{{ __('كلمة السر') }}"
                                                         class="sr-only" />
 
                                                     <x-text-input id="password" name="password" type="password"
-                                                        class="mt-1 block w-3/4" placeholder="{{ __('Password') }}" />
+                                                        class="mt-1 block w-3/4" placeholder="{{ __('كلمة السر') }}" />
 
                                                     <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
                                                 </div>
 
                                                 <div class="mt-6 flex justify-end">
                                                     <x-secondary-button x-on:click="$dispatch('close')">
-                                                        {{ __('Cancel') }}
+                                                        {{ __('الفاء') }}
                                                     </x-secondary-button>
 
                                                     <x-danger-button class="ms-3">
-                                                        {{ __('Delete Account') }}
+                                                        {{ __('حذف الحساب') }}
                                                     </x-danger-button>
                                                 </div>
                                             </form>

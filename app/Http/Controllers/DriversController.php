@@ -7,6 +7,7 @@ use Exception;
 use Illuminate\Http\Request;
 use App\Models\Calculations;
 use App\Models\Taxi;
+use App\Models\TaxiMovement;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -50,7 +51,7 @@ class DriversController extends Controller
             $driver = $this->getDrivers(['users.id' => $id, 'users.user_type' => 'driver'], 'first');
 
             if (!$driver) {
-                return redirect()->back()->withErrors(['driver is not exists' . 'An error occurred. Please try again.'])->withInput();
+                return redirect()->back()->withErrors(["السائق غير موجود حدث خطأ يرجى المحاولة مرة اخرى"])->withInput();
             }
             return view('Driver.show', ['driver' => $driver]);
         } catch (Exception $e) {
@@ -66,7 +67,7 @@ class DriversController extends Controller
             // التحقق من وجود السائق في قاعدة البيانات
             $driver = User::where('id', $driverId)->where('user_type', 'driver')->first();
             if (!$driver) {
-                return api_response(null, 'Driver not found', 404);
+                return api_response(null, 'السائق غير موجود', 404);
             }
 
             // تحديث حالة السائق بناءً على القيمة المرسلة في الطلب
@@ -82,7 +83,7 @@ class DriversController extends Controller
             }
 
             $driver->save();
-            return api_response(null, $message, 200);
+            return api_response($message, 200);
         } catch (Exception $e) {
             return api_response(null, 'Failed to update driver state', 500, null, ['error' => $e->getMessage()]);
         }
@@ -94,9 +95,11 @@ class DriversController extends Controller
             $driver = getAndCheckModelById(User::class, $id);
 
             $taxi = Taxi::where('driver_id',$id)->first();
-            $taxi->update([
-                'driver_id' => null
-            ]);
+            if($taxi){
+                $taxi->update([
+                    'driver_id' => null
+                ]);
+            }
 
             $driver->delete();
 
@@ -116,7 +119,7 @@ class DriversController extends Controller
         $query = User::select('users.id', 'user_profiles.name', 'users.email', 'user_profiles.phoneNumber', 'user_profiles.avatar', 'users.id', 'users.is_active', 'users.driver_state', 'taxis.plate_number', 'taxis.lamp_number')
             ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
             ->leftJoin('taxis', 'users.id', '=', 'taxis.driver_id')
-            ->where('users.user_type', 'driver');
+            ->where($conditions);
 
         // Apply the specified method
         if ($method === 'get') {

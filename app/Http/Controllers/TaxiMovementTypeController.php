@@ -15,18 +15,36 @@ class TaxiMovementTypeController extends Controller
     public function index()
     {
         try {
-            $movements = TaxiMovementType::select('id', 'type', 'price', 'description')->whereNotIn('id', ['t-m-t-1', 't-m-t-2'])->get();
+            $movements = TaxiMovementType::select('id', 'type', 'price', 'payment', 'description')->whereNotIn('id', ['t-m-t-1', 't-m-t-2', 't-m-t-3'])->get();
 
+            $movementTypes = TaxiMovementType::select('id', 'type', 'price', 'payment', 'description', 'is_onKM')->whereIn('id', ['t-m-t-1', 't-m-t-2', 't-m-t-3'])->get();
             if (request()->wantsJson())
-                return api_response(data: $movements, message: 'getting-movement-type-error');
-
-            $movementTypes = TaxiMovementType::select('id', 'type', 'price', 'description', 'is_onKM')->whereIn('id', ['t-m-t-1', 't-m-t-2'])->get();
+                return api_response(data: $movements, message: ' نجح الحصول على انواع الطلبات');
 
             return view('services', ['movementTypes' => $movementTypes, 'movements' => $movements]);
         } catch (Exception $e) {
             if (request()->wantsJson())
-                return api_response(errors: [$e->getMessage()], message: 'getting-movement-type-success', code: 500);
+                return api_response(errors: [$e->getMessage()], message: 'حدث خطأ في الحصول على انواع الطلبات', code: 500);
             return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+        }
+    }
+
+
+    public function getMovement3()
+    {
+        try {
+            $movement = getAndCheckModelById(TaxiMovementType::class, 't-m-t-3');
+
+            $data = [
+                'id' => $movement->id,
+                'type' => $movement->type,
+                'price' => $movement->price,
+                'payment' => $movement->payment,
+                'description' => $movement->description
+            ];
+            return api_response(data: $data, message: ' نجح الحصول على  البيانات');
+        } catch (Exception $e) {
+            return api_response(errors: [$e->getMessage()], message: 'حدث خطأ في الحصول على انواع الطلبات', code: 500);
         }
     }
     /**
@@ -47,8 +65,10 @@ class TaxiMovementTypeController extends Controller
             $validatedData = $request->validate([
                 'type' => ['required'],
                 'price' => ['required', 'numeric'],
-                'description' => ['required'],
+                'description' => ['nullable'],
                 'is_onKM' => ['required', 'boolean'],
+                'payment' => ['required', 'in:$,TL']
+
             ]);
 
             // إنشاء نوع حركة تاكسي جديد وحفظه في قاعدة البيانات
@@ -82,6 +102,7 @@ class TaxiMovementTypeController extends Controller
                 'price' => 'required|numeric',
                 'description' => 'nullable|string',
                 'is_onKM' => 'required|boolean',
+                'payment' => 'required|in:$,TL'
             ]);
             $movementType->update($data);
 

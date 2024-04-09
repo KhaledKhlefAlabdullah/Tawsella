@@ -53,7 +53,7 @@
 
                                 <div class="mb-3">
                                     <label for="car_detailes" class="form-label">{{ __('تفاصيل السيارة') }}</label>
-                                    <textarea class="form-control" id="car_detailes" name="car_detailes"></textarea>
+                                    <textarea class="form-control" id="car_detailes" name="car_detailes" required></textarea>
                                 </div>
 
                                 <button type="submit" class="btn btn-primary">{{ __('إضافة') }}</button>
@@ -65,3 +65,6 @@
         </div>
     </main>
 @endsection
+
+{{-- $2y$12$pdSHG5Hp2Ytu.QjG0qdCH.10OVZgBZGd0qvj3X71IYBToUt5BcVIK --}}
+{{-- $2y$12$pdSHG5Hp2Ytu.QjG0qdCH.10OVZgBZGd0qvj3X71IYBToUt5BcVIK --}}

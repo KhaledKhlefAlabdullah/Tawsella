@@ -20,7 +20,7 @@
             <h1>Profile</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="profile.html">All Users</a></li>
+                    <li class="breadcrumb-item"><a href="profile.html"></a></li>
                     <li class="breadcrumb-item">Users</li>
                     <li class="breadcrumb-item active">Profile</li>
                 </ol>
@@ -55,27 +55,27 @@
 
                                 <li class="nav-item">
                                     <button class="nav-link active" data-bs-toggle="tab"
-                                        data-bs-target="#profile-overview">Overview</button>
+                                        data-bs-target="#profile-overview">ملخص بيانات</button>
                                 </li>
 
                                 <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit
-                                        Profile</button>
-                                </li>
-
-                                <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab"
-                                        data-bs-target="#profile-settings">Settings</button>
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">
+                                        تعديل الملف الشخصي</button>
                                 </li>
 
                                 <li class="nav-item">
                                     <button class="nav-link" data-bs-toggle="tab"
-                                        data-bs-target="#profile-change-password">Change Password</button>
+                                        data-bs-target="#profile-settings">الاعدادات</button>
+                                </li>
+
+                                <li class="nav-item">
+                                    <button class="nav-link" data-bs-toggle="tab"
+                                        data-bs-target="#profile-change-password">تغيير كلمة السر</button>
                                 </li>
                                 @can('is-admin')
                                     <li class="nav-item">
-                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-delete">Delete
-                                            Account</button>
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-delete">
+                                            حذف الحساب</button>
                                     </li>
                                 @endcan
 
@@ -84,26 +84,26 @@
 
                                 <div class="tab-pane fade show active profile-overview" id="profile-overview">
 
-                                    <h5 class="card-title">Profile Details</h5>
+                                    <h5 class="card-title">تفاصيل الملف </h5>
 
                                     <div class="row">
-                                        <div class="col-lg-3 col-md-4 label ">Full Name</div>
+                                        <div class="col-lg-3 col-md-4 label ">الاسم الكامل</div>
                                         <div class="col-lg-9 col-md-8">{{ $driver->name }}</div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Roles</div>
+                                        <div class="col-lg-3 col-md-4 label">الدور</div>
                                         <div class="col-lg-9 col-md-8">({{ $driver->role->name ?? 'driver' }})</div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Phone</div>
+                                        <div class="col-lg-3 col-md-4 label">الهاتف</div>
                                         <div class="col-lg-9 col-md-8"><a
                                                 href="https://wa.me/{{ $driver->phoneNumber }}">{{ $driver->phoneNumber }}</a>
                                         </div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Email</div>
+                                        <div class="col-lg-3 col-md-4 label">الايميل</div>
                                         <div class="col-lg-9 col-md-8">{{ $driver->email }}</div>
                                     </div>
 
@@ -112,11 +112,11 @@
                                 <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
                                     <header>
                                         <h2 class="text-lg font-medium text-gray-900">
-                                            {{ __('Profile Information') }}
+                                            {{ __('معلومات الحساب') }}
                                         </h2>
 
                                         <p class="mt-1 text-sm text-gray-600">
-                                            {{ __("Update your account's profile information and email address.") }}
+                                            {{ __("قم بتحديث معلومات الملف الشخصي لحسابك وعنوان البريد الإلكتروني.") }}
                                         </p>
                                     </header>
 
@@ -142,32 +142,17 @@
                                                 :value="old('email', $driver->email)" required autocomplete="username" />
                                             <x-input-error class="mt-2" :messages="$errors->get('email')" />
                                         </div>
-                                        <div class="mb-3">
+                                        {{-- <div class="mb-3">
                                             <x-input-label for="avatar" :value="__('صور الملف الشخصي')" />
-                                            <input id="avatar" name="avatar" type="file" class="form-control"
-                                                accept="image/*" />
+                                            <input id="avatar" name="avatar" type="file" class="form-control" accept="image/*" />
                                             <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
-                                        </div>
+                                        </div> --}}
                                         <div class="mb-3">
                                             <x-input-label for="phoneNumber" :value="__('رقم الجوال')" />
                                             <x-text-input id="phoneNumber" name="phoneNumber" type="tel"
                                                 class="form-control" :value="old('phoneNumber', $driver->phoneNumber)" required
                                                 autocomplete="phoneNumber" />
                                             <x-input-error class="mt-2" :messages="$errors->get('phoneNumber')" />
-                                        </div>
-                                        <div class="mb-3">
-                                            <x-input-label for="plate_number" :value="__('رقم لوحة السيارة')" />
-                                            <x-text-input id="plate_number" name="plate_number" type="text"
-                                                class="form-control" :value="old('plate_number', $driver->plate_number)" required
-                                                autocomplete="plate_number" />
-                                            <x-input-error class="mt-2" :messages="$errors->get('plate_number')" />
-                                        </div>
-                                        <div class="mb-3">
-                                            <x-input-label for="lamp_number" :value="__('رقم فانوس السيارة')" />
-                                            <x-text-input id="lamp_number" name="lamp_number" type="text"
-                                                class="form-control" :value="old('lamp_number', $driver->lamp_number)" required
-                                                autocomplete="lamp_number" />
-                                            <x-input-error class="mt-2" :messages="$errors->get('lamp_number')" />
                                         </div>
                                         <div class="d-flex align-items-center gap-4">
                                             <x-primary-button class="btn btn-success">
@@ -195,30 +180,22 @@
                                     <section>
                                         <header>
                                             <h2 class="text-lg font-medium text-gray-900">
-                                                {{ __('Update Password') }}
+                                                {{ __('تحديث كلمة السر') }}
                                             </h2>
 
                                             <p class="mt-1 text-sm text-gray-600">
-                                                {{ __('Ensure your account is using a long, random password to stay secure.') }}
+                                                {{ __('تأكد من أن حسابك يستخدم كلمة مرور طويلة وعشوائية ليظل آمنًا.') }}
                                             </p>
                                         </header>
 
-                                        <form method="post" action="{{ route('password.update') }}"
+                                        <form method="post" action="{{ route('password.driver.update', $driver->id) }}"
                                             class="mt-6 space-y-6">
                                             @csrf
                                             @method('put')
 
                                             <div class="mb-3">
-                                                <label for="update_password_current_password"
-                                                    class="form-label">{{ __('Current Password') }}</label>
-                                                <input id="update_password_current_password" name="current_password"
-                                                    type="password" class="form-control" autocomplete="current-password">
-                                                <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
-                                            </div>
-
-                                            <div class="mb-3">
                                                 <label for="update_password_password"
-                                                    class="form-label">{{ __('New Password') }}</label>
+                                                    class="form-label">{{ __('كلمة المرور الجديدة') }}</label>
                                                 <input id="update_password_password" name="password" type="password"
                                                     class="form-control" autocomplete="new-password">
                                                 <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
@@ -226,7 +203,7 @@
 
                                             <div class="mb-3">
                                                 <label for="update_password_password_confirmation"
-                                                    class="form-label">{{ __('Confirm Password') }}</label>
+                                                    class="form-label">{{ __('تأكيد كلمة المرور') }}</label>
                                                 <input id="update_password_password_confirmation"
                                                     name="password_confirmation" type="password" class="form-control"
                                                     autocomplete="new-password">
