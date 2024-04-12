@@ -37,7 +37,7 @@
                                         class="bg-gray-100 inline-flex py-3 px-5 rounded-lg items-center hover:bg-gray-200 focus:outline-none">
                                         <img src="App-APK/smart.png" alt="" style="width: 60px;height: 60px;">
                                         <span class="ml-4 flex items-start flex-col leading-none">
-                                            <span class="text-xs text-gray-600 mb-1">GET IT ON</span>
+                                            <span class="text-xs text-gray-600 mb-1">انقر هنا لتحميل التطبيق </span>
                                             <span class="title-font font-medium">Smart Code Platform</span>
                                         </span>
                                     </a>
@@ -51,7 +51,7 @@
                                                 </path>
                                             </svg>
                                             <span class="ml-4 flex items-start flex-col leading-none">
-                                                <span class="text-xs text-gray-600 mb-1">GET IT ON</span>
+                                                <span class="text-xs text-gray-600 mb-1">انقر هنا لتحميل التطبيق </span>
                                                 <span class="title-font font-medium">Google Play</span>
                                             </span>
                                         </button></div>
