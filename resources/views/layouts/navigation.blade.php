@@ -120,12 +120,14 @@
                         </div>
                     </a>
                 </li>
-
-                <a href="{{ route('create.driver') }}">
-                    <div class="ms-auto" style="margin-right: 30px">
-                        <span>اضافة سائق</span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                    </div>
-                </a>
+                <li>
+                    <a href="{{ route('create.driver') }}">
+                        <div class="ms-auto" style="margin-right: 30px">
+                            <span>اضافة سائق</span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                        </div>
+                    </a>
+                </li>
+            </ul>
         </li>
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
