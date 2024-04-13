@@ -151,6 +151,7 @@
                 </li>
             </ul>
         </li><!-- End Forms Nav -->
+
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#taxi-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-chevron-down "></i><span class="ms-auto">الطلبات</span><i class="bi bi-hourglass" style="margin-left: 10px"></i>
@@ -171,7 +172,7 @@
                     </a>
                 </li>
             </ul>
-        </li><!-- End Forms Nav -->
+        <!-- End Forms Nav -->
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
@@ -195,7 +196,7 @@
                 </li>
             </ul>
         </li><!-- End Tables Nav -->
-        
+
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-chevron-down "></i> <span class="ms-auto">الرصيد والحسابات</span><i
