@@ -134,7 +134,7 @@
             <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-chevron-down "></i><span class="ms-auto">السيارات</span><i class="bi bi-taxi-front-fill" style="margin-left: 10px"></i>
             </a>
-            <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#taxi-nav">
                 <li>
                     <a href="{{ route('taxis.index') }}">
                         <div class="ms-auto" style="margin-right: 30px">
@@ -172,7 +172,7 @@
                     </a>
                 </li>
             </ul>
-        <!-- End Forms Nav -->
+        </li><!-- End Forms Nav -->
 
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
