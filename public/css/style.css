@@ -942,7 +942,7 @@ a:hover {
 .sidebar-nav li {
     padding: 0;
     margin: 0;
-    
+    list-style: none;
 }
 
 .sidebar-nav .nav-item {
@@ -1002,7 +1002,7 @@ a:hover {
     transform: rotate(180deg);
 }
 
-.sidebar-nav .nav-content {
+/* .sidebar-nav .nav-content {
     padding: 5px 0 0 0;
     margin: 0;
     list-style: none;
@@ -1033,7 +1033,7 @@ a:hover {
 
 .sidebar-nav .nav-content a.active i {
     background-color: #4154f1;
-}
+} */
 
 /*--------------------------------------------------------------
 # Dashboard
