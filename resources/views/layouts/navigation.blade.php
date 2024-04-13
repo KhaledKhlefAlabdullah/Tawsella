@@ -195,8 +195,7 @@
                 </li>
             </ul>
         </li><!-- End Tables Nav -->
-
-        <li class="nav-item">
+        
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-chevron-down "></i> <span class="ms-auto">الرصيد والحسابات</span><i
