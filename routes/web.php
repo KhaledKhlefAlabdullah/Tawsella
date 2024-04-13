@@ -28,11 +28,11 @@ Route::get('/', function () {
     return view('auth.login');
 });
 //***************************start route AppPlatform ******************************** */
-    Route::get('/Applatform', function () {
-        return view('ApplicationPlatform');
-    });
-    //*****************************End route AppPlatform ******************************** */
-    //******************************************************************************* */
+Route::get('/Applatform', function () {
+    return view('ApplicationPlatform');
+});
+//*****************************End route AppPlatform ******************************** */
+//******************************************************************************* */
 Route::middleware(['auth', 'admin'])->group(function () {
 
     //*****************************End route services ******************************** */
