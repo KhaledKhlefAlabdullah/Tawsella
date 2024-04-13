@@ -113,6 +113,7 @@
                     class="bi bi-menu-button-wide " style="margin-left: 10px"></i>
             </a>
             <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+                <li>jfnd;jkndfnb'knbg</li>
                 <li>
                     <a href="{{ route('drivers.index') }}">
                         <div class="ms-auto" style="margin-right: 30px">
