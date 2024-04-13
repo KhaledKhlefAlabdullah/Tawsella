@@ -85,7 +85,8 @@
                         <a class="logo d-flex align-items-center">
                             <img src="{{ asset('/img/logoo.png') }}" style="width: 60px;height: 40px;margin: 10px"
                                 alt="">
-                            <span class="d-none d-lg-block" style="font-family: 'Cairo', sans-serif ;color: white; ">{{ __('الشهباء') }}</span>
+                            <span class="d-none d-lg-block"
+                                style="font-family: 'Cairo', sans-serif ;color: white; ">{{ __('الشهباء') }}</span>
                         </a>
                     </div><!-- End Logo -->
                 </div>
@@ -104,10 +105,9 @@
             <a class="nav-link " href="{{ url('/dashboard') }}">
                 <span class="ms-auto">لوحة التحكم</span>
                 <i class="bi bi-grid " style="margin-left: 10px"></i>
-
             </a>
         </li><!-- End Dashboard Nav -->
-             <li><li class="nav-item">
+        <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-chevron-down"></i><span class="ms-auto">السائقين</span><i
                     class="bi bi-menu-button-wide " style="margin-left: 10px"></i>
@@ -121,18 +121,16 @@
                     </a>
                 </li>
 
-                    <a href="{{ route('create.driver') }}">
-                        <div class="ms-auto" style="margin-right: 30px">
-                            <span>اضافة سائق</span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                        </div>
-                    </a>
-                </li>
-            </ul>
+                <a href="{{ route('create.driver') }}">
+                    <div class="ms-auto" style="margin-right: 30px">
+                        <span>اضافة سائق</span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                    </div>
+                </a>
         </li>
-
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-chevron-down "></i><span class="ms-auto">السيارات</span><i class="bi bi-taxi-front-fill" style="margin-left: 10px"></i>
+                <i class="bi bi-chevron-down "></i><span class="ms-auto">السيارات</span><i class="bi bi-taxi-front-fill"
+                    style="margin-left: 10px"></i>
             </a>
             <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
@@ -153,7 +151,8 @@
         </li><!-- End Forms Nav -->
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#taxi-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-chevron-down "></i><span class="ms-auto">الطلبات</span><i class="bi bi-hourglass" style="margin-left: 10px"></i>
+                <i class="bi bi-chevron-down "></i><span class="ms-auto">الطلبات</span><i class="bi bi-hourglass"
+                    style="margin-left: 10px"></i>
             </a>
             <ul id="taxi-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
                 <li>
