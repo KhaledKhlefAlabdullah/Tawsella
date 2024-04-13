@@ -108,22 +108,25 @@
             </a>
         </li><!-- End Dashboard Nav -->
         <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-chevron-down"></i><span class="ms-auto">السائقين</span><i
-                    class="bi bi-menu-button-wide " style="margin-left: 10px"></i>
+            <a class="nav-link collapsed" data-bs-toggle="collapse" href="#components-nav">
+                <i class="bi bi-chevron-down"></i>
+                <span class="ms-auto">السائقين</span>
+                <i class="bi bi-menu-button-wide"></i>
             </a>
-            <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+            <ul id="components-nav" class="nav-content collapse" data-bs-parent="#sidebar-nav">
                 <li>
                     <a href="{{ route('drivers.index') }}">
                         <div class="ms-auto" style="margin-right: 30px">
-                            <span>عرض السائقين</span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                            <span>عرض السائقين</span>
+                            <i class="bi bi-circle"></i>
                         </div>
                     </a>
                 </li>
                 <li>
                     <a href="{{ route('create.driver') }}">
                         <div class="ms-auto" style="margin-right: 30px">
-                            <span>اضافة سائق</span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                            <span>اضافة سائق</span>
+                            <i class="bi bi-circle"></i>
                         </div>
                     </a>
                 </li>
