@@ -129,14 +129,14 @@
                 <i class="bi bi-chevron-down "></i><span class="ms-auto">السيارات</span><i class="bi bi-taxi-front-fill"
                     style="margin-left: 10px"></i>
             </a>
-        <li style="margin-left: 100px">
+        <li style="margin-left: 80px">
             <a href="{{ route('taxis.index') }}">
                 <div class="ms-auto" style="margin-right: 30px">
                     <span> عرض السيارات </span><i class="bi bi-circle" style="margin-left: 10px"></i>
                 </div>
             </a>
         </li>
-        <li style="margin-left: 100px">
+        <li style="margin-left: 90px">
             <a href="{{ route('taxis.create') }}">
                 <div class="ms-auto" style="margin-right: 30px">
                     <span> اضافة سيارة </span><i class="bi bi-circle" style="margin-left: 10px"></i>
@@ -177,7 +177,7 @@
                 </div>
             </a>
         </li>
-        <li style="margin-left: 120px">
+        <li style="margin-left: 125px">
             <a href="{{ route('offers.index') }}">
                 <div class="ms-auto" style="margin-right: 30px">
                     <span>العروض</span><i class="bi bi-circle" style="margin-left: 10px"></i>
