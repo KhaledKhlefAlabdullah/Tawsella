@@ -109,14 +109,14 @@
                 <i class="bi bi-chevron-down"></i><span class="ms-auto">السائقين</span><i
                     class="bi bi-menu-button-wide " style="margin-left: 10px"></i>
             </a>
-        <li style="margin-left: 50px">
+        <li style="margin-left: 80px">
             <a href="{{ route('drivers.index') }}">
                 <div class="ms-auto" style="margin-left: 30px">
                     <span>عرض السائقين</span><i class="bi bi-circle" style="margin-left: 10px"></i>
                 </div>
             </a>
         </li>
-        <li>
+        <li style="margin-left: 80px">
             <a href="{{ route('create.driver') }}">
                 <div class="ms-auto" style="margin-left: 30px">
                     <span>اضافة سائق</span><i class="bi bi-circle" style="margin-left: 10px"></i>
@@ -129,44 +129,40 @@
                 <i class="bi bi-chevron-down "></i><span class="ms-auto">السيارات</span><i class="bi bi-taxi-front-fill"
                     style="margin-left: 10px"></i>
             </a>
-            <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="{{ route('taxis.index') }}">
-                        <div class="ms-auto" style="margin-right: 30px">
-                            <span> عرض السيارات </span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('taxis.create') }}">
-                        <div class="ms-auto" style="margin-right: 30px">
-                            <span> اضافة سيارة </span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                        </div>
-                    </a>
-                </li>
-            </ul>
+        <li style="margin-left: 80px">
+            <a href="{{ route('taxis.index') }}">
+                <div class="ms-auto" style="margin-right: 30px">
+                    <span> عرض السيارات </span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                </div>
+            </a>
+        </li>
+        <li style="margin-left: 80px">
+            <a href="{{ route('taxis.create') }}">
+                <div class="ms-auto" style="margin-right: 30px">
+                    <span> اضافة سيارة </span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                </div>
+            </a>
+        </li>
         </li><!-- End Forms Nav -->
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#taxi-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-chevron-down "></i><span class="ms-auto">الطلبات</span><i class="bi bi-hourglass"
                     style="margin-left: 10px"></i>
             </a>
-            <ul id="taxi-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="{{ route('current.taxi.movement') }}">
-                        <div class="ms-auto" style="margin-right: 30px">
-                            <span> الطلبات الحالية </span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('completed.requests') }}">
-                        <div class="ms-auto" style="margin-right: 30px">
-                            <span> الطلبات المكتملة </span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                        </div>
-                    </a>
-                </li>
-            </ul>
+        <li style="margin-left: 80px">
+            <a href="{{ route('current.taxi.movement') }}">
+                <div class="ms-auto" style="margin-right: 30px">
+                    <span> الطلبات الحالية </span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                </div>
+            </a>
+        </li>
+        <li style="margin-left: 80px">
+            <a href="{{ route('completed.requests') }}">
+                <div class="ms-auto" style="margin-right: 30px">
+                    <span> الطلبات المكتملة </span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                </div>
+            </a>
+        </li>
         </li><!-- End Forms Nav -->
 
         <li class="nav-item">
@@ -174,22 +170,20 @@
                 <i class="bi bi-chevron-down "></i><span class=" ms-auto">الاضافات</span>
                 <i class="bi bi-layout-text-window-reverse" style="margin-left: 10px"></i>
             </a>
-            <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="{{ url('/services') }}">
-                        <div class="ms-auto" style="margin-right: 30px">
-                            <span>الخدمات</span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('offers.index') }}">
-                        <div class="ms-auto" style="margin-right: 30px">
-                            <span>العروض</span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                        </div>
-                    </a>
-                </li>
-            </ul>
+        <li style="margin-left: 80px">
+            <a href="{{ url('/services') }}">
+                <div class="ms-auto" style="margin-right: 30px">
+                    <span>الخدمات</span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                </div>
+            </a>
+        </li>
+        <li style="margin-left: 80px">
+            <a href="{{ route('offers.index') }}">
+                <div class="ms-auto" style="margin-right: 30px">
+                    <span>العروض</span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                </div>
+            </a>
+        </li>
         </li><!-- End Tables Nav -->
 
         <li class="nav-item">
@@ -197,15 +191,13 @@
                 <i class="bi bi-chevron-down "></i> <span class="ms-auto">الرصيد والحسابات</span><i
                     class="bi bi-gem "style="margin-left: 10px"></i>
             </a>
-            <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="{{ route('calculations.index') }}">
-                        <div class="ms-auto" style="margin-right: 30px">
-                            <span> رصيد السائقين </span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                        </div>
-                    </a>
-                </li>
-            </ul>
+        <li style="margin-left: 80px">
+            <a href="{{ route('calculations.index') }}">
+                <div class="ms-auto" style="margin-right: 30px">
+                    <span> رصيد السائقين </span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                </div>
+            </a>
+        </li>
         </li><!-- End Icons Nav -->
 
         <center>
