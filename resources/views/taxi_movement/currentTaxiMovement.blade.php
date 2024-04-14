@@ -20,21 +20,21 @@
             <div class="row">
                 <div class="col-md-12">
                     <h1>الطلبات الحالية</h1>
-                    <div class="table-responsive"> <!-- تجعل الجدول متجاوبًا -->
-                        <table class="table table-striped"> <!-- إضافة فئة table-striped لتظليل الصفوف بشكل بديل -->
-                            <thead class="table"> <!-- تحديد لون خلفية العناوين -->
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead class="thead-dark"> <!-- Bootstrap dark theme for table header -->
                                 <tr>
-                                    <th>العميل</th>
-                                    <th>رقم العميل</th>
-                                    <th>مكان انطلاق العميل</th>
-                                    <th>وجهة العميل</th>
-                                    <th>الجنس</th>
-                                    <th>السائق</th>
-                                    <th>رقم السائق</th>
-                                    <th>فانوس السيارة</th>
-                                    <th>لوحة السيارة</th>
-                                    <th>نوع الطلب</th>
-                                    <th>تتبع</th>
+                                    <th scope="col">العميل</th>
+                                    <th scope="col">رقم العميل</th>
+                                    <th scope="col">مكان انطلاق العميل</th>
+                                    <th scope="col">وجهة العميل</th>
+                                    <th scope="col">الجنس</th>
+                                    <th scope="col">السائق</th>
+                                    <th scope="col">رقم السائق</th>
+                                    <th scope="col">فانوس السيارة</th>
+                                    <th scope="col">لوحة السيارة</th>
+                                    <th scope="col">نوع الطلب</th>
+                                    <th scope="col">تتبع</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -53,9 +53,8 @@
                                         <td>
                                             @if ($movement->taxi_id)
                                                 <a href="{{ route('map', ['selector' => 'taxi', 'id' => $movement->taxi_id]) }}"
-                                                    class="btn btn-success">موقع السيارة</a>
+                                                    class="btn btn-success btn-sm">موقع السيارة</a> <!-- Bootstrap small button -->
                                             @else
-                                                <!-- Handle the case when taxi_id is missing or null -->
                                                 <span class="text-danger">No taxi ID available</span>
                                             @endif
                                         </td>
