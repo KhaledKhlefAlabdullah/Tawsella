@@ -70,15 +70,6 @@
                             </ul><!-- End Profile Dropdown Items -->
                         </li><!-- End Profile Nav -->
                     </ul>
-                    <ul>
-                        <li>
-                            <ul>
-                                <li>fdijb fvkdn mvkfdl</li>
-                                <li>fdijb fvkdn mvkfdl</li>
-                            </ul>
-                        </li>
-                        <li>kdmfkbmfdkgjbnkgdf</li>
-                    </ul>
                 </nav><!-- End Icons Navigation -->
             </div>
             <div class="col-5"></div>
@@ -118,22 +109,20 @@
                 <i class="bi bi-chevron-down"></i><span class="ms-auto">السائقين</span><i
                     class="bi bi-menu-button-wide " style="margin-left: 10px"></i>
             </a>
-            <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="{{ route('drivers.index') }}">
-                        <div class="ms-auto" style="margin-right: 30px">
-                            <span>عرض السائقين</span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('create.driver') }}">
-                        <div class="ms-auto" style="margin-right: 30px">
-                            <span>اضافة سائق</span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                        </div>
-                    </a>
-                </li>
-            </ul>
+        <li>
+            <a href="{{ route('drivers.index') }}">
+                <div class="ms-auto" style="margin-right: 30px">
+                    <span>عرض السائقين</span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('create.driver') }}">
+                <div class="ms-auto" style="margin-right: 30px">
+                    <span>اضافة سائق</span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                </div>
+            </a>
+        </li>
         </li>
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
