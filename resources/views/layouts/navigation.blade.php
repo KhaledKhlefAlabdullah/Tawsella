@@ -111,14 +111,14 @@
             </a>
         <li>
             <a href="{{ route('drivers.index') }}">
-                <div class="ms-auto">
-                    <span>عرض السائقين</span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                <div class="ms-auto" style="margin-right: 30px">
+                    <span>عرض السائقين</span><i class="bi bi-circle" style="margin-left: 50px"></i>
                 </div>
             </a>
         </li>
         <li>
             <a href="{{ route('create.driver') }}">
-                <div class="ms-auto" >
+                <div class="ms-auto" style="margin-right: 30px">
                     <span>اضافة سائق</span><i class="bi bi-circle" style="margin-left: 10px"></i>
                 </div>
             </a>
