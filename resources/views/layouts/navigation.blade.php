@@ -156,7 +156,7 @@
                 </div>
             </a>
         </li>
-        <li style="margin-left: 60px">
+        <li style="margin-left: 61px">
             <a href="{{ route('completed.requests') }}">
                 <div class="ms-auto" style="margin-right: 30px">
                     <span> الطلبات المكتملة </span><i class="bi bi-circle" style="margin-left: 10px"></i>
@@ -177,7 +177,7 @@
                 </div>
             </a>
         </li>
-        <li style="margin-left: 125px">
+        <li style="margin-left: 123px">
             <a href="{{ route('offers.index') }}">
                 <div class="ms-auto" style="margin-right: 30px">
                     <span>العروض</span><i class="bi bi-circle" style="margin-left: 10px"></i>
