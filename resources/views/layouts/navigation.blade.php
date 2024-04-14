@@ -156,7 +156,7 @@
                 </div>
             </a>
         </li>
-        <li style="margin-left: 75px">
+        <li style="margin-left: 65px">
             <a href="{{ route('completed.requests') }}">
                 <div class="ms-auto" style="margin-right: 30px">
                     <span> الطلبات المكتملة </span><i class="bi bi-circle" style="margin-left: 10px"></i>
