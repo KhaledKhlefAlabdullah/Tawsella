@@ -170,14 +170,14 @@
                 <i class="bi bi-chevron-down "></i><span class=" ms-auto">الاضافات</span>
                 <i class="bi bi-layout-text-window-reverse" style="margin-left: 10px"></i>
             </a>
-        <li style="margin-left: 100px">
+        <li style="margin-left: 150px">
             <a href="{{ url('/services') }}">
                 <div class="ms-auto" style="margin-right: 30px">
                     <span>الخدمات</span><i class="bi bi-circle" style="margin-left: 10px"></i>
                 </div>
             </a>
         </li>
-        <li style="margin-left: 100px">
+        <li style="margin-left: 150px">
             <a href="{{ route('offers.index') }}">
                 <div class="ms-auto" style="margin-right: 30px">
                     <span>العروض</span><i class="bi bi-circle" style="margin-left: 10px"></i>
