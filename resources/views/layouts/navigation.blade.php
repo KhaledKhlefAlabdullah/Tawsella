@@ -109,14 +109,14 @@
                 <i class="bi bi-chevron-down"></i><span class="ms-auto">السائقين</span><i
                     class="bi bi-menu-button-wide " style="margin-left: 10px"></i>
             </a>
-        <li style="margin-left: 90px">
+        <li style="margin-left: 80px">
             <a href="{{ route('drivers.index') }}">
                 <div class="ms-auto" style="margin-right: 30px">
                     <span>عرض السائقين</span><i class="bi bi-circle" style="margin-left: 10px"></i>
                 </div>
             </a>
         </li>
-        <li style="margin-left: 100px">
+        <li style="margin-left: 94px">
             <a href="{{ route('create.driver') }}">
                 <div class="ms-auto" style="margin-right: 30px">
                     <span>اضافة سائق</span><i class="bi bi-circle" style="margin-left: 10px"></i>
