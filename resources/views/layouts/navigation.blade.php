@@ -129,14 +129,14 @@
                 <i class="bi bi-chevron-down "></i><span class="ms-auto">السيارات</span><i class="bi bi-taxi-front-fill"
                     style="margin-left: 10px"></i>
             </a>
-        <li style="margin-left: 80px">
+        <li style="margin-left: 100px">
             <a href="{{ route('taxis.index') }}">
                 <div class="ms-auto" style="margin-right: 30px">
                     <span> عرض السيارات </span><i class="bi bi-circle" style="margin-left: 10px"></i>
                 </div>
             </a>
         </li>
-        <li style="margin-left: 94px">
+        <li style="margin-left: 100px">
             <a href="{{ route('taxis.create') }}">
                 <div class="ms-auto" style="margin-right: 30px">
                     <span> اضافة سيارة </span><i class="bi bi-circle" style="margin-left: 10px"></i>
@@ -149,14 +149,14 @@
                 <i class="bi bi-chevron-down "></i><span class="ms-auto">الطلبات</span><i class="bi bi-hourglass"
                     style="margin-left: 10px"></i>
             </a>
-        <li style="margin-left: 80px">
+        <li style="margin-left: 100px">
             <a href="{{ route('current.taxi.movement') }}">
                 <div class="ms-auto" style="margin-right: 30px">
                     <span> الطلبات الحالية </span><i class="bi bi-circle" style="margin-left: 10px"></i>
                 </div>
             </a>
         </li>
-        <li style="margin-left: 94px">
+        <li style="margin-left: 100px">
             <a href="{{ route('completed.requests') }}">
                 <div class="ms-auto" style="margin-right: 30px">
                     <span> الطلبات المكتملة </span><i class="bi bi-circle" style="margin-left: 10px"></i>
@@ -170,14 +170,14 @@
                 <i class="bi bi-chevron-down "></i><span class=" ms-auto">الاضافات</span>
                 <i class="bi bi-layout-text-window-reverse" style="margin-left: 10px"></i>
             </a>
-        <li style="margin-left: 80px">
+        <li style="margin-left: 100px">
             <a href="{{ url('/services') }}">
                 <div class="ms-auto" style="margin-right: 30px">
                     <span>الخدمات</span><i class="bi bi-circle" style="margin-left: 10px"></i>
                 </div>
             </a>
         </li>
-        <li style="margin-left: 94px">
+        <li style="margin-left: 100px">
             <a href="{{ route('offers.index') }}">
                 <div class="ms-auto" style="margin-right: 30px">
                     <span>العروض</span><i class="bi bi-circle" style="margin-left: 10px"></i>
@@ -191,7 +191,7 @@
                 <i class="bi bi-chevron-down "></i> <span class="ms-auto">الرصيد والحسابات</span><i
                     class="bi bi-gem "style="margin-left: 10px"></i>
             </a>
-        <li style="margin-left: 80px">
+        <li style="margin-left: 100px">
             <a href="{{ route('calculations.index') }}">
                 <div class="ms-auto" style="margin-right: 30px">
                     <span> رصيد السائقين </span><i class="bi bi-circle" style="margin-left: 10px"></i>
