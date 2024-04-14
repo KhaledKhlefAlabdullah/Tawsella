@@ -191,7 +191,7 @@
                 <i class="bi bi-chevron-down "></i> <span class="ms-auto">الرصيد والحسابات</span><i
                     class="bi bi-gem "style="margin-left: 10px"></i>
             </a>
-        <li style="margin-left: 100px">
+        <li style="margin-left: 75px">
             <a href="{{ route('calculations.index') }}">
                 <div class="ms-auto" style="margin-right: 30px">
                     <span> رصيد السائقين </span><i class="bi bi-circle" style="margin-left: 10px"></i>
