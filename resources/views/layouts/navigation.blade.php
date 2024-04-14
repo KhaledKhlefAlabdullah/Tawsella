@@ -4,7 +4,6 @@
             <div class="col-4">
                 <nav class="header-nav ms-auto">
                     <ul class="d-flex align-items-center">
-
                         <li class="nav-item dropdown pe-3">
 
                             <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
@@ -70,8 +69,6 @@
 
                             </ul><!-- End Profile Dropdown Items -->
                         </li><!-- End Profile Nav -->
-
-
                     </ul>
                 </nav><!-- End Icons Navigation -->
             </div>
