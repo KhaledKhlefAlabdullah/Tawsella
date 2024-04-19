@@ -510,7 +510,7 @@
 
         <div class="container">
             <div class="copyright">
-                &copy; شركة <strong><span>StarTaxi</span></strong>بخدمتكم
+                &copy; شركة <strong><span> StarTaxi </span></strong>بخدمتكم
             </div>
             <div class="credits">
                 مصمم الموقع <a href="https://abdalrhmanal.github.io/CV-MY/">شركة Smart Code</a>
