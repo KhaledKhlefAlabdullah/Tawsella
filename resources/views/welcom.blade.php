@@ -513,7 +513,7 @@
                 &copy; شركة <strong><span> StarTaxi </span></strong>بخدمتكم
             </div>
             <div class="credits">
-                مصمم الموقع <a href="https://abdalrhmanal.github.io/CV-MY/">شركة Smart Code</a>
+                مصمم الموقع <a href="https://www.facebook.com/qadoor98/">شركة Smart Code</a>
             </div>
         </div>
     </footer><!-- End Footer -->
