@@ -73,7 +73,7 @@
                     </div>
                 </div>
                 <div class="col-lg-4 order-1 order-lg-2 hero-img" data-aos="zoom-out" data-aos-delay="300">
-                    <img src="assets/img/hero-img.png" class="img-fluid animated" alt="">
+                    <img src="{{ asset('assets/img/hero-img.png" class="img-fluid animated')}}" alt="">
                 </div>
             </div>
         </div>
@@ -216,7 +216,7 @@
 
                 <div class="row content">
                     <div class="col-md-4" data-aos="fade-right">
-                        <img src="assets/img/details-1.png" class="img-fluid" alt="">
+                        <img src="{{ asset('assets/img/details-1.png')}}" class="img-fluid" alt="">
                     </div>
                     <div class="col-md-8 pt-4" data-aos="fade-up">
                         <h3>عندما تقوم بطلب سيارة</h3>
@@ -241,7 +241,7 @@
 
                 <div class="row content">
                     <div class="col-md-4 order-1 order-md-2" data-aos="fade-left">
-                        <img src="assets/img/details-2.png" class="img-fluid" alt="">
+                        <img src="{{ asset('assets/img/details-2.png')}}" class="img-fluid" alt="">
                     </div>
                     <div class="col-md-8 pt-5 order-2 order-md-1" data-aos="fade-up">
                         <h3>معالجة طلبك</h3>
@@ -275,7 +275,7 @@
                     <div class="col-lg-3 col-md-6"></div>
                     <div class="col-lg-3 col-md-6">
                         <div class="member" data-aos="zoom-in" data-aos-delay="100">
-                            <div class="pic"><img src="assets/img/driver.png" class="img-fluid" alt="">
+                            <div class="pic"><img src="{{ asset('assets/img/driver.png')}}" class="img-fluid" alt="">
                             </div>
                             <div class="member-info">
                                 <h4>سائقين رجال</h4>
@@ -286,7 +286,7 @@
 
                     <div class="col-lg-3 col-md-6 mt-5 mt-md-0">
                         <div class="member" data-aos="zoom-in" data-aos-delay="200">
-                            <div class="pic"><img src="assets/img/driver.png" class="img-fluid" alt="">
+                            <div class="pic"><img src="{{ asset('assets/img/driver.png')}}" class="img-fluid" alt="">
                             </div>
                             <div class="member-info">
                                 <h4>سائقات نساء</h4>
@@ -465,7 +465,7 @@
 
                     <div class="col-lg-4 mt-5 mt-lg-0" data-aos="fade-left" data-aos-delay="200">
 
-                        <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+                        <form action="" method="post" role="form" class="php-email-form">
                             <div class="row">
                                 <div class="col-md-6 form-group">
                                     <input type="text" name="name" class="form-control" id="name"
