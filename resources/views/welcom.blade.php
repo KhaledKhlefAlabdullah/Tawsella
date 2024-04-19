@@ -48,9 +48,7 @@
                     <li><a class="nav-link scrollto" href="#features">خدماتنا</a></li>
                     <li><a class="nav-link scrollto" href="#team">السائقين</a></li>
                     <li><a class="nav-link scrollto" href="#pricing">الاسعار و الرحلات</a></li>
-                    <li><a class="nav-link scrollto" href="#pricing">الاسعار و الرحلات</a></li>
                     <li><a class="nav-link scrollto" href="#contact">التواصل</a></li>
-                    <li><a class="nav-link scrollto" href="/login">تسجيل الدخول</a></li>
                     <li><a class="nav-link scrollto" href="/login">تسجيل الدخول</a></li>
                 </ul>
                 <i class="bi bi-list mobile-nav-toggle"></i>
