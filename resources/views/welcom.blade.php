@@ -216,7 +216,7 @@
 
                 <div class="row content">
                     <div class="col-md-4" data-aos="fade-right">
-                        <img src="{{ asset('assets/img/details-1.png')}}" class="img-fluid" alt="">
+                        <img src="{{ asset('assets/img/details-11.png')}}" class="img-fluid" alt="">
                     </div>
                     <div class="col-md-8 pt-4" data-aos="fade-up">
                         <h3>عندما تقوم بطلب سيارة</h3>
@@ -241,7 +241,7 @@
 
                 <div class="row content">
                     <div class="col-md-4 order-1 order-md-2" data-aos="fade-left">
-                        <img src="{{ asset('assets/img/details-2.png')}}" class="img-fluid" alt="">
+                        <img src="{{ asset('assets/img/details-22.png')}}" class="img-fluid" alt="">
                     </div>
                     <div class="col-md-8 pt-5 order-2 order-md-1" data-aos="fade-up">
                         <h3>معالجة طلبك</h3>
