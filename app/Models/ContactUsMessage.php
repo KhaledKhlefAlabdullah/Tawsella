@@ -27,4 +27,3 @@ class ContactUsMessage extends Model
     }
 
 }
-//Symfony\Component\ErrorHandler\Error\FatalError: Trait "App\Models\Traits\HasUuid" not found in file D:\SmartCode Projects\star-taxi-12\star-taxi\app\Models\User.php on line 14

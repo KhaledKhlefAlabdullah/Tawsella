@@ -19,7 +19,8 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request){
+    public function store(Request $request)
+    {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
@@ -33,11 +34,13 @@ class RegisteredUserController extends Controller
         ]);
 
         UserProfile::create([
-            'user_id' => $user->id
-,            'name' => $request->input('name'),
+            'user_id' => $user->id,
+            'name' => $request->input('name'),
             'phone_number' => $request->input('phone_number'),
             'gender' => $request->input('gender')
         ]);
+
+        event(new Registered($user));
 
         $token = createUserToken($user, 'register-token');
 

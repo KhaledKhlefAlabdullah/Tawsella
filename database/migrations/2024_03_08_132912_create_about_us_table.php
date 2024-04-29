@@ -17,10 +17,10 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->string('complaints_number')->nullable();
-            $table->boolean('is_general')->default(false);
             $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
-            $table->SoftDeletes();        });
+            $table->SoftDeletes();
+        });
     }
 
     /**

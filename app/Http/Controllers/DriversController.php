@@ -7,7 +7,7 @@ use Exception;
 use Illuminate\Http\Request;
 use App\Models\Calculations;
 
-use App\Models\TaxiMovement;
+use App\Models\Movement;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 

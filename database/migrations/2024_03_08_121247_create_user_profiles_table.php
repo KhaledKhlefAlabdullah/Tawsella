@@ -20,7 +20,8 @@ return new class extends Migration
             $table->enum('gender',['male','female'])->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
-            $table->SoftDeletes();        });
+            $table->SoftDeletes();
+        });
     }
 
     /**

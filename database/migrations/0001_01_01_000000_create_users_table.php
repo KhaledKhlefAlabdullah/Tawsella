@@ -14,11 +14,17 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('user_type',['customer','driver','admin'])->default('customer');
+            $table->enum('user_type',['customer','taxi driver','transport car driver','motorcyclist','admin'])->default('customer');
             $table->enum('driver_state',['ready','in_break','reserved'])->default('ready');
             $table->boolean('is_active')->default(true);
+            $table->double('last_location_latoted')->nullable();
+            $table->double('last_location_longted')->nullable();
+            $table->timestamp('mobile_verified_at')->nullable();
+            $table->string('mobile_verify_code')->nullable();
+            $table->tinyInteger('mobile_attempts_left')->default(0);
+            $table->timestamp('mobile_last_attempt_date')->nullable();
+            $table->timestamp('mobile_verify_code_sent_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->SoftDeletes();

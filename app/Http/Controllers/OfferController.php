@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Offer;
-use App\Models\TaxiMovementType;
+use App\Models\MovementType;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -48,7 +48,7 @@ class OfferController extends Controller
      */
     public function create()
     {
-        $movementTypes = TaxiMovementType::all();
+        $movementTypes = MovementType::all();
         $admins = User::where('user_type', 'admin')->get();
 
         return view('offers.create', ['movementTypes' => $movementTypes, 'admins' => $admins]);
@@ -92,7 +92,7 @@ class OfferController extends Controller
      */
     public function edit(Offer $offer)
     {
-        $movementTypes = TaxiMovementType::all();
+        $movementTypes = MovementType::all();
         $admins = User::where('user_type', 'admin')->get();
 
         return view('offers.edit', ['offer' => $offer, 'movementTypes' => $movementTypes, 'admins' => $admins]);

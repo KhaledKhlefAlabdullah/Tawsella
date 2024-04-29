@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Calculations extends Model
+class Chat extends Model
 {
     use HasFactory, HasUuid, SoftDeletes;
 
@@ -16,18 +16,12 @@ class Calculations extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'driver_id',
-        'taxi_movement_id',
-        'totalPrice',
-        'way',
-        'is_bring'
+        'sender_id',
+        'reciver_id',
+        'message',
+        'image_url',
+        'voice_url',
+        'is_edited',
+        'is_stared'
     ];
-
-    public function driver(){
-        return $this->belongsTo(User::class,'driver_id');
-    }
-
-    public function taxiMovement(){
-        return $this->belongsTo(TaxiMovement::class,'taxi_movement_id');
-    }
 }
