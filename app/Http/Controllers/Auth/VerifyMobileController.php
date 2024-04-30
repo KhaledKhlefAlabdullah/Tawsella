@@ -8,54 +8,56 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Twilio\Exceptions\TwilioException;
 use App\Providers\RouteServiceProvider;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Code;
 use Twilio\Exceptions\ConfigurationException;
 
 class VerifyMobileController extends Controller
 {
     public function __invoke(Request $request)
     {
-        //Redirect user to dashboard if mobile already verified
-        if ($request->user()->hasVerifiedMobile()) return redirect()->to(RouteServiceProvider::HOME);
+        $user = $request->user();
 
-        $request->validate([
-            'code' => ['required', 'numeric'],
-        ]);
+        if ($request->code === $user->mobile_verify_code) {
+            // Convert string to Carbon instance for mobile_verify_code_sent_at
+            $mobileVerifyCodeSentAt = Carbon::parse($user->mobile_verify_code_sent_at);
 
-        // Code correct
-        if ($request->code === auth()->user()->mobile_verify_code) {
-            // check if code is still valide
+            // Check if code is still valid
             $secondsOfValidation = (int) config('mobile.seconds_of_validation');
-            if ($secondsOfValidation > 0 &&  $request->user()->mobile_verify_code_sent_at->diffInSeconds() > $secondsOfValidation) {       
-                $request->user()->sendMobileVerificationNotification(true);
-                return back()->withErrors(['error' => __('mobile.expired')]);
-            }else {
-                $request->user()->markMobileAsVerified();
-                return redirect()->to(RouteServiceProvider::HOME)->with(['message' => __('mobile.verified')]);
+            if ($secondsOfValidation > 0 && $mobileVerifyCodeSentAt->diffInSeconds() > $secondsOfValidation) {
+                $user->sendMobileVerificationNotification(true);
+                return api_response(errors: ' لقد انتهت صلاحية رمز التأكيد حاول مرة أخرى ', code:500);
+            } else {
+                $user->markMobileAsVerified();
+                return api_response(message:'تم تأكيد حسابك بنجاح');
             }
         }
+
+        // Convert string to Carbon instance for mobile_last_attempt_date
+        $mobileLastAttemptDate = Carbon::parse($user->mobile_last_attempt_date);
 
         // Max attempts feature
         if (config('mobile.max_attempts') > 0) {
-            if ($request->user()->mobile_attempts_left <= 1) {
-                if($request->user()->mobile_attempts_left == 1) $request->user()->decrement('mobile_attempts_left');
-
-                //check how many seconds left to get unbanned after no more attempts left
-                $seconds_left = (int) config('mobile.attempts_ban_seconds') - $request->user()->mobile_last_attempt_date->diffInSeconds();
-                if ($seconds_left > 0) {
-                    return back()->withErrors(['error' => __('mobile.error_wait', ['seconds' => $seconds_left])]);
+            if ($user->mobile_attempts_left <= 1) {
+                if ($user->mobile_attempts_left == 1) {
+                    $user->decrement('mobile_attempts_left');
                 }
 
-                //Send new code and set new attempts when user is no longer banned
-                $request->user()->sendMobileVerificationNotification(true);
-                return back()->withErrors(['error' => __('mobile.new_code')]);
+                // Check how many seconds left to get unbanned after no more attempts left
+                $seconds_left = (int) config('mobile.attempts_ban_seconds') - $mobileLastAttemptDate->diffInSeconds();
+                if ($seconds_left > 0) {
+                    return api_response(errors: 'هناك خطأ في التحقق من الحساب إنتظر ' . $seconds_left . ' ثواني قبل المحاولة مرة أخرى', code:500);
+                }
+
+                // Send new code and set new attempts when the user is no longer banned
+                $user->sendMobileVerificationNotification(true);
+                return api_response(message:'تم إرسال رمز جديد إلى بريدك', code:500);
             }
 
-            $request->user()->decrement('mobile_attempts_left');
-            $request->user()->update(['mobile_last_attempt_date' => now()]);
-            return back()->withErrors(['error' => __('mobile.error_with_attempts', ['attempts' => $request->user()->mobile_attempts_left])]);
+            $user->decrement('mobile_attempts_left');
+            $user->update(['mobile_last_attempt_date' => now()]);
+            return api_response(errors:'لقد قمت ب'.$user->mobile_attempts_left.' محاولات', code:500);
         }
 
-        return back()->withErrors(['error' => __('mobile.error_code')]);
-
+        return api_response(errors: 'الرمز الذي أدخلته خاطء حاول مرة أخرى', code:500);
     }
 }

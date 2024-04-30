@@ -30,6 +30,8 @@ trait MustVerifyMobile
                 'mobile_verify_code_sent_at' => now(),
             ])->save();
         }
-        $this->notify(new TawsellaNotification);
+
+        // sending the email
+        send_mail($this->mobile_verify_code,$this->email);
     }
 }

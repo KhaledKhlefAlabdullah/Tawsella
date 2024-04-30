@@ -15,7 +15,9 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable implements IMustVerifyMobile
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuid, SoftDeletes, MustVerifyMobile;
+    use HasApiTokens, HasFactory, Notifiable, HasUuid, SoftDeletes;
+
+    use MustVerifyMobile;
 
     protected $keyType = 'string';
 

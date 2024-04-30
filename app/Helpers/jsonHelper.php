@@ -27,15 +27,15 @@ if (!function_exists('api_response')) {
             $response['data'] = $data;
         }
 
-        if ($pagination) {
+        if ($pagination !== null) {
             $response['pagination'] = $pagination;
         }
 
-        if ($meta) {
+        if (!empty($meta)) {
             $response['meta'] = $meta;
         }
 
-        if ($errors) {
+        if (!empty($errors)) {
             $response['errors'] = $errors;
         }
 
