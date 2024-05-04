@@ -5,19 +5,22 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Models\Traits\HasUuid;
-use App\Interfaces\MustVerifyMobile as IMustVerifyMobile;
-use App\Models\Traits\MustVerifyMobile;
+
+
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable implements IMustVerifyMobile
+use App\Interfaces\MustVerifyEmailByCode as IMustVerifyEmailByCode;
+use App\Models\Traits\MustVerifyEmailByCode;
+
+class User extends Authenticatable implements IMustVerifyEmailByCode
 {
     use HasApiTokens, HasFactory, Notifiable, HasUuid, SoftDeletes;
 
-    use MustVerifyMobile;
+    use MustVerifyEmailByCode;
 
     protected $keyType = 'string';
 
@@ -38,10 +41,10 @@ class User extends Authenticatable implements IMustVerifyMobile
         'is_active',
         'last_location_latoted',
         'last_location_longted',
-        'mobile_verify_code',
-        'mobile_attempts_left',
-        'mobile_last_attempt_date',
-        'mobile_verify_code_sent_at',
+        'mail_verify_code',
+        'mail_code_attempts_left',
+        'mail_code_last_attempt_date',
+        'mail_verify_code_sent_at',
     ];
 
     /**

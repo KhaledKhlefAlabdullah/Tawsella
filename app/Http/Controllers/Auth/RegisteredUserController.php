@@ -43,14 +43,14 @@ class RegisteredUserController extends Controller
             ]);
 
             // event(new Registered($user));
-            
-            $user->sendMobileVerificationNotification(true);
+
+            $user->sendEmailVerificationNotification(true);
 
             $token = createUserToken($user, 'register-token');
 
             return api_response(data: ['token' => $token, 'user_id' => $user->id], message: 'register-success');
         } catch (Exception $e) {
-            return api_response(errors: $e->getMessage(), message: 'register-error',code:500);
+            return api_response(errors: $e->getMessage(), message: 'register-error', code: 500);
         }
     }
 }

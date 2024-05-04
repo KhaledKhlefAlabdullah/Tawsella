@@ -34,7 +34,7 @@ class TawsellaNotification extends Notification
      */
     public function toMail(object $notifiable)
     {
-        return send_mail($notifiable->mobile_verify_code,$notifiable->email);
+        return send_mail($notifiable->mail_verify_code, $notifiable->email);
     }
 
     /**

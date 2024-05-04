@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Auth\VerifyMobileController;
+use App\Http\Controllers\Auth\VerifyEmailByCodeController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\NewPasswordController;
@@ -22,7 +22,7 @@ Route::post('/reset-password', [NewPasswordController::class, 'store'])
 
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::post('verify-mobile', [VerifyMobileController::class, '__invoke'])
+    Route::post('verify-mail', [VerifyEmailByCodeController::class, '__invoke'])
         ->middleware(['throttle:6,1']);
 
     Route::post('email/verification-notification', [EmailVerificationNotificationController::class, 'store'])

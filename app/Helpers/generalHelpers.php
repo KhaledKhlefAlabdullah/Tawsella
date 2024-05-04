@@ -171,11 +171,11 @@ if (!function_exists('getMyId')) {
 if (!function_exists('getReadyDrivers')) {
     function getReadyDrivers()
     {
-            $drivers = User::where([
-                'users.user_type' => 'driver',
-                'users.driver_state' => 'ready',
-                'users.is_active' => true
-            ])
+        $drivers = User::where([
+            'users.user_type' => 'driver',
+            'users.driver_state' => 'ready',
+            'users.is_active' => true
+        ])
             ->whereNull('taxis.deleted_at')
             ->join('taxis', 'users.id', '=', 'taxis.driver_id')
             ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
@@ -191,15 +191,13 @@ if (!function_exists('getReadyDrivers')) {
     }
 }
 
-
+/**
+ * This function is used to email to user
+ * @param string $mail_message as message you want to send
+ * @param string $receiver as mail or list of mails
+ *
+ */
 if (!function_exists('send_mail')) {
-    /*
-     * This function is used to get and check if a model exists by ID
-     * @param string $model
-     * @param string $id
-     *
-     * @throws NotFoundResourceException
-     */
     function send_mail($mail_message, $receiver)
     {
         try {
@@ -208,7 +206,7 @@ if (!function_exists('send_mail')) {
 
             return true;
         } catch (Exception $e) {
-            return api_response(errors:$e->getMessage(), message: 'Cold not sending the email');
+            return api_response(errors: $e->getMessage(), message: 'Cold not sending the email');
         }
     }
 }
