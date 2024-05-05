@@ -39,9 +39,10 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
         'user_type',
         'driver_state',
         'is_active',
-        'last_location_latoted',
-        'last_location_longted',
+        'last_location_latitude',
+        'last_location_longitude',
         'mail_verify_code',
+        'mail_code_verified_at',
         'mail_code_attempts_left',
         'mail_code_last_attempt_date',
         'mail_verify_code_sent_at',
@@ -110,5 +111,10 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
     public function our_services()
     {
         return $this->hasMany(OurService::class, 'admin_id');
+    }
+
+    public function vehicle()
+    {
+        return $this->hasOne(Vehicle::class, 'user_id');
     }
 }

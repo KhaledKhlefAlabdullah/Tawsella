@@ -18,8 +18,8 @@ return new class extends Migration
             $table->enum('user_type', ['customer', 'taxi driver', 'transport car driver', 'motorcyclist', 'admin'])->default('customer');
             $table->enum('driver_state', ['ready', 'in_break', 'reserved'])->default('ready');
             $table->boolean('is_active')->default(true);
-            $table->double('last_location_latoted')->nullable();
-            $table->double('last_location_longted')->nullable();
+            $table->double('last_location_latitude')->nullable();
+            $table->double('last_location_longitude')->nullable();
             $table->timestamp('mail_code_verified_at')->nullable();
             $table->string('mail_verify_code')->nullable();
             $table->tinyInteger('mail_code_attempts_left')->default(0);

@@ -3,33 +3,51 @@
 namespace App\Policies;
 
 use App\Models\User;
-use SebastianBergmann\CodeCoverage\Driver\Driver;
 
 class UserPolicy
 {
-
+    // Constants defining user types
     const ADMIN = 'admin';
     const CUSTOMER = 'customer';
     const TAXI_DRIVER = 'taxi driver';
     const TRANSPORT_CAR_DRIVER = 'transport car driver';
     const MOTORCYCLIST = 'motorcyclist';
+
     public function __construct()
     {
-        //
+        // Constructor, currently empty
     }
 
-    public function is_admin(User $user):bool
+    /**
+     * Check if the user is an admin.
+     *
+     * @param User $user The user to check.
+     * @return bool Returns true if the user is an admin, false otherwise.
+     */
+    public function is_admin(User $user): bool
     {
-        return $user->user_type == $this::ADMIN;
+        return $user->user_type == self::ADMIN;
     }
 
-    public function is_customer(User $user):bool
+    /**
+     * Check if the user is a customer.
+     *
+     * @param User $user The user to check.
+     * @return bool Returns true if the user is a customer, false otherwise.
+     */
+    public function is_customer(User $user): bool
     {
-        return $user->user_type == $this::CUSTOMER;
+        return $user->user_type == self::CUSTOMER;
     }
 
-    public function is_driver(USer $user):bool
+    /**
+     * Check if the user is a driver (taxi driver, transport car driver, or motorcyclist).
+     *
+     * @param User $user The user to check.
+     * @return bool Returns true if the user is a driver, false otherwise.
+     */
+    public function is_driver(User $user): bool
     {
-        return $user->user_type == $this::TAXI_DRIVER || $user->user_type == $this::TRANSPORT_CAR_DRIVER || $user->user_type == $this::MOTORCYCLIST;
+        return $user->user_type == self::TAXI_DRIVER || $user->user_type == self::TRANSPORT_CAR_DRIVER || $user->user_type == self::MOTORCYCLIST;
     }
 }

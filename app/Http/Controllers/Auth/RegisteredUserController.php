@@ -3,15 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\UserRequest;
 use App\Models\User;
 use App\Models\UserProfile;
 use Exception;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
+
 
 class RegisteredUserController extends Controller
 {
@@ -20,15 +18,11 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
         try {
-            $request->validate([
-                'name' => ['required', 'string', 'max:255'],
-                'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-                'phone_number' => ['nullable', 'string', 'regex:/^(00|\+)[0-9]{9,20}$/'],
-                'password' => ['required', 'confirmed', Rules\Password::defaults()],
-            ]);
+
+            $request->validated();
 
             $user = User::create([
                 'email' => $request->email,

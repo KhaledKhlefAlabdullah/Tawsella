@@ -210,3 +210,24 @@ if (!function_exists('send_mail')) {
         }
     }
 }
+
+/**
+ * Get Counter
+ * @param Model $model to counst within
+ * @param array $validations to check by
+ * @return numeric count of items
+ */
+if (!function_exists('count_items')) {
+
+    function count_items($model, array $validations)
+    {
+        try {
+            // withTrashed to count the deleted items to
+            $item_count = $model::withTrashed()->where($validations)->get()->count();
+
+            return $item_count + 1;
+        } catch (Exception $e) {
+            return api_response(errors:$e->getMessage(), message: 'get-count-error', code: 500);
+        }
+    }
+}
