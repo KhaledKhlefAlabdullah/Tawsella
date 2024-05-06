@@ -18,6 +18,8 @@ class OurService extends Model
         'admin_id',
         'service_name',
         'service_description',
+        'image',
+        'logo',
     ];
 
     public function admin(){

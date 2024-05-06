@@ -159,6 +159,8 @@ class UsersController extends Controller
                 $user_details = array_merge($user_details, $driverDetails);
             }
 
+            
+
             // Return API response with user details
             return api_response(data: $user_details, message: 'تم جلب تفاصل الحساب بنجاح');
         } catch (Exception $e) {

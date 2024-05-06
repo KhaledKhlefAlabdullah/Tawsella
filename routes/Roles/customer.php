@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Middleware\RolesMiddlewares\CustomerMiddleware;
 use Illuminate\Support\Facades\Route;
 
 
-Route::group(['middleware' => 'customer'], function() {
+Route::middleware([CustomerMiddleware::class])->group(function() {
 
 
 

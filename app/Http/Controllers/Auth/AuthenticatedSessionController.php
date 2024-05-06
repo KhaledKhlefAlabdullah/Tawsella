@@ -45,6 +45,7 @@ class AuthenticatedSessionController extends Controller
 
             // Return the API response with the token and user data
             return api_response(data: ['token' => $token, 'user' => $user], message: 'نجح تسجيل الدخول');
+            
         } catch (AuthenticationException $e) {
             // Return an API response with authentication errors
             return api_response(errors: [$e->getMessage(), 'دخول غير مرخص'], message: 'بيانات الاعتماد غير صالحة', code: 401);
@@ -97,9 +98,7 @@ class AuthenticatedSessionController extends Controller
             // Check if the new password is the same as the old password
             if ($user->password == $new_password) {
                 // Return an API response with an error message
-                return response()->json([
-                    'message' => __('Your new password it same old password')
-                ], 400);
+                return api_response(message: 'Your new password it same old password', code:400);
             }
 
             // Update the user's password

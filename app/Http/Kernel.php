@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\EnsureEmailIsVerifiedByCodeMiddleware;
 use App\Http\Middleware\RolesMiddlewares\AdminMiddleware;
 use App\Http\Middleware\RolesMiddlewares\CustomerMiddleware;
 use App\Http\Middleware\RolesMiddlewares\DriverMiddleware;
@@ -65,10 +66,11 @@ class Kernel extends HttpKernel
         'precognitive' => \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class,
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
-        'verify.email' => \App\Http\Middleware\EnsureEmailIsVerifiedByCodeMiddleware::class,
+        // 'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'verified' => EnsureEmailIsVerifiedByCodeMiddleware::class,
         'admin' => AdminMiddleware::class,
         'driver' => DriverMiddleware::class,
         'customer' => CustomerMiddleware::class
     ];
+
 }

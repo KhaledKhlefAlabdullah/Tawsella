@@ -77,10 +77,10 @@ class UserProfileController extends Controller
 
                     if ($userProfile->avatar == '/images/profile_images/user_profile.png') {
 
-                        $avatar_path = storeProfileAvatar($avatar, $path);
+                        $avatar_path = storeFile($avatar, $path);
                     } else {
 
-                        $avatar_path = editProfileAvatar($userProfile->avatar, $path, $avatar);
+                        $avatar_path = editFile($userProfile->avatar, $path, $avatar);
                     }
 
                     $userProfile->update([

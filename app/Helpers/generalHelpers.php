@@ -100,9 +100,9 @@ if (!function_exists('findAndUpdate')) {
  * @param string $path the path where i want to save it
  * @return string $path+fileName
  */
-if (!function_exists('storeProfileAvatar')) {
+if (!function_exists('storeFile')) {
 
-    function storeProfileAvatar($file, $path): string
+    function storeFile($file, $path): string
     {
         // get file extension
         $file_extension = $file->getClientOriginalExtension();
@@ -125,9 +125,9 @@ if (!function_exists('storeProfileAvatar')) {
  * @param mixed $file the file i want to store it
  * @return string $new_file_path+fileName
  */
-if (!function_exists('editProfileAvatar')) {
+if (!function_exists('editFile')) {
 
-    function editProfileAvatar($old_path, $new_path, $new_file): string
+    function editFile($old_path, $new_path, $new_file): string
     {
         // Delete the old file from storage
         if (file_exists($old_path)) {
@@ -136,7 +136,7 @@ if (!function_exists('editProfileAvatar')) {
         }
 
         // Store the new file
-        $new_file_path = storeProfileAvatar($new_file, $new_path);
+        $new_file_path = storeFile($new_file, $new_path);
 
         return $new_file_path;
     }
@@ -227,7 +227,7 @@ if (!function_exists('count_items')) {
 
             return $item_count + 1;
         } catch (Exception $e) {
-            return api_response(errors:$e->getMessage(), message: 'get-count-error', code: 500);
+            return api_response(errors: $e->getMessage(), message: 'get-count-error', code: 500);
         }
     }
 }

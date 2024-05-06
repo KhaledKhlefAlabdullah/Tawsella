@@ -44,12 +44,14 @@ if (!function_exists('api_response')) {
 }
 
 /**
+ * @param Model $user is the user whill make token for it
+ * @param string $token_name is the user token name
  * @return string token
  */
 if (!function_exists('createUserToken')) {
     function createUserToken($user, $token_name)
     {
-
+        
         // Set the expiration time for the new token
         $expiresAt = Carbon::now()->addDays(30);
 
