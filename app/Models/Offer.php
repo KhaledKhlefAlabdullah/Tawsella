@@ -15,15 +15,13 @@ class Offer extends Model
     public $incrementing = false;
 
     protected $fillable =[
-        'movement_type_id',
-        'admin_id',
+        'user_id',
         'title',
-        'discreption',
         'valide_date',
         'description'
     ];
 
-    public function admin_offer(){
+    public function user(){
         return $this->belongsTo(User::class,'admin_id');
     }
 

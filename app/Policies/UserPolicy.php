@@ -50,4 +50,26 @@ class UserPolicy
     {
         return $user->user_type == self::TAXI_DRIVER || $user->user_type == self::TRANSPORT_CAR_DRIVER || $user->user_type == self::MOTORCYCLIST;
     }
+
+    /**
+     * Check if the user is not driver (taxi driver, transport car driver, or motorcyclist).
+     *
+     * @param User $user The user to check.
+     * @return bool Returns true if the user is a driver, false otherwise.
+     */
+    public function not_driver(User $user): bool
+    {
+        return $user->user_type != self::TAXI_DRIVER || $user->user_type != self::TRANSPORT_CAR_DRIVER || $user->user_type != self::MOTORCYCLIST;
+    }
+
+    /**
+     * Check if the user is admin or driver (taxi driver, transport car driver, or motorcyclist).
+     *
+     * @param User $user The user to check.
+     * @return bool Returns true if the user is a driver, false otherwise.
+     */
+    public function admin_and_driver(User $user): bool
+    {
+        return $user->user_type != self::CUSTOMER;
+    }
 }

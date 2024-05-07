@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\OurServiceController;
 use App\Http\Controllers\UsersController;
 use App\Http\Middleware\RolesMiddlewares\AdminMiddleware;
@@ -26,11 +27,21 @@ Route::middleware([AdminMiddleware::class])->group(function() {
 
     Route::group(['prefix' => 'services', 'controller' => OurServiceController::class], function(){
 
-        Route::get('/','index');
-
         Route::post('/add','store');
 
         Route::put('/edit/{id}','update');
+
+        Route::delete('/delete/{id}','destroey');
+
+    });
+
+    Route::group(['prefix' => 'about-us', 'controller' => AboutUsController::class], function(){
+
+        Route::post('/general/add-or-update','storeOrUpdate');
+
+        Route::post('/additonal/add','storeAdditionalInfo');
+
+        Route::put('/additonal/edit/{id}','updateAdditionalInfo');
 
         Route::delete('/delete/{id}','destroey');
 

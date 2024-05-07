@@ -15,12 +15,11 @@ return new class extends Migration
             $table->uuid('id')->unique()->primary();
             $table->string('admin_id');
             $table->string('service_name');
-            $table->string('image')->default('/images/services/def_image.png');
-            $table->string('logo')->default('/images/services/def_logo.png');
+            $table->string('image')->nullable();
+            $table->string('logo')->nullable();
             $table->text('service_description');
             $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
-            $table->SoftDeletes();
         });
     }
 

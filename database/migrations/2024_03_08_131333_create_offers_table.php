@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('offers', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
-            $table->string('admin_id');
+            $table->string('user_id');
             $table->string('title');
-            $table->string('deiscreption');
             $table->date('valide_date');
-            $table->text('discreption')->nullable();
-            $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
+            $table->text('discreption');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
             $table->SoftDeletes();
         });

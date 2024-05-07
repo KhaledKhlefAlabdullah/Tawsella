@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\OffersRequest;
 use App\Models\Offer;
 use App\Models\MovementType;
 use App\Models\User;
@@ -13,124 +14,99 @@ class OfferController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * Retrieves and displays both valid and ended offers.
+     * Valid offers are those whose validity date is today or in the future.
+     * Ended offers are those whose validity date is in the past.
+     *
+     * @return mixed Returns a JSON response containing valid and ended offers.
      */
     public function index()
     {
         try {
 
-            $offers = Offer::select(
-                'offers.id',
-                'offers.offer',
-                'offers.value_of_discount',
-                'offers.valide_date',
-                'taxi_movement_types.type',
-                'taxi_movement_types.price',
-                'taxi_movement_types.description'
-
-            )
-                ->join('taxi_movement_types', 'offers.movement_type_id', '=', 'taxi_movement_types.id')
+            $valiedOffers = Offer::select('offers.id', 'offers.title', 'offers.valide_date', 'offers.discreption', 'up.name', 'up.avatar')
+                ->join('user_profiles as up', 'offers.user_id', '=', 'up.user_id')
                 ->where('offers.valide_date', '>=', now())
                 ->get();
 
-            if (request()->wantsJson())
-                return api_response(data: $offers, message: 'تم الحصول على العروض بنجاح');
+            if (Auth::user()->user_type != 'admin')
+                return api_response(data: $valiedOffers, message: 'تم الحصول على العروض بنجاح');
 
-            return view('offers.index', ['offers' => $offers]);
+            $endedOffers = Offer::select('offers.id', 'offers.title', 'offers.valide_date', 'offers.discreption', 'up.name', 'up.avatar')
+                ->join('user_profiles as up', 'offers.user_id', '=', 'up.user_id')
+                ->where('offers.valide_date', '<', now())
+                ->get();
+
+            return api_response(data: ['valiedOffers' => $valiedOffers, 'endedOffers' => $endedOffers], message: 'تم الحصول على العروض بنجاح');
         } catch (Exception $e) {
-            if (request()->wantsJson())
-                return api_response(errors: $e->getMessage(), message: 'فشل الحصول على العروض', code: 500);
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return api_response(errors: $e->getMessage(), message: 'فشل الحصول على العروض', code: 500);
         }
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        $movementTypes = MovementType::all();
-        $admins = User::where('user_type', 'admin')->get();
-
-        return view('offers.create', ['movementTypes' => $movementTypes, 'admins' => $admins]);
     }
 
     /**
      * Store a newly created resource in storage.
+     * Validates the request data and creates a new offer in the database.
+     *
+     * @param OffersRequest $request The request object containing all the necessary data.
+     * @return mixed Returns a JSON response with the newly created offer or an error message.
      */
-    public function store(Request $request)
+    public function store(OffersRequest $request)
     {
         try {
-            $data = $request->validate([
-                'movement_type_id' => 'required',
-                'offer' => 'required',
-                'value_of_discount' => 'required|numeric',
-                'valide_date' => 'required|date',
-                'description' => 'sometimes|string|nullable'
-            ]);
+            $validatedData = $request->validated();
 
-            // تعيين admin_id بمعرف المستخدم الحالي
-            $data['admin_id'] = Auth::id();
 
-            Offer::create($data);
+            Offer::create($validatedData);
 
-            return redirect()->route('offers.index')->with('success', 'تم إنشاء العرض بنجاح.');
+            return api_response(message: 'تم انشاء العرض بنجاح');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return api_response(errors: $e->getMessage(), message: 'فشل انشاء العرض', code: 500);
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Offer $offer)
-    {
-        return view('offers.show', ['offer' => $offer]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Offer $offer)
-    {
-        $movementTypes = MovementType::all();
-        $admins = User::where('user_type', 'admin')->get();
-
-        return view('offers.edit', ['offer' => $offer, 'movementTypes' => $movementTypes, 'admins' => $admins]);
-    }
 
     /**
      * Update the specified resource in storage.
+     * Validates the request data and updates the specified offer.
+     *
+     * @param OffersRequest $request The request object containing all the necessary data.
+     * @param string $id The ID of the offer to update.
+     * @return mixed Returns a JSON response with the updated offer or an error message.
      */
-    public function update(Request $request, Offer $offer)
+    public function update(OffersRequest $request, string $id)
     {
         try {
-            $data = $request->validate([
-                'movement_type_id' => 'required',
-                'admin_id' => 'required',
-                'offer' => 'required',
-                'value_of_discount' => 'required|numeric',
-                'valide_date' => 'required|date',
-            ]);
+            $validatedData = $request->validated();
 
-            $offer->update($data);
+            $offer = getAndCheckModelById(Offer::class, $id);
+            $offer->update($validatedData);
 
-            return redirect()->route('offers.index')->with('success', 'تم تحديث العرض بنجاح.');
+            return api_response(message: 'تم تعديل العرض بنجاح');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return api_response(errors: $e->getMessage(), message: 'فشل تعديل العرض', code: 500);
         }
     }
 
     /**
      * Remove the specified resource from storage.
+     * Deletes the specified offer from the database.
+     *
+     * @param string $id The ID of the offer to delete.
+     * @return mixed Returns a JSON response indicating success or failure of the deletion.
      */
-    public function destroy(Offer $offer)
+    public function destroy(string $id)
     {
         try {
+
+            $offer = getAndCheckModelById(Offer::class, $id);
+
             $offer->delete();
 
-            return redirect()->route('offers.index')->with('success', 'تم حذف العرض بنجاح.');
+            // Return a success message indicating the offer was deleted
+            return api_response(message: 'تم حذف العرض بنجاح');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            // Return an error response if an exception occurs
+            return api_response(errors: $e->getMessage(), message: 'فشل حذف العرض', code: 500);
         }
     }
 }

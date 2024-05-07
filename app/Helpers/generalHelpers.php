@@ -143,6 +143,26 @@ if (!function_exists('editFile')) {
 }
 
 /**
+ * This function is used to update files
+ * @param string $path the path where the file sotred
+ * @return mixed success message
+ */
+if (!function_exists('removeFile')) {
+
+    function removeFile($path): string
+    {
+        // Delete the old file from storage
+        if (file_exists($path)) {
+
+            unlink(public_path($path));
+            return 'success';
+        }
+
+        return 'falied';
+    }
+}
+
+/**
  * this function return the admin id
  * @return string admin_id
  */

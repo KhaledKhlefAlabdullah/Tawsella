@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
-class AboutUsRequest extends FormRequest
+class OffersRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -14,13 +15,10 @@ class AboutUsRequest extends FormRequest
         return true;
     }
 
-    protected function prepareForValidation()
+    public function prepareForValidation(): void
     {
-            $this->merge([
-                'admin_id' => getAdminId(),
-            ]);
+        $this->merge(['user_id' => Auth::id()]);
     }
-
     /**
      * Get the validation rules that apply to the request.
      *
@@ -29,11 +27,10 @@ class AboutUsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'admin_id' => ['required', 'string', 'exists:users,id'],
+            'user_id' => ['required', 'string', 'exists:users,id'],
             'title' => ['required', 'string'],
-            'description' => ['required', 'string'],
-            'complaints_number' => ['sometimes', 'required', 'string', 'regex:/^(\+|00)[0-9]{9,20}$/'],
-            'image' => ['nullable', 'image', 'mimes:jpg,png,jpeg','max:10024'],
+            'valide_date' => ['required', 'date', 'after:now'],
+            'description' => ['required', 'string']
         ];
     }
 }
