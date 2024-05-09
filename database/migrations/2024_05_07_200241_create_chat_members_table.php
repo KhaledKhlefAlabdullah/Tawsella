@@ -10,11 +10,15 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('chats', function (Blueprint $table) {
+        Schema::create('chat_members', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
-            $table->string('name');
+            $table->string('chat_id');
+            $table->string('member_id');
+            $table->foreign('chat_id')->references('id')->on('chats')->onDelete('cascade');
+            $table->foreign('member_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
+
         });
     }
 
@@ -23,6 +27,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('chats');
+        Schema::dropIfExists('chat_members');
     }
 };

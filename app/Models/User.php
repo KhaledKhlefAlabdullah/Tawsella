@@ -22,11 +22,11 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
 
     use MustVerifyEmailByCode;
 
-    protected $keyType = 'string';
+    protected $keyType = 'string'; // Specifies the data type of the primary key
 
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'id'; // Sets the primary key for the User model
 
-    public $incrementing = false;
+    public $incrementing = false; // Indicates that the primary key is not auto-incrementing
 
     /**
      * The attributes that are mass assignable.
@@ -54,8 +54,8 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+        'password', // Ensures the password is not visible when the user model is serialized
+        'remember_token', // Ensures the remember token is not visible when the user model is serialized
     ];
 
     /**
@@ -64,57 +64,73 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'email_verified_at' => 'datetime', // Casts 'email_verified_at' to a datetime object
+        'password' => 'hashed', // Ensures the password is hashed
     ];
 
+    // Relationships
     public function user_profile()
     {
-        return $this->hasOne(UserProfile::class, 'user_id');
+        return $this->hasOne(UserProfile::class, 'user_id'); // Defines a one-to-one relationship with UserProfile
     }
 
     public function customer_ratings()
     {
-        return $this->hasMany(Rating::class, 'customer_id');
+        return $this->hasMany(Rating::class, 'customer_id'); // Defines a one-to-many relationship with Rating for customers
     }
 
     public function driver_ratings()
     {
-        return $this->hasMany(Rating::class, 'driver_id');
+        return $this->hasMany(Rating::class, 'driver_id'); // Defines a one-to-many relationship with Rating for drivers
     }
 
     public function customer_movements()
     {
-        return $this->hasMany(Movement::class, 'customer_id');
+        return $this->hasMany(Movement::class, 'customer_id'); // Defines a one-to-many relationship with Movement for customers
     }
 
     public function driver_movements()
     {
-        return $this->hasMany(Movement::class, 'driver_id');
+        return $this->hasMany(Movement::class, 'driver_id'); // Defines a one-to-many relationship with Movement for drivers
     }
 
     public function admin_offers()
     {
-        return $this->hasMany(Offer::class, 'admin_id');
+        return $this->hasMany(Offer::class, 'admin_id'); // Defines a one-to-many relationship with Offer for admins
     }
 
     public function about_us()
     {
-        return $this->hasOne(AboutUs::class, 'admin_id');
+        return $this->hasOne(AboutUs::class, 'admin_id'); // Defines a one-to-one relationship with AboutUs for admins
     }
 
     public function contact_us_messages()
     {
-        return $this->hasMany(ContactUsMessage::class, 'admin_id');
+        return $this->hasMany(ContactUsMessage::class, 'admin_id'); // Defines a one-to-many relationship with ContactUsMessage for admins
     }
 
     public function our_services()
     {
-        return $this->hasMany(OurService::class, 'admin_id');
+        return $this->hasMany(OurService::class, 'admin_id'); // Defines a one-to-many relationship with OurService for admins
     }
 
     public function vehicle()
     {
-        return $this->hasOne(Vehicle::class, 'user_id');
+        return $this->hasOne(Vehicle::class, 'user_id'); // Defines a one-to-one relationship with Vehicle
+    }
+
+    public function chats()
+    {
+        return $this->belongsToMany(Chat::class,'chat_members','member_id','chat_id'); // Defines a many-to-many relationship with Chat
+    }
+
+    public function sendedMessages()
+    {
+        return $this->hasMany(Message::class,'sender_id'); // Defines a one-to-many relationship with Message for sent messages
+    }
+
+    public function receivedMessages()
+    {
+        return $this->hasMany(Message::class,'receiver_id'); // Defines a one-to-many relationship with Message for received messages
     }
 }

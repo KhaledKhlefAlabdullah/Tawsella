@@ -16,12 +16,17 @@ class Chat extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'sender_id',
-        'reciver_id',
-        'message',
-        'image_url',
-        'voice_url',
-        'is_edited',
-        'is_stared'
+        'name'
     ];
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class, 'chat_id');
+    }
+
+
+    public function members()
+    {
+        return $this->belongsToMany(User::class, 'chat_members', 'chat_id', 'member_id');
+    }
 }
