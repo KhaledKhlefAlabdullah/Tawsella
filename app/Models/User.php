@@ -69,7 +69,7 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
     ];
 
     // Relationships
-    public function user_profile()
+    public function profile()
     {
         return $this->hasOne(UserProfile::class, 'user_id'); // Defines a one-to-one relationship with UserProfile
     }

@@ -159,7 +159,7 @@ class UsersController extends Controller
                 $user_details = array_merge($user_details, $driverDetails);
             }
 
-            
+
 
             // Return API response with user details
             return api_response(data: $user_details, message: 'تم جلب تفاصل الحساب بنجاح');
@@ -194,7 +194,7 @@ class UsersController extends Controller
             ]);
 
             // Update user profile
-            $user->user_profile->update([
+            $user->profile->update([
                 'name' => $validatedData['name']
             ]);
 

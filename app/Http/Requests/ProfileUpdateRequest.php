@@ -19,7 +19,7 @@ class ProfileUpdateRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
-            'phoneNumber' => ['required', 'string', 'regex:/^(00|\+)[0-9]{9,20}$/', 'max:255', $this->user()->user_profile ? Rule::unique(UserProfile::class)->ignore($this->user()->user_profile->id): 'nullable']
+            'phoneNumber' => ['required', 'string', 'regex:/^(00|\+)[0-9]{9,20}$/', 'max:255', $this->user()->profile ? Rule::unique(UserProfile::class)->ignore($this->user()->profile->id): 'nullable']
         ];
     }
 }
