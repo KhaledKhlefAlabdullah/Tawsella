@@ -35,7 +35,7 @@ class UsersController extends Controller
             return api_response(data: $users, message: 'تم جلب بيانات المستخدمين بنجاح');
         } catch (Exception $e) {
             // Return error response if an exception occurs
-            return api_response(errors: $e->getMessage(), message: 'هناك مشكلة في جلب بيانات المستخدمين', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'هناك مشكلة في جلب بيانات المستخدمين', code: 500);
         }
     }
 
