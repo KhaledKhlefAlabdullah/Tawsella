@@ -45,7 +45,7 @@ class AuthenticatedSessionController extends Controller
 
             // Return the API response with the token and user data
             return api_response(data: ['token' => $token, 'user' => $user], message: 'نجح تسجيل الدخول');
-            
+
         } catch (AuthenticationException $e) {
             // Return an API response with authentication errors
             return api_response(errors: [$e->getMessage(), 'دخول غير مرخص'], message: 'بيانات الاعتماد غير صالحة', code: 401);
@@ -103,7 +103,7 @@ class AuthenticatedSessionController extends Controller
 
             // Update the user's password
             $user->password = $new_password;
-            $user->save;
+            $user->save();
 
             // Return an API response indicating successful password change
             return api_response(message: 'تم تغيير كلمة المرور بنجاح');

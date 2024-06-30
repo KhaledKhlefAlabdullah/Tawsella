@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\UserProfile;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -21,6 +22,8 @@ class RegisteredUserController extends Controller
     public function store(UserRequest $request)
     {
         try {
+
+            DB::beginTransaction();
 
             $request->validated();
 
@@ -42,8 +45,11 @@ class RegisteredUserController extends Controller
 
             $token = createUserToken($user, 'register-token');
 
+            DB::commit();
             return api_response(data: ['token' => $token, 'user_id' => $user->id], message: 'register-success');
         } catch (Exception $e) {
+
+            DB::rollBack();
             return api_response(errors: $e->getMessage(), message: 'register-error', code: 500);
         }
     }
