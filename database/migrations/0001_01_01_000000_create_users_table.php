@@ -32,7 +32,7 @@ return new class extends Migration
             $table->SoftDeletes();
         });
 
-        $password= Hash::make('123');
+        $password= Hash::make('12345678');
         DB::table('users')->insert([
             'id' => \Illuminate\Support\Str::uuid(),
             'email'=>'admin@email.com',

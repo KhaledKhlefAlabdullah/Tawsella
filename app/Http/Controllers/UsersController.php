@@ -9,7 +9,6 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\UserProfile;
-use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
@@ -22,17 +21,21 @@ class UsersController extends Controller
     public function index()
     {
         try {
-            // Get IDs of all users except admin
-            $users_ids = User::where('id', '!=', Auth::id())->pluck('id');
 
+            $query = ['users.id', 'user_profiles.name', 'users.email', 'user_profiles.phone_number', 'user_profiles.avatar', 'users.is_active', 'users.user_type', 'users.created_at'];
             // Fetch user details
-            $users = User::select('users.id', 'user_profiles.name', 'users.email', 'user_profiles.phoneNumber', 'user_profiles.avatar', 'users.is_active', 'users.created_at')
+            $drivers = User::select($query)
                 ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
-                ->whereIn('users.id', $users_ids) // Filter users except admin
+                ->whereNot('users.user_type', 'customer')
+                ->whereNot('users.user_type', 'customer') // Filter users except admin
                 ->get();
 
+            $customers = User::select($query)
+                ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
+                ->where('users.user_type', 'customer') // Filter users except admin
+                ->get();
             // Return API response with user data
-            return api_response(data: $users, message: 'تم جلب بيانات المستخدمين بنجاح');
+            return api_response(data: ['customers' => $customers, 'drivers' => $drivers], message: 'تم جلب بيانات المستخدمين بنجاح');
         } catch (Exception $e) {
             // Return error response if an exception occurs
             return api_response(errors: [$e->getMessage()], message: 'هناك مشكلة في جلب بيانات المستخدمين', code: 500);
@@ -92,7 +95,7 @@ class UsersController extends Controller
     {
         try {
             // Define the initial query fields
-            $query = ['users.id', 'up.name', 'users.email', 'up.phoneNumber', 'up.avatar', 'users.is_active', 'users.created_at'];
+            $query = ['users.id', 'up.name', 'users.email', 'up.phone_number', 'up.avatar', 'users.is_active', 'users.created_at'];
 
             // Get the user type of the specified user by ID
             $user_type = getAndCheckModelById(User::class, $id)->user_type;
@@ -132,7 +135,7 @@ class UsersController extends Controller
                 'name' => $user->name,
                 'email' => $user->email,
                 'user_type' => $user->user_type,
-                'phone_number' => $user->phoneNumber,
+                'phone_number' => $user->phone_number,
                 'profile_image' => $user->avatar,
                 'is_active' => $user->is_active,
                 'completed_movements' => $completed_movements,
