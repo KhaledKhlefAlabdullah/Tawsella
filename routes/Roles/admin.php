@@ -13,6 +13,8 @@ Route::middleware([AdminMiddleware::class])->group(function() {
 
         Route::get('/','index');
 
+        Route::get('/users-types','getUsersTypes');
+
         Route::get('/{id}','show');
 
         Route::post('/add','store');
@@ -21,7 +23,7 @@ Route::middleware([AdminMiddleware::class])->group(function() {
 
         Route::put('/active-unactive/{id}','setActive');
 
-        Route::delete('/delete/{id}','destroey');
+        Route::delete('/delete/{id}','destroy');
 
     });
 

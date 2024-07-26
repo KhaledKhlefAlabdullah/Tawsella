@@ -1,10 +1,12 @@
 <?php
 
+use App\Enums\UserType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Validation\Rule;
 
 return new class extends Migration
 {
@@ -17,7 +19,7 @@ return new class extends Migration
             $table->uuid('id')->primary()->unique();
             $table->string('email')->unique();
             $table->string('password');
-            $table->enum('user_type', ['customer', 'taxi driver', 'transport car driver', 'motorcyclist', 'admin'])->default('customer');
+            $table->enum('user_type', array_column(UserType::cases(), 'value'))->default(UserType::CUSTOMER);
             $table->enum('driver_state', ['ready', 'in_break', 'reserved'])->default('ready');
             $table->boolean('is_active')->default(true);
             $table->double('last_location_latitude')->nullable();

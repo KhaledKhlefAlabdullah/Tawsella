@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserType;
 use App\Http\Requests\Auth\UserRequest;
 use App\Models\Movement;
 use App\Models\Rating;
@@ -9,6 +10,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\UserProfile;
+use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
@@ -22,7 +24,7 @@ class UsersController extends Controller
     {
         try {
 
-            $query = ['users.id', 'user_profiles.name', 'users.email', 'user_profiles.phone_number', 'user_profiles.avatar', 'users.is_active', 'users.user_type', 'users.created_at'];
+            $query = ['users.id', 'user_profiles.name', 'users.email', 'user_profiles.phone_number', 'user_profiles.avatar', 'users.is_active as active', 'users.user_type', 'user_profiles.gender', 'users.created_at'];
             // Fetch user details
             $drivers = User::select($query)
                 ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
@@ -51,6 +53,7 @@ class UsersController extends Controller
     public function store(UserRequest $request)
     {
         try {
+            DB::beginTransaction();
             // Validate the incoming data
             $validatedData = $request->validated();
 
@@ -65,7 +68,9 @@ class UsersController extends Controller
             // Create user profile
             UserProfile::create([
                 'user_id' => $user->id,
-                'name' => $validatedData['name']
+                'name' => $validatedData['name'],
+                'phone_number' => $validatedData['phone_number'],
+                'gender' => $validatedData['gender']
             ]);
 
             // Prepare response data
@@ -73,12 +78,16 @@ class UsersController extends Controller
                 'email' => $validatedData['email'],
                 'password' => $validatedData['password'],
                 'user_type' => $validatedData['user_type'],
-                'name' => $validatedData['name']
+                'name' => $validatedData['name'],
+                'phone_number' => $validatedData['phone_number'],
+                'gender' => $validatedData['gender']
             ];
 
+            DB::commit();
             // Return API response with newly created user data
             return api_response(data: $data, message: 'تم إنشاء مستخدم جديد بنجاح');
         } catch (Exception $e) {
+            DB::rollBack();
             // Return error response if an exception occurs
             return api_response(errors: $e->getMessage(), message: 'هناك مشكلة في إنشاء مستخدم جديد', code: 500);
         }
@@ -95,7 +104,7 @@ class UsersController extends Controller
     {
         try {
             // Define the initial query fields
-            $query = ['users.id', 'up.name', 'users.email', 'up.phone_number', 'up.avatar', 'users.is_active', 'users.created_at'];
+            $query = ['users.id', 'up.name', 'users.email', 'up.phone_number', 'up.avatar', 'users.is_active as active', 'users.created_at'];
 
             // Get the user type of the specified user by ID
             $user_type = getAndCheckModelById(User::class, $id)->user_type;
@@ -137,7 +146,7 @@ class UsersController extends Controller
                 'user_type' => $user->user_type,
                 'phone_number' => $user->phone_number,
                 'profile_image' => $user->avatar,
-                'is_active' => $user->is_active,
+                'active' => $user->is_active,
                 'completed_movements' => $completed_movements,
                 'canceled_movements' => $canceled_movements,
             ];
@@ -183,6 +192,7 @@ class UsersController extends Controller
     public function update(UserRequest $request, string $id)
     {
         try {
+            DB::beginTransaction();
             // Validate the incoming data
             $validatedData = $request->validated();
 
@@ -191,14 +201,17 @@ class UsersController extends Controller
 
             // Update user details
             $user->update([
-                'email' => $validatedData['email'],
-                'password' => $validatedData['password'],
-                'user_type' => $validatedData['user_type'],
+                'email' => $validatedData['email'] ?? $user->email,
+                'password' => $validatedData['password'] ?? $user->password,
+                'user_type' => $validatedData['user_type'] ?? $user->user_type
             ]);
 
             // Update user profile
             $user->profile->update([
-                'name' => $validatedData['name']
+                'name' => $validatedData['name'] ?? $user->profile->name,
+                'phone_number' => $validatedData['phone_number'] ?? $user->profile->phone_number,
+                'gender' => $validatedData['gender'] ?? $user->profile->gender,
+                'is_avtive' => $validatedData['active']
             ]);
 
             // Prepare response data
@@ -206,12 +219,17 @@ class UsersController extends Controller
                 'email' => $validatedData['email'],
                 'password' => $validatedData['password'],
                 'user_type' => $validatedData['user_type'],
-                'name' => $validatedData['name']
+                'name' => $validatedData['name'],
+                'phone_number' => $validatedData['phone_number'],
+                'gender' => $validatedData['gender'],
+                'active' => $validatedData['active']
             ];
 
+            DB::commit();
             // Return API response confirming the update
             return api_response(data: $data, message: 'تم تعديل بيانات المستخدم بنجاح');
         } catch (Exception $e) {
+            DB::rollBack();
             // Return error response if an exception occurs
             return api_response(errors: $e->getMessage(), message: 'هناك مشكلة في تحديث بيانات المستخدم', code: 500);
         }
@@ -250,6 +268,30 @@ class UsersController extends Controller
     }
 
     /**
+     * Get the list of user types
+     * This method retrieves the possible user types from the UserType enum
+     * an error response.
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getUsersTypes()
+    {
+        try {
+            // Retrieve the user types from the UserType enum
+            $usersTypes = UserType::values();
+
+            // Return a successful API response with the user types
+            return api_response(data: $usersTypes, message: 'تم ارجاع البيانات بنجاح', code: 200);
+        } catch (Exception $e) {
+            // Return an error response if an exception occurs
+            return api_response(
+                errors: $e->getMessage(),
+                message: 'هناك خطأ في جلب بيانات انواع المستخدمين',
+                code: 500
+            );
+        }
+    }
+
+    /**
      * Delete a user.
      *
      * @param  string $id User ID to delete.
@@ -261,6 +303,10 @@ class UsersController extends Controller
             // Find the user by ID
             $user = getAndCheckModelById(User::class, $id);
 
+            if (file_exists($user->profile->avatar)) {
+                if(in_array($user->profile->avatar, ['/images/profile_images/man','/images/profile_images/woman']))
+                    unlink(public_path($user->profile->avatar));
+            }
             // Delete the user
             $user->delete();
 
