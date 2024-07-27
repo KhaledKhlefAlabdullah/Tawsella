@@ -15,8 +15,8 @@ class OurService extends Model
 
     protected $fillable =[
         'admin_id',
-        'service_name',
-        'service_description',
+        'name',
+        'description',
         'image',
         'logo',
     ];

@@ -35,8 +35,10 @@ class ServicesRequest extends FormRequest
             'admin_id' => ['required','string',],
             'name' => ['required','string',],
             'description' => ['required','string',],
-            'image' => ['sometimes','image','mimes:png,jpg,jpeg','max:1024'],
-            'logo' => ['sometimes','image','mimes:png,jpg,jpeg','max:1024']
+            'image' => ['nullable','image','mimes:png,jpg,jpeg','max:10024'],
+            'logo' => ['nullable','image','mimes:png,jpg,jpeg','max:10024']
         ];
     }
 }
+
+

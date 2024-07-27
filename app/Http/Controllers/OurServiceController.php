@@ -17,7 +17,7 @@ class OurServiceController extends Controller
     {
         try {
             // Fetch all records from OurService model
-            $services = OurService::all();
+            $services = OurService::select('id','name', 'description', 'image', 'logo', 'created_at')->get();
 
             // Return a successful API response with the services data
             return api_response(data: $services, message: 'تم إرجاع بيانات الخدمات بنجاح');
@@ -39,21 +39,21 @@ class OurServiceController extends Controller
             $validatedData = $request->validated();
 
             // Store uploaded image and logo files in the specified directory
-            $imagePath = $validatedData->input('image') ? storeFile($validatedData->input('image'), '/images/services') : '/images/services/service.jpg';
+            $imagePath = $validatedData['image'] ? storeFile($validatedData['image'], '/images/services') : '/images/services/images/service.jpg ';
 
-            $logoPath = $validatedData->input('logo') ? storeFile($validatedData->input('logo'), '/images/services') : '/images/services/logo.jpg';
+            $logoPath = $validatedData['logo'] ? storeFile($validatedData['logo'], '/images/services') : '/images/services/logos/logo.jpg ';
 
             // Create a new service record in the database
-            OurService::create([
+            $service = OurService::create([
                 'admin_id' => $validatedData['admin_id'],
-                'service_name' => $validatedData['service_name'],
-                'service_description' => $validatedData['service_description'],
+                'name' => $validatedData['name'],
+                'description' => $validatedData['description'],
                 'image' => $imagePath,
                 'logo' => $logoPath
             ]);
-
+//['id' =>$service->id, 'image' => $service->image, 'logo' => $service->logo]
             // Return a successful API response indicating the service was created
-            return api_response(message: 'تم إنشاء الخدمة بنجاح');
+            return api_response(data: $service,message: 'تم إنشاء الخدمة بنجاح');
         } catch (Exception $e) {
             // Return an error API response if an exception occurs during creation
             return api_response(errors: $e->getMessage(), message: 'هناك مشكلة في إنشاء الخدمة', code: 500);
@@ -80,8 +80,8 @@ class OurServiceController extends Controller
             // Update the service record with new data
             $service->update([
                 'admin_id' => $validatedData['admin_id'],
-                'service_name' => $validatedData['service_name'],
-                'service_description' => $validatedData['service_description'],
+                'name' => $validatedData['name'],
+                'description' => $validatedData['description'],
                 'image' => $imagePath,
                 'logo' => $logoPath
             ]);
