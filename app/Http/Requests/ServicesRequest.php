@@ -33,8 +33,8 @@ class ServicesRequest extends FormRequest
     {
         return [
             'admin_id' => ['required','string',],
-            'service_name' => ['required','string',],
-            'service_description' => ['required','string',],
+            'name' => ['required','string',],
+            'description' => ['required','string',],
             'image' => ['sometimes','image','mimes:png,jpg,jpeg','max:1024'],
             'logo' => ['sometimes','image','mimes:png,jpg,jpeg','max:1024']
         ];

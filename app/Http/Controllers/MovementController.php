@@ -277,52 +277,52 @@ class MovementController extends Controller
     {
         try {
 
-            $request->validate([
-                'way' => 'sometimes|numeric',
-                'end_lat' => 'required|numeric',
-                'end_lon' => 'required|numeric'
-            ]);
+            // $request->validate([
+            //     'way' => 'sometimes|numeric',
+            //     'end_lat' => 'required|numeric',
+            //     'end_lon' => 'required|numeric'
+            // ]);
 
-            $Movement = getAndCheckModelById(Movement::class, $id);
+            // $Movement = getAndCheckModelById(Movement::class, $id);
 
-            $Movement->update([
-                'is_completed' => true,
-                'end_latitude' => $request->input('end_lat'),
-                'end_longitude' => $request->input('end_lon')
-            ]);
+            // $Movement->update([
+            //     'is_completed' => true,
+            //     'end_latitude' => $request->input('end_lat'),
+            //     'end_longitude' => $request->input('end_lon')
+            // ]);
 
-            $movement_type = MovementType::findOrFail($Movement->movement_type_id);
-            if ($movement_type->is_onKM) {
-                $totalPrice = $request->input('way') * $movement_type->price;
-            } else {
-                $totalPrice = $movement_type->price;
-            }
+            // $movement_type = MovementType::findOrFail($Movement->movement_type_id);
+            // if ($movement_type->is_onKM) {
+            //     $totalPrice = $request->input('way') * $movement_type->price;
+            // } else {
+            //     $totalPrice = $movement_type->price;
+            // }
 
-            $Calculation = Calculations::create([
-                'driver_id' => Auth::id(),
-                'taxi_movement_id' => $id,
-                'totalPrice' => $totalPrice,
-                'way' => $request->input('way')
-            ]);
+            // $Calculation = Calculations::create([
+            //     'driver_id' => Auth::id(),
+            //     'taxi_movement_id' => $id,
+            //     'totalPrice' => $totalPrice,
+            //     'way' => $request->input('way')
+            // ]);
 
-            getAndCheckModelById(User::class, Auth::id())->update([
-                'driver_state' => 'ready'
-            ]);
+            // getAndCheckModelById(User::class, Auth::id())->update([
+            //     'driver_state' => 'ready'
+            // ]);
 
-            $driverName = UserProfile::where('user_id', Auth::id())->first()->name;
+            // $driverName = UserProfile::where('user_id', Auth::id())->first()->name;
 
-            $customerName = UserProfile::where('user_id',  $Movement->customer_id)->first()->name;
+            // $customerName = UserProfile::where('user_id',  $Movement->customer_id)->first()->name;
 
-            $from = $Movement->my_address;
-            $to = $Movement->destnation_address;
+            // $from = $Movement->my_address;
+            // $to = $Movement->destnation_address;
 
-            MovementFindUnFindEvent::dispatch(
-                $driverName,
-                $customerName,
-                'تم اكمال طلب الزبون من ' . $from . 'إلى ' . $to
-            );
+            // MovementFindUnFindEvent::dispatch(
+            //     $driverName,
+            //     $customerName,
+            //     'تم اكمال طلب الزبون من ' . $from . 'إلى ' . $to
+            // );
 
-            return api_response(data: $Calculation->totalPrice, message: 'success');
+            // return api_response(data: $Calculation->totalPrice, message: 'success');
         } catch (Exception $e) {
             return api_response(errors: $e->getMessage(), message: 'error', code: 500);
         }

@@ -7,7 +7,8 @@ use App\Enums\UserType;
 use App\Models\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-use Illuminate\Validation\Rules;
+
+use function PHPUnit\Framework\isNull;
 
 class UserRequest extends FormRequest
 {
@@ -26,13 +27,14 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
+        $id = $this->route('id');
         return [
-            'name' => ['sometimes', 'required', 'string', 'max:255'],
-            'email' => ['sometimes', 'required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
+            'name' => ['sometimes', 'string', 'max:255'],
+            'email' => ['sometimes', 'string', 'lowercase', 'email', 'max:255', is_null($id) ? 'unique:' . User::class : Rule::unique('users')->ignore($id)],
             'phone_number' => ['sometimes', 'nullable', 'string', 'regex:/^(00|\+)[0-9]{9,20}$/'],
             'user_type' => ['sometimes', 'string', Rule::in(UserType::values())],
-            'gender' => ['sometimes', 'string', Rule::in(array_column(UserGender::cases(), 'value'))],
-            'password' => ['sometimes', 'required'],
+            'gender' => ['sometimes', 'string', Rule::in(UserGender::values())],
+            'password' => ['sometimes', ],
             'active' => ['sometimes','boolean']
         ];
     }

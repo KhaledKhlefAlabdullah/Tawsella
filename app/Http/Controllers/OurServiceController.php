@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ServicesRequest;
 use App\Models\OurService;
 use Exception;
-use function PHPUnit\Framework\isNull;
+use function PHPUnit\Framework\is_null;
 
 class OurServiceController extends Controller
 {
@@ -39,8 +39,9 @@ class OurServiceController extends Controller
             $validatedData = $request->validated();
 
             // Store uploaded image and logo files in the specified directory
-            $imagePath = storeFile($validatedData['image'], '/images/services');
-            $logoPath = storeFile($validatedData['logo'], '/images/services');
+            $imagePath = $validatedData->input('image') ? storeFile($validatedData->input('image'), '/images/services') : '/images/services/service.jpg';
+
+            $logoPath = $validatedData->input('logo') ? storeFile($validatedData->input('logo'), '/images/services') : '/images/services/logo.jpg';
 
             // Create a new service record in the database
             OurService::create([
@@ -73,8 +74,8 @@ class OurServiceController extends Controller
             $service = getAndCheckModelById(OurService::class, $id);
 
             // Check if new images or logos are provided and update them
-            $imagePath = !isNull($validatedData['image']) ? editFile($service->image, $validatedData['image'], '/images/services') : $service->image;
-            $logoPath = !isNull($validatedData['logo']) ? editFile($service->logo, $validatedData['logo'], '/images/services') : $service->logo;
+            $imagePath = !is_null($validatedData['image']) ? editFile($service->image, $validatedData['image'], '/images/services') : $service->image;
+            $logoPath = !is_null($validatedData['logo']) ? editFile($service->logo, $validatedData['logo'], '/images/services') : $service->logo;
 
             // Update the service record with new data
             $service->update([
@@ -103,11 +104,13 @@ class OurServiceController extends Controller
         try {
             // Retrieve the service record by ID
             $service = getAndCheckModelById(OurService::class, $id);
-            $logoMessage = removeFile($service->logo);
-            $imageMessage = removeFile($service->image);
 
-            if ($logoMessage == 'falied' || $imageMessage == 'falied') 
-                return api_response(message: 'لم يتم ايجاد البيانات', code: 404);
+            removeFile($service->logo);
+
+            removeFile($service->image);
+
+            // if ($logoMessage == 'falied' || $imageMessage == 'falied')
+            //     return api_response(message: 'لم يتم ايجاد البيانات', code: 404);
 
             // Delete the service record
             $service->delete();

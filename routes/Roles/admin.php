@@ -31,9 +31,9 @@ Route::middleware([AdminMiddleware::class])->group(function() {
 
         Route::post('/add','store');
 
-        Route::put('/edit/{id}','update');
+        Route::post('/edit/{id}','update');
 
-        Route::delete('/delete/{id}','destroey');
+        Route::delete('/delete/{id}','destroy');
 
     });
 

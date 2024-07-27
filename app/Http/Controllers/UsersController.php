@@ -73,19 +73,9 @@ class UsersController extends Controller
                 'gender' => $validatedData['gender']
             ]);
 
-            // Prepare response data
-            $data = [
-                'email' => $validatedData['email'],
-                'password' => $validatedData['password'],
-                'user_type' => $validatedData['user_type'],
-                'name' => $validatedData['name'],
-                'phone_number' => $validatedData['phone_number'],
-                'gender' => $validatedData['gender']
-            ];
-
             DB::commit();
             // Return API response with newly created user data
-            return api_response(data: $data, message: 'تم إنشاء مستخدم جديد بنجاح');
+            return api_response(data: $user->id, message: 'تم إنشاء مستخدم جديد بنجاح');
         } catch (Exception $e) {
             DB::rollBack();
             // Return error response if an exception occurs
@@ -214,20 +204,9 @@ class UsersController extends Controller
                 'is_avtive' => $validatedData['active']
             ]);
 
-            // Prepare response data
-            $data = [
-                'email' => $validatedData['email'],
-                'password' => $validatedData['password'],
-                'user_type' => $validatedData['user_type'],
-                'name' => $validatedData['name'],
-                'phone_number' => $validatedData['phone_number'],
-                'gender' => $validatedData['gender'],
-                'active' => $validatedData['active']
-            ];
-
             DB::commit();
             // Return API response confirming the update
-            return api_response(data: $data, message: 'تم تعديل بيانات المستخدم بنجاح');
+            return api_response(message: 'تم تعديل بيانات المستخدم بنجاح');
         } catch (Exception $e) {
             DB::rollBack();
             // Return error response if an exception occurs
