@@ -5,155 +5,141 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AboutUsRequest;
 use App\Models\AboutUs;
 use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+
 
 class AboutUsController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @return mixed
      */
     public function index()
     {
         try {
-            $aboutUsRecords = AboutUs::select('title', 'description', 'complaints_number')->first();
+            $aboutUsRecords = AboutUs::select('id','title', 'description', 'complaints_number', 'image')->where('is_general', true)->first();
+            $additional_info = AboutUs::select('id','title', 'description', 'image')->where('is_general', false)->get();
 
-            if (request()->wantsJson()) {
-                return api_response(data: $aboutUsRecords, message: 'نجحنا في الحصول على التفاصيل عنا');
-            }
-
-            $additional_info = AboutUs::where('is_general', false)->select('title', 'description')->get();
-
-            return view('aboutus.index', ['aboutUsRecords' => $aboutUsRecords, 'additional_info' => $additional_info]);
-
+            return api_response(data: ['generalAboutus' => $aboutUsRecords, 'additionalInfo' => $additional_info], message: 'نجحنا في الحصول على التفاصيل عنا');
         } catch (Exception $e) {
-            if (request()->wantsJson()) {
-                return api_response(errors: [$e->getMessage()], message: 'نجحنا في الحصول على التفاصيل عنا', code: 500);
-            }
-
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return api_response(errors: $e->getMessage(), message: 'فشل في الحصول على التفاصيل عنا', code: 500);
         }
     }
 
 
     /**
      * Get the additional information
+     * @return mixed
      */
-    public function get_addition_information()
+    public function getAdditionInformation()
     {
         try {
-
-            $data = AboutUs::where('is_general', false)->select('title', 'description')->get();
+            $data = AboutUs::select('id','title', 'description', 'image')->where('is_general', false)->get();
 
             return api_response(data: $data, message: 'الحصول على معلومات إضافية ناجحة');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'الحصول على خطأ معلومات إضافية', code: 500);
+            return api_response(errors: $e->getMessage(), message: 'الحصول على خطأ معلومات إضافية', code: 500);
         }
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Store or update the general about us details
+     * @param AboutUsRequest $request
+     * @return mixed
      */
-    public function create()
-    {
-        // يمكنك تعيين البيانات التي تحتاجها في صفحة الإنشاء هنا
-        return view('aboutus.create');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(AboutUs $aboutUs)
-    {
-        // يمكنك تعيين البيانات التي تحتاجها في صفحة التحرير هنا
-        return view('aboutus.edit', ['aboutUs' => $aboutUs]);
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     * Or
-     * Update the exists aboutus details
-     */
-    public function store_or_update(AboutUsRequest $request)
+    public function storeOrUpdate(AboutUsRequest $request)
     {
         try {
-
             $validatedData = $request->validated();
+            $aboutUs = AboutUs::where('is_general', true)->first();
 
-            if (AboutUs::where('is_general', true)->count() == 0) {
-                AboutUs::create($validatedData);
+            if (is_null($aboutUs)) {
+                $imagePath = storeFile($validatedData['image'], '/images/aboutUs');
+                AboutUs::create([
+                    'title' => $validatedData['title'],
+                    'description' => $validatedData['description'],
+                    'complaints_number' => $validatedData['complaints_number'],
+                    'is_general' => true,
+                    'image' => $imagePath
+                ]);
+
+                $messag = 'تم إنشاء نبذه عنا بنجاح';
             } else {
-                AboutUs::where('is_general', true)->first()->update($validatedData);
+                $imagePath = $validatedData['image'] ? editFile($aboutUs->image, '/images/aboutUs', $validatedData['image']) : $aboutUs->image;
+                $aboutUs->update([
+                    'title' => $validatedData['title'],
+                    'description' => $validatedData['description'],
+                    'complaints_number' => $validatedData['complaints_number'],
+                    'image' => $imagePath
+                ]);
+                $messag = 'تحديث نبذة عنا بنجاح';
             }
-
-            return redirect()->route('aboutus.index')->with('success', 'تم إنشاء نبذة عنا بنجاح.');
+            return api_response(data: $validatedData, message: $messag);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return api_response(errors: $e->getMessage(), message: 'فشل في إنشاء أو تحديث نبذة عنا', code: 500);
         }
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Create additional info records
+     * @param AboutUsRequest $request
+     * @return mixed
      */
-    public function create_additional_info()
+    public function storeAdditionalInfo(AboutUsRequest $request)
     {
-        // يمكنك تعيين البيانات التي تحتاجها في صفحة الإنشاء هنا
-        return view('aboutus.create_additional_info');
+        try {
+            $validatedData = $request->validated();
+            $imagePath = storeFile($validatedData['image'], '/images/aboutUs/additional');
+            AboutUs::create([
+                'title' => $validatedData['title'],
+                'description' => $validatedData['description'],
+                'image' => $imagePath
+            ]);
+            return api_response(data: $validatedData, message: 'تم إضافة معلومات إضافية بنجاح.');
+        } catch (Exception $e) {
+            return api_response(errors: $e->getMessage(), message: 'فشل في إضافة معلومات إضافية', code: 500);
+        }
     }
 
     /**
-     * Create Additional info records
+     * Update additional info records
+     * @param AboutUsRequest $request
+     * @param AboutUs $aboutUs
+     * @return mixed
      */
-    public function store_additional_info(AboutUsRequest $request){
-        try{
-
-            $validatedData = $request->validated();
-
-            AboutUs::create($validatedData);
-
-            return redirect()->route('aboutus.index')->with('success', 'تم إضافة معلومات إضافية بنجاح.');
-
-        }
-        catch(Exception $e){
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
-        }
-    }
-
-
-    public function edit_additional_info(AboutUs $aboutUs)
+    public function updateAdditionalInfo(AboutUsRequest $request, string $id)
     {
-        // يمكنك تعيين البيانات التي تحتاجها في صفحة التحرير هنا
-        return view('aboutus.edit', ['aboutUs' => $aboutUs]);
-    }
-
-     /**
-     * Update Additional info records
-     */
-    public function update_additional_info(AboutUsRequest $request, AboutUs $aboutUs){
-        try{
-
+        try {
             $validatedData = $request->validated();
-
-            $aboutUs->update($validatedData);
-
-            return redirect()->route('aboutus.index')->with('success', 'تم تعديل البيانات بنجاح.');
-
-        }
-        catch(Exception $e){
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            $aboutUs = getAndCheckModelById(AboutUs::class, $id);
+            $imagePath = $validatedData['image'] ? editFile($aboutUs->image, '/images/aboutUs/additional', $validatedData['image']) : $aboutUs->image;
+            $aboutUs->update([
+                'title' => $validatedData['title'],
+                'description' => $validatedData['description'],
+                'image' => $imagePath
+            ]);
+            return api_response(data: $validatedData, message: 'تم تعديل البيانات بنجاح.');
+        } catch (Exception $e) {
+            return api_response(errors: $e->getMessage(), message: 'فشل في تعديل البيانات', code: 500);
         }
     }
 
     /**
      * Remove the specified resource from storage.
+     * @param AboutUs $aboutUs
+     * @return mixed
      */
-    public function destroy(AboutUs $aboutUs)
+    public function destroy(string $id)
     {
         try {
+            $aboutUs = getAndCheckModelById(AboutUs::class, $id);
+            $message = removeFile($aboutUs->image);
+            if ($message == 'falied')
+                return api_response(message: 'لم يتم ايجاد البيانات', code: 404);
+
             $aboutUs->delete();
-            return redirect()->route('aboutus.index')->with('success', 'تم حذف نبذة عنا بنجاح.');
+            return api_response(message: 'تم حذف البيانات بنجاح.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return api_response(errors: $e->getMessage(), message: 'فشل في حذف البيانات', code: 500);
         }
     }
 }

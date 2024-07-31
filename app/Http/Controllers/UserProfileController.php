@@ -15,8 +15,10 @@ use function Laravel\Prompts\error;
 
 class UserProfileController extends Controller
 {
+
     /**
-     * Display a listing of the resource.
+     * Return Auth User Profile
+     * @return mixed UserProfile data
      */
     public function index()
     {
@@ -34,17 +36,11 @@ class UserProfileController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(UserProfile $userProfile)
-    {
-    }
-
-    /**
      * Update the specified resource in storage.
+     * @param UserProfileRequest $request is profile data
+     * @param string $id is user id to edit his profile
+     * @return mixed
      */
-    // تلقا بشقك
-    // غير قابل للتعديل
     public function update(UserProfileRequest $request, string $id)
     {
         try {
@@ -77,10 +73,10 @@ class UserProfileController extends Controller
 
                     if ($userProfile->avatar == '/images/profile_images/user_profile.png') {
 
-                        $avatar_path = storeProfileAvatar($avatar, $path);
+                        $avatar_path = storeFile($avatar, $path);
                     } else {
 
-                        $avatar_path = editProfileAvatar($userProfile->avatar, $path, $avatar);
+                        $avatar_path = editFile($userProfile->avatar, $path, $avatar);
                     }
 
                     $userProfile->update([
@@ -89,15 +85,10 @@ class UserProfileController extends Controller
                 }
             }
 
-            if ($request->wantsJson())
-                return api_response(message: 'تم تعديل البيانات بنجاح');
-
-            return redirect()->back()->with('success', 'تم تعديل بيانات السائق بنجاح');
+            return api_response(message: 'تم تعديل البيانات بنجاح');
         } catch (Exception $e) {
-            if ($request->wantsJson())
-                return api_response(errors: [$e->getMessage()], message: 'حدث خطأ في تعديل البيانات', code: 500);
-
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى. الاخطاء:' . $e->getMessage())->withInput();
+            return api_response(errors: [$e->getMessage()], message: 'حدث خطأ في تعديل البيانات', code: 500);
         }
     }
+
 }

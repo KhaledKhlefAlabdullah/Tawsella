@@ -17,7 +17,7 @@ class DriverMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        Gate::authorize('driver',User::class);
+        Gate::authorize('is_driver',User::class);
 
         return $next($request);
     }

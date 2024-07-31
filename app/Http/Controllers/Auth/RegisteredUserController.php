@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\UserRequest;
 use App\Models\User;
 use App\Models\UserProfile;
-use Illuminate\Auth\Events\Registered;
+use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules;
+
 
 class RegisteredUserController extends Controller
 {
@@ -19,28 +19,38 @@ class RegisteredUserController extends Controller
      *
      * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request){
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
-            'phone_number' => ['nullable', 'string', 'regex:/^(00|\+)[0-9]{9,20}$/'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+    public function store(UserRequest $request)
+    {
+        try {
 
-        $user = User::create([
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+            DB::beginTransaction();
 
-        UserProfile::create([
-            'user_id' => $user->id
-,            'name' => $request->input('name'),
-            'phone_number' => $request->input('phone_number'),
-            'gender' => $request->input('gender')
-        ]);
+            $request->validated();
 
-        $token = createUserToken($user, 'register-token');
+            $user = User::create([
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+            ]);
 
-        return api_response(data: ['token' => $token, 'user_id' => $user->id], message: 'register-success');
+            UserProfile::create([
+                'user_id' => $user->id,
+                'name' => $request->input('name'),
+                'phone_number' => $request->input('phone_number'),
+                'gender' => $request->input('gender')
+            ]);
+
+            // event(new Registered($user));
+
+            $user->sendEmailVerificationNotification(true);
+
+            $token = createUserToken($user, 'register-token');
+
+            DB::commit();
+            return api_response(data: ['token' => $token, 'user_id' => $user->id], message: 'register-success');
+        } catch (Exception $e) {
+
+            DB::rollBack();
+            return api_response(errors: $e->getMessage(), message: 'register-error', code: 500);
+        }
     }
 }

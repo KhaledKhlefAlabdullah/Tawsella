@@ -15,19 +15,13 @@ class Offer extends Model
     public $incrementing = false;
 
     protected $fillable =[
-        'movement_type_id',
-        'admin_id',
-        'offer',
-        'value_of_discount',
+        'user_id',
+        'title',
         'valide_date',
         'description'
     ];
 
-    public function movement_type_offer(){
-        return $this->belongsTo(TaxiMovementType::class,'movement_type_id');
-    }
-
-    public function admin_offer(){
+    public function user(){
         return $this->belongsTo(User::class,'admin_id');
     }
 

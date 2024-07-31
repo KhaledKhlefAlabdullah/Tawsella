@@ -5,10 +5,9 @@ namespace App\Models;
 use App\Models\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 class OurService extends Model
 {
-    use HasFactory,HasUuid,SoftDeletes;
+    use HasFactory,HasUuid;
 
     protected $keyType = 'string';
     protected $primaryKey = 'id';
@@ -16,8 +15,10 @@ class OurService extends Model
 
     protected $fillable =[
         'admin_id',
-        'service_name',
-        'service_description',
+        'name',
+        'description',
+        'image',
+        'logo',
     ];
 
     public function admin(){

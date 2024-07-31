@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Calculations extends Model
+class Vehicle extends Model
 {
     use HasFactory, HasUuid, SoftDeletes;
 
@@ -17,17 +17,13 @@ class Calculations extends Model
 
     protected $fillable = [
         'driver_id',
-        'taxi_movement_id',
-        'totalPrice',
-        'way',
-        'is_bring'
+        'plat_number',
+        'vehicle_image',
+        'vehicle_description'
     ];
 
     public function driver(){
-        return $this->belongsTo(User::class,'driver_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function taxiMovement(){
-        return $this->belongsTo(TaxiMovement::class,'taxi_movement_id');
-    }
 }

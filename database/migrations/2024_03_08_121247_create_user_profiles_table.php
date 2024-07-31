@@ -15,12 +15,13 @@ return new class extends Migration
             $table->uuid('id')->unique()->primary();
             $table->string('user_id');
             $table->string('name');
-            $table->string('avatar')->default('/images/profile_images/avatar.png');
+            $table->string('avatar')->default('/images/profile_images/man.png');
             $table->string('phone_number')->nullable();
-            $table->enum('gender',['male','female'])->nullable();
+            $table->enum('gender',['male','female']);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
-            $table->SoftDeletes();        });
+            $table->SoftDeletes();
+        });
     }
 
     /**

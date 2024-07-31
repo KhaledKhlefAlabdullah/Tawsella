@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Models\TaxiMovementType;
+use App\Models\MovementType;
 use App\Models\UserProfile;
 use Illuminate\Broadcasting\PrivateChannel;
 
@@ -14,12 +14,12 @@ class AcceptTaxiMovemntEvent extends BaseEvent
     /**
      * Create a new event instance.
      */
-    public function __construct($taxiMovement)
+    public function __construct($Movement)
     {
-        $this->driver_id = $taxiMovement->driver_id;
-        $this->movement_type = TaxiMovementType::findOrFail($taxiMovement->movement_type_id)->type;
+        $this->driver_id = $Movement->driver_id;
+        $this->movement_type = MovementType::findOrFail($Movement->movement_type_id)->type;
 
-        parent::__construct($taxiMovement);
+        parent::__construct($Movement);
     }
 
     /**
@@ -60,7 +60,7 @@ class AcceptTaxiMovemntEvent extends BaseEvent
         return [
             'request_id' => $this->request_id,
             'customer' => $customer_profile,
-            'taxiMovementInfo' => $this->getDriverData()
+            'MovementInfo' => $this->getDriverData()
         ];
     }
 
@@ -98,7 +98,8 @@ class AcceptTaxiMovemntEvent extends BaseEvent
         return [];
     }
 
-    public function broadcastAs(){
+    public function broadcastAs()
+    {
         return 'accept-request';
     }
 }

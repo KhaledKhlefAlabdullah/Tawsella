@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Events\AcceptTaxiMovemntEvent;
-use App\Events\CreateTaxiMovementEvent;
+use App\Events\CreateMovementEvent;
 use App\Events\MovementFindUnFindEvent;
 use App\Events\RejectTaxiMovemntEvent;
-use App\Http\Requests\TaxiMovementRequest;
+use App\Http\Requests\MovementRequest;
 use App\Models\Calculations;
 
-use App\Models\TaxiMovement;
-use App\Models\TaxiMovementType;
+use App\Models\Movement;
+use App\Models\MovementType;
 use App\Models\User;
 use App\Models\UserProfile;
 use Carbon\Carbon;
@@ -19,17 +19,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
-class TaxiMovementController extends Controller
+class MovementController extends Controller
 {
 
     /**
      * Show the form for creating a new resource.
      */
-    public function currentTaxiMovement()
+    public function currentMovement()
     {
         $currentDate = Carbon::now()->format('Y-m-d');
 
-        $taxiMovement = $this->get_data([
+        $Movement = $this->get_data([
             'taxi_movements.id as movement_id',
             'taxi_movements.my_address',
             'taxi_movements.destnation_address',
@@ -51,7 +51,7 @@ class TaxiMovementController extends Controller
             ->whereDate('taxi_movements.created_at', $currentDate)
             ->get();
 
-        return view('taxi_movement.currentTaxiMovement', ['taxiMovement' => $taxiMovement]);
+        return view('taxi_movement.currentMovement', ['Movement' => $Movement]);
     }
 
 
@@ -95,7 +95,7 @@ class TaxiMovementController extends Controller
         try {
 
             // Query to get requests for the current day
-            $data = TaxiMovement::select($columns)
+            $data = Movement::select($columns)
                 ->join('users as driver', 'taxi_movements.driver_id', '=', 'driver.id')
                 ->join('users as customer', 'taxi_movements.customer_id', '=', 'customer.id')
                 ->join('user_profiles as driver_profile', 'taxi_movements.driver_id', '=', 'driver_profile.user_id')
@@ -119,11 +119,11 @@ class TaxiMovementController extends Controller
         try {
 
             if ($selector == 'taxi') {
-               $data = ''; // Taxi::select('taxis.last_location_latitude as lat', 'taxis.driver_id', 'taxis.last_location_longitude as long', 'up.name')
+                $data = ''; // Taxi::select('taxis.last_location_latitude as lat', 'taxis.driver_id', 'taxis.last_location_longitude as long', 'up.name')
                 //     ->join('user_profiles as up', 'taxis.driver_id', '=', 'up.user_id')
                 //     ->where('taxis.id', $id)->first();
             } else if ($selector == 'completed') {
-                $data = TaxiMovement::select('taxi_movements.driver_id as driver_id', 'taxi_movements.end_latitude as lat', 'taxi_movements.end_longitude as long', 'up.name')
+                $data = Movement::select('taxi_movements.driver_id as driver_id', 'taxi_movements.end_latitude as lat', 'taxi_movements.end_longitude as long', 'up.name')
                     ->join('user_profiles as up', 'taxi_movements.customer_id', '=', 'up.user_id')
                     ->where('taxi_movements.id', $id)->first();
 
@@ -139,14 +139,14 @@ class TaxiMovementController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(TaxiMovementRequest $request)
+    public function store(MovementRequest $request)
     {
         try {
 
             $validatedData = $request->validated();
 
             // To check if the customer have request in last 4 menites dont create new one and return message
-            $existsRequest = TaxiMovement::where('customer_id', $validatedData['customer_id'])
+            $existsRequest = Movement::where('customer_id', $validatedData['customer_id'])
                 ->where('created_at', '>=', Carbon::now()->subMinutes(10))
                 ->latest()
                 ->first();
@@ -155,16 +155,16 @@ class TaxiMovementController extends Controller
                 return api_response(message: 'لقد قمت بطلب سيارة قبل قليل انتظر قليلاً من فضلك ريثما يتم معالجة طلبك');
             }
 
-            $taxiMovement = TaxiMovement::create($validatedData);
+            $Movement = Movement::create($validatedData);
 
             // 1
-            // event(new CreateTaxiMovementEvent($request->input('customer_id'),
+            // event(new CreateMovementEvent($request->input('customer_id'),
             // $request->input('start_latitude'),
             // $request->input('start_longitude')));
 
             // 2
-            CreateTaxiMovementEvent::dispatch(
-                $taxiMovement
+            CreateMovementEvent::dispatch(
+                $Movement
             );
 
             return api_response(message: 'تم انشاء الطلب بنجاح');
@@ -186,9 +186,9 @@ class TaxiMovementController extends Controller
                 'message' => 'string|sometimes|nullable'
             ]);
 
-            $taxiMovement = getAndCheckModelById(TaxiMovement::class, $id);
+            $Movement = getAndCheckModelById(Movement::class, $id);
 
-            $taxiMovement->update([
+            $Movement->update([
                 'request_state' => $request->input('state'),
                 'is_don' => true
             ]);
@@ -203,20 +203,20 @@ class TaxiMovementController extends Controller
                     'driver_state' => 'reserved'
                 ]);
 
-                $taxi_id = '';//Taxi::where('driver_id', $driver_id)->first()->id;
+                $taxi_id = ''; //Taxi::where('driver_id', $driver_id)->first()->id;
 
-                $taxiMovement->update([
+                $Movement->update([
                     'driver_id' => $driver_id,
                     'taxi_id' => $taxi_id
                 ]);
 
-                AcceptTaxiMovemntEvent::dispatch($taxiMovement);
+                AcceptTaxiMovemntEvent::dispatch($Movement);
 
                 $message = 'قبول';
             } else if ($request->input('state') == 'rejected') {
 
                 RejectTaxiMovemntEvent::dispatch(
-                    $taxiMovement->customer_id,
+                    $Movement->customer_id,
                     $request->input('message')
                 );
 
@@ -242,10 +242,10 @@ class TaxiMovementController extends Controller
                 'state' => 'required|boolean'
             ]);
 
-            $taxiMovement = getAndCheckModelById(TaxiMovement::class, $id);
+            $Movement = getAndCheckModelById(Movement::class, $id);
 
-            $driver = UserProfile::where('user_id', $taxiMovement->driver_id)->first();
-            $customer = UserProfile::where('user_id', $taxiMovement->customer_id)->first();
+            $driver = UserProfile::where('user_id', $Movement->driver_id)->first();
+            $customer = UserProfile::where('user_id', $Movement->customer_id)->first();
 
             $d_name = $driver->name;
             $c_name = $customer->name;
@@ -259,8 +259,8 @@ class TaxiMovementController extends Controller
             );
 
             if (!$request->input('state')) {
-                // حذف taxiMovement
-                $taxiMovement->delete();
+                // حذف Movement
+                $Movement->delete();
             }
 
             return api_response(message: $message);
@@ -277,52 +277,52 @@ class TaxiMovementController extends Controller
     {
         try {
 
-            $request->validate([
-                'way' => 'sometimes|numeric',
-                'end_lat' => 'required|numeric',
-                'end_lon' => 'required|numeric'
-            ]);
+            // $request->validate([
+            //     'way' => 'sometimes|numeric',
+            //     'end_lat' => 'required|numeric',
+            //     'end_lon' => 'required|numeric'
+            // ]);
 
-            $taxiMovement = getAndCheckModelById(TaxiMovement::class, $id);
+            // $Movement = getAndCheckModelById(Movement::class, $id);
 
-            $taxiMovement->update([
-                'is_completed' => true,
-                'end_latitude' => $request->input('end_lat'),
-                'end_longitude' => $request->input('end_lon')
-            ]);
+            // $Movement->update([
+            //     'is_completed' => true,
+            //     'end_latitude' => $request->input('end_lat'),
+            //     'end_longitude' => $request->input('end_lon')
+            // ]);
 
-            $movement_type = TaxiMovementType::findOrFail($taxiMovement->movement_type_id);
-            if ($movement_type->is_onKM) {
-                $totalPrice = $request->input('way') * $movement_type->price;
-            } else {
-                $totalPrice = $movement_type->price;
-            }
+            // $movement_type = MovementType::findOrFail($Movement->movement_type_id);
+            // if ($movement_type->is_onKM) {
+            //     $totalPrice = $request->input('way') * $movement_type->price;
+            // } else {
+            //     $totalPrice = $movement_type->price;
+            // }
 
-            $Calculation = Calculations::create([
-                'driver_id' => Auth::id(),
-                'taxi_movement_id' => $id,
-                'totalPrice' => $totalPrice,
-                'way' => $request->input('way')
-            ]);
+            // $Calculation = Calculations::create([
+            //     'driver_id' => Auth::id(),
+            //     'taxi_movement_id' => $id,
+            //     'totalPrice' => $totalPrice,
+            //     'way' => $request->input('way')
+            // ]);
 
-            getAndCheckModelById(User::class, Auth::id())->update([
-                'driver_state' => 'ready'
-            ]);
+            // getAndCheckModelById(User::class, Auth::id())->update([
+            //     'driver_state' => 'ready'
+            // ]);
 
-            $driverName = UserProfile::where('user_id', Auth::id())->first()->name;
+            // $driverName = UserProfile::where('user_id', Auth::id())->first()->name;
 
-            $customerName = UserProfile::where('user_id',  $taxiMovement->customer_id)->first()->name;
+            // $customerName = UserProfile::where('user_id',  $Movement->customer_id)->first()->name;
 
-            $from = $taxiMovement->my_address;
-            $to = $taxiMovement->destnation_address;
+            // $from = $Movement->my_address;
+            // $to = $Movement->destnation_address;
 
-            MovementFindUnFindEvent::dispatch(
-                $driverName,
-                $customerName,
-                'تم اكمال طلب الزبون من ' . $from . 'إلى ' . $to
-            );
+            // MovementFindUnFindEvent::dispatch(
+            //     $driverName,
+            //     $customerName,
+            //     'تم اكمال طلب الزبون من ' . $from . 'إلى ' . $to
+            // );
 
-            return api_response(data: $Calculation->totalPrice, message: 'success');
+            // return api_response(data: $Calculation->totalPrice, message: 'success');
         } catch (Exception $e) {
             return api_response(errors: $e->getMessage(), message: 'error', code: 500);
         }
@@ -335,7 +335,7 @@ class TaxiMovementController extends Controller
     {
         try {
 
-            $request = TaxiMovement::select(
+            $request = Movement::select(
                 'taxi_movements.id as request_id',
                 'up.name',
                 'up.phoneNumber',
@@ -364,11 +364,11 @@ class TaxiMovementController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TaxiMovement $taxiMovement)
+    public function destroy(Movement $Movement)
     {
         try {
 
-            $taxiMovement->delete();
+            $Movement->delete();
 
             return redirect()->back()->with('success', 'تم حذف الطلب بنجاح');
         } catch (Exception $e) {

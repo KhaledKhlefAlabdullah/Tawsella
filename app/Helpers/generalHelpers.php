@@ -8,19 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
-/**
- * Get an Eloquent model instance by its ID and perform a existence check.
- *
- * This helper function retrieves an instance of the specified Eloquent model
- * by its ID. If the instance is not found, a NotFoundResourceException is thrown.
- *
- * @param string $model The fully qualified class name of the Eloquent model.
- * @param mixed $id The ID of the model to retrieve.
- * @return Model The retrieved Eloquent model instance.
- *
- * @throws NotFoundResourceException If the model instance is not found.
- */
+
 if (!function_exists('getAndCheckModelById')) {
+    /**
+     * Get an Eloquent model instance by its ID and perform a existence check.
+     *
+     * This helper function retrieves an instance of the specified Eloquent model
+     * by its ID. If the instance is not found, a NotFoundResourceException is thrown.
+     *
+     * @param string $model The fully qualified class name of the Eloquent model.
+     * @param mixed $id The ID of the model to retrieve.
+     * @return Model The retrieved Eloquent model instance.
+     *
+     * @throws NotFoundResourceException If the model instance is not found.
+     */
     function getAndCheckModelById($model, $id)
     {
         $instance = $model::find($id);
@@ -33,13 +34,14 @@ if (!function_exists('getAndCheckModelById')) {
     }
 }
 
-/**
- * This Function it get the instance by any value inside it
- * @param Model $model the model will search about
- * @param mixed $value is any value will pass it and search if it exists in the model
- * @return Model $instance the finded instance
- */
+
 if (!function_exists('get_instances_with_value')) {
+    /**
+     * This Function it get the instance by any value inside it
+     * @param Model $model the model will search about
+     * @param mixed $value is any value will pass it and search if it exists in the model
+     * @return Model $instance the finded instance
+     */
     function get_instances_with_value($model, $value)
     {
 
@@ -60,16 +62,17 @@ if (!function_exists('get_instances_with_value')) {
 }
 
 
-/**
- * This function is update the instance with keys and values passed to it
- * the keys and values lenght most be equale
- * @param Model $model the model will search about
- * @param mixed $search_param the value you will pass to search about it
- * @param mixed $keys the column key you want to update them
- * @param mixed $values the new column values
- * @return Model $instance the updated finded instance
- */
+
 if (!function_exists('findAndUpdate')) {
+    /**
+     * This function is update the instance with keys and values passed to it
+     * the keys and values lenght most be equale
+     * @param Model $model the model will search about
+     * @param mixed $search_param the value you will pass to search about it
+     * @param mixed $keys the column key you want to update them
+     * @param mixed $values the new column values
+     * @return Model $instance the updated finded instance
+     */
     function findAndUpdate($model, $search_param, $keys, $values)
     {
 
@@ -94,15 +97,15 @@ if (!function_exists('findAndUpdate')) {
     }
 }
 
-/**
- * This function is used to store files
- * @param mixed $file the file i want to store it
- * @param string $path the path where i want to save it
- * @return string $path+fileName
- */
-if (!function_exists('storeProfileAvatar')) {
 
-    function storeProfileAvatar($file, $path): string
+if (!function_exists('storeFile')) {
+    /**
+     * This function is used to store files
+     * @param mixed $file the file i want to store it
+     * @param string $path the path where i want to save it
+     * @return string $path+fileName
+     */
+    function storeFile($file, $path): string
     {
         // get file extension
         $file_extension = $file->getClientOriginalExtension();
@@ -118,16 +121,16 @@ if (!function_exists('storeProfileAvatar')) {
     }
 }
 
-/**
- * This function is used to update files
- * @param string $old_path the old path where the file sotred
- * @param string $new_path the new path where i want to save the new file
- * @param mixed $file the file i want to store it
- * @return string $new_file_path+fileName
- */
-if (!function_exists('editProfileAvatar')) {
 
-    function editProfileAvatar($old_path, $new_path, $new_file): string
+if (!function_exists('editFile')) {
+    /**
+     * This function is used to update files
+     * @param string $old_path the old path where the file sotred
+     * @param string $new_path the new path where i want to save the new file
+     * @param mixed $file the file i want to store it
+     * @return string $new_file_path+fileName
+     */
+    function editFile($old_path, $new_path, $new_file): string
     {
         // Delete the old file from storage
         if (file_exists($old_path)) {
@@ -136,17 +139,38 @@ if (!function_exists('editProfileAvatar')) {
         }
 
         // Store the new file
-        $new_file_path = storeProfileAvatar($new_file, $new_path);
+        $new_file_path = storeFile($new_file, $new_path);
 
         return $new_file_path;
     }
 }
 
-/**
- * this function return the admin id
- * @return string admin_id
- */
+
+if (!function_exists('removeFile')) {
+    /**
+     * This function is used to update files
+     * @param string $path the path where the file sotred
+     * @return mixed success message
+     */
+    function removeFile($path): string
+    {
+        // Delete the old file from storage
+        if (file_exists($path)) {
+
+            unlink(public_path($path));
+            return 'success';
+        }
+
+        return 'falied';
+    }
+}
+
+
 if (!function_exists('getAdminId')) {
+    /**
+     * this function return the admin id
+     * @return string admin_id
+     */
     function getAdminId()
     {
         $admin_id = User::where('user_type', 'admin')->first()->id;
@@ -154,28 +178,30 @@ if (!function_exists('getAdminId')) {
     }
 }
 
-/**
- * @return string Auth user id
- */
+
 if (!function_exists('getMyId')) {
+    /**
+     * Get my Id
+     * @return string Auth user id
+     */
     function getMyId()
     {
         return Auth::id();
     }
 }
 
-/**
- * it returned the ready drivers
- * @return User
- */
 if (!function_exists('getReadyDrivers')) {
+    /**
+     * it returned the ready drivers
+     * @return User
+     */
     function getReadyDrivers()
     {
-            $drivers = User::where([
-                'users.user_type' => 'driver',
-                'users.driver_state' => 'ready',
-                'users.is_active' => true
-            ])
+        $drivers = User::where([
+            'users.user_type' => 'driver',
+            'users.driver_state' => 'ready',
+            'users.is_active' => true
+        ])
             ->whereNull('taxis.deleted_at')
             ->join('taxis', 'users.id', '=', 'taxis.driver_id')
             ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
@@ -193,12 +219,10 @@ if (!function_exists('getReadyDrivers')) {
 
 
 if (!function_exists('send_mail')) {
-    /*
-     * This function is used to get and check if a model exists by ID
-     * @param string $model
-     * @param string $id
-     *
-     * @throws NotFoundResourceException
+    /**
+     * This function is used to email to user
+     * @param string $mail_message as message you want to send
+     * @param string $receiver as mail or list of mails
      */
     function send_mail($mail_message, $receiver)
     {
@@ -208,7 +232,28 @@ if (!function_exists('send_mail')) {
 
             return true;
         } catch (Exception $e) {
-            return api_response(errors:$e->getMessage(), message: 'Cold not sending the email');
+            return api_response(errors: $e->getMessage(), message: 'Cold not sending the email');
+        }
+    }
+}
+
+
+if (!function_exists('count_items')) {
+    /**
+     * Get Counter
+     * @param Model $model to counst within
+     * @param array $validations to check by
+     * @return numeric count of items
+     */
+    function count_items($model, array $validations)
+    {
+        try {
+            // withTrashed to count the deleted items to
+            $item_count = $model::withTrashed()->where($validations)->get()->count();
+
+            return $item_count + 1;
+        } catch (Exception $e) {
+            return api_response(errors: $e->getMessage(), message: 'get-count-error', code: 500);
         }
     }
 }

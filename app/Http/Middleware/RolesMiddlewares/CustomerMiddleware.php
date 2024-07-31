@@ -17,7 +17,7 @@ class CustomerMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        Gate::authorize('customer',User::class);
+        Gate::authorize('is_customer',User::class);
 
         return $next($request);
     }

@@ -3,20 +3,21 @@
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Carbon;
 
-/**
- * Prepares a standardized JSON response for API endpoints.
- *
- * @param mixed $data (optional) The data to be included in the response body.
- * @param string $message (optional) A message to be included in the response body.
- * @param int $code (optional) The HTTP status code for the response. Defaults to 200 (OK).
- * @param mixed $pagination (optional) Pagination information to be included in the response.
- * @param array $meta (optional) Additional metadata to be included in the response.
- * @param array $errors (optional) An array of error messages to be included in the response.
- * @return JsonResponse
- *
- * @throws \InvalidArgumentException if an invalid HTTP status code is provided.
- */
+
 if (!function_exists('api_response')) {
+    /**
+     * Prepares a standardized JSON response for API endpoints.
+     *
+     * @param mixed $data (optional) The data to be included in the response body.
+     * @param string $message (optional) A message to be included in the response body.
+     * @param int $code (optional) The HTTP status code for the response. Defaults to 200 (OK).
+     * @param mixed $pagination (optional) Pagination information to be included in the response.
+     * @param array $meta (optional) Additional metadata to be included in the response.
+     * @param array $errors (optional) An array of error messages to be included in the response.
+     * @return JsonResponse
+     *
+     * @throws \InvalidArgumentException if an invalid HTTP status code is provided.
+     */
     function api_response($data = null, $message = "", $code = 200, $pagination = null, $meta = [], $errors = []): JsonResponse
     {
         $response = [
@@ -27,15 +28,15 @@ if (!function_exists('api_response')) {
             $response['data'] = $data;
         }
 
-        if ($pagination) {
+        if ($pagination !== null) {
             $response['pagination'] = $pagination;
         }
 
-        if ($meta) {
+        if (!empty($meta)) {
             $response['meta'] = $meta;
         }
 
-        if ($errors) {
+        if (!empty($errors)) {
             $response['errors'] = $errors;
         }
 
@@ -43,10 +44,13 @@ if (!function_exists('api_response')) {
     }
 }
 
-/**
- * @return string token
- */
+
 if (!function_exists('createUserToken')) {
+    /**
+     * @param Model $user is the user whill make token for it
+     * @param string $token_name is the user token name
+     * @return string token
+     */
     function createUserToken($user, $token_name)
     {
 

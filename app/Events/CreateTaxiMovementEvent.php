@@ -3,18 +3,18 @@
 namespace App\Events;
 
 
-use App\Models\TaxiMovement;
+use App\Models\Movement;
 use App\Models\UserProfile;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\PrivateChannel;
 
-class CreateTaxiMovementEvent extends BaseEvent
+class CreateMovementEvent extends BaseEvent
 {
     protected $time;
-    public function __construct($taxiMovement)
+    public function __construct($Movement)
     {
-        parent::__construct($taxiMovement);
-        $this->time = $taxiMovement->created_at;
+        parent::__construct($Movement);
+        $this->time = $Movement->created_at;
     }
     /**
      * Get the channels the event should broadcast on.
@@ -33,7 +33,7 @@ class CreateTaxiMovementEvent extends BaseEvent
 
         $customer = UserProfile::where('user_id', $this->customer_id)->select('name', 'avatar', 'phoneNumber')->first();
         return [
-            'index' => TaxiMovement::where('is_don', false)->count(),
+            'index' => Movement::where('is_don', false)->count(),
             'drivers' => getReadyDrivers(),
             'request_id' => $this->request_id,
             'customer' => $customer,
