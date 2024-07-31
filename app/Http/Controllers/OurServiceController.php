@@ -6,6 +6,7 @@ use App\Http\Requests\ServicesRequest;
 use App\Models\OurService;
 use Exception;
 use function PHPUnit\Framework\is_null;
+use function PHPUnit\Framework\isJson;
 
 class OurServiceController extends Controller
 {
@@ -41,13 +42,34 @@ class OurServiceController extends Controller
             // Store uploaded image and logo files in the specified directory
             $imagePath = $validatedData['image'] ? storeFile($validatedData['image'], '/images/services') : '/images/services/images/service.jpg ';
 
-            $logoPath = $validatedData['logo'] ? storeFile($validatedData['logo'], '/images/services') : '/images/services/logos/logo.jpg ';
+            $logoPath = $validatedData['logo'] ? storeFile($validatedData['logo'], '/images/logos') : '/images/services/logos/logo.jpg ';
 
+            $name = $validatedData['name'];
+            if (isJson($name)) {
+                // Decode the JSON string
+                $decodedValue = json_decode($name, true);
+
+                // Check if the decoded value is an array and contains 'value' key
+                if (is_array($decodedValue) && isset($decodedValue['value'])) {
+                    $name = $decodedValue['value'];
+                }
+            }
+
+            $description = $validatedData['description'];
+            if (isJson($description)) {
+                // Decode the JSON string
+                $decodedValue = json_decode($description, true);
+
+                // Check if the decoded value is an array and contains 'value' key
+                if (is_array($decodedValue) && isset($decodedValue['value'])) {
+                    $description = $decodedValue['value'];
+                }
+            }
             // Create a new service record in the database
             $service = OurService::create([
                 'admin_id' => $validatedData['admin_id'],
-                'name' => $validatedData['name'],
-                'description' => $validatedData['description'],
+                'name' => $name,
+                'description' => $description,
                 'image' => $imagePath,
                 'logo' => $logoPath
             ]);
@@ -74,8 +96,8 @@ class OurServiceController extends Controller
             $service = getAndCheckModelById(OurService::class, $id);
 
             // Check if new images or logos are provided and update them
-            $imagePath = !is_null($validatedData['image']) ? editFile($service->image, $validatedData['image'], '/images/services') : $service->image;
-            $logoPath = !is_null($validatedData['logo']) ? editFile($service->logo, $validatedData['logo'], '/images/services') : $service->logo;
+            $imagePath = !is_null($validatedData['image']) ? editFile($service->image, $validatedData['image'], '/images/services/images') : $service->image;
+            $logoPath = !is_null($validatedData['logo']) ? editFile($service->logo, $validatedData['logo'], '/images/services/logos') : $service->logo;
 
             // Update the service record with new data
             $service->update([

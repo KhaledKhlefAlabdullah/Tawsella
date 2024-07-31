@@ -35,7 +35,7 @@ class UserRequest extends FormRequest
             'user_type' => ['sometimes', 'string', Rule::in(UserType::values())],
             'gender' => ['sometimes', 'string', Rule::in(UserGender::values())],
             'password' => ['sometimes', ],
-            'active' => ['sometimes','boolean']
+            'active' => ['sometimes']
         ];
     }
 }

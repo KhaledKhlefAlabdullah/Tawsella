@@ -62,7 +62,8 @@ class UsersController extends Controller
                 'email' => $validatedData['email'],
                 'password' => $validatedData['password'],
                 'user_type' => $validatedData['user_type'],
-                'mail_code_verified_at' => now(),
+                'is_active' => $validatedData['active'],
+                'mail_code_verified_at' => now()
             ]);
 
             // Create user profile
@@ -193,7 +194,8 @@ class UsersController extends Controller
             $user->update([
                 'email' => $validatedData['email'] ?? $user->email,
                 'password' => $validatedData['password'] ?? $user->password,
-                'user_type' => $validatedData['user_type'] ?? $user->user_type
+                'user_type' => $validatedData['user_type'] ?? $user->user_type,
+                'is_avtive' => $validatedData['active']
             ]);
 
             // Update user profile
@@ -201,7 +203,6 @@ class UsersController extends Controller
                 'name' => $validatedData['name'] ?? $user->profile->name,
                 'phone_number' => $validatedData['phone_number'] ?? $user->profile->phone_number,
                 'gender' => $validatedData['gender'] ?? $user->profile->gender,
-                'is_avtive' => $validatedData['active']
             ]);
 
             DB::commit();
