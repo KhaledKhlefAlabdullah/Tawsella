@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SendMessageEvent;
+use App\Http\Requests\Messages\SendMessageRequest;
 use App\Models\Chat;
 use App\Models\Message;
 use Exception;
@@ -12,14 +14,16 @@ use Illuminate\Support\Facades\Auth;
 class MessageController extends Controller
 {
 
-    private $QUERY = ['messages.id as message_id',
-                    'up.name as sender_name',
-                    'up.avatar as sender_avatar',
-                    'messages.message',
-                    'messages.image_url',
-                    'messages.voice_url',
-                    'messages.is_edited',
-                    'messages.is_stared'];
+    private $QUERY = [
+        'messages.id as message_id',
+        'up.name as sender_name',
+        'up.avatar as sender_avatar',
+        'messages.message',
+        'messages.media',
+        'messages.is_edited',
+        'messages.is_stared',
+        'messages.created_at'
+    ];
     /**
      * Display a listing of the resource.
      * @param string $chat_id To get the messages belongs to this chat
@@ -38,7 +42,9 @@ class MessageController extends Controller
                 ->join('user_profiles as up', 'messages.sender_id', '=', 'up.user_id')
                 ->select(
                     $this->QUERY
-                )->get();
+                )
+                ->orderBy('messages.created_at', 'desc')
+                ->get();
 
             return api_response(data: $messages, message: 'تم جلب بيانات الرسائل بنجاح');
         } catch (Exception $e) {
@@ -51,27 +57,55 @@ class MessageController extends Controller
      * @param string $chat_id is optional parameter if is set will return just starred messages belong to this chat
      * @return JsonResponse with starred messages data and status code 200 if success or with errors in failed
      */
-    public function getStarredMessages(string $chat_id=null){
-        try{
+    public function getStarredMessages(string $chat_id = null)
+    {
+        try {
             // get auth user
             $user = Auth::user();
             // if the chat_id is null get all starred messages for this user else get just starred messages in on chat
             $starredMessages = is_null($chat_id) ? $user->starredMessages : $user->starredMessages->where('chat_id', $chat_id);
 
-            return api_response(data: $starredMessages, message:'تم جلب الرسائل المميزة بنجمة بنجاح');
-        }catch(Exception $e){
-            return api_response(errors: [$e->getMessage()], message:'هناك خطأ في جلب الرسائل المميزة بنجمة', code:500);
+            return api_response(data: $starredMessages, message: 'تم جلب الرسائل المميزة بنجمة بنجاح');
+        } catch (Exception $e) {
+            return api_response(errors: [$e->getMessage()], message: 'هناك خطأ في جلب الرسائل المميزة بنجمة', code: 500);
         }
     }
 
 
 
     /**
-     * Store a newly created resource in storage.
+     * @param SendMessageRequest $request is new message data with (chat_id - sender_id - receiver_id - message:nullable - media:nullable)
+     * @return JsonResponse with starred messages data and status code 200 if success or with errors in failed
      */
-    public function store(Request $request)
+    public function store(SendMessageRequest $request)
     {
-        //
+        try {
+
+            $validatedData = $request->validated();
+
+            if ($request->has('media')) {
+                $validatedData['media'] = storeFile($validatedData['media'], 'messages/' . $validatedData['chat_id']);
+            }
+            // $validatedData['created_at'] = now();
+            $message = Message::create($validatedData);
+
+            $profile = Auth::user()->profile;
+
+            SendMessageEvent::dispatch([
+                'message_id' => $message->id,
+                'sender_name' => $profile->name,
+                'sender_avatar' => $profile->avatar,
+                'message' => $message->message,
+                'media' => $message->media,
+                'is_edited' => $message->is_edited,
+                'is_stared' => $message->is_stared,
+                'created_at' => $message->created_at
+            ], $validatedData['receiver_id']);
+
+            return api_response(message: 'تم ارسال الرسالة بنجاح');
+        } catch (Exception $e) {
+            return api_response(errors: [$e->getMessage()], message: 'هناك مشكلة في إرسال الرسالة', code: 500);
+        }
     }
 
     /**
