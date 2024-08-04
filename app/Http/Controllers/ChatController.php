@@ -18,15 +18,44 @@ class ChatController extends Controller
     {
         try {
             // Get chat IDs for the current user
-            $chat_ids = ChatMember::where('member_id', getMyId())->pluck('id');
+            $chat_ids = ChatMember::where('member_id', getMyId())
+                ->pluck('chat_id');
 
             // Retrieve chats where the user is a member and join with user profiles
             $chats = Chat::whereIn('chats.id', $chat_ids)
-                ->where('chats.member_id', getMyId()) // This line was corrected to 'where' instead of 'whereNot'
                 ->join('chat_members as cm', 'chats.id', '=', 'cm.chat_id')
                 ->join('user_profiles as up', 'cm.member_id', '=', 'up.user_id')
-                ->select('chats.id as chat_id', 'cm.member_id as receiver_id', '', 'up.name', 'up.avatar')->get();
+                ->leftJoin('messages as m', 'chats.id', '=', 'm.chat_id')
+                ->select('chats.id as chat_id', 'cm.member_id as receiver_id', 'up.name as receiver_name', 'up.avatar as receiver_avatar')
+                ->selectRaw('GROUP_CONCAT(m.message) as messages')
+                ->selectRaw('GROUP_CONCAT(m.image_url) as image_urls')
+                ->selectRaw('GROUP_CONCAT(m.voice_url) as voice_urls')
+                ->selectRaw('GROUP_CONCAT(m.created_at) as created_ats')
+                ->where('cm.member_id', '<>', getMyId()) // Use '<>' for 'not equal'
+                ->groupBy('chats.id', 'cm.member_id', 'up.name', 'up.avatar') // Use actual column names here
+                ->get();
 
+            // Format the results
+            $chats = $chats->map(function ($item) {
+                $messages = collect(explode(',', $item->messages))->map(function ($message, $index) use ($item) {
+                    return [
+                        'message' => $message,
+                        'image_url' => explode(',', $item->image_urls)[$index] ?? null,
+                        'voice_url' => explode(',', $item->voice_urls)[$index] ?? null,
+                        'created_at' => explode(',', $item->created_ats)[$index] ?? null
+                    ];
+                });
+
+                return [
+                    'chat_id' => $item->chat_id,
+                    'receiver_id' => $item->receiver_id,
+                    'receiver_name' => $item->receiver_name,
+                    'receiver_avatar' => $item->receiver_avatar,
+                    'messages' => $messages
+                ];
+            });
+
+            //    ( reciver name - reciver avatar - last message - last message created_at)
             return api_response(data: $chats, message: 'تم جلب بيانات المحادثات بنجاح');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'هناك مشكلة في جلب بيانات المحادثات', code: 500);

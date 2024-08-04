@@ -65,6 +65,7 @@ class AuthenticatedSessionController extends Controller
     public function destroy(Request $request)
     {
         try {
+            
             // Delete the current access token
             $request->user()->currentAccessToken()->delete();
 
@@ -103,7 +104,7 @@ class AuthenticatedSessionController extends Controller
 
             // Update the user's password
             $user->password = $new_password;
-            $user->save();
+            $user->save;
 
             // Return an API response indicating successful password change
             return api_response(message: 'تم تغيير كلمة المرور بنجاح');
