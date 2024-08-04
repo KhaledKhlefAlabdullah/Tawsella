@@ -14,12 +14,16 @@ class SendMessageEvent extends BaseEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
+    private $message;
+    private $receiver_id;
+
     /**
      * Create a new event instance.
      */
-    public function __construct()
+    public function __construct($message, $receiver_id)
     {
-        //
+        $this->message = $message;
+        $this->receiver_id = $receiver_id;
     }
 
     /**
@@ -30,7 +34,11 @@ class SendMessageEvent extends BaseEvent
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-name'),
+            new PrivateChannel('message-'.$this->receiver_id),
         ];
+    }
+
+    public function broadCastWith(){
+        return $this->message;
     }
 }
