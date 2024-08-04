@@ -133,4 +133,9 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
     {
         return $this->hasMany(Message::class,'receiver_id'); // Defines a one-to-many relationship with Message for received messages
     }
+
+    // Relationship to Message model for the messages that starred by the user
+    public function starredMessages(){
+        return $this->belongsToMany(Message::class, 'user_starred_messages');
+    }
 }

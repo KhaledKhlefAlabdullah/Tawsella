@@ -25,7 +25,6 @@ class Message extends Model
         'image_url',    // URL to an image if attached
         'voice_url',    // URL to a voice message if attached
         'is_edited',    // Boolean flag for edited messages
-        'is_stared'     // Boolean flag for starred messages
     ];
 
     // Relationship to Chat model
@@ -44,5 +43,10 @@ class Message extends Model
     public function receiver()
     {
         return $this->belongsTo(User::class,'receiver_id');
+    }
+
+    // Relationship to User model for the users who starred this message
+    public function usersStarredMessage(){
+        return $this->belongsToMany(User::class, 'user_starred_messages');
     }
 }
