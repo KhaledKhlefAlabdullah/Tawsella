@@ -20,8 +20,11 @@ Route::group(['prefix' => 'chats', 'controller' => ChatController::class], funct
     Route::get('/', 'index');
 
     Route::group(['prefix' => 'messages', 'controller' => MessageController::class], function () {
-        Route::get('/{chat_id}', 'index');
+        Route::get('/get/{chat_id}', 'index');
 
         Route::get('/get/starred/{chat_id?}','getStarredMessages');
+
+        Route::post('/send','store');
+
     });
 });

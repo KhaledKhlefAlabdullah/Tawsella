@@ -22,31 +22,31 @@ class Message extends Model
         'sender_id',    // Foreign key for the sender user
         'receiver_id',  // Foreign key for the receiver user
         'message',      // Text content of the message
-        'image_url',    // URL to an image if attached
-        'voice_url',    // URL to a voice message if attached
+        'media',        // URL to an media if attached
         'is_edited',    // Boolean flag for edited messages
     ];
 
     // Relationship to Chat model
     public function chat()
     {
-        return $this->belongsTo(Chat::class,'chat_id');
+        return $this->belongsTo(Chat::class, 'chat_id');
     }
 
     // Relationship to User model for the sender
     public function sender()
     {
-        return $this->belongsTo(User::class,'sender_id');
+        return $this->belongsTo(User::class, 'sender_id');
     }
 
     // Relationship to User model for the receiver
     public function receiver()
     {
-        return $this->belongsTo(User::class,'receiver_id');
+        return $this->belongsTo(User::class, 'receiver_id');
     }
 
     // Relationship to User model for the users who starred this message
-    public function usersStarredMessage(){
+    public function usersStarredMessage()
+    {
         return $this->belongsToMany(User::class, 'user_starred_messages');
     }
 }
