@@ -156,9 +156,9 @@ if (!function_exists('editFile')) {
 
 if (!function_exists('removeFile')) {
     /**
-     * This function is used to update files
+     * This function is used to remove files
      * @param string $path the path where the file sotred
-     * @return JsonResponse success message
+     * @return mixed success message
      */
     function removeFile($path): string
     {

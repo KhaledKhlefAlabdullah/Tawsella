@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('user_starred_messages', function (Blueprint $table) {
-            $table->uuid('id')->primary()->unique();
             $table->uuid('user_id');
-            $table->uuid('message_id'); 
+            $table->uuid('message_id');
+            $table->primary(['user_id', 'message_id']);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('message_id')->references('id')->on('messages')->onDelete('cascade');
             $table->timestamps();
