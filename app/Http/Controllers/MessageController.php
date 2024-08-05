@@ -24,8 +24,11 @@ class MessageController extends Controller
         'messages.is_stared',
         'messages.created_at'
     ];
+
     /**
      * Display a listing of the resource.
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-27
      * @param string $chat_id To get the messages belongs to this chat
      * @return JsonResponse with messages data and status code 200 if success or with errors in failed
      */
@@ -54,6 +57,9 @@ class MessageController extends Controller
 
 
     /**
+     * Get starred messages
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-28
      * @param string $chat_id is optional parameter if is set will return just starred messages belong to this chat
      * @return JsonResponse with starred messages data and status code 200 if success or with errors in failed
      */
@@ -71,11 +77,12 @@ class MessageController extends Controller
         }
     }
 
-
-
     /**
+     * store new message
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-29
      * @param SendMessageRequest $request is new message data with (chat_id - sender_id - receiver_id - message:nullable - media:nullable)
-     * @return JsonResponse with starred messages data and status code 200 if success or with errors in failed
+     * @return JsonResponse with success message and status code 200 if success or with errors in failed
      */
     public function store(SendMessageRequest $request)
     {
@@ -89,8 +96,10 @@ class MessageController extends Controller
             // $validatedData['created_at'] = now();
             $message = Message::create($validatedData);
 
+            // get the auth user profile
             $profile = Auth::user()->profile;
 
+            // broadcast the message on realtime chat channel
             SendMessageEvent::dispatch([
                 'message_id' => $message->id,
                 'sender_name' => $profile->name,
@@ -109,11 +118,26 @@ class MessageController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Set message as starred
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-30
+     * @param string $id is message i want to starred
+     * @return JsonResponse with success message and status code 200 if success or with errors in failed
      */
-    public function show(Message $message)
+    public function setMessageStarred(string $id)
     {
-        //
+        try {
+
+            // check if there message with $id
+            getAndCheckModelById(Message::class, $id);
+
+            // attach the message to user in user_starred_messages_table
+            Auth::user()->starredMessages->attach($id);
+
+            return api_response(message: 'تم تمييز الرسالة بنجمة بنجاح');
+        } catch (Exception $e) {
+            return api_response(errors: [$e->getMessage()], message: 'هناك خطا في تمييز الرسالة بنجمة', code: 500);
+        }
     }
 
     /**
