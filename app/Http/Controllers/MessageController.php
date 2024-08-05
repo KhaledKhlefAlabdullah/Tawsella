@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\SendMessageEvent;
+use App\Http\Requests\Messages\EditMessageRequest;
 use App\Http\Requests\Messages\SendMessageRequest;
 use App\Models\Chat;
 use App\Models\Message;
@@ -36,6 +37,7 @@ class MessageController extends Controller
     {
         try {
 
+            // chcek if there chat with this id
             if (!getAndCheckModelById(Chat::class, $chat_id)) {
                 return api_response(message: 'يبدو أن هنالك مشكلة في معرف المحادثة حاول مرة اخرى', code: 404);
             }
@@ -88,7 +90,9 @@ class MessageController extends Controller
     {
         try {
 
+            // check data if valid
             $validatedData = $request->validated();
+
 
             if ($request->has('media')) {
                 $validatedData['media'] = storeFile($validatedData['media'], 'messages/' . $validatedData['chat_id']);
@@ -131,36 +135,77 @@ class MessageController extends Controller
             // check if there message with $id
             getAndCheckModelById(Message::class, $id);
 
-            // attach the message to user in user_starred_messages_table
-            Auth::user()->starredMessages->attach($id);
+            $user = Auth::user();
+            $isStarred = $user->starredMessages()->where('message_id', $id)->exists();
 
-            return api_response(message: 'تم تمييز الرسالة بنجمة بنجاح');
+            if ($isStarred) {
+                // if the message is starred unstarred
+                $user->starredMessages()->detach($id);
+                $message = 'تم إلغاء تمييز الرسالة بنجمة بنجاح';
+            } else {
+                // else starred the message
+                $user->starredMessages()->attach($id);
+                $message = 'تم تمييز الرسالة بنجمة بنجاح';
+            }
+
+            return api_response(message: $message);
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'هناك خطا في تمييز الرسالة بنجمة', code: 500);
         }
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * edit message details
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-31
+     * @param EditMessageRequest $request is the new message data that i want to edit
+     * @param string $id is message i want to update
+     * @return JsonResponse with success message and status code 200 if success or with errors in failed
      */
-    public function edit(Message $message)
+    public function update(EditMessageRequest $request, string $id)
     {
-        //
+        try {
+            // check data if valid
+            $validatedData = $request->validated();
+
+            // chcek if there message with this id if is exists return the message
+            $message = getAndCheckModelById(Message::class, $id);
+
+            if ($request->has('media')) {
+                $validatedData['media'] = editFile($message->media, $validatedData['media'], 'messages/' . $message->chat_id);
+            }
+
+            $message->update($validatedData);
+
+            return api_response(message: 'تم تعديل الرسالة بنجاح');
+        } catch (Exception $e) {
+            return api_response(errors: [$e->getMessage()], message: 'هناك خطا في تعديل الرسالة', code: 500);
+        }
     }
 
     /**
-     * Update the specified resource in storage.
+     * edit message details
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-31
+     * @param string $id is message i want to delete
+     * @return JsonResponse with success message and status code 200 if success or with errors in failed
      */
-    public function update(Request $request, Message $message)
+    public function destroy(string $id)
     {
-        //
-    }
+        try {
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Message $message)
-    {
-        //
+            // chcek if there message with this id if is exists return the message
+            $message = getAndCheckModelById(Message::class, $id);
+
+            // remove message media file
+            removeFile($message->media);
+
+            // delete the messsage
+            $message->delete();
+
+            return api_response(message: 'تم حذف الرسالة بنجاح');
+        } catch (Exception $e) {
+            return api_response(errors: [$e->getMessage()], message: 'هناك خطا في حذف الرسالة', code: 500);
+        }
     }
 }

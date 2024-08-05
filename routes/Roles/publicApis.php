@@ -27,7 +27,11 @@ Route::group(['prefix' => 'chats', 'controller' => ChatController::class], funct
         // T-29
         Route::post('/send', 'store');
         // T-30
-        Route::post('/set-starred/{$id}', 'setMessageStarred');
+        Route::post('/set-starred/{id}', 'setMessageStarred');
+        // T-31
+        Route::post('/edit/{id}', 'update');
+        // T-32
+        Route::delete('/delete/{id}', 'destroy');
 
     });
 });
