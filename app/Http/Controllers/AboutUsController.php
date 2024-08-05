@@ -5,19 +5,21 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AboutUsRequest;
 use App\Models\AboutUs;
 use Exception;
-
+use Illuminate\Http\JsonResponse;
 
 class AboutUsController extends Controller
 {
     /**
      * Display a listing of the resource.
-     * @return mixed
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-30
+     * @return JsonResponse
      */
     public function index()
     {
         try {
-            $aboutUsRecords = AboutUs::select('id','title', 'description', 'complaints_number', 'image')->where('is_general', true)->first();
-            $additional_info = AboutUs::select('id','title', 'description', 'image')->where('is_general', false)->get();
+            $aboutUsRecords = AboutUs::select('id', 'title', 'description', 'complaints_number', 'image')->where('is_general', true)->first();
+            $additional_info = AboutUs::select('id', 'title', 'description', 'image')->where('is_general', false)->get();
 
             return api_response(data: ['generalAboutus' => $aboutUsRecords, 'additionalInfo' => $additional_info], message: 'نجحنا في الحصول على التفاصيل عنا');
         } catch (Exception $e) {
@@ -28,12 +30,14 @@ class AboutUsController extends Controller
 
     /**
      * Get the additional information
-     * @return mixed
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-30
+     * @return JsonResponse
      */
     public function getAdditionInformation()
     {
         try {
-            $data = AboutUs::select('id','title', 'description', 'image')->where('is_general', false)->get();
+            $data = AboutUs::select('id', 'title', 'description', 'image')->where('is_general', false)->get();
 
             return api_response(data: $data, message: 'الحصول على معلومات إضافية ناجحة');
         } catch (Exception $e) {
@@ -43,8 +47,10 @@ class AboutUsController extends Controller
 
     /**
      * Store or update the general about us details
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-30
      * @param AboutUsRequest $request
-     * @return mixed
+     * @return JsonResponse
      */
     public function storeOrUpdate(AboutUsRequest $request)
     {
@@ -81,8 +87,10 @@ class AboutUsController extends Controller
 
     /**
      * Create additional info records
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-
      * @param AboutUsRequest $request
-     * @return mixed
+     * @return JsonResponse
      */
     public function storeAdditionalInfo(AboutUsRequest $request)
     {
@@ -102,9 +110,11 @@ class AboutUsController extends Controller
 
     /**
      * Update additional info records
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-
      * @param AboutUsRequest $request
      * @param AboutUs $aboutUs
-     * @return mixed
+     * @return JsonResponse
      */
     public function updateAdditionalInfo(AboutUsRequest $request, string $id)
     {
@@ -125,8 +135,10 @@ class AboutUsController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-
      * @param AboutUs $aboutUs
-     * @return mixed
+     * @return JsonResponse
      */
     public function destroy(string $id)
     {
