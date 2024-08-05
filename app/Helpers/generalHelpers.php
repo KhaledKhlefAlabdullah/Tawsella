@@ -107,25 +107,25 @@ if (!function_exists('storeFile')) {
      */
     function storeFile($file, $path): string
     {
-        // // get file extension
-        // $file_extension = $file->getClientOriginalExtension();
+        // get file extension
+        $file_extension = $file->getClientOriginalExtension();
 
-        // // rename the file
-        // $file_name = time() . '.' . $file_extension;
+        // rename the file
+        $file_name = time() . '.' . $file_extension;
 
-        // // store the file in public directory
-        // $file->move(public_path($path), $file_name);
+        // store the file in public directory
+        $file->move(public_path($path), $file_name);
 
-        // // return the path and file name
-        // return $path . '/' . $file_name;
+        // return the path and file name
+        return $path . '/' . $file_name;
 
         // Store the file using Laravel's Storage facade
-        $fileName = time() . '.' . $file->getClientOriginalExtension();
-        $filePath = $path . '/' . $fileName;
+        // $fileName = time() . '.' . $file->getClientOriginalExtension();
+        // $filePath = $path . '/' . $fileName;
 
-        Storage::disk('public')->putFileAs($path, $file, $fileName);
+        // Storage::disk('public')->putFileAs($path, $file, $fileName);
 
-        return $filePath;
+        // return $filePath;
     }
 }
 
@@ -158,7 +158,7 @@ if (!function_exists('removeFile')) {
     /**
      * This function is used to update files
      * @param string $path the path where the file sotred
-     * @return mixed success message
+     * @return JsonResponse success message
      */
     function removeFile($path): string
     {

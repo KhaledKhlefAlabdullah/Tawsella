@@ -20,4 +20,5 @@ yarn-error.log
 *.jpg
 *.jpeg
 *.png
+*.pdf
 *.gif
