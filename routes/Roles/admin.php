@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutUsController;
+use App\Http\Controllers\ContactUsMessageController;
 use App\Http\Controllers\OurServiceController;
 use App\Http\Controllers\UsersController;
 use App\Http\Middleware\RolesMiddlewares\AdminMiddleware;
@@ -47,6 +48,10 @@ Route::middleware([AdminMiddleware::class])->group(function() {
 
         Route::delete('/delete/{id}','destroey');
 
+    });
+
+    Route::group(['prefix' => 'contact-us', 'controller' => ContactUsMessageController::class], function(){
+        Route::get('/','index');
     });
 
 });

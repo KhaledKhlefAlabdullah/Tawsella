@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\User;
 use App\Models\UserProfile;
+use App\Rules\PhoneNumber;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -19,7 +20,7 @@ class ProfileUpdateRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
-            'phoneNumber' => ['required', 'string', 'regex:/^(00|\+)[0-9]{9,20}$/', 'max:255', $this->user()->profile ? Rule::unique(UserProfile::class)->ignore($this->user()->profile->id): 'nullable']
+            'phoneNumber' => ['required', 'string', new PhoneNumber, 'max:255', $this->user()->profile ? Rule::unique(UserProfile::class)->ignore($this->user()->profile->id) : 'nullable']
         ];
     }
 }

@@ -1,0 +1,9 @@
+{
+    "get-contact-us-success": "Successfully getting the contact-us messages",
+    "get-contact-us-error": "There an error in getting contact-us messages",
+    "phone-number-format": "The phone number must ber 9 to 20 charcter, accept just numbers and startr with 00 or +",
+    "media-receive":"receive an media message",
+    "contact-us-send-success":"Contact-us message send Successfully",
+    "contact-us-send-pand-admin": "The admin cann't send contact-us message",
+    "contact-us-send-error":"Contact-us message send error"
+}

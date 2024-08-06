@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\PhoneNumber;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ContactUsMessagesRequest extends FormRequest
 {
@@ -16,9 +18,23 @@ class ContactUsMessagesRequest extends FormRequest
 
     protected function prepareForValidation()
     {
+        $this->merge([
+            'admin_id' => getAdminId(),
+        ]);
+
+        $user = Auth::user();
+        if ($user) {
             $this->merge([
-                'admin_id' => getAdminId(),
+                'sender_name' => $user->profile->name,
+                'email' => $user->email,
+                'phone_number' => $user->profile->phone_number,
+                'is_registredInApp' => true
             ]);
+        }else{
+            $this->merge([
+                'is_registredInApp' => false
+            ]);
+        }
     }
     /**
      * Get the validation rules that apply to the request.
@@ -28,11 +44,12 @@ class ContactUsMessagesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'admin_id' => ['string','required','exists:users,id'],
-            'description' => ['string','required',''],
-            'email' => ['string','required','email'],
-            'phone_number' => ['string','sometimes','required','regex:/^(00|\+)[0-9]{9,20}$/
-']
+            'admin_id' => ['string', 'required', 'exists:users,id'],
+            'is_registredInApp' => ['boolean','required'],
+            'sender_name' => ['string', 'required', ''],
+            'email' => ['string', 'required', 'email'],
+            'phone_number' => ['string','nullable', new PhoneNumber],
+            'message' => ['string', 'required']
         ];
     }
 }

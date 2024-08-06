@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\SendMessageEvent;
+use App\Events\Messages\UpdateMessageEvent;
+use App\Events\Messages\SendMessageEvent;
 use App\Http\Requests\Messages\EditMessageRequest;
 use App\Http\Requests\Messages\SendMessageRequest;
 use App\Models\Chat;
 use App\Models\Message;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -45,9 +47,7 @@ class MessageController extends Controller
 
             $messages = Message::where('chat_id', $chat_id)
                 ->join('user_profiles as up', 'messages.sender_id', '=', 'up.user_id')
-                ->select(
-                    $this->QUERY
-                )
+                ->select($this->QUERY)
                 ->orderBy('messages.created_at', 'desc')
                 ->get();
 
@@ -93,7 +93,6 @@ class MessageController extends Controller
             // check data if valid
             $validatedData = $request->validated();
 
-
             if ($request->has('media')) {
                 $validatedData['media'] = storeFile($validatedData['media'], 'messages/' . $validatedData['chat_id']);
             }
@@ -115,6 +114,11 @@ class MessageController extends Controller
                 'created_at' => $message->created_at
             ], $validatedData['receiver_id']);
 
+            // Send Message notification
+            $receiver = getAndCheckModelById(User::class, $message->receiver_id);
+            $notificationMessage = is_null($message->message) ? __('media-receive') : $message->message;
+            send_notifications($receiver, $notificationMessage);
+            
             return api_response(message: 'تم ارسال الرسالة بنجاح');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'هناك مشكلة في إرسال الرسالة', code: 500);
@@ -176,6 +180,9 @@ class MessageController extends Controller
             }
 
             $message->update($validatedData);
+
+            // broadcast the message after edit
+            UpdateMessageEvent::dispatch($message);
 
             return api_response(message: 'تم تعديل الرسالة بنجاح');
         } catch (Exception $e) {

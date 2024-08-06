@@ -16,9 +16,11 @@ class ContactUsMessage extends Model
 
     protected $fillable =[
         'admin_id',
-        'description',
+        'sender_name',
+        'message',
         'email',
         'phone_number',
+        'is_registredInApp',
         'is_answerd'
     ];
 

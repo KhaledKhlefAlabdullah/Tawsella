@@ -1,12 +1,15 @@
 <?php
 
+use App\Events\NotificationsEvent;
 use App\Mail\TawsellaMail;
 use App\Models\User;
+use App\Notifications\TawsellaNotification;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 
 if (!function_exists('getAndCheckModelById')) {
@@ -263,5 +266,48 @@ if (!function_exists('count_items')) {
         } catch (Exception $e) {
             return api_response(errors: $e->getMessage(), message: 'get-count-error', code: 500);
         }
+    }
+}
+
+
+/**
+ * Send notifications
+ * @param User $receiver
+ * @param string $message
+ */
+if (!function_exists('send_notifications')) {
+    function send_notifications($receivers, $message, array $viaChannel = ['database'])
+    {
+        // Check if the user is authenticated
+        if (Auth::check()) {
+            $user = Auth::user();
+            // Fetch user profile or create a default profile
+            $user_profile = $user->profile ?: (object) [
+                'email' => $user->email,
+                'name' => 'portal manager',
+                'avatar_url' => 'images/profile_images/default_user_avatar.png'
+            ];
+        } else {
+            // Create a default profile for unauthenticated users
+            $user_profile = (object) [
+                'email' => 'default@example.com',
+                'name' => 'Anonymous',
+                'avatar_url' => 'images/profile_images/default_user_avatar.png'
+            ];
+        }
+
+        // Ensure receivers is a collection or array of User models
+        $receiversArray = is_array($receivers) ? $receivers : $receivers->all();
+
+        // Validate each receiver is a User instance
+        foreach ($receiversArray as $receiver) {
+            if (!($receiver instanceof \App\Models\User)) {
+                throw new \Exception('Each receiver must be an instance of User model.');
+            }
+        }
+
+        // Trigger event and send notifications
+        event(new NotificationsEvent($receiversArray, $message));
+        Notification::send($receiversArray, new TawsellaNotification($user_profile, $message, $receiversArray, $viaChannel));
     }
 }

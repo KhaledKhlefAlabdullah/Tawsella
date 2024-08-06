@@ -2,8 +2,6 @@
 
 namespace App\Models\Traits;
 
-use App\Notifications\TawsellaNotification;
-
 trait MustVerifyEmailByCode
 {
     public function hasVerifiedEmailByCode(): bool

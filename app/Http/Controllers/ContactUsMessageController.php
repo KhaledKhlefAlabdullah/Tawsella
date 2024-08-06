@@ -6,42 +6,49 @@ use App\Http\Requests\ContactUsMessagesRequest;
 use App\Mail\ContactUsMails;
 use App\Models\ContactUsMessage;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class ContactUsMessageController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a listing of the contact-us messages.
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-33
+     * @return JsonResponse with conatct-us-messages, success message and status code 200 if success or with errors in failed
      */
     public function index()
     {
         try {
 
-            $contct_us = ContactUsMessage::select('admin_id', 'description', 'email', 'phone_number')
-                ->where('is_answerd', false)
-                ->get();
+            // get all unaswerd messages
+            $contct_us = Auth::user()->contact_us_messages()->where('is_answerd', false)->get();
 
-            return view('contctus', [$contct_us]);
+            return api_response(data: $contct_us, message: 'get-contact-us-success');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return api_response(errors: [$e->getMessage()], message: 'get-contact-us-error', code: 500);
         }
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created conatct-us message in storage.
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-35
+     * @return JsonResponse with success message and status code 200 if success or with errors in failed
      */
     public function store(ContactUsMessagesRequest $request)
     {
         try {
 
             $validatedData = $request->validated();
-
+           
             ContactUsMessage::create($validatedData);
 
-            return api_response(message: 'أرسل رسالة اتصل بنا بنجاح');
+            return api_response(message: 'contact-us-send-success');
         } catch (Exception $e) {
-            return api_response(errors: $e->getMessage(), message: 'إرسال خطأ في رسالة اتصل بنا', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'contact-us-send-error', code: 500);
         }
     }
 
@@ -85,14 +92,13 @@ class ContactUsMessageController extends Controller
      */
     public function destroy(ContactUsMessage $contactUsMessage)
     {
-        try{
+        try {
 
             $contactUsMessage->delete();
 
             return redirect()->back();
 
-        }
-        catch(Exception $e){
+        } catch (Exception $e) {
             return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
