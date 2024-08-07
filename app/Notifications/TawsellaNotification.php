@@ -3,8 +3,10 @@
 namespace App\Notifications;
 
 use App\Mail\TawsellaMail;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Log;
@@ -31,7 +33,7 @@ class TawsellaNotification extends Notification implements ShouldQueue
 
     public function via($notifiable)
     {
-        return $this->viaChannels;
+        return ['broadcast', ...$this->viaChannels];
     }
 
     public function toDatabase($notifiable)
@@ -67,10 +69,33 @@ class TawsellaNotification extends Notification implements ShouldQueue
         } catch (\Exception $e) {
             Log::error('Email sending error: ' . $e->getMessage());
 
-            return api_response(errors: $e->getMessage(), message: 'Could not send the email');
+            return api_response(errors: [$e->getMessage()], message: 'Could not send the email');
         }
 
         return api_response(message: 'Could not send the email', code: 500);
+    }
+
+    public function toBroadcast($notifiable)
+    {
+        return new BroadcastMessage([
+            'sender_name' => $this->user_profile->name ?? 'Anonymous',
+            'sender_image' => $this->user_profile ? $this->user_profile->avatar_url : null,
+            'message' => __($this->message),
+        ]);
+    }
+
+    /**
+     * Select the channel whill broadcaston
+     *
+     * @return \Illuminate\Broadcasting\Channel|\Illuminate\Broadcasting\Channel[]
+     */
+    public function broadcastOn()
+    {
+        $channels = [];
+        foreach ($this->receivers as $receiver) {
+            $channels[] = new Channel('Notification-to-user-id' . $receiver->id);
+        }
+        return $channels;
     }
 
     public function toArray($notifiable)

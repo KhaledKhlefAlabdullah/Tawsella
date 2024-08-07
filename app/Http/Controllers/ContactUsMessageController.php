@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ContactUsMessagesRequest;
 use App\Mail\ContactUsMails;
 use App\Models\ContactUsMessage;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -26,9 +27,9 @@ class ContactUsMessageController extends Controller
             // get all unaswerd messages
             $contct_us = Auth::user()->contact_us_messages()->where('is_answerd', false)->get();
 
-            return api_response(data: $contct_us, message: 'get-contact-us-success');
+            return api_response(data: $contct_us, message: 'getting contact us messages successfully');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'get-contact-us-error', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'getting contact us messages error', code: 500);
         }
     }
 
@@ -43,12 +44,15 @@ class ContactUsMessageController extends Controller
         try {
 
             $validatedData = $request->validated();
-           
+
             ContactUsMessage::create($validatedData);
 
-            return api_response(message: 'contact-us-send-success');
+            $admin = getAndCheckModelById(User::class, getAdminId());
+            send_notifications($admin, 'The user: '.$validatedData['sender_name'].' send new contact-us message');
+
+            return api_response(message: 'contact us message send successfuly');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'contact-us-send-error', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'contact us message sending error', code: 500);
         }
     }
 
