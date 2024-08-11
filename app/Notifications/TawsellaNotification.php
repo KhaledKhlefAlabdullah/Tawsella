@@ -98,6 +98,11 @@ class TawsellaNotification extends Notification implements ShouldQueue
         return $channels;
     }
 
+    public function broadcastAs(){
+        return 'Notifications';
+    }
+
+    
     public function toArray($notifiable)
     {
         return [
