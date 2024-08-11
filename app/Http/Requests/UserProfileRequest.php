@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-
+use App\Rules\PhoneNumber;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules;
 
@@ -32,7 +32,7 @@ class UserProfileRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['sometimes', 'string', 'email', 'max:255'],
             'password' => ['sometimes', 'required', 'confirmed', Rules\Password::defaults()],
-            'phoneNumber' => ['required', 'string', 'regex:/^(00|\+)[0-9]{9,20}$/'],
+            'phoneNumber' => ['required', 'string', new PhoneNumber],
             'avatar' => ['sometimes', 'nullable', 'mimes:png,jpg,jpeg', 'max:10024'], // Example: max file size of 10MB
         ];
     }

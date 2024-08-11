@@ -1,12 +1,16 @@
 <?php
 
+use App\Events\NotificationsEvent;
 use App\Mail\TawsellaMail;
 use App\Models\User;
+use App\Notifications\TawsellaNotification;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 
 if (!function_exists('getAndCheckModelById')) {
@@ -240,7 +244,7 @@ if (!function_exists('send_mail')) {
 
             return true;
         } catch (Exception $e) {
-            return api_response(errors: $e->getMessage(), message: 'Cold not sending the email');
+            return api_response(errors: [$e->getMessage()], message: 'Cold not sending the email');
         }
     }
 }
@@ -251,7 +255,7 @@ if (!function_exists('count_items')) {
      * Get Counter
      * @param Model $model to counst within
      * @param array $validations to check by
-     * @return numeric count of items
+     * @return <numeric/JsonResponse> count of items
      */
     function count_items($model, array $validations)
     {
@@ -261,7 +265,45 @@ if (!function_exists('count_items')) {
 
             return $item_count + 1;
         } catch (Exception $e) {
-            return api_response(errors: $e->getMessage(), message: 'get-count-error', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'get-count-error', code: 500);
         }
     }
+}
+
+
+/**
+ * Send notifications
+ * @param User $receiver
+ * @param string $message
+ */
+if (!function_exists('send_notifications')) {
+    function send_notifications($receivers, $message, array $viaChannel = ['database'])
+    {
+        // Check if the user is authenticated
+        $user = Auth::user();
+        $user_profile = Auth::check()
+            ? (object) [
+                'email' => $user->email,
+                'name' => $user->profile->name,
+                'avatar_url' => $user->profile->avatar
+            ]
+            : (object) [
+                'email' => 'default@example.com',
+                'name' => 'Anonymous',
+                'avatar_url' => 'images/profile_images/default_user_avatar.png'
+            ];
+
+        if (!is_array($receivers)) {
+            $receivers = [$receivers];
+        }
+
+        foreach ($receivers as $receiver) {
+            if (!($receiver instanceof App\Models\User)) {
+                throw new \Exception('Each receiver must be an instance of User model.');
+            }
+        }
+
+        Notification::send($receivers, new TawsellaNotification($user_profile, $message, $receivers, $viaChannel));
+    }
+
 }

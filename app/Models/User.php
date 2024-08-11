@@ -8,7 +8,6 @@ use App\Models\Traits\HasUuid;
 
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -18,7 +17,7 @@ use App\Models\Traits\MustVerifyEmailByCode;
 
 class User extends Authenticatable implements IMustVerifyEmailByCode
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuid, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, HasUuid;
 
     use MustVerifyEmailByCode;
 

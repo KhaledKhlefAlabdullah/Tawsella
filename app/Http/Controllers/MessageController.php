@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\SendMessageEvent;
+use App\Events\Messages\UpdateMessageEvent;
+use App\Events\Messages\SendMessageEvent;
 use App\Http\Requests\Messages\EditMessageRequest;
 use App\Http\Requests\Messages\SendMessageRequest;
 use App\Models\Chat;
 use App\Models\Message;
+use App\Models\User;
+use App\Notifications\TawsellaNotification;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -39,21 +42,19 @@ class MessageController extends Controller
 
             // chcek if there chat with this id
             if (!getAndCheckModelById(Chat::class, $chat_id)) {
-                return api_response(message: 'يبدو أن هنالك مشكلة في معرف المحادثة حاول مرة اخرى', code: 404);
+                return api_response(message: 'There an error in chat id try agin', code: 404);
             }
             //  message(text or Audio or image) -  - receiver name - created_at - is_edited - is_stared )
 
             $messages = Message::where('chat_id', $chat_id)
                 ->join('user_profiles as up', 'messages.sender_id', '=', 'up.user_id')
-                ->select(
-                    $this->QUERY
-                )
+                ->select($this->QUERY)
                 ->orderBy('messages.created_at', 'desc')
                 ->get();
 
-            return api_response(data: $messages, message: 'تم جلب بيانات الرسائل بنجاح');
+            return api_response(data: $messages, message: 'Successfully getting messages');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'هناك مشكلة في جلب بيانات الرسائل', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Getting messages error', code: 500);
         }
     }
 
@@ -73,9 +74,9 @@ class MessageController extends Controller
             // if the chat_id is null get all starred messages for this user else get just starred messages in on chat
             $starredMessages = is_null($chat_id) ? $user->starredMessages : $user->starredMessages->where('chat_id', $chat_id);
 
-            return api_response(data: $starredMessages, message: 'تم جلب الرسائل المميزة بنجمة بنجاح');
+            return api_response(data: $starredMessages, message: 'Successfully getting starred messages');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'هناك خطأ في جلب الرسائل المميزة بنجمة', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Getting starred messages error', code: 500);
         }
     }
 
@@ -92,7 +93,6 @@ class MessageController extends Controller
 
             // check data if valid
             $validatedData = $request->validated();
-
 
             if ($request->has('media')) {
                 $validatedData['media'] = storeFile($validatedData['media'], 'messages/' . $validatedData['chat_id']);
@@ -115,9 +115,16 @@ class MessageController extends Controller
                 'created_at' => $message->created_at
             ], $validatedData['receiver_id']);
 
-            return api_response(message: 'تم ارسال الرسالة بنجاح');
+            // Send Message notification
+            $receiver = getAndCheckModelById(User::class, $validatedData['receiver_id']);
+
+            $notificationMessage = is_null($message->message) ? 'receive an media message' : $message->message;
+
+            send_notifications($receiver, $notificationMessage);
+
+            return api_response(message: 'Successfully sending message');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'هناك مشكلة في إرسال الرسالة', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Sending message error', code: 500);
         }
     }
 
@@ -141,16 +148,16 @@ class MessageController extends Controller
             if ($isStarred) {
                 // if the message is starred unstarred
                 $user->starredMessages()->detach($id);
-                $message = 'تم إلغاء تمييز الرسالة بنجمة بنجاح';
+                $message = 'Successfully unstarred message';
             } else {
                 // else starred the message
                 $user->starredMessages()->attach($id);
-                $message = 'تم تمييز الرسالة بنجمة بنجاح';
+                $message = 'Successfully starred message';
             }
 
             return api_response(message: $message);
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'هناك خطا في تمييز الرسالة بنجمة', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Message starred error', code: 500);
         }
     }
 
@@ -177,9 +184,12 @@ class MessageController extends Controller
 
             $message->update($validatedData);
 
-            return api_response(message: 'تم تعديل الرسالة بنجاح');
+            // broadcast the message after edit
+            UpdateMessageEvent::dispatch($message);
+
+            return api_response(message: 'Successfully editing message');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'هناك خطا في تعديل الرسالة', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Editing message error', code: 500);
         }
     }
 
@@ -203,9 +213,9 @@ class MessageController extends Controller
             // delete the messsage
             $message->delete();
 
-            return api_response(message: 'تم حذف الرسالة بنجاح');
+            return api_response(message: 'Successfully deleting message');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'هناك خطا في حذف الرسالة', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Deleting message error', code: 500);
         }
     }
 }

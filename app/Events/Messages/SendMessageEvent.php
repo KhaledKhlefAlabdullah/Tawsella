@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Messages;
 
-use Illuminate\Broadcasting\Channel;
+use App\Events\BaseEvent;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
@@ -34,7 +32,7 @@ class SendMessageEvent extends BaseEvent
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('message-'.$this->receiver_id),
+            new PrivateChannel('send-message-'.$this->receiver_id),
         ];
     }
 
