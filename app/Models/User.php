@@ -14,10 +14,11 @@ use Laravel\Sanctum\HasApiTokens;
 
 use App\Interfaces\MustVerifyEmailByCode as IMustVerifyEmailByCode;
 use App\Models\Traits\MustVerifyEmailByCode;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements IMustVerifyEmailByCode
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuid;
+    use HasApiTokens, HasFactory, Notifiable, HasUuid, HasRoles;
 
     use MustVerifyEmailByCode;
 

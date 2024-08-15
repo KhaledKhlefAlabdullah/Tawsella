@@ -7,11 +7,11 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
 });
 
 // send messages event channle
-Broadcast::channel('message-{id}', function ($user, $id) {
+Broadcast::channel('send-message.{id}', function ($user, $id) {
     return (string) $user->id === (string) $id;
 });
 
 
-Broadcast::channel('Notification-to-user-id{id}', function ($user, $id) {
+Broadcast::channel('Notification-to-user.{id}', function ($user, $id) {
     return (string) $user->id === (string) $id;
 });

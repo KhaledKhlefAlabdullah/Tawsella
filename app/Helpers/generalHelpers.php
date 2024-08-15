@@ -1,17 +1,14 @@
 <?php
 
-use App\Events\NotificationsEvent;
 use App\Mail\TawsellaMail;
 use App\Models\User;
 use App\Notifications\TawsellaNotification;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Storage;
 
 if (!function_exists('getAndCheckModelById')) {
     /**
@@ -167,13 +164,13 @@ if (!function_exists('removeFile')) {
     function removeFile($path): string
     {
         // Delete the old file from storage
-        if (file_exists($path)) {
+        if (file_exists(public_path($path))) {
 
             unlink(public_path($path));
             return 'success';
         }
 
-        return 'falied';
+        return 'failed';
     }
 }
 
@@ -185,7 +182,7 @@ if (!function_exists('getAdminId')) {
      */
     function getAdminId()
     {
-        $admin_id = User::where('user_type', 'admin')->first()->id;
+        $admin_id = \App\Models\User::role(\App\Enums\UserType::ADMIN()->key)->first()->id;
         return $admin_id;
     }
 }

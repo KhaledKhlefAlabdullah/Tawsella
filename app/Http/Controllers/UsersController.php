@@ -10,6 +10,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use App\Models\UserProfile;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
@@ -17,19 +18,18 @@ class UsersController extends Controller
     /**
      * Retrieve details of all users except admin.
      *
-     * @return mixed Details of users including name, email, phone number, user type,
+     * @return JsonResponse Details of users including name, email, phone number, user type,
      *               creation date, and activation status.
      */
     public function index()
     {
         try {
-
             $query = ['users.id', 'user_profiles.name', 'users.email', 'user_profiles.phone_number', 'user_profiles.avatar', 'users.is_active as active', 'users.user_type', 'user_profiles.gender', 'users.created_at'];
             // Fetch user details
             $drivers = User::select($query)
                 ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
-                ->whereNot('users.user_type', 'customer')
-                ->whereNot('users.user_type', 'customer') // Filter users except admin
+                ->whereNot('users.user_type', UserType::ADMIN())
+                ->whereNot('users.user_type', UserType::CUSTOMER())
                 ->get();
 
             $customers = User::select($query)
@@ -48,7 +48,7 @@ class UsersController extends Controller
      * Store a newly created user.
      *
      * @param UserRequest $request New user information.
-     * @return mixed API response confirming the creation of the user.
+     * @return JsonResponse API response confirming the creation of the user.
      */
     public function store(UserRequest $request)
     {
@@ -61,7 +61,7 @@ class UsersController extends Controller
             $user = User::create([
                 'email' => $validatedData['email'],
                 'password' => $validatedData['password'],
-                'user_type' => $validatedData['user_type'],
+                'user_type' => UserType::fromKey($validatedData['user_type']),
                 'is_active' => $validatedData['active'],
                 'mail_code_verified_at' => now()
             ]);
@@ -80,28 +80,28 @@ class UsersController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             // Return error response if an exception occurs
-            return api_response(errors: $e->getMessage(), message: 'هناك مشكلة في إنشاء مستخدم جديد', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'هناك مشكلة في إنشاء مستخدم جديد', code: 500);
         }
     }
 
     /**
      * Retrieve details of a specific user.
      *
-     * @param string $id User ID to retrieve details.
-     * @return mixed $user_details with user details by user type
+     * @param User $user User to retrieve details.
+     * @return JsonResponse $user_details with user details by user type
      */
 
-    public function show($id)
+    public function show(User $user)
     {
         try {
             // Define the initial query fields
             $query = ['users.id', 'up.name', 'users.email', 'up.phone_number', 'up.avatar', 'users.is_active as active', 'users.created_at'];
 
             // Get the user type of the specified user by ID
-            $user_type = getAndCheckModelById(User::class, $id)->user_type;
+            $user_type = $user->user_type;
 
             // Check if the user type is not 'customer'
-            if ($user_type != 'customer') {
+            if ($user_type != UserType::fromKey('CUSTOMER')) {
                 // If not a customer, add additional fields related to vehicles and location to the query
                 $additionalQuery = [
                     'vehicles.plate_number',
@@ -122,12 +122,12 @@ class UsersController extends Controller
             $user = User::select($query)
                 ->join('user_profiles as up', 'users.id', '=', 'up.user_id')
                 ->leftJoin('vehicles as v', 'users.id', '=', 'v.driver_id')
-                ->where('users.id', $id) // Filter users except admin
+                ->where('users.id', $user->id) // Filter users except admin
                 ->first();
 
             // Count completed and canceled movements based on user type
-            $completed_movements = count_items(Movement::class, [$compare_id => $id, 'is_completed' => true]);
-            $canceled_movements = count_items(Movement::class, [$compare_id => $id, 'is_canceled' => true]);
+//            $completed_movements = count_items(Movement::class, [$compare_id => $user->id, 'is_completed' => true]);
+//            $canceled_movements = count_items(Movement::class, [$compare_id => $user->id, 'is_canceled' => true]);
 
             // Prepare user details array
             $user_details = [
@@ -145,8 +145,8 @@ class UsersController extends Controller
             // If the user is not a customer, add additional details
             if ($user_type != 'customer') {
                 // Count and calculate driver ratings
-                $ratings = count_items(Rating::class, ['driver_id' => $id]);
-                $rating = $ratings > 0 ? Rating::where('driver_id', $id)->sum('rating') / $ratings : 0;
+                $ratings = count_items(Rating::class, ['driver_id' => $user->id]);
+                $rating = $ratings > 0 ? Rating::where('driver_id', $user->id)->sum('rating') / $ratings : 0;
 
                 // Prepare driver details array
                 $driverDetails = [
@@ -168,7 +168,7 @@ class UsersController extends Controller
             return api_response(data: $user_details, message: 'تم جلب تفاصل الحساب بنجاح');
         } catch (Exception $e) {
             // Handle any exceptions
-            return api_response(errors: $e->getMessage(), message: 'هناك خطأ في جلب تفاثيل الحساب', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'هناك خطأ في جلب تفاثيل الحساب', code: 500);
         }
     }
 
@@ -177,18 +177,15 @@ class UsersController extends Controller
      * Update the details of a user.
      *
      * @param UserRequest $request New user information.
-     * @param  string $id User ID to update.
-     * @return mixed API response confirming the update of the user.
+     * @param  User $user User to update.
+     * @return JsonResponse API response confirming the update of the user.
      */
-    public function update(UserRequest $request, string $id)
+    public function update(UserRequest $request, User $user)
     {
         try {
             DB::beginTransaction();
             // Validate the incoming data
             $validatedData = $request->validated();
-
-            // Find the user by ID
-            $user = getAndCheckModelById(User::class, $id);
 
             // Update user details
             $user->update([
@@ -211,7 +208,7 @@ class UsersController extends Controller
         } catch (Exception $e) {
             DB::rollBack();
             // Return error response if an exception occurs
-            return api_response(errors: $e->getMessage(), message: 'هناك مشكلة في تحديث بيانات المستخدم', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'هناك مشكلة في تحديث بيانات المستخدم', code: 500);
         }
     }
 
@@ -219,17 +216,14 @@ class UsersController extends Controller
      * Set the activation status of a user.
      *
      * @param Request $request Request containing activation status.
-     * @param  string $id User ID to update activation status.
-     * @return mixed API response confirming the activation status change.
+     * @param  User $user User ID to update activation status.
+     * @return JsonResponse API response confirming the activation status change.
      */
-    public function setActive(UserRequest $request, string $id)
+    public function setActive(UserRequest $request, User $user)
     {
         try {
             // Validated data
             $validatedData = $request->validated();
-
-            // Find the user by ID
-            $user = getAndCheckModelById(User::class, $id);
 
             // Update activation status
             $user->update([
@@ -243,7 +237,7 @@ class UsersController extends Controller
             return api_response(data: $user->is_active, message: $message, code: 200);
         } catch (Exception $e) {
             // Return error response if an exception occurs
-            return api_response(errors: $e->getMessage(), message: 'هناك خطأ في تغيير حالة الحساب', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'هناك خطأ في تغيير حالة الحساب', code: 500);
         }
     }
 
@@ -257,14 +251,14 @@ class UsersController extends Controller
     {
         try {
             // Retrieve the user types from the UserType enum
-            $usersTypes = UserType::values();
+            $usersTypes = UserType::getKeys();
 
             // Return a successful API response with the user types
             return api_response(data: $usersTypes, message: 'تم ارجاع البيانات بنجاح', code: 200);
         } catch (Exception $e) {
             // Return an error response if an exception occurs
             return api_response(
-                errors: $e->getMessage(),
+                errors: [$e->getMessage()],
                 message: 'هناك خطأ في جلب بيانات انواع المستخدمين',
                 code: 500
             );
@@ -274,15 +268,12 @@ class UsersController extends Controller
     /**
      * Delete a user.
      *
-     * @param  string $id User ID to delete.
-     * @return mixed API response confirming the deletion of the user.
+     * @param  User $user User to delete.
+     * @return JsonResponse API response confirming the deletion of the user.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
         try {
-            // Find the user by ID
-            $user = getAndCheckModelById(User::class, $id);
-
             if (file_exists($user->profile->avatar)) {
                 if(in_array($user->profile->avatar, ['/images/profile_images/man','/images/profile_images/woman']))
                     unlink(public_path($user->profile->avatar));
@@ -294,7 +285,7 @@ class UsersController extends Controller
             return api_response('تم حذف المستخدم بنجاح', 200);
         } catch (Exception $e) {
             // Return error response if an exception occurs
-            return api_response(errors: $e->getMessage(), message: 'هناك مشكلة في حذف الحساب', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'هناك مشكلة في حذف الحساب', code: 500);
         }
     }
 }

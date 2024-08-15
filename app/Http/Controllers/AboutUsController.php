@@ -61,6 +61,7 @@ class AboutUsController extends Controller
             if (is_null($aboutUs)) {
                 $imagePath = storeFile($validatedData['image'], '/images/aboutUs');
                 AboutUs::create([
+                    'admin_id' => $validatedData['admin_id'],
                     'title' => $validatedData['title'],
                     'description' => $validatedData['description'],
                     'complaints_number' => $validatedData['complaints_number'],
@@ -79,7 +80,7 @@ class AboutUsController extends Controller
                 ]);
                 $messag = 'تحديث نبذة عنا بنجاح';
             }
-            return api_response(data: $validatedData, message: $messag);
+            return api_response(message: $messag);
         } catch (Exception $e) {
             return api_response(errors: $e->getMessage(), message: 'فشل في إنشاء أو تحديث نبذة عنا', code: 500);
         }
@@ -116,11 +117,10 @@ class AboutUsController extends Controller
      * @param AboutUs $aboutUs
      * @return JsonResponse
      */
-    public function updateAdditionalInfo(AboutUsRequest $request, string $id)
+    public function updateAdditionalInfo(AboutUsRequest $request, AboutUs $aboutUs)
     {
         try {
             $validatedData = $request->validated();
-            $aboutUs = getAndCheckModelById(AboutUs::class, $id);
             $imagePath = $validatedData['image'] ? editFile($aboutUs->image, '/images/aboutUs/additional', $validatedData['image']) : $aboutUs->image;
             $aboutUs->update([
                 'title' => $validatedData['title'],
@@ -140,12 +140,11 @@ class AboutUsController extends Controller
      * @param AboutUs $aboutUs
      * @return JsonResponse
      */
-    public function destroy(string $id)
+    public function destroy(AboutUs $aboutUs)
     {
         try {
-            $aboutUs = getAndCheckModelById(AboutUs::class, $id);
             $message = removeFile($aboutUs->image);
-            if ($message == 'falied')
+            if ($message == 'failed')
                 return api_response(message: 'لم يتم ايجاد البيانات', code: 404);
 
             $aboutUs->delete();

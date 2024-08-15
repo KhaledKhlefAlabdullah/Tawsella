@@ -29,7 +29,7 @@ class AboutUsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'admin_id' => ['required', 'string', 'exists:users,id'],
+            'admin_id' => ['string', 'exists:users,id'],
             'title' => ['required', 'string'],
             'description' => ['required', 'string'],
             'complaints_number' => ['sometimes', 'required', 'string', 'regex:/^(\+|00)[0-9]{9,20}$/'],

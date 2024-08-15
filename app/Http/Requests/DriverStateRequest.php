@@ -23,7 +23,6 @@ class DriverStateRequest extends FormRequest
      */
     protected function prepareForValidation()
     {
-        // يُحضر المعرّف للسائق من جلسة المستخدم أو من أي منطق تطبيق محدد لديك
         $this->merge([
             'driver_id' => auth()->id(),
         ]);

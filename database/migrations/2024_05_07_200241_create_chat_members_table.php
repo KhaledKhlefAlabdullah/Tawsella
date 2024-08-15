@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->string('member_id');
             $table->foreign('chat_id')->references('id')->on('chats')->onDelete('cascade');
             $table->foreign('member_id')->references('id')->on('users')->onDelete('cascade');
+            $table->primary(['chat_id', 'member_id']);
             $table->timestamps();
             $table->softDeletes();
 
