@@ -260,7 +260,7 @@ if (!function_exists('count_items')) {
             // withTrashed to count the deleted items to
             $item_count = $model::withTrashed()->where($validations)->get()->count();
 
-            return $item_count + 1;
+            return $item_count;
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'get-count-error', code: 500);
         }

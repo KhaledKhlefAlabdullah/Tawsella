@@ -18,8 +18,8 @@ class Movement extends Model
     protected $fillable = [
         'driver_id',
         'customer_id',
-        'statrt_address',
-        'destnation_address',
+        'start_address',
+        'destination_address',
         'start_latitude',
         'start_longitude',
         'end_latitude',

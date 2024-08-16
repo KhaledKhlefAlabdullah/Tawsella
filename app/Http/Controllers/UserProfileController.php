@@ -19,6 +19,8 @@ class UserProfileController extends Controller
 
     /**
      * Return Auth User Profile
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-13
      * @return JsonResponse UserProfile data
      */
     public function index()
@@ -43,6 +45,8 @@ class UserProfileController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-14
      * @param UserProfileRequest $request is profile data
      * @param User $user is user to edit his profile
      * @return JsonResponse

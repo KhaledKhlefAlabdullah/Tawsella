@@ -21,7 +21,7 @@ class MessageController extends Controller
     /**
      * Display a listing of the resource.
      * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-27
+     * @Target T-29
      * @param Chat $chat To get the messages belongs to this chat
      * @return JsonResponse with messages data and status code 200 if success or with errors in failed
      */
@@ -41,7 +41,7 @@ class MessageController extends Controller
     /**
      * Get all starred messages
      * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-28
+     * @Target T-30
      * @return JsonResponse with starred messages data and status code 200 if success or with errors in failed
      */
     public function getAllStarredMessages()
@@ -61,7 +61,7 @@ class MessageController extends Controller
     /**
      * Get starred messages
      * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-28
+     * @Target T-30
      * @param Chat $chat to return just starred messages belong to this chat
      * @return JsonResponse with starred messages data and status code 200 if success or with errors in failed
      */
@@ -82,7 +82,7 @@ class MessageController extends Controller
     /**
      * store new message
      * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-29
+     * @Target T-31
      * @param SendMessageRequest $request is new message data with (chat_id - sender_id - receiver_id - message:nullable - media:nullable)
      * @return JsonResponse with success message and status code 200 if success or with errors in failed
      */
@@ -130,7 +130,7 @@ class MessageController extends Controller
     /**
      * Set message as starred
      * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-30
+     * @Target T-32
      * @param Message $message is message i want to starred
      * @return JsonResponse with success message and status code 200 if success or with errors in failed
      */
@@ -160,7 +160,7 @@ class MessageController extends Controller
     /**
      * edit message details
      * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-31
+     * @Target T-33
      * @param EditMessageRequest $request is the new message data that i want to edit
      * @param string $id is message i want to update
      * @return JsonResponse with success message and status code 200 if success or with errors in failed
@@ -187,9 +187,9 @@ class MessageController extends Controller
     }
 
     /**
-     * edit message details
+     * Delete message
      * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-31
+     * @Target T-34
      * @param Message $message is message i want to delete
      * @return JsonResponse with success message and status code 200 if success or with errors in failed
      */
