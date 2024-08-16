@@ -108,7 +108,8 @@ class UsersController extends Controller
 
     /**
      * Update the details of a user.
-     *
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-10
      * @param UserRequest $request New user information.
      * @param User $user User to update.
      * @return JsonResponse API response confirming the update of the user.
@@ -125,7 +126,7 @@ class UsersController extends Controller
                 'email' => $validatedData['email'] ?? $user->email,
                 'password' => $validatedData['password'] ?? $user->password,
                 'user_type' => $validatedData['user_type'] ?? $user->user_type,
-                'is_avtive' => $validatedData['active']
+                'is_active' => $validatedData['active']
             ]);
 
             // Update user profile
@@ -137,17 +138,18 @@ class UsersController extends Controller
 
             DB::commit();
             // Return API response confirming the update
-            return api_response(message: 'تم تعديل بيانات المستخدم بنجاح');
+            return api_response(message: 'Successfully updated user');
         } catch (Exception $e) {
             DB::rollBack();
             // Return error response if an exception occurs
-            return api_response(errors: [$e->getMessage()], message: 'هناك مشكلة في تحديث بيانات المستخدم', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'updated user error', code: 500);
         }
     }
 
     /**
      * Set the activation status of a user.
-     *
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-12
      * @param Request $request Request containing activation status.
      * @param User $user User ID to update activation status.
      * @return JsonResponse API response confirming the activation status change.
@@ -164,18 +166,20 @@ class UsersController extends Controller
             ]);
 
             // Define message based on activation status
-            $message = $validatedData['active'] ? 'تم تفعيل الحساب بنجاح' : 'تم إلغاء تفعيل الحساب بنجاح';
+            $message = $validatedData['active'] ? 'Successfully activate the account' : 'Successfully deactivate the account';
 
             // Return API response with updated activation status
             return api_response(data: $user->is_active, message: $message, code: 200);
         } catch (Exception $e) {
             // Return error response if an exception occurs
-            return api_response(errors: [$e->getMessage()], message: 'هناك خطأ في تغيير حالة الحساب', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Error in activate or deactivate account', code: 500);
         }
     }
 
     /**
      * Get the list of user types
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-7
      * This method retrieves the possible user types from the UserType enum
      * an error response.
      * @return \Illuminate\Http\JsonResponse
@@ -187,12 +191,12 @@ class UsersController extends Controller
             $usersTypes = UserType::getKeys();
 
             // Return a successful API response with the user types
-            return api_response(data: $usersTypes, message: 'تم ارجاع البيانات بنجاح', code: 200);
+            return api_response(data: $usersTypes, message: 'Successfully getting users types', code: 200);
         } catch (Exception $e) {
             // Return an error response if an exception occurs
             return api_response(
                 errors: [$e->getMessage()],
-                message: 'هناك خطأ في جلب بيانات انواع المستخدمين',
+                message: 'getting users types error',
                 code: 500
             );
         }
@@ -200,7 +204,8 @@ class UsersController extends Controller
 
     /**
      * Delete a user.
-     *
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-11
      * @param User $user User to delete.
      * @return JsonResponse API response confirming the deletion of the user.
      */
@@ -208,17 +213,17 @@ class UsersController extends Controller
     {
         try {
             if (file_exists($user->profile->avatar)) {
-                if (in_array($user->profile->avatar, ['/images/profile_images/man', '/images/profile_images/woman']))
+                if (!in_array($user->profile->avatar, ['/images/profile_images/man', '/images/profile_images/woman']))
                     unlink(public_path($user->profile->avatar));
             }
             // Delete the user
             $user->delete();
 
             // Return API response confirming the deletion
-            return api_response('تم حذف المستخدم بنجاح', 200);
+            return api_response('Successfully deleting user', 200);
         } catch (Exception $e) {
             // Return error response if an exception occurs
-            return api_response(errors: [$e->getMessage()], message: 'هناك مشكلة في حذف الحساب', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'deleting user error', code: 500);
         }
     }
 }

@@ -63,7 +63,6 @@ if (!function_exists('get_instances_with_value')) {
 }
 
 
-
 if (!function_exists('findAndUpdate')) {
     /**
      * This function is update the instance with keys and values passed to it
@@ -143,8 +142,8 @@ if (!function_exists('editFile')) {
     {
         // Delete the old file from storage
         if (file_exists($old_path)) {
-
-            unlink(public_path($old_path));
+            if (!in_array($old_path, ['/images/profile_images/man', '/images/profile_images/woman']))
+                unlink(public_path($old_path));
         }
 
         // Store the new file
@@ -279,12 +278,12 @@ if (!function_exists('send_notifications')) {
         // Check if the user is authenticated
         $user = Auth::user();
         $user_profile = Auth::check()
-            ? (object) [
+            ? (object)[
                 'email' => $user->email,
                 'name' => $user->profile->name,
                 'avatar_url' => $user->profile->avatar
             ]
-            : (object) [
+            : (object)[
                 'email' => 'default@example.com',
                 'name' => 'Anonymous',
                 'avatar_url' => 'images/profile_images/default_user_avatar.png'
