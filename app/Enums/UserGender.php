@@ -1,17 +1,18 @@
-<?php
+<?php declare(strict_types=1);
 
 namespace App\Enums;
 
-enum UserGender: string
-{
-    case MALE = 'male';
-    case FEMALE = 'female';
+use BenSampo\Enum\Enum;
 
-    public static function values(): array
-    {
-        return array_filter(
-            array_map(fn($role) => $role->value, self::cases()),
-            fn($value) => $value !== 'admin'
-        );
-    }
+/**
+ * @method static static ADMIN()
+ * @method static static CUSTOMER()
+ * @method static static TAXIDRIVER()
+ * @method static static TRANSPORTCARDRIVER()
+ * @method static static MOTOROCYCLIST()
+ */
+final class UserGender extends Enum
+{
+    const MALE = 'male';
+    const FEMALE = 'female';
 }

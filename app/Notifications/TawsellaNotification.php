@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use App\Mail\TawsellaMail;
 use Illuminate\Broadcasting\Channel;
+use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\BroadcastMessage;
@@ -93,7 +94,7 @@ class TawsellaNotification extends Notification implements ShouldQueue
     {
         $channels = [];
         foreach ($this->receivers as $receiver) {
-            $channels[] = new Channel('Notification-to-user-id' . $receiver->id);
+            $channels[] = new PrivateChannel('Notification-to-user.' . $receiver->id);
         }
         return $channels;
     }
@@ -102,7 +103,7 @@ class TawsellaNotification extends Notification implements ShouldQueue
         return 'Notifications';
     }
 
-    
+
     public function toArray($notifiable)
     {
         return [

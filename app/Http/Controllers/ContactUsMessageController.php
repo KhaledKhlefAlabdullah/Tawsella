@@ -17,7 +17,7 @@ class ContactUsMessageController extends Controller
     /**
      * Display a listing of the contact-us messages.
      * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-33
+     * @Target T-35
      * @return JsonResponse with conatct-us-messages, success message and status code 200 if success or with errors in failed
      */
     public function index()
@@ -36,7 +36,7 @@ class ContactUsMessageController extends Controller
     /**
      * Store a newly created conatct-us message in storage.
      * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-35
+     * @Target T-37
      * @return JsonResponse with success message and status code 200 if success or with errors in failed
      */
     public function store(ContactUsMessagesRequest $request)

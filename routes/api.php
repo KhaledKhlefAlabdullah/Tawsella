@@ -27,7 +27,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group( function () {
 });
 
 // Let unregistred users and all auth users ecept drivers
-Route::middleware(['exceptDrivers', 'guest'])->get('/offers', [OfferController::class, 'index']);
+Route::middleware(['guest'])->get('/offers', [OfferController::class, 'index']);
 
 // for all users auth or not auth
 require __DIR__ . '/Roles/publicApis.php';

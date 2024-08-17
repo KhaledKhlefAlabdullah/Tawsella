@@ -6,14 +6,11 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware([AdminAndDriver::class])->group(function() {
-
-    Route::group(['prefix' => 'offers', 'controller' => OfferController::class], function () {
-
-        Route::post('/add','store');
-
-        Route::put('/edit/{id}','update');
-
-        Route::delete('/delete/{id}','destroy');
-    });
-
+    /**
+     * Offers Management
+     */
+    Route::ApiResource('offers', OfferController::class)->except(['index', 'show']);
+    /**
+     * End Offers Management
+     */
 });

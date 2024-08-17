@@ -16,7 +16,7 @@ class Vehicle extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'driver_id',
+        'user_id',
         'plat_number',
         'vehicle_image',
         'vehicle_description'

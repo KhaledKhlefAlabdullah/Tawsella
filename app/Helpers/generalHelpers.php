@@ -1,17 +1,14 @@
 <?php
 
-use App\Events\NotificationsEvent;
 use App\Mail\TawsellaMail;
 use App\Models\User;
 use App\Notifications\TawsellaNotification;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
-use Illuminate\Support\Facades\Storage;
 
 if (!function_exists('getAndCheckModelById')) {
     /**
@@ -64,7 +61,6 @@ if (!function_exists('get_instances_with_value')) {
         return $instance;
     }
 }
-
 
 
 if (!function_exists('findAndUpdate')) {
@@ -146,8 +142,8 @@ if (!function_exists('editFile')) {
     {
         // Delete the old file from storage
         if (file_exists($old_path)) {
-
-            unlink(public_path($old_path));
+            if (!in_array($old_path, ['/images/profile_images/man', '/images/profile_images/woman']))
+                unlink(public_path($old_path));
         }
 
         // Store the new file
@@ -167,13 +163,13 @@ if (!function_exists('removeFile')) {
     function removeFile($path): string
     {
         // Delete the old file from storage
-        if (file_exists($path)) {
+        if (file_exists(public_path($path))) {
 
             unlink(public_path($path));
             return 'success';
         }
 
-        return 'falied';
+        return 'failed';
     }
 }
 
@@ -185,7 +181,7 @@ if (!function_exists('getAdminId')) {
      */
     function getAdminId()
     {
-        $admin_id = User::where('user_type', 'admin')->first()->id;
+        $admin_id = \App\Models\User::role(\App\Enums\UserType::ADMIN()->key)->first()->id;
         return $admin_id;
     }
 }
@@ -263,7 +259,7 @@ if (!function_exists('count_items')) {
             // withTrashed to count the deleted items to
             $item_count = $model::withTrashed()->where($validations)->get()->count();
 
-            return $item_count + 1;
+            return $item_count;
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'get-count-error', code: 500);
         }
@@ -282,12 +278,12 @@ if (!function_exists('send_notifications')) {
         // Check if the user is authenticated
         $user = Auth::user();
         $user_profile = Auth::check()
-            ? (object) [
+            ? (object)[
                 'email' => $user->email,
                 'name' => $user->profile->name,
                 'avatar_url' => $user->profile->avatar
             ]
-            : (object) [
+            : (object)[
                 'email' => 'default@example.com',
                 'name' => 'Anonymous',
                 'avatar_url' => 'images/profile_images/default_user_avatar.png'

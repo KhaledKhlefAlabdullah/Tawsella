@@ -15,8 +15,8 @@ return new class extends Migration
             $table->uuid('id')->unique()->primary();
             $table->string('driver_id')->nullable();
             $table->string('customer_id');
-            $table->string('statrt_address')->nullable();
-            $table->string('destnation_address')->nullable();
+            $table->string('start_address')->nullable();
+            $table->string('distnation_address')->nullable();
             $table->double('start_latitude');
             $table->double('start_longitude');
             $table->double('end_latitude')->nullable();

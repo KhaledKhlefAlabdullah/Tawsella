@@ -15,8 +15,8 @@ return new class extends Migration
             $table->uuid('id')->unique()->primary();
             $table->string('user_id');
             $table->string('title');
-            $table->date('valide_date');
-            $table->text('discreption');
+            $table->date('valid_date');
+            $table->text('description');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
             $table->SoftDeletes();

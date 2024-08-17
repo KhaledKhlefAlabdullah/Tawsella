@@ -29,7 +29,7 @@ class OffersRequest extends FormRequest
         return [
             'user_id' => ['required', 'string', 'exists:users,id'],
             'title' => ['required', 'string'],
-            'valide_date' => ['required', 'date', 'after:now'],
+            'valid_date' => ['required', 'date', 'after:now'],
             'description' => ['required', 'string']
         ];
     }

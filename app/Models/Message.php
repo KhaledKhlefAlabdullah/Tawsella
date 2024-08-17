@@ -3,27 +3,26 @@
 namespace App\Models;
 
 use App\Models\Traits\HasUuid;
+use App\Models\Traits\MessagesTrate;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-// Message model which uses UUIDs, soft deletes, and factory patterns
 class Message extends Model
 {
-    use HasFactory, HasUuid, SoftDeletes; // Traits to enable factories, UUIDs as primary keys, and soft deletion
+    use HasFactory, HasUuid, SoftDeletes, MessagesTrate;
 
-    protected $keyType = 'string'; // Specifies the type of the primary key
-    protected $primaryKey = 'id'; // Specifies the primary key field
-    public $incrementing = false; // Indicates that the primary key is not auto-incrementing
+    protected $keyType = 'string';
+    protected $primaryKey = 'id';
+    public $incrementing = false;
 
     // Mass assignable attributes
     protected $fillable = [
-        'chat_id',      // Foreign key for the chat
-        'sender_id',    // Foreign key for the sender user
-        'receiver_id',  // Foreign key for the receiver user
-        'message',      // Text content of the message
-        'media',        // URL to an media if attached
-        'is_edited',    // Boolean flag for edited messages
+        'chat_id',
+        'sender_id',
+        'message',
+        'media',
+        'is_edited',
     ];
 
     // Relationship to Chat model
@@ -49,4 +48,6 @@ class Message extends Model
     {
         return $this->belongsToMany(User::class, 'user_starred_messages');
     }
+
+
 }

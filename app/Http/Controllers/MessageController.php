@@ -14,67 +14,66 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Symfony\Component\Mailer\Event\MessageEvent;
 
 class MessageController extends Controller
 {
-
-    private $QUERY = [
-        'messages.id as message_id',
-        'up.name as sender_name',
-        'up.avatar as sender_avatar',
-        'messages.message',
-        'messages.media',
-        'messages.is_edited',
-        'messages.is_stared',
-        'messages.created_at'
-    ];
-
     /**
      * Display a listing of the resource.
      * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-27
-     * @param string $chat_id To get the messages belongs to this chat
+     * @Target T-29
+     * @param Chat $chat To get the messages belongs to this chat
      * @return JsonResponse with messages data and status code 200 if success or with errors in failed
      */
-    public function index(string $chat_id)
+    public function index(Chat $chat)
     {
         try {
 
-            // chcek if there chat with this id
-            if (!getAndCheckModelById(Chat::class, $chat_id)) {
-                return api_response(message: 'There an error in chat id try agin', code: 404);
-            }
-            //  message(text or Audio or image) -  - receiver name - created_at - is_edited - is_stared )
+            // get chat messages
+            $messages = $chat->messages->sortByDesc('created_at');
 
-            $messages = Message::where('chat_id', $chat_id)
-                ->join('user_profiles as up', 'messages.sender_id', '=', 'up.user_id')
-                ->select($this->QUERY)
-                ->orderBy('messages.created_at', 'desc')
-                ->get();
-
-            return api_response(data: $messages, message: 'Successfully getting messages');
+            return api_response(data: Message::mapingMessages($messages), message: 'Successfully getting messages');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'Getting messages error', code: 500);
         }
     }
 
-
     /**
-     * Get starred messages
+     * Get all starred messages
      * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-28
-     * @param string $chat_id is optional parameter if is set will return just starred messages belong to this chat
+     * @Target T-30
      * @return JsonResponse with starred messages data and status code 200 if success or with errors in failed
      */
-    public function getStarredMessages(string $chat_id = null)
+    public function getAllStarredMessages()
     {
         try {
             // get auth user
             $user = Auth::user();
-            // if the chat_id is null get all starred messages for this user else get just starred messages in on chat
-            $starredMessages = is_null($chat_id) ? $user->starredMessages : $user->starredMessages->where('chat_id', $chat_id);
+            // if the chat is null get all starred messages for this user else get just starred messages in on chat
+            $starredMessages = $user->starredMessages;
 
-            return api_response(data: $starredMessages, message: 'Successfully getting starred messages');
+            return api_response(data: Message::mapingMessages($starredMessages), message: 'Successfully getting all starred messages');
+        } catch (Exception $e) {
+            return api_response(errors: [$e->getMessage()], message: 'Getting starred messages error', code: 500);
+        }
+    }
+
+    /**
+     * Get starred messages
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-30
+     * @param Chat $chat to return just starred messages belong to this chat
+     * @return JsonResponse with starred messages data and status code 200 if success or with errors in failed
+     */
+    public function getChatStarredMessages(Chat $chat)
+    {
+        try {
+            // get auth user
+            $user = Auth::user();
+            // if the chat is null get all starred messages for this user else get just starred messages in on chat
+            $starredMessages = $user->starredMessages->where('chat_id', $chat->id);
+
+            return api_response(data: Message::mapingMessages($starredMessages), message: 'Successfully getting chat starred messages');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'Getting starred messages error', code: 500);
         }
@@ -83,7 +82,7 @@ class MessageController extends Controller
     /**
      * store new message
      * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-29
+     * @Target T-31
      * @param SendMessageRequest $request is new message data with (chat_id - sender_id - receiver_id - message:nullable - media:nullable)
      * @return JsonResponse with success message and status code 200 if success or with errors in failed
      */
@@ -131,18 +130,15 @@ class MessageController extends Controller
     /**
      * Set message as starred
      * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-30
-     * @param string $id is message i want to starred
+     * @Target T-32
+     * @param Message $message is message i want to starred
      * @return JsonResponse with success message and status code 200 if success or with errors in failed
      */
-    public function setMessageStarred(string $id)
+    public function setMessageStarred(Message $message)
     {
         try {
-
-            // check if there message with $id
-            getAndCheckModelById(Message::class, $id);
-
             $user = Auth::user();
+            $id = $message->id;
             $isStarred = $user->starredMessages()->where('message_id', $id)->exists();
 
             if ($isStarred) {
@@ -164,19 +160,16 @@ class MessageController extends Controller
     /**
      * edit message details
      * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-31
+     * @Target T-33
      * @param EditMessageRequest $request is the new message data that i want to edit
      * @param string $id is message i want to update
      * @return JsonResponse with success message and status code 200 if success or with errors in failed
      */
-    public function update(EditMessageRequest $request, string $id)
+    public function update(EditMessageRequest $request, Message $message)
     {
         try {
             // check data if valid
             $validatedData = $request->validated();
-
-            // chcek if there message with this id if is exists return the message
-            $message = getAndCheckModelById(Message::class, $id);
 
             if ($request->has('media')) {
                 $validatedData['media'] = editFile($message->media, $validatedData['media'], 'messages/' . $message->chat_id);
@@ -185,7 +178,7 @@ class MessageController extends Controller
             $message->update($validatedData);
 
             // broadcast the message after edit
-            UpdateMessageEvent::dispatch($message);
+            broadcast(new UpdateMessageEvent($message));
 
             return api_response(message: 'Successfully editing message');
         } catch (Exception $e) {
@@ -194,19 +187,15 @@ class MessageController extends Controller
     }
 
     /**
-     * edit message details
+     * Delete message
      * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-31
-     * @param string $id is message i want to delete
+     * @Target T-34
+     * @param Message $message is message i want to delete
      * @return JsonResponse with success message and status code 200 if success or with errors in failed
      */
-    public function destroy(string $id)
+    public function destroy(Message $message)
     {
         try {
-
-            // chcek if there message with this id if is exists return the message
-            $message = getAndCheckModelById(Message::class, $id);
-
             // remove message media file
             removeFile($message->media);
 

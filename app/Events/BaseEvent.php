@@ -31,7 +31,7 @@ class BaseEvent implements ShouldBroadcast
         $this->location_long = $Movement->start_longitude;
         $this->gender = $Movement->gender;
         $this->customer_address = $Movement->my_address;
-        $this->customer_destnation_address = $Movement->destnation_address;
+        $this->customer_destnation_address = $Movement->distnation_address;
     }
 
 

@@ -5,14 +5,16 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ServicesRequest;
 use App\Models\OurService;
 use Exception;
-use function PHPUnit\Framework\is_null;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use function PHPUnit\Framework\isJson;
 
 class OurServiceController extends Controller
 {
     /**
      * Display all services.
-     * @return mixed API response containing all services data
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-15
+     * @return JsonResponse API response containing all services data
      */
     public function index()
     {
@@ -21,17 +23,19 @@ class OurServiceController extends Controller
             $services = OurService::select('id','name', 'description', 'image', 'logo', 'created_at')->get();
 
             // Return a successful API response with the services data
-            return api_response(data: $services, message: 'تم إرجاع بيانات الخدمات بنجاح');
+            return api_response(data: $services, message: 'Services retrieved successfully');
         } catch (Exception $e) {
             // Return an error API response if an exception occurs
-            return api_response(errors: $e->getMessage(), message: 'فشل في استرجاع بيانات الخدمات', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Services retrieved error', code: 500);
         }
     }
 
     /**
      * Store a new service in the database.
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-16
      * @param ServicesRequest $request Service data from request
-     * @return mixed API response indicating success or failure
+     * @return JsonResponse API response indicating success or failure
      */
     public function store(ServicesRequest $request)
     {
@@ -84,16 +88,17 @@ class OurServiceController extends Controller
 
     /**
      * Update an existing service.
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-17
      * @param ServicesRequest $request Updated service data
-     * @param string $id Service ID to update
-     * @return mixed API response indicating success or failure
+     * @param OurService $service Service to update
+     * @return JsonResponse API response indicating success or failure
      */
-    public function update(ServicesRequest $request, string $id)
+    public function update(ServicesRequest $request, OurService $service)
     {
         try {
             // Validate incoming data and retrieve the existing service record
             $validatedData = $request->validated();
-            $service = getAndCheckModelById(OurService::class, $id);
 
             // Check if new images or logos are provided and update them
             $imagePath = !is_null($validatedData['image']) ? editFile($service->image, $validatedData['image'], '/images/services/images') : $service->image;
@@ -118,21 +123,18 @@ class OurServiceController extends Controller
 
     /**
      * Delete a service from the database.
-     * @param string $id Service ID to delete
-     * @return mixed API response indicating success or failure
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-18
+     * @param OurService $service Service to delete
+     * @return JsonResponse API response indicating success or failure
      */
-    public function destroy(string $id)
+    public function destroy(OurService $service)
     {
         try {
-            // Retrieve the service record by ID
-            $service = getAndCheckModelById(OurService::class, $id);
 
             removeFile($service->logo);
 
             removeFile($service->image);
-
-            // if ($logoMessage == 'falied' || $imageMessage == 'falied')
-            //     return api_response(message: 'لم يتم ايجاد البيانات', code: 404);
 
             // Delete the service record
             $service->delete();

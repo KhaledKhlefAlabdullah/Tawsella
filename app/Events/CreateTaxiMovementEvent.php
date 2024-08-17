@@ -39,7 +39,7 @@ class CreateMovementEvent extends BaseEvent
             'customer' => $customer,
             'gender' => $this->gender,
             'customer_address' => $this->customer_address,
-            'destnation_address' => $this->customer_destnation_address,
+            'distnation_address' => $this->customer_destnation_address,
             'lat' => $this->location_lat,
             'long' => $this->location_long,
             'time' => date('Y-m-d -- h:i A', strtotime($this->time))

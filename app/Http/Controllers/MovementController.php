@@ -32,7 +32,7 @@ class MovementController extends Controller
         $Movement = $this->get_data([
             'taxi_movements.id as movement_id',
             'taxi_movements.my_address',
-            'taxi_movements.destnation_address',
+            'taxi_movements.destination_address',
             'taxi_movements.gender',
             'taxi_movements.start_latitude',
             'taxi_movements.start_longitude',
@@ -63,7 +63,7 @@ class MovementController extends Controller
         $completedRequests = $this->get_data([
             'taxi_movements.id as movement_id',
             'taxi_movements.my_address',
-            'taxi_movements.destnation_address',
+            'taxi_movements.destination_address',
             'taxi_movements.gender',
             'taxi_movements.start_latitude',
             'taxi_movements.start_longitude',
@@ -314,7 +314,7 @@ class MovementController extends Controller
             // $customerName = UserProfile::where('user_id',  $Movement->customer_id)->first()->name;
 
             // $from = $Movement->my_address;
-            // $to = $Movement->destnation_address;
+            // $to = $Movement->destination_address;
 
             // MovementFindUnFindEvent::dispatch(
             //     $driverName,
@@ -340,7 +340,7 @@ class MovementController extends Controller
                 'up.name',
                 'up.phoneNumber',
                 'taxi_movements.my_address as customer_address',
-                'taxi_movements.destnation_address as destnation_address',
+                'taxi_movements.destination_address as destination_address',
                 'taxi_movements.gender as gender',
                 'taxi_movements.start_latitude as location_lat',
                 'taxi_movements.start_longitude as location_long',

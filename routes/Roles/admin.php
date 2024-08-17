@@ -10,31 +10,24 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware([AdminMiddleware::class])->group(function() {
 
-    Route::group(['prefix' => 'users', 'controller' => UsersController::class], function(){
+    /**
+     * Users Management
+     */
+    Route::ApiResource('users', UsersController::class);
 
-        Route::get('/','index');
+    Route::get('/users-types',[UsersController::class, 'getUsersTypes']);
 
-        Route::get('/users-types','getUsersTypes');
-
-        Route::get('/{id}','show');
-
-        Route::post('/add','store');
-
-        Route::put('/edit/{id}','update');
-
-        Route::put('/active-unactive/{id}','setActive');
-
-        Route::delete('/delete/{id}','destroy');
-
-    });
-
+    Route::put('/active-unactive/{user}',[UsersController::class, 'setActive']);
+    /**
+     * End Users Management
+     */
     Route::group(['prefix' => 'services', 'controller' => OurServiceController::class], function(){
 
         Route::post('/add','store');
 
-        Route::post('/edit/{id}','update');
+        Route::post('/edit/{service}','update');
 
-        Route::delete('/delete/{id}','destroy');
+        Route::delete('/delete/{service}','destroy');
 
     });
 
@@ -44,9 +37,9 @@ Route::middleware([AdminMiddleware::class])->group(function() {
 
         Route::post('/additonal/add','storeAdditionalInfo');
 
-        Route::put('/additonal/edit/{id}','updateAdditionalInfo');
+        Route::put('/additonal/edit/{aboutUs}','updateAdditionalInfo');
 
-        Route::delete('/delete/{id}','destroey');
+        Route::delete('/delete/{aboutUs}','destroy');
 
     });
 

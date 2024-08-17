@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Models\Traits\HasUuid;
 
 
+use App\Models\Traits\UserTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -14,10 +15,11 @@ use Laravel\Sanctum\HasApiTokens;
 
 use App\Interfaces\MustVerifyEmailByCode as IMustVerifyEmailByCode;
 use App\Models\Traits\MustVerifyEmailByCode;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements IMustVerifyEmailByCode
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuid;
+    use HasApiTokens, HasFactory, Notifiable, HasUuid, HasRoles, UserTrait;
 
     use MustVerifyEmailByCode;
 
@@ -35,6 +37,7 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
     protected $fillable = [
         'email',
         'password',
+        'points',
         'user_type',
         'driver_state',
         'is_active',

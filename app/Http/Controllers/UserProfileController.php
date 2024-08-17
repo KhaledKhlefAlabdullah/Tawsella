@@ -7,6 +7,7 @@ use App\Http\Requests\UserProfileRequest;
 use App\Models\User;
 use App\Models\UserProfile;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,35 +19,44 @@ class UserProfileController extends Controller
 
     /**
      * Return Auth User Profile
-     * @return mixed UserProfile data
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-13
+     * @return JsonResponse UserProfile data
      */
     public function index()
     {
         try {
 
-            $profile = UserProfile::select('users.id as user_id', 'user_profiles.name', 'user_profiles.avatar', 'user_profiles.phoneNumber', 'users.email')
-                ->join('users', 'user_profiles.user_id', '=', 'users.id')
-                ->where('user_profiles.user_id', getMyId())
-                ->first();
+            $userProfile = Auth::user()->profile;
 
-            return api_response(data: $profile, message: 'تفاصيل ملف تعريف المستخدم تحقق النجاح');
+            $profile = [
+                'user_id' => $userProfile->id,
+                'name' => $userProfile->profile->name,
+                'avatar' => $userProfile->profile->avatar,
+                'phoneNumber' => $userProfile->profile->phoneNumber,
+                'email' => $userProfile->email
+            ];
+
+            return api_response(data: $profile, message: 'Profile retrieved successfully.');
         } catch (Exception $e) {
-            return api_response(errors: $e->getMessage(), message: 'تفاصيل ملف تعريف المستخدم تحصل على خطأ', code: 500);
+            return api_response(errors: $e->getMessage(), message: 'Profile retrieved error.', code: 500);
         }
     }
 
     /**
      * Update the specified resource in storage.
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-14
      * @param UserProfileRequest $request is profile data
-     * @param string $id is user id to edit his profile
-     * @return mixed
+     * @param User $user is user to edit his profile
+     * @return JsonResponse
      */
-    public function update(UserProfileRequest $request, string $id)
+    public function update(UserProfileRequest $request, User $user)
     {
         try {
 
             $request->validated();
-            $user = getAndCheckModelById(User::class, $id);
+
             if (request()->has('email'))
                 $user->update([
                     'email' => $request->input('email')
@@ -57,7 +67,7 @@ class UserProfileController extends Controller
                     'password' => Hash::make($request->password),
                 ]);
 
-            $userProfile = UserProfile::where('user_id', $id)->first();
+            $userProfile = $user->profile;
 
             $userProfile->update([
                 'name' => $request->input('name'),
@@ -85,9 +95,9 @@ class UserProfileController extends Controller
                 }
             }
 
-            return api_response(message: 'تم تعديل البيانات بنجاح');
+            return api_response(message: 'Profile updated successfully.');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'حدث خطأ في تعديل البيانات', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Profile updated error.', code: 500);
         }
     }
 
