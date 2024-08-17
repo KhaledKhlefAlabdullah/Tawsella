@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutUsController;
+use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\ContactUsMessageController;
 use App\Http\Controllers\OurServiceController;
 use App\Http\Controllers\UsersController;
@@ -46,5 +47,7 @@ Route::middleware([AdminMiddleware::class])->group(function() {
     Route::group(['prefix' => 'contact-us', 'controller' => ContactUsMessageController::class], function(){
         Route::get('/','index');
     });
+
+    Route::ApiResource('balances',BalanceController::class)->except('show');
 
 });
