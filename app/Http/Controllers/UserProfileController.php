@@ -27,14 +27,14 @@ class UserProfileController extends Controller
     {
         try {
 
-            $userProfile = Auth::user()->profile;
+            $use = Auth::user();
 
             $profile = [
-                'user_id' => $userProfile->id,
-                'name' => $userProfile->profile->name,
-                'avatar' => $userProfile->profile->avatar,
-                'phoneNumber' => $userProfile->profile->phoneNumber,
-                'email' => $userProfile->email
+                'id' => $use->id,
+                'name' => $use->profile->name,
+                'avatar' => $use->profile->avatar,
+                'phone_number' => $use->profile->phone_number,
+                'email' => $use->email
             ];
 
             return api_response(data: $profile, message: 'Profile retrieved successfully.');
@@ -67,11 +67,11 @@ class UserProfileController extends Controller
                     'password' => Hash::make($request->password),
                 ]);
 
-            $userProfile = $user->profile;
+            $userProfile = $user->profile();
 
             $userProfile->update([
                 'name' => $request->input('name'),
-                'phoneNumber' => $request->input('phoneNumber')
+                'phone_number' => $request->input('phone_number')
             ]);
 
             if ($request->has('avatar')) {

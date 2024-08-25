@@ -65,7 +65,7 @@ class AuthenticatedSessionController extends Controller
     public function destroy(Request $request)
     {
         try {
-            
+
             // Delete the current access token
             $request->user()->currentAccessToken()->delete();
 
@@ -96,10 +96,14 @@ class AuthenticatedSessionController extends Controller
             // Hash the new password
             $new_password = Hash::make($request->input('new_password'));
 
-            // Check if the new password is the same as the old password
-            if ($user->password == $new_password) {
-                // Return an API response with an error message
-                return api_response(message: 'Your new password it same old password', code:400);
+            // Check if the current password matches the user's password
+            if (!Hash::check($request->input('current_password'), $user->password)) {
+                return api_response(message: 'Current password is incorrect', code: 400);
+            }
+
+            // Check if the new password is the same as the current password
+            if (Hash::check($request->input('new_password'), $user->password)) {
+                return api_response(message: 'Your new password is the same as the old password', code: 400);
             }
 
             // Update the user's password
@@ -107,10 +111,10 @@ class AuthenticatedSessionController extends Controller
             $user->save;
 
             // Return an API response indicating successful password change
-            return api_response(message: 'تم تغيير كلمة المرور بنجاح');
+            return api_response(message: 'Password changed successfully');
         } catch (Exception $e) {
             // Return an API response with an error message for failed password change
-            return api_response(errors: $e->getMessage(), message: 'هناك مشكلة في تغيير كلمة المرور الخاصة بك', code: 500);
+            return api_response(errors: $e->getMessage(), message: 'Password changeing error', code: 500);
         }
     }
 }

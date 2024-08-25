@@ -55,7 +55,7 @@ class AcceptTaxiMovemntEvent extends BaseEvent
     {
         $customer_id = $this->customer_id;
 
-        $customer_profile = UserProfile::where('user_id', $customer_id)->select('name', 'avatar', 'phoneNumber',)->first();
+        $customer_profile = UserProfile::where('user_id', $customer_id)->select('name', 'avatar', 'phone_number',)->first();
 
         return [
             'request_id' => $this->request_id,
@@ -68,7 +68,7 @@ class AcceptTaxiMovemntEvent extends BaseEvent
     {
         $driver_id = $this->driver_id;
 
-        $driver_profile = UserProfile::where('user_id', $driver_id)->select('name', 'avatar', 'phoneNumber',)->first();
+        $driver_profile = UserProfile::where('user_id', $driver_id)->select('name', 'avatar', 'phone_number',)->first();
 
         return [
             'message' => '',

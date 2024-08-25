@@ -31,7 +31,7 @@ class CreateMovementEvent extends BaseEvent
     public function broadcastWith(): array
     {
 
-        $customer = UserProfile::where('user_id', $this->customer_id)->select('name', 'avatar', 'phoneNumber')->first();
+        $customer = UserProfile::where('user_id', $this->customer_id)->select('name', 'avatar', 'phone_number')->first();
         return [
             'index' => Movement::where('is_don', false)->count(),
             'drivers' => getReadyDrivers(),

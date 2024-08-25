@@ -23,16 +23,11 @@ class UserProfileRequest extends FormRequest
      */
     public function rules(): array
     {
-        // تلقا بشقك
-        // غير قابل للتعديل
-
-        $id = $this->id;
-
         return [
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['sometimes', 'string', 'max:255'],
             'email' => ['sometimes', 'string', 'email', 'max:255'],
-            'password' => ['sometimes', 'required', 'confirmed', Rules\Password::defaults()],
-            'phoneNumber' => ['required', 'string', new PhoneNumber],
+            'password' => ['sometimes', 'confirmed', Rules\Password::defaults()],
+            'phone_number' => ['sometimes', 'string', new PhoneNumber],
             'avatar' => ['sometimes', 'nullable', 'mimes:png,jpg,jpeg', 'max:10024'], // Example: max file size of 10MB
         ];
     }
