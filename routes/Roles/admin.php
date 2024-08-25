@@ -35,9 +35,9 @@ Route::middleware([AdminMiddleware::class])->group(function() {
 
         Route::post('/general/add-or-update','storeOrUpdate');
 
-        Route::post('/additonal/add','storeAdditionalInfo');
+        Route::post('/additional/add','storeAdditionalInfo');
 
-        Route::put('/additonal/edit/{aboutUs}','updateAdditionalInfo');
+        Route::put('/additional/edit/{aboutUs}','updateAdditionalInfo');
 
         Route::delete('/delete/{aboutUs}','destroy');
 
