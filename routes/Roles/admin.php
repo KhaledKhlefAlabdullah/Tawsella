@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutUsController;
+use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\ContactUsMessageController;
 use App\Http\Controllers\OurServiceController;
 use App\Http\Controllers\UsersController;
@@ -59,6 +60,14 @@ Route::middleware([AdminMiddleware::class])->group(function() {
      * End Contact us management
      */
 
+   /**
+    * For balances management
+    */
+    Route::ApiResource('balances',BalanceController::class)->except('show');
+    /**
+     * End balances management
+     */
+
     /**
      * For Movements view
      */
@@ -66,4 +75,5 @@ Route::middleware([AdminMiddleware::class])->group(function() {
     /**
      * End Movements
      */
+
 });

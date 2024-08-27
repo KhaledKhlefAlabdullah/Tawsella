@@ -140,4 +140,7 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
     public function starredMessages(){
         return $this->belongsToMany(Message::class, 'user_starred_messages');
     }
+    public function balances(){
+        return $this->hasMany(Balance::class, 'user_id');
+    }
 }
