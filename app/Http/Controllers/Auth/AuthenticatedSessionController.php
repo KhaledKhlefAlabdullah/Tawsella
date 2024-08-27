@@ -44,17 +44,17 @@ class AuthenticatedSessionController extends Controller
             $token = createUserToken($user, 'login-token');
 
             // Return the API response with the token and user data
-            return api_response(data: ['token' => $token, 'user' => $user], message: 'نجح تسجيل الدخول');
+            return api_response(data: ['token' => $token, 'user' => $user], message: 'Login successful');
 
         } catch (AuthenticationException $e) {
             // Return an API response with authentication errors
-            return api_response(errors: [$e->getMessage(), 'دخول غير مرخص'], message: 'بيانات الاعتماد غير صالحة', code: 401);
+            return api_response(errors: [$e->getMessage(), 'Unauthorized access'], message: 'Invalid credentials', code: 401);
         } catch (ValidationValidationException $e) {
             // Return an API response with validation errors
-            return api_response(errors: [$e->errors()], message: 'خطئ في التحقق', code: 422);
+            return api_response(errors: [$e->errors()], message: 'Validation error', code: 422);
         } catch (Exception $e) {
             // Return a generic API response for login errors
-            return api_response(errors: [$e->getMessage()], message: 'خطأ في تسجيل الدخول', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Login error', code: 500);
         }
     }
 

@@ -15,12 +15,21 @@ use App\Models\User;
 use App\Models\UserProfile;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class MovementController extends Controller
 {
+
+    /**
+     * @return JsonResponse all Movements and paths
+     */
+    public function index(){
+        $movements = Movement::with(['customer.profile','driver.profile'])->get();
+        return api_response(data: Movement::mappingMovements($movements),message: 'Successfully getting movements details');
+    }
 
     /**
      * Show the form for creating a new resource.

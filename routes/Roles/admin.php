@@ -4,6 +4,7 @@ use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\ContactUsMessageController;
 use App\Http\Controllers\OurServiceController;
 use App\Http\Controllers\UsersController;
+use App\Http\Controllers\MovementController;
 use App\Http\Middleware\RolesMiddlewares\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -21,16 +22,18 @@ Route::middleware([AdminMiddleware::class])->group(function() {
     /**
      * End Users Management
      */
-    Route::group(['prefix' => 'services', 'controller' => OurServiceController::class], function(){
 
-        Route::post('/add','store');
+    /**
+     * For Services Management
+     */
+    Route::ApiResource('services', OurServiceController::class)->except(['index', 'show']);
+    /**
+     * End Services Management
+     */
 
-        Route::post('/edit/{service}','update');
-
-        Route::delete('/delete/{service}','destroy');
-
-    });
-
+    /**
+     * For About us management
+     */
     Route::group(['prefix' => 'about-us', 'controller' => AboutUsController::class], function(){
 
         Route::post('/general/add-or-update','storeOrUpdate');
@@ -42,9 +45,25 @@ Route::middleware([AdminMiddleware::class])->group(function() {
         Route::delete('/delete/{aboutUs}','destroy');
 
     });
+    /**
+     * End About us management
+     */
 
+    /**
+     * For Contact us management
+     */
     Route::group(['prefix' => 'contact-us', 'controller' => ContactUsMessageController::class], function(){
         Route::get('/','index');
     });
+    /**
+     * End Contact us management
+     */
 
+    /**
+     * For Movements view
+     */
+    Route::get('movements', [MovementController::class,'index']);
+    /**
+     * End Movements
+     */
 });
