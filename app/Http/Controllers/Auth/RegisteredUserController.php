@@ -45,8 +45,16 @@ class RegisteredUserController extends Controller
 
             $token = createUserToken($user, 'register-token');
 
+            $userData = [
+                'id' => $user->id,
+                'email' => $user->email,
+                'name' => $user->profile->name,
+                'phone_number' => $user->profile->phone_number,
+                'avatar' => $user->profile->avatar
+            ];
+
             DB::commit();
-            return api_response(data: ['token' => $token, 'user_id' => $user->id], message: 'register-success');
+            return api_response(data: ['token' => $token, 'user' => $userData], message: 'register-success');
         } catch (Exception $e) {
 
             DB::rollBack();

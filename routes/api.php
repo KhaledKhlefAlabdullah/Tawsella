@@ -33,8 +33,3 @@ Route::middleware(['guest'])->get('/offers', [OfferController::class, 'index']);
 require __DIR__ . '/Roles/publicApis.php';
 
 require __DIR__ . '/auth.php';
-
-Route::post('test', function(){
-    $admin = getAndCheckModelById(User::class, getAdminId());
-    return send_notifications($admin,'test test');
-});
