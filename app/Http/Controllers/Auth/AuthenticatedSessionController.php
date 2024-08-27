@@ -44,17 +44,17 @@ class AuthenticatedSessionController extends Controller
             $token = createUserToken($user, 'login-token');
 
             // Return the API response with the token and user data
-            return api_response(data: ['token' => $token, 'user' => $user], message: 'نجح تسجيل الدخول');
+            return api_response(data: ['token' => $token, 'user' => $user], message: 'Login successful');
 
         } catch (AuthenticationException $e) {
             // Return an API response with authentication errors
-            return api_response(errors: [$e->getMessage(), 'دخول غير مرخص'], message: 'بيانات الاعتماد غير صالحة', code: 401);
+            return api_response(errors: [$e->getMessage(), 'Unauthorized access'], message: 'Invalid credentials', code: 401);
         } catch (ValidationValidationException $e) {
             // Return an API response with validation errors
-            return api_response(errors: [$e->errors()], message: 'خطئ في التحقق', code: 422);
+            return api_response(errors: [$e->errors()], message: 'Validation error', code: 422);
         } catch (Exception $e) {
             // Return a generic API response for login errors
-            return api_response(errors: [$e->getMessage()], message: 'خطأ في تسجيل الدخول', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Login error', code: 500);
         }
     }
 
@@ -65,7 +65,7 @@ class AuthenticatedSessionController extends Controller
     public function destroy(Request $request)
     {
         try {
-            
+
             // Delete the current access token
             $request->user()->currentAccessToken()->delete();
 
@@ -96,10 +96,14 @@ class AuthenticatedSessionController extends Controller
             // Hash the new password
             $new_password = Hash::make($request->input('new_password'));
 
-            // Check if the new password is the same as the old password
-            if ($user->password == $new_password) {
-                // Return an API response with an error message
-                return api_response(message: 'Your new password it same old password', code:400);
+            // Check if the current password matches the user's password
+            if (!Hash::check($request->input('current_password'), $user->password)) {
+                return api_response(message: 'Current password is incorrect', code: 400);
+            }
+
+            // Check if the new password is the same as the current password
+            if (Hash::check($request->input('new_password'), $user->password)) {
+                return api_response(message: 'Your new password is the same as the old password', code: 400);
             }
 
             // Update the user's password
@@ -107,10 +111,10 @@ class AuthenticatedSessionController extends Controller
             $user->save;
 
             // Return an API response indicating successful password change
-            return api_response(message: 'تم تغيير كلمة المرور بنجاح');
+            return api_response(message: 'Password changed successfully');
         } catch (Exception $e) {
             // Return an API response with an error message for failed password change
-            return api_response(errors: $e->getMessage(), message: 'هناك مشكلة في تغيير كلمة المرور الخاصة بك', code: 500);
+            return api_response(errors: $e->getMessage(), message: 'Password changeing error', code: 500);
         }
     }
 }

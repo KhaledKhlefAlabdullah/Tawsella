@@ -6,6 +6,7 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\OurServiceController;
 use Illuminate\Support\Facades\Route;
+use \App\Http\Controllers\UserProfileController;
 
 
 Route::post('/change-password', [AuthenticatedSessionController::class, 'change_password']);
@@ -20,7 +21,7 @@ Route::ApiResource('chats', ChatController::class)->except(['show', 'update']);
 Route::post('chats/new/{receiver}', [ChatController::class,'store']);
 
 /**
- * Messages Menagement
+ * Messages Management
  */
 Route::get('messages/{chat}', [MessageController::class, 'index']);
 Route::ApiResource('messages', MessageController::class)->except(['index','show']);
@@ -35,5 +36,13 @@ Route::post('/set-message-starred/{message}', [MessageController::class, 'setMes
  * End Messages Management
  */
 
+
+/**
+ * Profile Management
+ */
+Route::ApiResource('profile', UserProfileController::class)->only(['index', 'update']);
+/**
+ * Profile management End
+ */
 
 

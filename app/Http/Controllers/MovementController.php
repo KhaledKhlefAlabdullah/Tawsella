@@ -15,12 +15,21 @@ use App\Models\User;
 use App\Models\UserProfile;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class MovementController extends Controller
 {
+
+    /**
+     * @return JsonResponse all Movements and paths
+     */
+    public function index(){
+        $movements = Movement::with(['customer.profile','driver.profile'])->get();
+        return api_response(data: Movement::mappingMovements($movements),message: 'Successfully getting movements details');
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -39,9 +48,9 @@ class MovementController extends Controller
             'driver.email as driver_email',
             'customer.email as customer_email',
             'driver_profile.name as driver_name',
-            'driver_profile.phoneNumber as driver_phone',
+            'driver_profile.phone_number as driver_phone',
             'customer_profile.name as customer_name',
-            'customer_profile.phoneNumber as customer_phone',
+            'customer_profile.phone_number as customer_phone',
             'taxis.id as taxi_id',
             'taxis.car_name as car_car_name',
             'taxis.lamp_number as car_lamp_number',
@@ -70,9 +79,9 @@ class MovementController extends Controller
             'driver.email as driver_email',
             'customer.email as customer_email',
             'driver_profile.name as driver_name',
-            'driver_profile.phoneNumber as driver_phone',
+            'driver_profile.phone_number as driver_phone',
             'customer_profile.name as customer_name',
-            'customer_profile.phoneNumber as customer_phone',
+            'customer_profile.phone_number as customer_phone',
             'taxis.id as taxi_id',
             'taxis.car_name as car_car_name',
             'taxis.lamp_number as car_lamp_number',
@@ -338,7 +347,7 @@ class MovementController extends Controller
             $request = Movement::select(
                 'taxi_movements.id as request_id',
                 'up.name',
-                'up.phoneNumber',
+                'up.phone_number',
                 'taxi_movements.my_address as customer_address',
                 'taxi_movements.destination_address as destination_address',
                 'taxi_movements.gender as gender',
