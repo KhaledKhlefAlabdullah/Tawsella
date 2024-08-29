@@ -5,6 +5,7 @@ namespace App\Models\Traits;
 use App\Enums\UserType;
 use App\Models\Movement;
 use App\Models\Rating;
+use Illuminate\Database\Eloquent\Builder;
 
 trait UserTrait
 {
@@ -53,5 +54,36 @@ trait UserTrait
 
             return $mapping;
         });
+    }
+
+
+    public static function mappingNearestDrivers($drivers)
+    {
+        return $drivers->map(function ($driver) {
+            // Basic user mapping
+            return [
+                'user_id' => $driver->id,
+                'name' => $driver->profile->name ?? '',
+                'email' => $driver->email,
+                'phone_number' => $driver->profile->phone_number ?? '',
+                'avatar' => $driver->profile->avatar ?? '',
+                'user_type' => UserType::getKey($driver->user_type),
+                'gender' => $driver->profile->gender ?? '',
+                'distance' => $driver->distance.' KM',
+            ];
+        }
+        );
+    }
+
+    // Method to find users near a given point
+    public static function scopeNearLocation(Builder $query, float $latitude, float $longitude, float $radius = 10): Builder
+    {
+        return $query->selectRaw(
+            "*, (6371 * acos(cos(radians(?)) * cos(radians(last_location_latitude)) *
+            cos(radians(last_location_longitude) - radians(?)) +
+            sin(radians(?)) * sin(radians(last_location_latitude)))) AS distance",
+            [$latitude, $longitude, $latitude]
+        )->having('distance', '<=', $radius)
+            ->orderBy('distance', 'asc');
     }
 }

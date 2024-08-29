@@ -35,4 +35,32 @@ final class UserType extends Enum
         $filteredKeys = array_values($filteredKeys);
         return $filteredKeys;
     }
+
+    /**
+     * Get all service types except ADMIN and CUSTOMER.
+     *
+     * @return array
+     */
+    public static function getServicesTypes()
+    {
+        // Get all keys and values from the UserType enum
+        $allTypes = UserType::asArray();
+
+        // Define the keys to exclude
+        $keysToExclude = [self::ADMIN, self::CUSTOMER];
+
+        // Filter out the excluded keys
+        $filteredTypes = array_filter($allTypes, function ($value, $key) use ($keysToExclude) {
+            return !in_array($value, $keysToExclude, true);
+        }, ARRAY_FILTER_USE_BOTH);
+
+        // Re-index array if needed
+        $array = [
+            'Taxi' => $filteredTypes['TAXIDRIVER'],
+            'TransportCars' => $filteredTypes['TRANSPORTCARDRIVER'],
+            'Motorcycle' => $filteredTypes['MOTOROCYCLIST'],
+        ];
+
+        return $array;
+    }
 }

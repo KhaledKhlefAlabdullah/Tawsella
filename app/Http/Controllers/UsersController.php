@@ -16,37 +16,66 @@ use Illuminate\Support\Facades\DB;
 class UsersController extends Controller
 {
     /**
-     * Retrieve details of all users except admin.
-     * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-8
+     * Retrieve details of all drivers.
      * @return JsonResponse Details of users including name, email, phone number, user type,
      *               creation date, and activation status.
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-8
      */
-    public function index()
+    public function getDrivers()
     {
         try {
-            // Fetch user details
+            // Fetch paginated drivers
             $drivers = User::with('profile')
                 ->whereNotIn('user_type', [UserType::ADMIN(), UserType::CUSTOMER()])
-                ->get();
+                ->paginate(3); // Paginate drivers
 
-            $customers = User::with('profile')
-                ->where('user_type', UserType::CUSTOMER())
-                ->get();
-            // Return API response with user data
-            return api_response(data: ['customers' => User::mappingUsers($customers), 'drivers' => User::mappingUsers($drivers)], message: 'Successfully retrieved users');
+            // Return API response with user data and pagination metadata
+            return api_response(
+                data: User::mappingUsers(collect($drivers->items())),
+                message: 'Successfully retrieved drivers',
+                pagination: $drivers
+            );
         } catch (Exception $e) {
             // Return error response if an exception occurs
-            return api_response(errors: [$e->getMessage()], message: 'retrieved users error', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'retrieved drivers error', code: 500);
         }
     }
 
     /**
-     * Store a newly created user.
+     * Retrieve details of all customers.
+     * @return JsonResponse Details of users including name, email, phone number, user type,
+     *               creation date, and activation status.
      * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-7
+     * @Target T-8
+     */
+    public function getCustomers()
+    {
+        try {
+            // Fetch paginated customers
+            $customers = User::with('profile')
+                ->where('user_type', UserType::CUSTOMER())
+                ->paginate(10); // Paginate customers
+
+            // Return API response with user data and pagination metadata
+            return api_response(
+                data: User::mappingUsers(collect($customers->items())),
+                message: 'Successfully retrieved customers',
+                pagination: $customers,
+            );
+        } catch (Exception $e) {
+            // Return error response if an exception occurs
+            return api_response(errors: [$e->getMessage()], message: 'retrieved customers error', code: 500);
+        }
+    }
+
+
+    /**
+     * Store a newly created user.
      * @param UserRequest $request New user information.
      * @return JsonResponse API response confirming the creation of the user.
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-7
      */
     public function store(UserRequest $request)
     {
@@ -72,6 +101,8 @@ class UsersController extends Controller
                 'gender' => $validatedData['gender']
             ]);
 
+            $user->assignRole($validatedData['user_type']);
+
             DB::commit();
             // Return API response with newly created user data
             return api_response(data: $user->id, message: 'Successfully created user');
@@ -84,18 +115,18 @@ class UsersController extends Controller
 
     /**
      * Retrieve details of a specific user.
-     * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-9
      * @param User $user User to retrieve details.
      * @return JsonResponse $user_details with user details by user type
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-9
      */
     public function show(User $user)
     {
         try {
             // Define the initial query fields
 
-            $userDetails = User::with(['profile','customer_movements'])
-                ->where('id',$user->id)->get();
+            $userDetails = User::with(['profile', 'customer_movements'])
+                ->where('id', $user->id)->get();
 
             // Return API response with user details
             return api_response(data: User::mappingUsers($userDetails), message: 'Successfully getting user details');
@@ -108,11 +139,11 @@ class UsersController extends Controller
 
     /**
      * Update the details of a user.
-     * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-10
      * @param UserRequest $request New user information.
      * @param User $user User to update.
      * @return JsonResponse API response confirming the update of the user.
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-10
      */
     public function update(UserRequest $request, User $user)
     {
@@ -148,11 +179,11 @@ class UsersController extends Controller
 
     /**
      * Set the activation status of a user.
-     * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-12
      * @param Request $request Request containing activation status.
      * @param User $user User ID to update activation status.
      * @return JsonResponse API response confirming the activation status change.
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-12
      */
     public function setActive(UserRequest $request, User $user)
     {
@@ -178,11 +209,11 @@ class UsersController extends Controller
 
     /**
      * Get the list of user types
+     * @return \Illuminate\Http\JsonResponse
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-7
      * This method retrieves the possible user types from the UserType enum
      * an error response.
-     * @return \Illuminate\Http\JsonResponse
      */
     public function getUsersTypes()
     {
@@ -204,10 +235,10 @@ class UsersController extends Controller
 
     /**
      * Delete a user.
-     * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-11
      * @param User $user User to delete.
      * @return JsonResponse API response confirming the deletion of the user.
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-11
      */
     public function destroy(User $user)
     {

@@ -30,6 +30,10 @@ class Movement extends Model
         'is_completed',
         'is_canceled',
         'request_state',
+        'state_message',
+        'is_onKM',
+        'distance',
+        'amountPaid'
     ];
 
     public function customer()

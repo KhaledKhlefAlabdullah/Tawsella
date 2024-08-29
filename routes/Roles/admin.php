@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AboutUsController;
-use App\Http\Controllers\BalanceController;
 use App\Http\Controllers\ContactUsMessageController;
 use App\Http\Controllers\OurServiceController;
 use App\Http\Controllers\UsersController;
@@ -10,16 +9,20 @@ use App\Http\Middleware\RolesMiddlewares\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
 
-Route::middleware([AdminMiddleware::class])->group(function() {
+Route::middleware([AdminMiddleware::class])->group(function () {
 
     /**
      * Users Management
      */
-    Route::ApiResource('users', UsersController::class);
+    Route::get('users/drivers', [UsersController::class, 'getDrivers']);
 
-    Route::get('/users-types',[UsersController::class, 'getUsersTypes']);
+    Route::get('users/customers', [UsersController::class, 'getCustomers']);
 
-    Route::put('/active-unactive/{user}',[UsersController::class, 'setActive']);
+    Route::get('users/types', [UsersController::class, 'getUsersTypes']);
+
+    Route::put('users/active-inactive/{user}', [UsersController::class, 'setActive']);
+
+    Route::ApiResource('users', UsersController::class)->except('index');
     /**
      * End Users Management
      */
@@ -35,15 +38,15 @@ Route::middleware([AdminMiddleware::class])->group(function() {
     /**
      * For About us management
      */
-    Route::group(['prefix' => 'about-us', 'controller' => AboutUsController::class], function(){
+    Route::group(['prefix' => 'about-us', 'controller' => AboutUsController::class], function () {
 
-        Route::post('/general/add-or-update','storeOrUpdate');
+        Route::post('/general/add-or-update', 'storeOrUpdate');
 
-        Route::post('/additional/add','storeAdditionalInfo');
+        Route::post('/additional/add', 'storeAdditionalInfo');
 
-        Route::put('/additional/edit/{aboutUs}','updateAdditionalInfo');
+        Route::put('/additional/edit/{aboutUs}', 'updateAdditionalInfo');
 
-        Route::delete('/delete/{aboutUs}','destroy');
+        Route::delete('/delete/{aboutUs}', 'destroy');
 
     });
     /**
@@ -53,17 +56,17 @@ Route::middleware([AdminMiddleware::class])->group(function() {
     /**
      * For Contact us management
      */
-    Route::group(['prefix' => 'contact-us', 'controller' => ContactUsMessageController::class], function(){
-        Route::get('/','index');
+    Route::group(['prefix' => 'contact-us', 'controller' => ContactUsMessageController::class], function () {
+        Route::get('/', 'index');
     });
     /**
      * End Contact us management
      */
 
-   /**
-    * For balances management
-    */
-    Route::ApiResource('balances',BalanceController::class)->except('show');
+    /**
+     * For balances management
+     */
+//    Route::ApiResource('balances', BalanceController::class)->except('show');
     /**
      * End balances management
      */
@@ -71,7 +74,7 @@ Route::middleware([AdminMiddleware::class])->group(function() {
     /**
      * For Movements view
      */
-    Route::get('movements', [MovementController::class,'index']);
+    Route::get('movements', [MovementController::class, 'index']);
     /**
      * End Movements
      */
