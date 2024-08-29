@@ -5,6 +5,7 @@ namespace App\Http\Requests\Auth;
 use App\Enums\UserGender;
 use App\Enums\UserType;
 use App\Models\User;
+use App\Models\UserProfile;
 use App\Rules\PhoneNumber;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -32,7 +33,7 @@ class UserRequest extends FormRequest
         return [
             'name' => ['sometimes', 'string', 'max:255'],
             'email' => ['sometimes', 'string', 'lowercase', 'email', 'max:255', is_null($id) ? 'unique:' . User::class : Rule::unique('users')->ignore($id)],
-            'phone_number' => ['sometimes', 'nullable', 'string', new PhoneNumber],
+            'phone_number' => ['sometimes', 'nullable', 'string', new PhoneNumber, is_null($id) ? 'unique:' . UserProfile::class : Rule::unique('user_profiles')->ignore($id)],
             'user_type' => ['sometimes', 'string', Rule::in(UserType::getUsersTypes())],
             'gender' => ['sometimes', 'string', Rule::in(UserGender::getValues())],
             'password' => ['sometimes',],

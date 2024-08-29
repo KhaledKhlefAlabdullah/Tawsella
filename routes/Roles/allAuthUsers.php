@@ -6,7 +6,8 @@ use App\Http\Controllers\ChatController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\OurServiceController;
 use Illuminate\Support\Facades\Route;
-use \App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\MovementController;
 
 
 Route::post('/change-password', [AuthenticatedSessionController::class, 'change_password']);
@@ -46,3 +47,10 @@ Route::ApiResource('profile', UserProfileController::class)->only(['index', 'upd
  */
 
 
+/**
+ * View my movements
+ */
+Route::get('my-movements', [MovementController::class, 'myMovements']);
+/**
+ * End View my movements
+ */

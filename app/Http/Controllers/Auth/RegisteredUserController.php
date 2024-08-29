@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\UserType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\UserRequest;
 use App\Models\User;
@@ -40,6 +41,8 @@ class RegisteredUserController extends Controller
             ]);
 
             // event(new Registered($user));
+
+            $user->assignRole(UserType::CUSTOMER()->key);
 
             $user->sendEmailVerificationNotification(true);
 

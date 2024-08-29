@@ -2,147 +2,88 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\AcceptTaxiMovemntEvent;
-use App\Events\CreateMovementEvent;
-use App\Events\MovementFindUnFindEvent;
-use App\Events\RejectTaxiMovemntEvent;
+use App\Enums\UserType;
 use App\Http\Requests\MovementRequest;
-use App\Models\Calculations;
-
+use App\Http\Requests\NearestDriverRequest;
 use App\Models\Movement;
-use App\Models\MovementType;
 use App\Models\User;
 use App\Models\UserProfile;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class MovementController extends Controller
 {
 
     /**
+     * View list of movements
      * @return JsonResponse all Movements and paths
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-44
      */
-    public function index(){
-        $movements = Movement::with(['customer.profile','driver.profile'])->get();
-        return api_response(data: Movement::mappingMovements($movements),message: 'Successfully getting movements details');
+    public function index()
+    {
+        // Fetch paginated movements with related customer and driver profiles
+        $movements = Movement::with(['customer.profile', 'driver.profile'])->paginate(10);
+
+        // Map the movements
+        $mappedMovements = Movement::mappingMovements(collect($movements->items()));
+
+        // Return the API response with paginated data and metadata
+        return api_response(
+            data: $mappedMovements,
+            message: 'Successfully getting movements details',
+            pagination: $movements,
+        );
     }
 
     /**
-     * Show the form for creating a new resource.
+     * View list of my movements
+     * @return JsonResponse all Movements and paths
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-45
      */
-    public function currentMovement()
+    public function myMovements()
     {
-        $currentDate = Carbon::now()->format('Y-m-d');
+        $movements = Movement::with(['customer.profile', 'driver.profile'])->where('driver_id', getMyId())->orWhere('customer_id', getMyId())->paginate(10);
+        return api_response(data: Movement::mappingMovements($movements), message: 'Successfully getting movements details', pagination: $movements);
+    }
 
-        $Movement = $this->get_data([
-            'taxi_movements.id as movement_id',
-            'taxi_movements.my_address',
-            'taxi_movements.destination_address',
-            'taxi_movements.gender',
-            'taxi_movements.start_latitude',
-            'taxi_movements.start_longitude',
-            'driver.email as driver_email',
-            'customer.email as customer_email',
-            'driver_profile.name as driver_name',
-            'driver_profile.phone_number as driver_phone',
-            'customer_profile.name as customer_name',
-            'customer_profile.phone_number as customer_phone',
-            'taxis.id as taxi_id',
-            'taxis.car_name as car_car_name',
-            'taxis.lamp_number as car_lamp_number',
-            'taxis.plate_number as car_plate_number',
-            'taxi_movement_types.type',
-        ], ['taxi_movements.is_completed' => false, 'taxi_movements.is_canceled' => false, 'taxi_movements.request_state' => 'accepted'])
-            ->whereDate('taxi_movements.created_at', $currentDate)
+    /**
+     * View nearest drivers on my location
+     * @return JsonResponse all Movements and paths
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-46
+     */
+    public function nearestDrivers(NearestDriverRequest $request)
+    {
+        $validatedData = $request->validated();
+
+        $drivers = User::nearLocation($validatedData['latitude'], $validatedData['longitude'])
+            ->with('profile') // Eager load profile relationship
+            ->whereNotIn('user_type', [UserType::ADMIN(), UserType::CUSTOMER()])
+            ->where('user_type', $validatedData['movement_type'])
+            ->where('is_active', true)
             ->get();
 
-        return view('taxi_movement.currentMovement', ['Movement' => $Movement]);
-    }
-
-
-    // الدالة لعرض الطلبات المكتملة
-    public function completedRequests()
-    {
-
-        // الحصول على الطلبات المكتملة من قاعدة البيانات
-        $completedRequests = $this->get_data([
-            'taxi_movements.id as movement_id',
-            'taxi_movements.my_address',
-            'taxi_movements.destination_address',
-            'taxi_movements.gender',
-            'taxi_movements.start_latitude',
-            'taxi_movements.start_longitude',
-            'driver.email as driver_email',
-            'customer.email as customer_email',
-            'driver_profile.name as driver_name',
-            'driver_profile.phone_number as driver_phone',
-            'customer_profile.name as customer_name',
-            'customer_profile.phone_number as customer_phone',
-            'taxis.id as taxi_id',
-            'taxis.car_name as car_car_name',
-            'taxis.lamp_number as car_lamp_number',
-            'taxis.plate_number as car_plate_number',
-            'taxi_movement_types.type',
-            'c.totalPrice as price',
-            'taxi_movements.created_at as date',
-        ], ['is_completed' => true])
-            ->join('calculations as c', 'driver.id', '=', 'c.driver_id')
-            ->get();
-        // إعادة عرض النتائج في الواجهة
-        return view('taxi_movement.completedRequests', ['completedRequests' => $completedRequests]);
+        if(empty($drivers)){
+            return api_response(message: 'We apologize, there is no driver nearest to you at the moment', code: 404);
+        }
+        return api_response(data: User::mappingNearestDrivers($drivers), message: 'Successfully getting nearest drivers');
     }
 
     /**
-     * Get data by condations
+     * View list movements types
+     * @return JsonResponse all Movements and paths
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-46
      */
-    public function get_data($columns, $condations)
+    public function movementsTypes()
     {
-        try {
-
-            // Query to get requests for the current day
-            $data = Movement::select($columns)
-                ->join('users as driver', 'taxi_movements.driver_id', '=', 'driver.id')
-                ->join('users as customer', 'taxi_movements.customer_id', '=', 'customer.id')
-                ->join('user_profiles as driver_profile', 'taxi_movements.driver_id', '=', 'driver_profile.user_id')
-                ->join('user_profiles as customer_profile', 'taxi_movements.customer_id', '=', 'customer_profile.user_id')
-                ->join('taxis', 'taxi_movements.taxi_id', '=', 'taxis.id')
-                ->join('taxi_movement_types', 'taxi_movements.movement_type_id', '=', 'taxi_movement_types.id')
-                ->distinct()
-                ->where($condations);
-
-            return $data;
-        } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
-        }
-    }
-
-    /**
-     * For View map for taxi location
-     */
-    public function view_map(string $selector, string $id)
-    {
-        try {
-
-            if ($selector == 'taxi') {
-                $data = ''; // Taxi::select('taxis.last_location_latitude as lat', 'taxis.driver_id', 'taxis.last_location_longitude as long', 'up.name')
-                //     ->join('user_profiles as up', 'taxis.driver_id', '=', 'up.user_id')
-                //     ->where('taxis.id', $id)->first();
-            } else if ($selector == 'completed') {
-                $data = Movement::select('taxi_movements.driver_id as driver_id', 'taxi_movements.end_latitude as lat', 'taxi_movements.end_longitude as long', 'up.name')
-                    ->join('user_profiles as up', 'taxi_movements.customer_id', '=', 'up.user_id')
-                    ->where('taxi_movements.id', $id)->first();
-
-                return view('taxi_movement.map_completed', ['data' => $data])->with('success', 'تم عرض الخريطة بنحاح');
-            }
-
-            return view('taxi_movement.map', ['data' => $data])->with('success', 'تم عرض الخريطة بنحاح');
-        } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
-        }
+        $movementTypes = UserType::getServicesTypes();
+        return api_response(data: $movementTypes, message: 'Successfully getting movements types');
     }
 
     /**
@@ -154,14 +95,18 @@ class MovementController extends Controller
 
             $validatedData = $request->validated();
 
-            // To check if the customer have request in last 4 menites dont create new one and return message
+            // To check if the customer have request in last 4 mentees don't create new one and return message
             $existsRequest = Movement::where('customer_id', $validatedData['customer_id'])
                 ->where('created_at', '>=', Carbon::now()->subMinutes(10))
                 ->latest()
                 ->first();
 
             if ($existsRequest) {
-                return api_response(message: 'لقد قمت بطلب سيارة قبل قليل انتظر قليلاً من فضلك ريثما يتم معالجة طلبك');
+                return api_response(message: 'You have requested a car a short while ago. Please wait a moment while your request is being processed', code: 403);
+            }
+
+            if (is_null($validatedData['driver_id'])) {
+
             }
 
             $Movement = Movement::create($validatedData);

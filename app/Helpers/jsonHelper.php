@@ -29,7 +29,7 @@ if (!function_exists('api_response')) {
         }
 
         if ($pagination !== null) {
-            $response['pagination'] = $pagination;
+            $response['pagination'] = get_pagination($pagination);
         }
 
         if (!empty($meta)) {
@@ -44,6 +44,27 @@ if (!function_exists('api_response')) {
     }
 }
 
+if (!function_exists('get_pagination')) {
+    /**
+     * Generate pagination metadata from a paginated instance.
+     *
+     * @param LengthAwarePaginator $paginator
+     * @return array
+     */
+    function get_pagination($paginator)
+    {
+        return [
+            'current_page' => $paginator->currentPage(),
+            'next_page_url' => $paginator->nextPageUrl(),
+            'prev_page_url' => $paginator->previousPageUrl(),
+            'per_page' => $paginator->perPage(),
+            'total' => $paginator->total(),
+            'last_page' => $paginator->lastPage(),
+            'from' => $paginator->firstItem(),
+            'to' => $paginator->lastItem(),
+        ];
+    }
+}
 
 if (!function_exists('createUserToken')) {
     /**
