@@ -54,14 +54,14 @@ if (!function_exists('get_pagination')) {
     function get_pagination($paginator)
     {
         return [
-            'current_page' => $paginator->currentPage(),
+            'totalCount' => $paginator->total(),
             'next_page_url' => $paginator->nextPageUrl(),
             'prev_page_url' => $paginator->previousPageUrl(),
-            'per_page' => $paginator->perPage(),
-            'total' => $paginator->total(),
-            'last_page' => $paginator->lastPage(),
-            'from' => $paginator->firstItem(),
-            'to' => $paginator->lastItem(),
+            'queryPayload' => [
+                'pageNumber' => $paginator->currentPage(),
+                'pageSize' => $paginator->perPage(),
+                'totalCount' => $paginator->total()
+            ],
         ];
     }
 }
