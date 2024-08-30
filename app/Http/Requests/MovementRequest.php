@@ -37,6 +37,8 @@ class MovementRequest extends FormRequest
             'destination_address' => ['nullable', 'sometimes', 'string'],
             'start_latitude' => ['required', 'numeric'],
             'start_longitude' => ['required', 'numeric'],
+            'end_latitude' => ['required', 'numeric'],
+            'end_longitude' => ['required', 'numeric'],
             'is_onKM' => ['required', 'boolean'],
         ];
     }
