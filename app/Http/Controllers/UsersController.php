@@ -28,7 +28,7 @@ class UsersController extends Controller
             // Fetch paginated drivers
             $drivers = User::with('profile')
                 ->whereNotIn('user_type', [UserType::ADMIN(), UserType::CUSTOMER()])
-                ->paginate(3); // Paginate drivers
+                ->paginate(10); // Paginate drivers
 
             // Return API response with user data and pagination metadata
             return api_response(

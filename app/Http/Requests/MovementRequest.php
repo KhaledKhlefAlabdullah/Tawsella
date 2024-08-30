@@ -19,7 +19,7 @@ class MovementRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'customer_id' => auth()->id(),
+            'customer_id' => getMyId(),
         ]);
     }
 
@@ -33,7 +33,6 @@ class MovementRequest extends FormRequest
         return [
             'driver_id' => ['nullable', 'string', 'exists:users,id'],
             'customer_id' => ['required', 'string', 'exists:users,id'],
-            'service_type' => ['required', 'string', Rule::in(array_values(UserType::getServicesTypes()))],
             'start_address' => ['nullable', 'sometimes', 'string'],
             'destination_address' => ['nullable', 'sometimes', 'string'],
             'start_latitude' => ['required', 'numeric'],

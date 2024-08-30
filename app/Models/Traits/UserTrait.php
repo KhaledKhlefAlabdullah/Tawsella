@@ -70,6 +70,8 @@ trait UserTrait
                 'user_type' => UserType::getKey($driver->user_type),
                 'gender' => $driver->profile->gender ?? '',
                 'distance' => $driver->distance.' KM',
+                'latitude' => $driver->last_location_latitude,
+                'longitude' => $driver->last_location_longitude,
             ];
         }
         );
