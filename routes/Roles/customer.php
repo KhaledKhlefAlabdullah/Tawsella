@@ -10,6 +10,8 @@ Route::middleware([CustomerMiddleware::class])->group(function() {
         Route::get('/movements-types', 'movementsTypes');
 
         Route::get('/nearest-drivers', 'nearestDrivers');
+
+        Route::post('/', 'store');
     });
 
 

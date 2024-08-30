@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\DriverState;
 use App\Enums\UserType;
+use App\Events\Movements\RequestingTransportationServiceEvent;
 use App\Http\Requests\MovementRequest;
 use App\Http\Requests\NearestDriverRequest;
 use App\Models\Movement;
@@ -64,12 +66,12 @@ class MovementController extends Controller
         $drivers = User::nearLocation($validatedData['latitude'], $validatedData['longitude'])
             ->with('profile') // Eager load profile relationship
             ->whereNotIn('user_type', [UserType::ADMIN(), UserType::CUSTOMER()])
-            ->where('user_type', $validatedData['movement_type'])
+            ->where(['user_type' => $validatedData['movement_type'], 'driver_state' => DriverState::Ready()])
             ->where('is_active', true)
             ->get();
 
         if(empty($drivers)){
-            return api_response(message: 'We apologize, there is no driver nearest to you at the moment', code: 404);
+            return api_response(message: 'We apologize, there is no driver nearest to you at the moment', code: 204);
         }
         return api_response(data: User::mappingNearestDrivers($drivers), message: 'Successfully getting nearest drivers');
     }
@@ -87,13 +89,23 @@ class MovementController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Create movements request
+     * @return JsonResponse all Movements and paths
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-46
      */
     public function store(MovementRequest $request)
     {
         try {
 
             $validatedData = $request->validated();
+
+            if(getAndCheckModelById(User::class, $validatedData['driver_id'])->driver_stet != DriverState::Ready()){
+                return api_response(
+                    message: 'This driver is currently unavailable. Please try another driver.',
+                    code: 409
+                );
+            }
 
             // To check if the customer have request in last 4 mentees don't create new one and return message
             $existsRequest = Movement::where('customer_id', $validatedData['customer_id'])
@@ -102,34 +114,25 @@ class MovementController extends Controller
                 ->first();
 
             if ($existsRequest) {
-                return api_response(message: 'You have requested a car a short while ago. Please wait a moment while your request is being processed', code: 403);
+                return api_response(
+                    message: 'You have recently requested a car. Please wait a moment while your request is being processed.',
+                    code: 429
+                );
             }
 
-            if (is_null($validatedData['driver_id'])) {
+            $movement = Movement::create($validatedData);
 
-            }
+            event(new RequestingTransportationServiceEvent($movement));
 
-            $Movement = Movement::create($validatedData);
-
-            // 1
-            // event(new CreateMovementEvent($request->input('customer_id'),
-            // $request->input('start_latitude'),
-            // $request->input('start_longitude')));
-
-            // 2
-            CreateMovementEvent::dispatch(
-                $Movement
-            );
-
-            return api_response(message: 'تم انشاء الطلب بنجاح');
+            return api_response(message: 'Successfully creating movement');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'حدث خطأ اثناء انشاء الطلب', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Creating movements error', code: 500);
         }
     }
 
 
     /**
-     * Accept and regect Taxi movement request
+     * Accept and reject Taxi movement request
      */
     public function accept_reject_request(Request $request, string $id)
     {

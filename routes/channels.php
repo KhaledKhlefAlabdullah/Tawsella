@@ -25,3 +25,9 @@ Broadcast::channel('driver-location.{id}', function ($user, $id) {
 Broadcast::channel('customer-location.{id}', function ($user, $id) {
     return (string) $user->id === (string) $id;
 });
+
+
+// send movement request to driver
+Broadcast::channel('movement-request-to.{id}', function ($user, $id) {
+    return (string) $user->id === (string) $id;
+});
