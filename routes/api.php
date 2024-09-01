@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\OfferController;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 
@@ -25,9 +23,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group( function () {
     // admin and driver
     require __DIR__ . '/Roles/adminAndDriver.php';
 });
-
-// Let unregistred users and all auth users ecept drivers
-Route::middleware(['guest'])->get('/offers', [OfferController::class, 'index']);
 
 // for all users auth or not auth
 require __DIR__ . '/Roles/publicApis.php';

@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\MessageController;
@@ -13,8 +12,6 @@ use App\Http\Controllers\MovementController;
 Route::post('/change-password', [AuthenticatedSessionController::class, 'change_password']);
 
 Route::get('/services', [OurServiceController::class, 'index']);
-
-Route::get('/about-us', [AboutUsController::class, 'index']);
 
 // T-26
 //chats part
