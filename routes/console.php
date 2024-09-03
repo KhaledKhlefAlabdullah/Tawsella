@@ -9,3 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 
 Schedule::command('send:activation-reminders')->daily();
+Schedule::command('app:deactivate-expired-drivers')->daily();
