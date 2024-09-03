@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use App\Models\UserProfile;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UsersController extends Controller
 {
@@ -83,13 +84,18 @@ class UsersController extends Controller
             DB::beginTransaction();
             // Validate the incoming data
             $validatedData = $request->validated();
+            $userType = UserType::fromKey($validatedData['user_type']);
+
+            // check if the user is driver add expire date
+            $activationExpiredDate = ($userType != UserType::CUSTOMER()) && $validatedData['active'] ? now()->addDay(30) : null;
 
             // Create user
             $user = User::create([
                 'email' => $validatedData['email'],
-                'password' => $validatedData['password'],
-                'user_type' => UserType::fromKey($validatedData['user_type']),
+                'password' => Hash::make($validatedData['password']),
+                'user_type' => $userType,
                 'is_active' => $validatedData['active'],
+                'activation_expired_date' => $activationExpiredDate,
                 'mail_code_verified_at' => now()
             ]);
 

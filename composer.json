@@ -33,7 +33,8 @@
         },
         "files": [
             "app/Helpers/jsonHelper.php",
-            "app/Helpers/generalHelpers.php"
+            "app/Helpers/generalHelpers.php",
+            "app/Helpers/commandsHelper.php"
         ]
     },
     "autoload-dev": {

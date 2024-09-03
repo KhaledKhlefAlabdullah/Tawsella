@@ -19,17 +19,17 @@ class TawsellaNotification extends Notification implements ShouldQueue
     protected $user_profile;
     protected $message;
     protected $viaChannels;
-    protected $receivers;
+    protected $receiver;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($user_profile, string $message, $receivers, array $viaChannels = ['database'])
+    public function __construct($user_profile, string $message, $receiver, array $viaChannels = ['database'])
     {
         $this->viaChannels = $viaChannels;
         $this->user_profile = $user_profile;
         $this->message = $message;
-        $this->receivers = is_array($receivers) ? $receivers : [$receivers];
+        $this->receiver = $receiver;
     }
 
     public function via($notifiable)
@@ -88,15 +88,11 @@ class TawsellaNotification extends Notification implements ShouldQueue
     /**
      * Select the channel whill broadcaston
      *
-     * @return \Illuminate\Broadcasting\Channel|\Illuminate\Broadcasting\Channel[]
+     * @return \Illuminate\Broadcasting\Channel|\Illuminate\Broadcasting\Channel
      */
     public function broadcastOn()
     {
-        $channels = [];
-        foreach ($this->receivers as $receiver) {
-            $channels[] = new PrivateChannel('Notification-to-user.' . $receiver->id);
-        }
-        return $channels;
+        return new PrivateChannel('Notification-to-user.' . $this->receiver->id);
     }
 
     public function broadcastAs(){
