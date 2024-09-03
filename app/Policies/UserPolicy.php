@@ -74,4 +74,15 @@ class UserPolicy
     {
         return !$user->hasRole(UserType::CUSTOMER()->key);
     }
+
+    /**
+     * Check if the user is active.
+     *
+     * @param User $user The user to check.
+     * @return bool Returns true if the user is an admin or driver, false otherwise.
+     */
+    public function user_is_active(User $user): bool
+    {
+        return $user->is_active;
+    }
 }

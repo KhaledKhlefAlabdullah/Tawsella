@@ -43,6 +43,7 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
         'user_type',
         'driver_state',
         'is_active',
+        'activation_expired_date',
         'last_location_latitude',
         'last_location_longitude',
         'mail_verify_code',

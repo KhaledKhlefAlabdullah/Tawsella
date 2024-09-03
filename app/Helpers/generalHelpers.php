@@ -240,12 +240,15 @@ if (!function_exists('count_items')) {
 }
 
 
-/**
- * Send notifications
- * @param User $receiver
- * @param string $message
- */
 if (!function_exists('send_notifications')) {
+    /**
+     * Send notifications to receivers.
+     *
+     * @param array|Illuminate\Support\Collection|App\Models\User $receivers
+     * @param string $message
+     * @param array $viaChannel
+     * @throws Exception
+     */
     function send_notifications($receivers, $message, array $viaChannel = ['database'])
     {
         // Check if the user is authenticated
@@ -262,17 +265,25 @@ if (!function_exists('send_notifications')) {
                 'avatar_url' => 'images/profile_images/default_user_avatar.png'
             ];
 
-        if (!is_array($receivers)) {
-            $receivers = [$receivers];
+        if ($receivers instanceof \Illuminate\Support\Collection) {
+            $receiversArray = $receivers->all();
+        } elseif (is_array($receivers)) {
+            $receiversArray = $receivers;
+        } else {
+            $receiversArray = [$receivers];
         }
 
-        foreach ($receivers as $receiver) {
-            if (!($receiver instanceof App\Models\User)) {
+        // Validate each receiver is a User instance
+        foreach ($receiversArray as $receiver) {
+            if (!($receiver instanceof \App\Models\User)) {
                 throw new \Exception('Each receiver must be an instance of User model.');
             }
         }
 
-        Notification::send($receivers, new TawsellaNotification($user_profile, $message, $receivers, $viaChannel));
+        // Trigger event and send notifications
+        foreach ($receiversArray as $receiver) {
+            Notification::send($receiver, new TawsellaNotification($user_profile, $message, $receivers, $viaChannel));
+        }
     }
 
 }

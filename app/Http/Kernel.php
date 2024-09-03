@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\CheckUserIsActiveMiddleware;
 use App\Http\Middleware\EnsureEmailIsVerifiedByCodeMiddleware;
 use App\Http\Middleware\RolesMiddlewares\AdminMiddleware;
 use App\Http\Middleware\RolesMiddlewares\AllAuthUsersExceptDriver;
@@ -74,6 +75,7 @@ class Kernel extends HttpKernel
         'customer' => CustomerMiddleware::class,
         'exceptDrivers' => AllAuthUsersExceptDriver::class,
         'AdminAndDriver' => AdminMiddleware::class,
+        'CheckIsActive' => CheckUserIsActiveMiddleware::class,
     ];
 
 }
