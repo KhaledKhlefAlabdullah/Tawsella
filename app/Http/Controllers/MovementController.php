@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\DriverState;
 use App\Enums\UserType;
+use App\Events\Movements\AcceptTransportationServiceRequestEvent;
 use App\Events\Movements\RequestingTransportationServiceEvent;
 use App\Http\Requests\MovementRequest;
 use App\Http\Requests\NearestDriverRequest;
@@ -167,7 +168,7 @@ class MovementController extends Controller
                     'taxi_id' => $taxi_id
                 ]);
 
-                AcceptTaxiMovemntEvent::dispatch($Movement);
+                AcceptTransportationServiceRequestEvent::dispatch($Movement);
 
                 $message = 'قبول';
             } else if ($request->input('state') == 'rejected') {
