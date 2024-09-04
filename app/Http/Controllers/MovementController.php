@@ -101,7 +101,7 @@ class MovementController extends Controller
 
             $validatedData = $request->validated();
 
-            if(getAndCheckModelById(User::class, $validatedData['driver_id'])->driver_stet != DriverState::Ready()){
+            if(getAndCheckModelById(User::class, $validatedData['driver_id'])->driver_stet != DriverState::Ready){
                 return api_response(
                     message: 'This driver is currently unavailable. Please try another driver.',
                     code: 409
