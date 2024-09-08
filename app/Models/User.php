@@ -4,24 +4,23 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Interfaces\MustVerifyEmailByCode as IMustVerifyEmailByCode;
 use App\Models\Traits\HasUuid;
-
-
-use App\Models\Traits\UserTrait;
+use App\Models\Traits\MustVerifyEmailByCode;
+use App\Models\Traits\UserTraits\CustomerTait;
+use App\Models\Traits\UserTraits\DriverTait;
+use App\Models\Traits\UserTraits\DriverTrait;
+use App\Models\Traits\UserTraits\UserTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
-
-use App\Interfaces\MustVerifyEmailByCode as IMustVerifyEmailByCode;
-use App\Models\Traits\MustVerifyEmailByCode;
 use Spatie\Permission\Traits\HasRoles;
 
-use Illuminate\Database\Eloquent\Builder;
 
 class User extends Authenticatable implements IMustVerifyEmailByCode
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuid, HasRoles, UserTrait;
+    use HasApiTokens, HasFactory, Notifiable, HasUuid, HasRoles, UserTrait, DriverTrait, CustomerTait;
 
     use MustVerifyEmailByCode;
 
@@ -146,5 +145,10 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
 
     public function balances(){
         return $this->hasMany(Balance::class, 'user_id');
+    }
+
+    public function prices()
+    {
+        return $this->hasMany(UserPrice::class, 'driver_id');
     }
 }

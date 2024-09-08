@@ -1,10 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Movements;
 
-use App\Enums\UserType;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class MovementRequest extends FormRequest
 {

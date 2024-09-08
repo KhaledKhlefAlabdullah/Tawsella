@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\UserType;
+use App\Enums\UserEnums\UserType;
 use App\Http\Requests\OffersRequest;
 use App\Models\Offer;
 use Exception;
@@ -27,7 +27,7 @@ class OfferController extends Controller
 
             $response = ['valiedOffers' => $validOffers];
             $user = Auth::user();
-            if ($user && $user->hasRole(UserType::ADMIN()->key)) {
+            if ($user && $user->hasRole(UserType::Admin()->key)) {
                 $endedOffers = Offer::getOffers('<');
                 $response['endedOffers'] = $endedOffers;
             }

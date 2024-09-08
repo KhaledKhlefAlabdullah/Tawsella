@@ -2,19 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\DriverState;
-use App\Enums\UserType;
+use App\Enums\MovementRequestStatus;
+use App\Enums\UserEnums\DriverState;
+use App\Enums\UserEnums\UserType;
 use App\Events\Movements\AcceptTransportationServiceRequestEvent;
+use App\Events\Movements\RejecttTransportationServiceRequestEvent;
 use App\Events\Movements\RequestingTransportationServiceEvent;
-use App\Http\Requests\MovementRequest;
+use App\Http\Requests\Movements\AcceptOrRejectMovementRequest;
+use App\Http\Requests\Movements\MarkMovementAsCompletedRequest;
+use App\Http\Requests\Movements\MovementRequest;
 use App\Http\Requests\NearestDriverRequest;
 use App\Models\Movement;
 use App\Models\User;
 use App\Models\UserProfile;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class MovementController extends Controller
@@ -66,12 +73,12 @@ class MovementController extends Controller
 
         $drivers = User::nearLocation($validatedData['latitude'], $validatedData['longitude'])
             ->with('profile') // Eager load profile relationship
-            ->whereNotIn('user_type', [UserType::ADMIN(), UserType::CUSTOMER()])
+            ->whereNotIn('user_type', [UserType::Admin(), UserType::Customer()])
             ->where(['user_type' => $validatedData['movement_type'], 'driver_state' => DriverState::Ready()])
             ->where('is_active', true)
             ->get();
 
-        if(empty($drivers)){
+        if (empty($drivers)) {
             return api_response(message: 'We apologize, there is no driver nearest to you at the moment', code: 204);
         }
         return api_response(data: User::mappingNearestDrivers($drivers), message: 'Successfully getting nearest drivers');
@@ -101,25 +108,15 @@ class MovementController extends Controller
 
             $validatedData = $request->validated();
 
-            if(getAndCheckModelById(User::class, $validatedData['driver_id'])->driver_stet != DriverState::Ready){
+            $driver = getAndCheckModelById(User::class, $validatedData['driver_id']);
+            if ($driver->driver_stet != DriverState::Ready) {
                 return api_response(
                     message: 'This driver is currently unavailable. Please try another driver.',
                     code: 409
                 );
             }
 
-            // To check if the customer have request in last 4 mentees don't create new one and return message
-            $existsRequest = Movement::where('customer_id', $validatedData['customer_id'])
-                ->where('created_at', '>=', Carbon::now()->subMinutes(10))
-                ->latest()
-                ->first();
-
-            if ($existsRequest) {
-                return api_response(
-                    message: 'You have recently requested a car. Please wait a moment while your request is being processed.',
-                    code: 429
-                );
-            }
+            User::checkExistingCustomerMovements($validatedData['customer_id']);
 
             $movement = Movement::create($validatedData);
 
@@ -133,154 +130,100 @@ class MovementController extends Controller
 
 
     /**
-     * Accept and reject Taxi movement request
+     * Accept Taxi movement request
+     * @param Movement $movement is the request who will be accepted
+     * @return JsonResponse status message and code
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-47
      */
-    public function accept_reject_request(Request $request, string $id)
+    public function acceptMovement(Movement $movement)
     {
         try {
-            $request->validate([
-                'state' => 'sometimes|string|required|in:accepted,rejected',
-                'driver_id' => 'sometimes|nullable|string|exists:users,id',
-                'message' => 'string|sometimes|nullable'
-            ]);
+            DB::beginTransaction();
+            $state = MovementRequestStatus::Accepted;
 
-            $Movement = getAndCheckModelById(Movement::class, $id);
+            User::processMovementState($movement, $state);
 
-            $Movement->update([
-                'request_state' => $request->input('state'),
-                'is_don' => true
-            ]);
+            $driver_id = Auth::id();
+            $driver = getAndCheckModelById(User::class, $driver_id);
 
-            if ($request->input('state') == 'accepted') {
+            // Update the driver state
+            $driver->driver_state = DriverState::Reserved;
+            $driver->save();
 
-                $driver_id = $request->input('driver_id');
-
-                $driver = getAndCheckModelById(User::class, $driver_id);
-
-                $driver->update([
-                    'driver_state' => 'reserved'
-                ]);
-
-                $taxi_id = ''; //Taxi::where('driver_id', $driver_id)->first()->id;
-
-                $Movement->update([
-                    'driver_id' => $driver_id,
-                    'taxi_id' => $taxi_id
-                ]);
-
-                AcceptTransportationServiceRequestEvent::dispatch($Movement);
-
-                $message = 'قبول';
-            } else if ($request->input('state') == 'rejected') {
-
-                RejectTaxiMovemntEvent::dispatch(
-                    $Movement->customer_id,
-                    $request->input('message')
-                );
-
-                $message = 'رفض';
-            }
-
-            return redirect()->back()->with('success', 'تم ' . $message . ' الطلب بنجاح');
-        } catch (ValidationException $e) {
-            return redirect()->back()->withErrors($e->errors())->withInput();
+            AcceptTransportationServiceRequestEvent::dispatch($movement);
+            $message = 'Request Accepted Successfully';
+            DB::commit();
+            return api_response(message: $message);
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            return api_response(
+                errors: [$e->getMessage()],
+                message: 'Driver not found.',
+                code: 404
+            );
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            DB::rollBack();
+            return api_response(
+                errors: [$e->getMessage()],
+                message: 'An error occurred while accepting the request.',
+                code: 500
+            );
         }
     }
 
     /**
-     * Display the specified resource.
+     * Reject Taxi movement request
+     * @param AcceptOrRejectMovementRequest $request contains the request details
+     * @param Movement $movement is the request who will be rejected
+     * @return JsonResponse status message and code
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-48
      */
-
-    public function foundCustomer(Request $request, string $id)
+    public function rejectMovement(AcceptOrRejectMovementRequest $request, Movement $movement)
     {
         try {
-            $request->validate([
-                'state' => 'required|boolean'
-            ]);
+            $validatedData = $request->validated();
 
-            $Movement = getAndCheckModelById(Movement::class, $id);
+            $state = MovementRequestStatus::Rejected;
 
-            $driver = UserProfile::where('user_id', $Movement->driver_id)->first();
-            $customer = UserProfile::where('user_id', $Movement->customer_id)->first();
+            User::processMovementState($movement, $state, $validatedData['message']);
 
-            $d_name = $driver->name;
-            $c_name = $customer->name;
+            RejecttTransportationServiceRequestEvent::dispatch($movement);
 
-            $message = $request->input('state') ? ' السائق ' . $d_name . ' وجد العميل ' . $c_name : ' السائق' . $d_name . ' لم يعثر على العميل ' . $c_name;
-
-            MovementFindUnFindEvent::dispatch(
-                $d_name ?? 'Unknown Driver',
-                $c_name ?? 'Unknown Customer',
-                $message
-            );
-
-            if (!$request->input('state')) {
-                // حذف Movement
-                $Movement->delete();
-            }
+            $message = 'Request Rejected Successfully';
 
             return api_response(message: $message);
+
         } catch (Exception $e) {
-            return api_response(errors: $e->getMessage(), message: 'حدث خطأ في ايجاد او عدم ايجاد الزبون', code: 500);
+            return api_response(
+                errors: [$e->getMessage()],
+                message: 'An error occurred while rejecting the request.',
+                code: 500
+            );
         }
     }
-
 
     /**
      * Make the movement is completed
+     * @param MarkMovementAsCompletedRequest $request contains the end point location
+     * @param Movement $movement is the movement who will be ended
+     * @return JsonResponse status message and code
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-48
      */
-    public function makeMovementIsCompleted(Request $request, string $id)
+    public function markMovementIsCompleted(MarkMovementAsCompletedRequest $request, Movement $movement)
     {
         try {
+            $validatedData = $request->validated();
 
-            // $request->validate([
-            //     'way' => 'sometimes|numeric',
-            //     'end_lat' => 'required|numeric',
-            //     'end_lon' => 'required|numeric'
-            // ]);
+            $movement->update([
+                'is_completed' => true,
+                'end_latitude' => $validatedData['end_lat'],
+                'end_longitude' => $validatedData['end_lon']
+            ]);
 
-            // $Movement = getAndCheckModelById(Movement::class, $id);
-
-            // $Movement->update([
-            //     'is_completed' => true,
-            //     'end_latitude' => $request->input('end_lat'),
-            //     'end_longitude' => $request->input('end_lon')
-            // ]);
-
-            // $movement_type = MovementType::findOrFail($Movement->movement_type_id);
-            // if ($movement_type->is_onKM) {
-            //     $totalPrice = $request->input('way') * $movement_type->price;
-            // } else {
-            //     $totalPrice = $movement_type->price;
-            // }
-
-            // $Calculation = Calculations::create([
-            //     'driver_id' => Auth::id(),
-            //     'taxi_movement_id' => $id,
-            //     'totalPrice' => $totalPrice,
-            //     'way' => $request->input('way')
-            // ]);
-
-            // getAndCheckModelById(User::class, Auth::id())->update([
-            //     'driver_state' => 'ready'
-            // ]);
-
-            // $driverName = UserProfile::where('user_id', Auth::id())->first()->name;
-
-            // $customerName = UserProfile::where('user_id',  $Movement->customer_id)->first()->name;
-
-            // $from = $Movement->my_address;
-            // $to = $Movement->destination_address;
-
-            // MovementFindUnFindEvent::dispatch(
-            //     $driverName,
-            //     $customerName,
-            //     'تم اكمال طلب الزبون من ' . $from . 'إلى ' . $to
-            // );
-
-            // return api_response(data: $Calculation->totalPrice, message: 'success');
+            return api_response(data: '', message: 'success');
         } catch (Exception $e) {
             return api_response(errors: $e->getMessage(), message: 'error', code: 500);
         }

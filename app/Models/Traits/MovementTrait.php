@@ -1,9 +1,6 @@
 <?php
 
-namespace App\Traits;
-
-use App\Enums\UserType;
-use App\Models\User;
+namespace App\Models\Traits;
 
 trait MovementTrait
 {

@@ -1,30 +1,30 @@
 <?php declare(strict_types=1);
 
-namespace App\Enums;
+namespace App\Enums\UserEnums;
 
 use BenSampo\Enum\Enum;
 
 /**
- * @method static static ADMIN()
- * @method static static CUSTOMER()
- * @method static static TAXIDRIVER()
- * @method static static TRANSPORTCARDRIVER()
- * @method static static MOTOROCYCLIST()
+ * @method static static Admin()
+ * @method static static Customer()
+ * @method static static TaxiDriver()
+ * @method static static TransportCarDriver()
+ * @method static static Motorocyclist()
  */
 final class UserType extends Enum
 {
-    const ADMIN = 0;
-    const CUSTOMER = 1;
-    const TAXIDRIVER = 2;
-    const TRANSPORTCARDRIVER = 3;
-    const MOTOROCYCLIST = 4;
+    const Admin = 0;
+    const Customer = 1;
+    const TaxiDriver = 2;
+    const TransportCarDriver = 3;
+    const Motorocyclist = 4;
 
     public static function getUsersTypes()
     {
         $allKeys = UserType::getKeys();
 
         // Define the key to exclude
-        $keyToExclude = 'Administrator';
+        $keyToExclude = UserType::getKey(UserType::Admin);
 
         // Filter out the key
         $filteredKeys = array_filter($allKeys, function ($key) use ($keyToExclude) {
@@ -47,20 +47,13 @@ final class UserType extends Enum
         $allTypes = UserType::asArray();
 
         // Define the keys to exclude
-        $keysToExclude = [self::ADMIN, self::CUSTOMER];
+        $keysToExclude = [self::Admin, self::Customer];
 
         // Filter out the excluded keys
         $filteredTypes = array_filter($allTypes, function ($value, $key) use ($keysToExclude) {
             return !in_array($value, $keysToExclude, true);
         }, ARRAY_FILTER_USE_BOTH);
 
-        // Re-index array if needed
-        $array = [
-            'Taxi' => $filteredTypes['TAXIDRIVER'],
-            'TransportCars' => $filteredTypes['TRANSPORTCARDRIVER'],
-            'Motorcycle' => $filteredTypes['MOTOROCYCLIST'],
-        ];
-
-        return $array;
+        return $filteredTypes;
     }
 }

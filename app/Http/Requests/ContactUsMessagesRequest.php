@@ -28,11 +28,11 @@ class ContactUsMessagesRequest extends FormRequest
                 'sender_name' => $user->profile->name,
                 'email' => $user->email,
                 'phone_number' => $user->profile->phone_number,
-                'is_registredInApp' => true
+                'is_registeredInApp' => true
             ]);
         }else{
             $this->merge([
-                'is_registredInApp' => false
+                'is_registeredInApp' => false
             ]);
         }
     }
@@ -45,7 +45,7 @@ class ContactUsMessagesRequest extends FormRequest
     {
         return [
             'admin_id' => ['string', 'required', 'exists:users,id'],
-            'is_registredInApp' => ['boolean','required'],
+            'is_registeredInApp' => ['boolean','required'],
             'sender_name' => ['string', 'required', ''],
             'email' => ['string', 'required', 'email'],
             'phone_number' => ['string','nullable', new PhoneNumber],

@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Enums\UserType;
+use App\Enums\UserEnums\UserType;
 use App\Models\User;
 use Carbon\Carbon;
 use Carbon\Traits\Date;
@@ -35,7 +35,7 @@ class SendActivityExpiredReminderMails extends Command
             $fiveDaysFromNow = Carbon::now()->addDays(5)->startOfDay();
             $now = Carbon::now()->startOfDay();
 
-            $drivers = User::whereNot('user_type', UserType::CUSTOMER())
+            $drivers = User::whereNot('user_type', UserType::Customer())
                 ->whereBetween('activation_expired_date', [$now, $fiveDaysFromNow])
                 ->where('active', true) // Ensure we are only deactivating active drivers
                 ->paginate(100);

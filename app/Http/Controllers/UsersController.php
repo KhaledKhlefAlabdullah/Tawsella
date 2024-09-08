@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\UserType;
+use App\Enums\UserEnums\UserType;
 use App\Http\Requests\Auth\UserRequest;
-use App\Models\Movement;
-use App\Models\Rating;
 use App\Models\User;
 use Exception;
-use Illuminate\Http\Request;
-use App\Models\UserProfile;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -28,7 +25,7 @@ class UsersController extends Controller
         try {
             // Fetch paginated drivers
             $drivers = User::with('profile')
-                ->whereNotIn('user_type', [UserType::ADMIN(), UserType::CUSTOMER()])
+                ->whereNotIn('user_type', [UserType::Admin(), UserType::Customer()])
                 ->paginate(10); // Paginate drivers
 
             // Return API response with user data and pagination metadata
@@ -55,7 +52,7 @@ class UsersController extends Controller
         try {
             // Fetch paginated customers
             $customers = User::with('profile')
-                ->where('user_type', UserType::CUSTOMER())
+                ->where('user_type', UserType::Customer())
                 ->paginate(10); // Paginate customers
 
             // Return API response with user data and pagination metadata
@@ -87,7 +84,7 @@ class UsersController extends Controller
             $userType = UserType::fromKey($validatedData['user_type']);
 
             // check if the user is driver add expire date
-            $activationExpiredDate = ($userType != UserType::CUSTOMER()) && $validatedData['active'] ? now()->addDay(30) : null;
+            $activationExpiredDate = ($userType != UserType::Customer()) && $validatedData['active'] ? now()->addDay(30) : null;
 
             // Create user
             $user = User::create([

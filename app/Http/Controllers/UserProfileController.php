@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 use function Laravel\Prompts\error;
@@ -19,9 +20,9 @@ class UserProfileController extends Controller
 
     /**
      * Return Auth User Profile
+     * @return JsonResponse UserProfile data
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-13
-     * @return JsonResponse UserProfile data
      */
     public function index()
     {
@@ -44,22 +45,34 @@ class UserProfileController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-14
+     * Store new movement price.
      * @param UserProfileRequest $request is profile data
      * @param User $user is user to edit his profile
      * @return JsonResponse
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-14
      */
-    public function update(UserProfileRequest $request, User $user)
+
+
+    /**
+     * Update the specified resource in storage.
+     * @param UserProfileRequest $request is profile data
+     * @param User $user is user to edit his profile
+     * @return JsonResponse
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-14
+     */
+    public function update(UserProfileRequest $request)
     {
         try {
+            DB::beginTransaction();
+            $validatedData = $request->validated();
 
-            $request->validated();
+            $user = Auth::user();
 
             if (request()->has('email'))
                 $user->update([
-                    'email' => $request->input('email')
+                    'email' => $validatedData['email']
                 ]);
 
             if (request()->has('password'))
@@ -70,13 +83,13 @@ class UserProfileController extends Controller
             $userProfile = $user->profile();
 
             $userProfile->update([
-                'name' => $request->input('name'),
-                'phone_number' => $request->input('phone_number')
+                'name' => $validatedData['name'],
+                'phone_number' => $validatedData['phone_number']
             ]);
 
             if ($request->has('avatar')) {
 
-                if (!empty($request->input('avatar'))) {
+                if (!empty($validatedData['avatar'])) {
                     $avatar = $request->avatar;
 
                     $path = 'images/profiles';
@@ -94,9 +107,10 @@ class UserProfileController extends Controller
                     ]);
                 }
             }
-
+            DB::commit();
             return api_response(message: 'Profile updated successfully.');
         } catch (Exception $e) {
+            DB::rollBack();
             return api_response(errors: [$e->getMessage()], message: 'Profile updated error.', code: 500);
         }
     }
