@@ -38,7 +38,10 @@ Route::post('/set-message-starred/{message}', [MessageController::class, 'setMes
 /**
  * Profile Management
  */
-Route::ApiResource('profile', UserProfileController::class)->only(['index', 'update']);
+Route::group(['prefix' => 'profile', 'controller' => UserProfileController::class], function () {
+    Route::get('/', [UserProfileController::class, 'index']);
+    Route::post('/', [UserProfileController::class, 'update']);
+});
 /**
  * Profile management End
  */

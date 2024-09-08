@@ -2,8 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Enums\UserType;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Enums\UserEnums\UserType;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 

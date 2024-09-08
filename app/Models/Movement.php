@@ -3,11 +3,10 @@
 namespace App\Models;
 
 use App\Models\Traits\HasUuid;
-use App\Traits\MovementTrait;
+use App\Models\Traits\MovementTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\DB;
 
 class Movement extends Model
 {

@@ -2,15 +2,13 @@
 
 namespace App\Http\Requests\Auth;
 
-use App\Enums\UserGender;
-use App\Enums\UserType;
+use App\Enums\UserEnums\UserGender;
+use App\Enums\UserEnums\UserType;
 use App\Models\User;
 use App\Models\UserProfile;
 use App\Rules\PhoneNumber;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-
-use function PHPUnit\Framework\isNull;
 
 class UserRequest extends FormRequest
 {

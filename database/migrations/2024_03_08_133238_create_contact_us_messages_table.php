@@ -18,8 +18,8 @@ return new class extends Migration
             $table->string('email');
             $table->string('phone_number')->nullable();
             $table->text('message');
-            $table->boolean('is_answerd')->default(false);
-            $table->boolean('is_registredInApp')->default(false);
+            $table->boolean('is_answered')->default(false);
+            $table->boolean('is_registeredInApp')->default(false);
             $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
             $table->SoftDeletes();

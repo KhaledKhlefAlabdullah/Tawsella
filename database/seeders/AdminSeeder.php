@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Enums\UserEnums\UserType;
+use App\Models\User;
 use Illuminate\Database\Seeder;
-use \App\Models\User;
 use Illuminate\Support\Facades\Hash;
-use App\Enums\UserType;
 
 class AdminSeeder extends Seeder
 {
@@ -19,7 +18,7 @@ class AdminSeeder extends Seeder
         $user = User::create([
             'email'=>'admin@email.com',
             'password'=>$password,
-            'user_type' => UserType::ADMIN(),
+            'user_type' => UserType::Admin(),
             'mail_code_verified_at' => now(),
             'created_at' => now(),
             'updated_at' => now(),
@@ -30,6 +29,6 @@ class AdminSeeder extends Seeder
             'phone_number' => '+000000000',
         ]);
 
-        $user->assignRole(UserType::ADMIN()->key);
+        $user->assignRole(UserType::Admin()->key);
     }
 }

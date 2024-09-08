@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Enums\UserType;
+use App\Enums\UserEnums\UserType;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
@@ -33,7 +33,7 @@ class DeactivateExpiredDrivers extends Command
             // Fetch drivers with expired activations
             $now = Carbon::now();
 
-            $drivers = User::whereNot('user_type', UserType::CUSTOMER())
+            $drivers = User::whereNot('user_type', UserType::Customer())
                 ->whereDate('activation_expired_date', '<=', $now)
                 ->where('active', true) // Assuming there is an 'active' column to check if they are currently active
                 ->get();

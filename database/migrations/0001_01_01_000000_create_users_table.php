@@ -1,11 +1,9 @@
 <?php
 
-use App\Enums\DriverState;
-use App\Enums\UserType;
+use App\Enums\UserEnums\DriverState;
+use App\Enums\UserEnums\UserType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
-use \App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -20,7 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->double('points')->default(0);
             $table->string('password');
-            $table->integer('user_type')->default(UserType::CUSTOMER());
+            $table->integer('user_type')->default(UserType::Customer());
             $table->integer('driver_state')->default(DriverState::Ready());
             $table->boolean('is_active')->default(true);
             $table->double('last_location_latitude')->nullable();

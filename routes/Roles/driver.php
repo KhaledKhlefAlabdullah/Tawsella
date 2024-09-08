@@ -1,12 +1,13 @@
 <?php
 
 use App\Http\Middleware\RolesMiddlewares\DriverMiddleware;
-use Illuminate\Http\Request;
+use \App\Http\Controllers\MovementController;
 use Illuminate\Support\Facades\Route;
 
 
 Route::middleware([DriverMiddleware::class])->group(function() {
-
-
-
+    Route::group(['prefix' => 'movements', 'controller' => MovementController::class], function () {
+        Route::post('movement/accept/{movement}','acceptMovement');
+        Route::post('movement/reject/{movement}','rejectMovement');
+    });
 });

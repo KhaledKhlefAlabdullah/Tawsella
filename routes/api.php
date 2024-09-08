@@ -30,3 +30,6 @@ Route::middleware([CheckUserIsActiveMiddleware::class])->group(function () {
 });
 require __DIR__ . '/auth.php';
 
+Route::get('/', function () {
+    return \App\Enums\MovementRequestStatus::getMovementStatuses();
+});

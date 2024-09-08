@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Enums\UserType;
+use App\Enums\UserEnums\UserType;
 use App\Models\User;
 
 class UserPolicy
@@ -20,7 +20,7 @@ class UserPolicy
      */
     public function is_admin(User $user): bool
     {
-        return $user->hasRole(UserType::ADMIN()->key);
+        return $user->hasRole(UserType::Admin()->key);
     }
 
     /**
@@ -31,7 +31,7 @@ class UserPolicy
      */
     public function is_customer(User $user): bool
     {
-        return $user->hasRole(UserType::CUSTOMER()->key);
+        return $user->hasRole(UserType::Customer()->key);
     }
 
     /**
@@ -72,7 +72,7 @@ class UserPolicy
      */
     public function admin_and_driver(User $user): bool
     {
-        return !$user->hasRole(UserType::CUSTOMER()->key);
+        return !$user->hasRole(UserType::Customer()->key);
     }
 
     /**

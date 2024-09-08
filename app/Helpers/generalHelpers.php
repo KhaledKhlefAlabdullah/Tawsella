@@ -1,14 +1,12 @@
 <?php
 
 use App\Mail\TawsellaMail;
-use App\Models\User;
 use App\Notifications\TawsellaNotification;
-use Symfony\Component\Translation\Exception\NotFoundResourceException;
-
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 if (!function_exists('getAndCheckModelById')) {
     /**
@@ -118,14 +116,6 @@ if (!function_exists('storeFile')) {
 
         // return the path and file name
         return $path . '/' . $file_name;
-
-        // Store the file using Laravel's Storage facade
-        // $fileName = time() . '.' . $file->getClientOriginalExtension();
-        // $filePath = $path . '/' . $fileName;
-
-        // Storage::disk('public')->putFileAs($path, $file, $fileName);
-
-        // return $filePath;
     }
 }
 
@@ -181,7 +171,7 @@ if (!function_exists('getAdminId')) {
      */
     function getAdminId()
     {
-        $admin_id = \App\Models\User::role(\App\Enums\UserType::ADMIN()->key)->first()->id;
+        $admin_id = \App\Models\User::role(\App\Enums\UserEnums\UserType::Admin()->key)->first()->id;
         return $admin_id;
     }
 }

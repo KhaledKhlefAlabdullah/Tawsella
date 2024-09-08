@@ -20,7 +20,7 @@ class ContactUsMessage extends Model
         'message',
         'email',
         'phone_number',
-        'is_registredInApp',
+        'is_registeredInApp',
         'is_answerd'
     ];
 
