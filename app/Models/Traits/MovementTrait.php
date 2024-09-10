@@ -2,6 +2,9 @@
 
 namespace App\Models\Traits;
 
+use App\Models\Movement;
+use App\Models\User;
+
 trait MovementTrait
 {
     public static function mappingMovements($movements)
@@ -50,5 +53,17 @@ trait MovementTrait
         });
 
         return $mappedMovements;
+    }
+
+    public static function calculateAmountPaid(Movement $movement, User $driver)
+    {
+        $amountPaid = 0;
+        if($movement->is_onKM) {
+            $amountPaid = $movement->distance * $driver->KMPaid;
+        }else{
+            $amountPaid = $driver->movementPaid;
+        }
+
+        return $amountPaid;
     }
 }

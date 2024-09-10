@@ -6,6 +6,7 @@ use App\Enums\MovementRequestStatus;
 use App\Enums\UserEnums\DriverState;
 use App\Enums\UserEnums\UserType;
 use App\Events\Movements\AcceptTransportationServiceRequestEvent;
+use App\Events\Movements\DriverChangeStateEvent;
 use App\Events\Movements\RejecttTransportationServiceRequestEvent;
 use App\Events\Movements\RequestingTransportationServiceEvent;
 use App\Http\Requests\Movements\AcceptOrRejectMovementRequest;
@@ -15,6 +16,7 @@ use App\Http\Requests\NearestDriverRequest;
 use App\Models\Movement;
 use App\Models\User;
 use App\Models\UserProfile;
+use BaconQrCode\Renderer\Path\Move;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -215,50 +217,37 @@ class MovementController extends Controller
     public function markMovementIsCompleted(MarkMovementAsCompletedRequest $request, Movement $movement)
     {
         try {
+            DB::beginTransaction();
             $validatedData = $request->validated();
+            $driver = Auth::user();
+
+            $amountPaid = Movement::calculateAmountPaid($movement, $driver);
 
             $movement->update([
                 'is_completed' => true,
-                'end_latitude' => $validatedData['end_lat'],
-                'end_longitude' => $validatedData['end_lon']
+                'distance' => $validatedData['distance'],
+                'end_latitude' => $validatedData['end_latitude'],
+                'end_longitude' => $validatedData['end_longitude'],
+                'amountPaid' => $amountPaid
             ]);
 
-            return api_response(data: '', message: 'success');
+            $driver->driver_state = DriverState::Ready;
+            $driver->save();
+
+            $data = [
+                'distance' => $movement->distance,
+                'start_latitude' => $movement->start_latitude,
+                'start_longitude' => $movement->start_longitude,
+                'end_latitude' => $movement->end_latitude,
+                'end_longitude' => $movement->end_longitude,
+                'amountPaid' => $movement->amountPaid
+            ];
+            DB::commit();
+            DriverChangeStateEvent::dispatch($driver);
+            return api_response(data: $data, message: 'success');
         } catch (Exception $e) {
+            DB::rollBack();
             return api_response(errors: $e->getMessage(), message: 'error', code: 500);
-        }
-    }
-
-    /**
-     * Send Taxi movemnt request details
-     */
-    public function get_request_data(string $driver_id)
-    {
-        try {
-
-            $request = Movement::select(
-                'taxi_movements.id as request_id',
-                'up.name',
-                'up.phone_number',
-                'taxi_movements.my_address as customer_address',
-                'taxi_movements.destination_address as destination_address',
-                'taxi_movements.gender as gender',
-                'taxi_movements.start_latitude as location_lat',
-                'taxi_movements.start_longitude as location_long',
-                'tmt.type',
-                'tmt.price',
-                'tmt.is_onKM'
-            )
-                ->join('user_profiles as up', 'taxi_movements.customer_id', '=', 'up.user_id')
-                ->join('taxi_movement_types as tmt', 'taxi_movements.movement_type_id', '=', 'tmt.id')
-                ->where(['taxi_movements.driver_id' => $driver_id, 'is_completed' => false, 'is_canceled' => false, 'is_don' => true])
-                ->whereDate('taxi_movements.created_at', today())
-                ->first();
-            if ($request)
-                return api_response(data: $request, message: 'نجح في الحول على بيانات');
-            return api_response(message: 'there now data');
-        } catch (Exception $e) {
-            return api_response(errors: $e->getMessage(), message: 'حدث خطأ في الحصول على بيانات', code: 500);
         }
     }
 
