@@ -4,6 +4,7 @@ namespace App\Models\Traits;
 
 use App\Models\Movement;
 use App\Models\User;
+use Carbon\Carbon;
 
 trait MovementTrait
 {
@@ -58,12 +59,43 @@ trait MovementTrait
     public static function calculateAmountPaid(Movement $movement, User $driver)
     {
         $amountPaid = 0;
-        if($movement->is_onKM) {
+        if ($movement->is_onKM) {
             $amountPaid = $movement->distance * $driver->KMPaid;
-        }else{
+        } else {
             $amountPaid = $driver->movementPaid;
         }
 
         return $amountPaid;
+    }
+
+    public static function calculateCanceledMovements(User $user)
+    {
+        // Get today's date without time
+        $today = Carbon::today();
+
+        // Filter movements for those that are canceled and created today
+        $todayCanceledMovements = $user->movements->filter(function ($movement) use ($today) {
+            return $movement->is_canceled && $movement->created_at->isSameDay($today);
+        })->count();
+
+        if ($todayCanceledMovements >= 10) {
+            $message = 'You have exceeded the allowed number of canceled movements for today.';
+            send_notifications($user, $message, ['database','mail']);
+            return api_response(message: $message, code: 429);
+        }
+
+        // Get the date ten days ago from today
+        $tenDaysAgo = $today->copy()->subDays(10);
+
+        // Filter movements for those that are canceled and created within the last ten days
+        $lastTenDaysCanceledMovements = $user->movements->filter(function ($movement) use ($tenDaysAgo, $today) {
+            return $movement->is_canceled && $movement->created_at->between($tenDaysAgo, $today);
+        })->count();
+
+        if ($lastTenDaysCanceledMovements >= 30) {
+            $user->is_active = false;
+            $user->save();
+            return api_response(message: 'Account deactivated due to excessive cancellations in the last 10 days.', code: 423);
+        }
     }
 }

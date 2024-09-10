@@ -6,6 +6,7 @@ use App\Enums\MovementRequestStatus;
 use App\Enums\UserEnums\DriverState;
 use App\Enums\UserEnums\UserType;
 use App\Events\Movements\AcceptTransportationServiceRequestEvent;
+use App\Events\Movements\CustomerCanceledMovementEvent;
 use App\Events\Movements\DriverChangeStateEvent;
 use App\Events\Movements\RejecttTransportationServiceRequestEvent;
 use App\Events\Movements\RequestingTransportationServiceEvent;
@@ -107,6 +108,8 @@ class MovementController extends Controller
     public function store(MovementRequest $request)
     {
         try {
+
+            Movement::calculateCanceledMovements(Auth::user());
 
             $validatedData = $request->validated();
 
@@ -212,7 +215,7 @@ class MovementController extends Controller
      * @param Movement $movement is the movement who will be ended
      * @return JsonResponse status message and code
      * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-48
+     * @Target T-49
      */
     public function markMovementIsCompleted(MarkMovementAsCompletedRequest $request, Movement $movement)
     {
@@ -252,17 +255,26 @@ class MovementController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Canceled movement by customer
+     * @param Movement $movement is the movement who will be ended
+     * @return JsonResponse status message and code
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-49
      */
-    public function destroy(Movement $Movement)
+    public function canceledMovement(Movement $movement)
     {
         try {
 
-            $Movement->delete();
+            $movement->update([
+                'is_canceled' => true
+            ]);
 
-            return redirect()->back()->with('success', 'تم حذف الطلب بنجاح');
+            Movement::calculateCanceledMovements(Auth::user());
+
+            CustomerCanceledMovementEvent::dispatch($movement);
+            return api_response(message: 'Movement Canceled Successfully');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return api_response(errors: [$e->getMessage()], message: 'Movement Canceled error', code: 500);
         }
     }
 }
