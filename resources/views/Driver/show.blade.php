@@ -2,12 +2,25 @@
 
 @section('content')
     <main id="main" class="main">
-
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="pagetitle">
             <h1>Profile</h1>
             <nav>
                 <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="profile.html">All Users</a></li>
+                    <li class="breadcrumb-item"><a href="profile.html"></a></li>
                     <li class="breadcrumb-item">Users</li>
                     <li class="breadcrumb-item active">Profile</li>
                 </ol>
@@ -21,10 +34,10 @@
                     <div class="card">
                         <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
                             <div class="social-links mt-2">
-                                <img src="{{ asset('/img/person.jpg') }}"
+                                <img src="{{ asset('assets/' . $driver->avatar) }}"
                                     style="width: 150px;height: 130px;border-radius: 50%" alt="">
                             </div>
-                            <img src="assets/img/profile-img.jpg" alt="Profile" class="rounded-circle">
+
                             <h2>{{ $driver->name }} <a href="#"><i class="bi bi-award"></i></a></h2>
                             <h3>({{ $driver->role->name ?? 'driver' }})</h3>
 
@@ -42,27 +55,27 @@
 
                                 <li class="nav-item">
                                     <button class="nav-link active" data-bs-toggle="tab"
-                                        data-bs-target="#profile-overview">Overview</button>
+                                        data-bs-target="#profile-overview">ملخص بيانات</button>
                                 </li>
 
                                 <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit
-                                        Profile</button>
-                                </li>
-
-                                <li class="nav-item">
-                                    <button class="nav-link" data-bs-toggle="tab"
-                                        data-bs-target="#profile-settings">Settings</button>
+                                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">
+                                        تعديل الملف الشخصي</button>
                                 </li>
 
                                 <li class="nav-item">
                                     <button class="nav-link" data-bs-toggle="tab"
-                                        data-bs-target="#profile-change-password">Change Password</button>
+                                        data-bs-target="#profile-settings">الاعدادات</button>
+                                </li>
+
+                                <li class="nav-item">
+                                    <button class="nav-link" data-bs-toggle="tab"
+                                        data-bs-target="#profile-change-password">تغيير كلمة السر</button>
                                 </li>
                                 @can('is-admin')
                                     <li class="nav-item">
-                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-delete">Delete
-                                            Account</button>
+                                        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-delete">
+                                            حذف الحساب</button>
                                     </li>
                                 @endcan
 
@@ -71,24 +84,26 @@
 
                                 <div class="tab-pane fade show active profile-overview" id="profile-overview">
 
-                                    <h5 class="card-title">Profile Details</h5>
+                                    <h5 class="card-title">تفاصيل الملف </h5>
 
                                     <div class="row">
-                                        <div class="col-lg-3 col-md-4 label ">Full Name</div>
+                                        <div class="col-lg-3 col-md-4 label ">الاسم الكامل</div>
                                         <div class="col-lg-9 col-md-8">{{ $driver->name }}</div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Roles</div>
+                                        <div class="col-lg-3 col-md-4 label">الدور</div>
                                         <div class="col-lg-9 col-md-8">({{ $driver->role->name ?? 'driver' }})</div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Phone</div>
-                                        <div class="col-lg-9 col-md-8"><a href="https://wa.me/{{ $driver->phoneNumber }}">{{ $driver->phoneNumber }}</a></div>
+                                        <div class="col-lg-3 col-md-4 label">الهاتف</div>
+                                        <div class="col-lg-9 col-md-8"><a
+                                                href="https://wa.me/{{ $driver->phoneNumber }}">{{ $driver->phoneNumber }}</a>
+                                        </div>
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-lg-3 col-md-4 label">Email</div>
+                                        <div class="col-lg-3 col-md-4 label">الايميل</div>
                                         <div class="col-lg-9 col-md-8">{{ $driver->email }}</div>
                                     </div>
 
@@ -97,11 +112,11 @@
                                 <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
                                     <header>
                                         <h2 class="text-lg font-medium text-gray-900">
-                                            {{ __('Profile Information') }}
+                                            {{ __('معلومات الحساب') }}
                                         </h2>
 
                                         <p class="mt-1 text-sm text-gray-600">
-                                            {{ __("Update your account's profile information and email address.") }}
+                                            {{ __("قم بتحديث معلومات الملف الشخصي لحسابك وعنوان البريد الإلكتروني.") }}
                                         </p>
                                     </header>
 
@@ -109,41 +124,39 @@
                                         @csrf
                                     </form>
 
-                                    <form method="post" action="{{ route('drivers.update', $driver->id) }}" class="mt-6 space-y-6">
+                                    <form method="post" action="{{ route('drivers.update', $driver->id) }}"
+                                        class="mt-6 space-y-6">
                                         @csrf
                                         @method('put')
 
                                         <div class="mb-3">
-                                            <x-input-label for="name" :value="__('Name')" />
+                                            <x-input-label for="name" :value="__('الاسم')" />
                                             <x-text-input id="name" name="name" type="text" class="form-control"
                                                 :value="old('name', $driver->name)" required autofocus autocomplete="name" />
                                             <x-input-error class="mt-2" :messages="$errors->get('name')" />
                                         </div>
 
                                         <div class="mb-3">
-                                            <x-input-label for="email" :value="__('Email')" />
+                                            <x-input-label for="email" :value="__('البريد الالكتروني')" />
                                             <x-text-input id="email" name="email" type="email" class="form-control"
                                                 :value="old('email', $driver->email)" required autocomplete="username" />
                                             <x-input-error class="mt-2" :messages="$errors->get('email')" />
                                         </div>
-
+                                        {{-- <div class="mb-3">
+                                            <x-input-label for="avatar" :value="__('صور الملف الشخصي')" />
+                                            <input id="avatar" name="avatar" type="file" class="form-control" accept="image/*" />
+                                            <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
+                                        </div> --}}
                                         <div class="mb-3">
-                                            <x-input-label for="plate_number" :value="__('Plate Number')" />
-                                            <x-text-input id="plate_number" name="plate_number" type="text" class="form-control"
-                                                :value="old('plate_number', $driver->plate_number)" required autocomplete="plate_number" />
-                                            <x-input-error class="mt-2" :messages="$errors->get('plate_number')" />
-                                        </div>
-
-                                        <div class="mb-3">
-                                            <x-input-label for="phoneNumber" :value="__('Phone Number')" />
-                                            <x-text-input id="phoneNumber" name="phoneNumber" type="tel" class="form-control"
-                                                :value="old('phoneNumber', $driver->phoneNumber)" required autocomplete="phoneNumber" />
+                                            <x-input-label for="phoneNumber" :value="__('رقم الجوال')" />
+                                            <x-text-input id="phoneNumber" name="phoneNumber" type="tel"
+                                                class="form-control" :value="old('phoneNumber', $driver->phoneNumber)" required
+                                                autocomplete="phoneNumber" />
                                             <x-input-error class="mt-2" :messages="$errors->get('phoneNumber')" />
                                         </div>
-
                                         <div class="d-flex align-items-center gap-4">
-                                            <x-primary-button>
-                                                {{ __('Save') }}
+                                            <x-primary-button class="btn btn-success">
+                                                {{ __('حفظ') }}
                                             </x-primary-button>
 
                                             @if (session('status') === 'profile-updated')
@@ -155,51 +168,11 @@
                                         </div>
                                     </form>
 
+
                                 </div>
 
 
                                 <div class="tab-pane fade setting pt-3" id="profile-settings">
-
-                                    <!-- Settings Form -->
-                                    <form>
-                                        <div class="row mb-3">
-                                            <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Email
-                                                Notifications</label>
-                                            <div class="col-md-8 col-lg-9">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="changesMade"
-                                                        checked>
-                                                    <label class="form-check-label" for="changesMade">
-                                                        Changes made to your account
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="newProducts"
-                                                        checked>
-                                                    <label class="form-check-label" for="newProducts">
-                                                        Information on new products and services
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="proOffers">
-                                                    <label class="form-check-label" for="proOffers">
-                                                        Marketing and promo offers
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" id="securityNotify"
-                                                        checked disabled>
-                                                    <label class="form-check-label" for="securityNotify">
-                                                        Security alerts
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="text-center">
-                                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                                        </div>
-                                    </form><!-- End settings Form -->
 
                                 </div>
 
@@ -207,30 +180,22 @@
                                     <section>
                                         <header>
                                             <h2 class="text-lg font-medium text-gray-900">
-                                                {{ __('Update Password') }}
+                                                {{ __('تحديث كلمة السر') }}
                                             </h2>
 
                                             <p class="mt-1 text-sm text-gray-600">
-                                                {{ __('Ensure your account is using a long, random password to stay secure.') }}
+                                                {{ __('تأكد من أن حسابك يستخدم كلمة مرور طويلة وعشوائية ليظل آمنًا.') }}
                                             </p>
                                         </header>
 
-                                        <form method="post" action="{{ route('password.update') }}"
+                                        <form method="post" action="{{ route('password.driver.update', $driver->id) }}"
                                             class="mt-6 space-y-6">
                                             @csrf
                                             @method('put')
 
                                             <div class="mb-3">
-                                                <label for="update_password_current_password"
-                                                    class="form-label">{{ __('Current Password') }}</label>
-                                                <input id="update_password_current_password" name="current_password"
-                                                    type="password" class="form-control" autocomplete="current-password">
-                                                <x-input-error :messages="$errors->updatePassword->get('current_password')" class="mt-2" />
-                                            </div>
-
-                                            <div class="mb-3">
                                                 <label for="update_password_password"
-                                                    class="form-label">{{ __('New Password') }}</label>
+                                                    class="form-label">{{ __('كلمة المرور الجديدة') }}</label>
                                                 <input id="update_password_password" name="password" type="password"
                                                     class="form-control" autocomplete="new-password">
                                                 <x-input-error :messages="$errors->updatePassword->get('password')" class="mt-2" />
@@ -238,7 +203,7 @@
 
                                             <div class="mb-3">
                                                 <label for="update_password_password_confirmation"
-                                                    class="form-label">{{ __('Confirm Password') }}</label>
+                                                    class="form-label">{{ __('تأكيد كلمة المرور') }}</label>
                                                 <input id="update_password_password_confirmation"
                                                     name="password_confirmation" type="password" class="form-control"
                                                     autocomplete="new-password">

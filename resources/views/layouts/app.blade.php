@@ -9,10 +9,12 @@
     <meta content="" name="description">
     <meta content="" name="keywords">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Favicons -->
-    <link href="{{ asset('img/logo.png') }}" rel="icon">
-    <link href="{{ asset('img/logo.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('img/logoo.png') }}" rel="icon">
+    <link href="{{ asset('img/logoo.png') }}" rel="apple-touch-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet">
@@ -21,7 +23,6 @@
     <link
         href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <!-- Vendor CSS Files -->
     <link href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
@@ -37,15 +38,6 @@
     {{-- for view maps for every customer --}}
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <!-- Vendor CSS Files -->
-    <!-- Template Main CSS File -->
-    <!-- =======================================================
-  * Template Name: NiceAdmin
-  * Updated: Nov 17 2023 with Bootstrap v5.3.2
-  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
 
 </head>
 
@@ -77,7 +69,7 @@
         </div>
         <div class="credits">
 
-            <h6><b> الشركة المصممة : <a href="https://abdalrhmanal.github.io/CV-MY">Smart Code Enginer Company</a></b>
+            <h6><b> الشركة المصممة : <a href="">Smart Code Enginer Company</a></b>
             </h6>
         </div>
     </footer><!-- End Footer -->
@@ -99,7 +91,26 @@
     <script src="{{ asset('js/darkmode.js') }}"></script>
     <script src="{{ asset('js/darkmode-config.js') }}"></script>
     <script src="path/to/darkmode.js"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete(deletedroute) {
+            Swal.fire({
+                title: 'هل أنت متأكد؟',
+                text: "لن يمكنك التراجع عن هذا الإجراء!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'نعم، احذفه!',
+                cancelButtonText: 'إلغاء'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById(`deleteForm${deletedroute}`).submit();
+                }
+            });
+            return false; // Prevent default form submission
+        }
+    </script>
 
     <!-- Template Main JS File -->
     <script src="{{ asset('js/main.js') }}"></script>
@@ -114,16 +125,20 @@
                     var driver = event.driver;
                     var customer = event.customer;
                     var message = event.message;
-                    console.log(driver);
-                    console.log(customer);
-                    console.log(message);
 
-                    alert(driver);
-                }); 
-        },200); 
+                    Swal.fire({
+                        position: "top-end",
+                        title: message,
+                        showConfirmButton: false,
+                        timer: 2500
+                    });
+
+                });
+        }, 200);
     </script>
     <script>
         setTimeout(() => {
+
             var userId = <?php echo json_encode(auth()->id()); ?>;
             Echo.private(`Taxi-movement.${userId}`)
                 .listen('.App\\Events\\CreateTaxiMovementEvent', (event) => {
@@ -136,9 +151,17 @@
                     var gender = event.gender;
                     var customer_address = event.customer_address;
                     var destnation_address = event.destnation_address;
+                    var time = event.time;
 
+                    Swal.fire({
+                        position: "top-end",
+                        title: "لقد وصل طلب جديد",
+                        showConfirmButton: false,
+                        timer: 2000
+                    });
                     var newItem = document.createElement('li');
                     newItem.innerHTML = `
+
             <li id='item${index}'>
                 <div class="card">
                     <h2>طلب جديد</h2>
@@ -164,7 +187,9 @@
                             </div>
                             <div class="col-lg-6 mb-6">
                                 <div class="text-center card-content" style="margin: 10px;">
-                                    <h4>جنس العميل: ${gender}</h4>
+                                    <h4>الجنس: <span
+                                                        style="color: ${ gender == 'male' ? '#4154f1' : 'pink' }">${ gender == 'male' ? 'ذكر' : 'انثى' }</span>
+                                                </h4>
                                 </div>
                             </div>
                         </div>
@@ -182,14 +207,23 @@
                         </div>
                     </div>
                     <hr>
+                        <div class="col-lg-6 mb-6">
+
+                            <div class="text-center card-content" style="margin: 10px;">
+                                <h4>التوقيت: ${time}</h4>
+                            </div>
+                        </div>
+                    <hr>
                     <div id="map${index}" class="map"></div>
                     <hr>
-                    <div id="buttons${index}" class="card row" style="display: block;">
-                                    <button id='accept${index}'
+                    <div id="buttons${index}" class="p-4 w-100" style="display: block;">
+                                    <button id='accept${index}' class="btn rounded btn-success"
                                         onclick="showAcceptForm(${index})">قبول</button>
-                                    <button id='reject${index}'
+                                    <button id='reject${index}' class="btn rounded btn-danger"
                                         onclick="showRejectForm(${index})">رفض</button>
                                 </div>
+                                <button id="cancel${index}" class="btn" style="display: none;"
+                                    onclick="showButtons(${index})"><i class="fa-solid fa-x"></i></button>
 
                                 <form id="accept-form${index}" method="POST"
                                     action="{{ url('/accept-reject-request/${request_id}') }}"
@@ -206,10 +240,10 @@
                                     @endif
                                     <div id="driver-field${index}" class="form-group">
                                         <label for="driver_id" class="form-label">اسم السائق:</label><br>
-                                    
-                                                <select id="driver_id" name="driver_id" class="form-input">
+
+                                                <select id="driver_id" name="driver_id" class="form-input" required>
                                         <option value="">اختر السائق</option>
-                                        ${drivers.map(driver => `<option value="${driver.id}">${driver.name}</option>`).join('')}
+                                        ${drivers.map(driver => driver.gender == gender ? `<option value="${driver.id}">${driver.name}</option> ` : '').join('')}
                                         </select>
                                     </div>
                                     <!-- Hidden input field for static state -->
@@ -232,17 +266,16 @@
                                     @endif
                                     <div id="reason-field${index}" class="form-group">
                                         <label for="reason" class="form-label">السبب (اختياري):</label><br>
-                                        <textarea id="reason${index}" name="message" class="form-input" rows="4" cols="50">{{ old('message') }}</textarea>
+                                        <textarea id="reason${index}" name="message" class="form-input" rows="4" cols="50" required>{{ old('message') }}</textarea>
                                     </div>
                                     <!-- Hidden input field for static state -->
                                     <input type="hidden" name="state" value="rejected">
                                     <input type="submit" class="form-submit">
                                 </form>
                     </div>
-                 
+
                     </li>
                     `;
-                    console.log(55);
 
                     document.getElementById('requests-container').appendChild(newItem);
 
@@ -260,32 +293,40 @@
                                 // You can customize the popup content as needed
 
                                 function showAcceptForm(index) {
-                                    document.getElementById('accept' + index).style.display = 'none';
-                                    document.getElementById('reject' + index).style.display = 'none';
                                     document.getElementById('accept-form' + index).style.display = 'block';
                                     document.getElementById('reject-form' + index).style.display = 'none';
                                     document.getElementById('buttons' + index).style.display = 'none';
+                                    document.getElementById('cancel' + index).style.display = 'block';
+
                                 }
 
                                 function showRejectForm(index) {
-                                    document.getElementById('accept' + index).style.display = 'none';
-                                    document.getElementById('reject' + index).style.display = 'none';
                                     document.getElementById('accept-form' + index).style.display = 'none';
                                     document.getElementById('reject-form' + index).style.display = 'block';
                                     document.getElementById('buttons' + index).style.display = 'none';
+                                    document.getElementById('cancel' + index).style.display = 'block';
+
+                                }
+
+                                function showButtons(index){
+                                    document.getElementById('accept-form' + index).style.display = 'none';
+                                    document.getElementById('reject-form' + index).style.display = 'none';
+                                    document.getElementById('buttons' + index).style.display = 'block';
+                                    document.getElementById('cancel' + index).style.display = 'none';
                                 }
                                 `;
-                               
+
 
                     // Get the HTML element to append the script to
                     var item = document.getElementById(`item${index}`);
 
                     // Append the script element to the HTML element
                     item.appendChild(script);
+
                 });
         }, 1000); // Set a delay of 1 second (1000 milliseconds) to ensure proper rendering after the page load
     </script>
-  
+
 </body>
 
 </html>

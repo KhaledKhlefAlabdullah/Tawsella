@@ -2,8 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Taxi;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules;
 
 class UserProfileRequest extends FormRequest
 {
@@ -22,14 +23,17 @@ class UserProfileRequest extends FormRequest
      */
     public function rules(): array
     {
+// تلقا بشقك 
+// غير قابل للتعديل
+
+        $id = $this->id;
+
         return [
-            'name' => ['required', 'sometimes', 'string'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'phoneNumber' => ['required', 'sometimes', 'string', 'regex:/^\+?[0-9]{9,20}$/', 'unique:user_profiles,phoneNumber'],
-            'carPlatNumber' => ['sometimes', 'string', 'unique:car_table,plat_number'],
-            'carLampNumber' => ['sometimes', 'string'],
-            'avatar' => ['sometimes', 'image', 'mimes:png,jpg,gif']
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['sometimes', 'string', 'email', 'max:255'],
+            'password' => ['sometimes','required', 'confirmed', Rules\Password::defaults()],
+            'phoneNumber' => ['required', 'string', 'regex:/^(00|\+)[0-9]{9,20}$/'],
+            'avatar' => ['sometimes', 'nullable', 'mimes:png,jpg,jpeg', 'max:10024'], // Example: max file size of 10MB
         ];
     }
-    
 }

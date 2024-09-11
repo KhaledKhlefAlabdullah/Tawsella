@@ -13,17 +13,16 @@ return new class extends Migration
     {
         Schema::create('taxis', function (Blueprint $table) {
             $table->uuid('id')->primary()->unique();
-            $table->string('driver_id');
+            $table->string('driver_id')->nullable();
             $table->string('car_name');
-            $table->string('lamp_number');
-            $table->string('plate_number');
+            $table->string('lamp_number')->unique()->nullable();
+            $table->string('plate_number')->unique()->nullable();
             $table->string('car_detailes');
             $table->double('last_location_latitude')->nullable();
             $table->double('last_location_longitude')->nullable();
             $table->foreign('driver_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
-            $table->softDeletes();
-
+            $table->SoftDeletes();
         });
     }
 

@@ -3,7 +3,22 @@
 @extends('layouts.app')
 
 @section('content')
+
     <main class="main" id="main">
+        @if (session('success'))
+            <div class="alert alert-success">
+                {{ session('success') }}
+            </div>
+        @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="container">
             <div class="row">
                 <div class="col-md-8 center">
@@ -16,11 +31,15 @@
                                 @method('PUT')
 
                                 <!-- اسم السائق -->
-                                <div class="mb-3">
-                                    <label for="driver_id" class="form-label">معرف السائق</label>
-                                    <input type="text" class="form-control" id="driver_id" name="driver_id"
-                                        value="{{ $taxi->driver_id }}" required>
-                                </div>
+                                <label for="driver_id" class="form-label">السائق</label>
+                                <select class="form-select" id="driver_id" name="driver_id" required>
+                                    @foreach ($drivers as $driver)
+                                        <option value="{{ $driver->id }}"
+                                            {{ $taxi->driver_id == $driver->id ? 'selected' : '' }}>
+                                            {{ $driver->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
 
                                 <!-- اسم السيارة -->
                                 <div class="mb-3">

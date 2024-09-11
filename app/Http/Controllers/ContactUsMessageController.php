@@ -24,7 +24,7 @@ class ContactUsMessageController extends Controller
 
             return view('contctus', [$contct_us]);
         } catch (Exception $e) {
-            return abort(500,'there error in getting constct us messages');
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -39,9 +39,9 @@ class ContactUsMessageController extends Controller
 
             ContactUsMessage::create($validatedData);
 
-            return api_response(message: 'send contact us message success');
+            return api_response(message: 'أرسل رسالة اتصل بنا بنجاح');
         } catch (Exception $e) {
-            return api_response(errors: $e->getMessage(), message: 'send contact us message error', code: 500);
+            return api_response(errors: $e->getMessage(), message: 'إرسال خطأ في رسالة اتصل بنا', code: 500);
         }
     }
 
@@ -56,12 +56,12 @@ class ContactUsMessageController extends Controller
                 'is_answerd' => true
             ]);
 
-            // this to send request by the email to the cutomer 
+            // this to send request by the email to the cutomer
             Mail::to($contactUsMessage->email)->send(new ContactUsMails($request->message));
 
             return view();
         } catch (Exception $e) {
-            return abort(500,'there error in answered the contact us message');
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -76,7 +76,7 @@ class ContactUsMessageController extends Controller
 
             return view('contact_us.show', ['contactDetails' => $contactDetails]);
         } catch (Exception $e) {
-            return abort(500, 'There was an error in getting the contact us message details with error'.$e->getMessage());
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -93,7 +93,7 @@ class ContactUsMessageController extends Controller
 
         }
         catch(Exception $e){
-            return abort(500,'there error in deleting the contact us message');
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 }

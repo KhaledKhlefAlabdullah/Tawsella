@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('movement_type_id');
             $table->string('my_address')->nullable();
             $table->string('destnation_address')->nullable();
-            $table->enum('gender',['male','femail']);
+            $table->enum('gender',['male','female']);
             $table->double('start_latitude');
             $table->double('start_longitude');
             $table->double('end_latitude')->nullable();
@@ -33,8 +33,7 @@ return new class extends Migration
             $table->foreign('taxi_id')->references('id')->on('taxis')->onDelete('cascade');
             $table->foreign('movement_type_id')->references('id')->on('taxi_movement_types')->onDelete('cascade');
             $table->timestamps();
-            $table->softDeletes();
-
+            $table->SoftDeletes();
         });
     }
 

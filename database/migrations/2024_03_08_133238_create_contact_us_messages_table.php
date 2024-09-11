@@ -20,8 +20,7 @@ return new class extends Migration
             $table->boolean('is_answerd')->default(false);
             $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
-            $table->softDeletes();
-        });
+            $table->SoftDeletes();        });
     }
 
     /**

@@ -7,6 +7,15 @@
                 {{ session('success') }}
             </div>
         @endif
+        @if ($errors->any())
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
 
         <div class="pagetitle">
             <h1>لوحة التحكم</h1>
@@ -23,29 +32,93 @@
         <section class="section dashboard">
             <div class="container">
                 <div class="row">
-                    <!-- Left side columns -->
-                    <div class="col-lg-12 mb-6 card" style="padding: 10px;">
-                        <div class="text-center card-content">
-                            <h4>مجموع مبالغ الطلبات</h4>
+                    <!-- Revenue Card -->
+                    <div class="col-xxl-6 col-md-6">
+                        <div class="card info-card revenue-card">
+                            <div class="card-body">
+                                <h5 class="card-title">مبالغ الطلبات <span>| مجموع </span></h5>
+
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-currency-dollar"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h6>LT {{ $calcolations }}</h6>
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
-                    </div>
-                    <div class="col-lg-12 mb-6 card"style="padding: 10px;">
-                        <div class="text-center card-content">
-                            <h4>عدد الطلبات</h4>
+                    </div><!-- End Revenue Card -->
+                    <!-- Customers Card -->
+                    <div class="col-xxl-6 col-xl-6">
+
+                        <div class="card info-card customers-card">
+
+                            <div class="card-body">
+                                <h5 class="card-title">الطلبات المكتملة <span>| عدد</span></h5>
+
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-bookmark-star-fill"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h6>{{ $requests }}</h6>
+                                        <hr>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-lg-12 mb-6 card"style="padding: 10px;">
-                        <div class="text-center card-content">
-                            <h4>عدد السائقين</h4>
-                            <p>{{ $totalDrivers }}</p>
+
+                    </div><!-- End Customers Card -->
+
+                    <!-- Customers Card -->
+                    <div class="col-xxl-6 col-xl-6">
+
+                        <div class="card info-card customers-card">
+
+                            <div class="card-body">
+                                <h5 class="card-title">السائقين <span>| عدد</span></h5>
+
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-people"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h6>{{ $totalDrivers }}</h6>
+                                        <hr>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-lg-12 mb-6 card"style="padding: 10px;">
-                        <div class="text-center card-content">
-                            <h4>عدد السيارات</h4>
-                            <p>{{ $totalTaxi }}</p>
+
+                    </div><!-- End Customers Card -->
+
+                    <!-- Customers Card -->
+                    <div class="col-xxl-6 col-xl-6">
+
+                        <div class="card info-card customers-card">
+
+                            <div class="card-body">
+                                <h5 class="card-title">السيارات <span>| عدد</span></h5>
+
+                                <div class="d-flex align-items-center">
+                                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-taxi-front-fill"></i>
+                                    </div>
+                                    <div class="ps-3">
+                                        <h6>{{ $totalTaxi }}</h6>
+                                        <hr>
+                                    </div>
+                                </div>
+
+                            </div>
                         </div>
-                    </div>
+
+                    </div><!-- End Customers Card -->
                 </div>
 
                 <ul id="requests-container">
@@ -77,7 +150,7 @@
                                         <div class="col-lg-6 mb-6">
                                             <div class="text-center card-content" style="margin: 10px;">
                                                 <h4>الجنس: <span
-                                                        style="color: {{ $lifeTaxiMovement->gender ? '#4154f1' : 'pink' }}">{{ $lifeTaxiMovement->gender }}</span>
+                                                        style="color: {{ $lifeTaxiMovement->gender == 'male' ? '#4154f1' : 'pink' }}">{{ $lifeTaxiMovement->gender == 'male' ? 'ذكر' : 'انثى' }}</span>
                                                 </h4>
                                             </div>
                                         </div>
@@ -96,6 +169,14 @@
                                     </div>
                                 </div>
                                 <hr>
+                                <div class="col-lg-6 mb-6">
+
+                                    <div class="text-center card-content" style="margin: 10px;">
+                                        <h4>التوقيت: {{ date('Y-m-d -- h:i A', strtotime($lifeTaxiMovement->time . ' +3 hours')) }}</h4>
+                                    </div>
+
+                                </div>
+                                <hr>
                                 <div id="map{{ $loop->index }}" class="map"></div>
                                 <hr>
 
@@ -104,11 +185,9 @@
                                         onclick="showAcceptForm({{ $loop->index }})">قبول</button>
                                     <button id='reject{{ $loop->index }}' class="btn rounded btn-danger "
                                         onclick="showRejectForm({{ $loop->index }})">رفض</button>
-
-                                    <button id='reject{{ $loop->index }}' class="btn rounded btn-danger "
-                                        onclick="showRejectForm({{ $loop->index }})">رفض</button>
                                 </div>
-
+                                <button id='cancel{{ $loop->index }}' class="btn" style="display: none;"
+                                    onclick="showButtons({{ $loop->index }})"><i class="fa-solid fa-x"></i></button>
                                 <form id="accept-form{{ $loop->index }}" method="POST"
                                     action="{{ route('accept.reject.request', ['id' => $lifeTaxiMovement->id]) }}"
                                     style="display: none;">
@@ -124,10 +203,13 @@
                                     @endif
                                     <div id="driver-field{{ $loop->index }}" class="form-group">
                                         <label for="driver_id" class="form-label">اسم السائق:</label><br>
-                                        <select id="driver_id{{ $loop->index }}" name="driver_id" class="form-input">
+                                        <select id="driver_id{{ $loop->index }}" name="driver_id" class="form-input"
+                                            required>
                                             <option value="">اختر السائق</option>
                                             @foreach ($drivers as $driver)
-                                                <option value="{{ $driver->id }}">{{ $driver->name }}</option>
+                                                @if ($driver->gender == $lifeTaxiMovement->gender)
+                                                    <option value="{{ $driver->id }}">{{ $driver->name }}</option>
+                                                @endif
                                             @endforeach
                                         </select>
                                     </div>
@@ -150,8 +232,8 @@
                                         </div>
                                     @endif
                                     <div id="reason-field{{ $loop->index }}" class="form-group">
-                                        <label for="reason" class="form-label">السبب (اختياري):</label><br>
-                                        <textarea id="reason{{ $loop->index }}" name="message" class="form-input" rows="4" cols="50">{{ old('message') }}</textarea>
+                                        <label for="reason" class="form-label">السبب:</label><br>
+                                        <textarea id="reason{{ $loop->index }}" name="message" class="form-input" rows="4" cols="50" required>{{ old('message') }}</textarea>
                                     </div>
                                     <!-- Hidden input field for static state -->
                                     <input type="hidden" name="state" value="rejected">
@@ -174,19 +256,25 @@
                                 // You can customize the popup content as needed
 
                                 function showAcceptForm(index) {
-                                    document.getElementById('accept' + index).style.display = 'none';
-                                    document.getElementById('reject' + index).style.display = 'none';
                                     document.getElementById('accept-form' + index).style.display = 'block';
                                     document.getElementById('reject-form' + index).style.display = 'none';
                                     document.getElementById('buttons' + index).style.display = 'none';
+                                    document.getElementById('cancel' + index).style.display = 'block';
+
                                 }
 
                                 function showRejectForm(index) {
-                                    document.getElementById('accept' + index).style.display = 'none';
-                                    document.getElementById('reject' + index).style.display = 'none';
                                     document.getElementById('accept-form' + index).style.display = 'none';
                                     document.getElementById('reject-form' + index).style.display = 'block';
                                     document.getElementById('buttons' + index).style.display = 'none';
+                                    document.getElementById('cancel' + index).style.display = 'block';
+                                }
+
+                                function showButtons(index) {
+                                    document.getElementById('accept-form' + index).style.display = 'none';
+                                    document.getElementById('reject-form' + index).style.display = 'none';
+                                    document.getElementById('buttons' + index).style.display = 'block';
+                                    document.getElementById('cancel' + index).style.display = 'none';
                                 }
                             </script>
 

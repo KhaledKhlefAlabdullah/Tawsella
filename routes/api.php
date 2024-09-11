@@ -10,6 +10,9 @@ use App\Http\Controllers\UserProfileController;
 use App\Models\AboutUs;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DriversController;
+use App\Http\Controllers\TaxiController;
+use App\Models\User;
+use Illuminate\Support\Facades\Broadcast;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,10 +24,14 @@ use App\Http\Controllers\DriversController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::post('/found-customer/{id}', [TaxiMovementController::class, 'foundCostumer'])->name('found.customer');
 
+Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
+Route::post('/found-customer/{id}', [TaxiMovementController::class, 'foundCustomer']);
 
+Route::get('/driver-request/{id}', [TaxiMovementController::class, 'get_request_data']);
+
+Route::post('/get-taxi-location/{driver_id}',[TaxiController::class,'getTaxiLocation']);
 
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -56,10 +63,21 @@ Route::group(['prefix' => 'info'], function () {
     Route::get('/addition', [AboutUsController::class, 'get_addition_information']);
 });
 
+Route::get('/movement-types', [TaxiMovementTypeController::class, 'index']);
+
+Route::get('/get-car', [TaxiMovementTypeController::class, 'getMovement3']);
 
 Route::get('/offers', [OfferController::class, 'index']);
 
 Route::post('/contact-us', [ContactUsMessageController::class, 'store']);
+
+Route::get('/phone',function(){
+
+    $phone = User::where('user_type','admin')->first()->user_profile->phoneNumber ?? '+3520000000';
+    
+    return $phone;
+});
+
 
 require __DIR__ . '/auth.php';
 

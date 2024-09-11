@@ -16,11 +16,12 @@ return new class extends Migration
             $table->string('driver_id');
             $table->string('taxi_movement_id');
             $table->float('totalPrice');
-            $table->float('way');
+            $table->float('way')->nullable();
+            $table->boolean('is_bring')->default(false);
             $table->foreign('driver_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('taxi_movement_id')->references('id')->on('taxi_movements')->onDelete('cascade');
             $table->timestamps();
-            $table->softDeletes();
+            $table->SoftDeletes();          
         });
     }
 

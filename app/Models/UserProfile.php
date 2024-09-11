@@ -6,7 +6,6 @@ use App\Models\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
 class UserProfile extends Model
 {
     use HasFactory,HasUuid,SoftDeletes;
@@ -27,6 +26,7 @@ class UserProfile extends Model
         'name',
         'avatar',
         'phoneNumber',
+        'gender'
     ];
 
     public function user(){

@@ -19,25 +19,25 @@ class AboutUsController extends Controller
             $aboutUsRecords = AboutUs::select('title', 'description', 'complaints_number')->first();
 
             if (request()->wantsJson()) {
-                return api_response(data: $aboutUsRecords, message: 'successfully getting about us details');
+                return api_response(data: $aboutUsRecords, message: 'نجحنا في الحصول على التفاصيل عنا');
             }
-                      
+
             $additional_info = AboutUs::where('is_general', false)->select('title', 'description')->get();
 
             return view('aboutus.index', ['aboutUsRecords' => $aboutUsRecords, 'additional_info' => $additional_info]);
 
         } catch (Exception $e) {
             if (request()->wantsJson()) {
-                return api_response(errors: [$e->getMessage()], message: 'successfully getting about us details', code: 500);
+                return api_response(errors: [$e->getMessage()], message: 'نجحنا في الحصول على التفاصيل عنا', code: 500);
             }
 
-            return abort(500,'there error in getting the data');
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
 
     /**
-     * Get the additional information 
+     * Get the additional information
      */
     public function get_addition_information()
     {
@@ -45,9 +45,9 @@ class AboutUsController extends Controller
 
             $data = AboutUs::where('is_general', false)->select('title', 'description')->get();
 
-            return api_response(data: $data, message: 'getting additional information success');
+            return api_response(data: $data, message: 'الحصول على معلومات إضافية ناجحة');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'getting additional information error', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'الحصول على خطأ معلومات إضافية', code: 500);
         }
     }
 
@@ -88,7 +88,7 @@ class AboutUsController extends Controller
 
             return redirect()->route('aboutus.index')->with('success', 'تم إنشاء نبذة عنا بنجاح.');
         } catch (Exception $e) {
-            return abort(500,'there error in getting the data');
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -102,7 +102,7 @@ class AboutUsController extends Controller
     }
 
     /**
-     * Create Additional info records 
+     * Create Additional info records
      */
     public function store_additional_info(AboutUsRequest $request){
         try{
@@ -111,11 +111,11 @@ class AboutUsController extends Controller
 
             AboutUs::create($validatedData);
 
-            return redirect()->route('aboutus.index')->with('success', 'تم إنشاء نبذة عنا بنجاح.');
+            return redirect()->route('aboutus.index')->with('success', 'تم إضافة معلومات إضافية بنجاح.');
 
         }
         catch(Exception $e){
-            return abort(500,'there error in add new additional info');
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -127,20 +127,20 @@ class AboutUsController extends Controller
     }
 
      /**
-     * Update Additional info records 
+     * Update Additional info records
      */
-    public function update_additional_info(AboutUsRequest $request){
+    public function update_additional_info(AboutUsRequest $request, AboutUs $aboutUs){
         try{
 
             $validatedData = $request->validated();
 
-            AboutUs::create($validatedData);
+            $aboutUs->update($validatedData);
 
-            return redirect()->route('aboutus.index')->with('success', 'تم إنشاء نبذة عنا بنجاح.');
+            return redirect()->route('aboutus.index')->with('success', 'تم تعديل البيانات بنجاح.');
 
         }
         catch(Exception $e){
-            return abort(500,'there error in add new additional info');
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 
@@ -153,7 +153,7 @@ class AboutUsController extends Controller
             $aboutUs->delete();
             return redirect()->route('aboutus.index')->with('success', 'تم حذف نبذة عنا بنجاح.');
         } catch (Exception $e) {
-            return abort(500,'there error in deleting aboutus data');
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
         }
     }
 }

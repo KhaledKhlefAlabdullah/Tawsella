@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Taxi;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Mockery\Generator\Method;
 
 class TaxiRequest extends FormRequest
 {
@@ -21,12 +24,26 @@ class TaxiRequest extends FormRequest
      */
     public function rules(): array
     {
+        
+        if (request()->isMethod('put')) {
+            $id = $this->id;
+            return [
+                'driver_id' => ['required', 'exists:users,id'],
+                'car_name' => ['required', 'string'],
+                'lamp_number' => ['required', 'string'],
+                //  Rule::unique('taxis', 'lamp_number')->ignore($id,'id')],
+                'plate_number' => ['required', 'string'],
+                //  Rule::unique('taxis', 'plate_number')->ignore($id,'id')],
+                'car_detailes' => ['nullable', 'string']
+            ];
+        }
+
         return [
-            'driver_id' => 'required|exists:users,id',
-            'car_name' => 'required|string',
-            'lamp_number' => 'required|string',
-            'plate_number' => 'required|string|unique:taxis,plate_number',
-            'car_detailes' => 'nullable|string',
+            'driver_id' => ['required','exists:users,id'],
+            'car_name' => ['required','string'],
+            'lamp_number' => ['required','string'],
+            'plate_number' => ['required','string'],
+            'car_detailes' => ['nullable','string']
         ];
     }
 }

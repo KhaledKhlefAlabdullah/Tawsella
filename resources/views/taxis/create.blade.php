@@ -7,7 +7,20 @@
                 <div class="col-md-8">
                     <div class="card">
                         <div class="card-header">{{ __('إضافة سجل تاكسي جديد') }}</div>
-
+                        @if (session('success'))
+                            <div class="alert alert-success">
+                                {{ session('success') }}
+                            </div>
+                        @endif
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <div class="card-body">
                             <form method="POST" action="{{ route('taxis.store') }}">
                                 @csrf
@@ -40,7 +53,7 @@
 
                                 <div class="mb-3">
                                     <label for="car_detailes" class="form-label">{{ __('تفاصيل السيارة') }}</label>
-                                    <textarea class="form-control" id="car_detailes" name="car_detailes"></textarea>
+                                    <textarea class="form-control" id="car_detailes" name="car_detailes" required></textarea>
                                 </div>
 
                                 <button type="submit" class="btn btn-primary">{{ __('إضافة') }}</button>
@@ -52,3 +65,6 @@
         </div>
     </main>
 @endsection
+
+{{-- $2y$12$pdSHG5Hp2Ytu.QjG0qdCH.10OVZgBZGd0qvj3X71IYBToUt5BcVIK --}}
+{{-- $2y$12$pdSHG5Hp2Ytu.QjG0qdCH.10OVZgBZGd0qvj3X71IYBToUt5BcVIK --}}

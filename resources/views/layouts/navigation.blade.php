@@ -4,15 +4,10 @@
             <div class="col-4">
                 <nav class="header-nav ms-auto">
                     <ul class="d-flex align-items-center">
-
                         <li class="nav-item dropdown pe-3">
 
                             <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
                                 data-bs-toggle="dropdown">
-
-                                <img src="{{ asset('/img/profile-img.jpg') }}" alt="{{ __('Profile') }}"
-                                    class="rounded-circle">
-
                                 <span
                                     class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->user_type }}</span>
                             </a><!-- End Profile Image Icon -->
@@ -74,56 +69,6 @@
 
                             </ul><!-- End Profile Dropdown Items -->
                         </li><!-- End Profile Nav -->
-
-                        <li class="nav-item dropdown">
-
-                            <a class="nav-link nav-icon" href="#" data-bs-toggle="dropdown">
-                                <i class="bi bi-bell"></i>
-                                <span class=" badge-number">
-                                    <div class="spinner-grow text-warning"
-                                        style="width: 10px;height: 10px;margin-bottom: 20px" role="status">
-                                        <div>
-                                            <span class="badge-numbe">
-                                                <h6>
-                                                    55
-                                                </h6>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </span>
-                            </a><!-- End Notification Icon -->
-
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow notifications">
-                                <li class="dropdown-header">
-                                    <a href="#">
-                                        <span
-                                            class="badge rounded-pill bg-primary p-2 ms-2">{{ __('عرض الكل') }}</span>
-                                    </a>
-
-
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-
-
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-
-                                <li class="notification-item">
-
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li class="dropdown-footer">
-                                    <a href="#">{{ __('عرض جميع الاشعارات') }}</a>
-                                </li>
-
-                            </ul><!-- End Notification Dropdown Items -->
-
-                        </li><!-- End Notification Nav -->
                     </ul>
                 </nav><!-- End Icons Navigation -->
             </div>
@@ -131,14 +76,19 @@
             <div class="col-3">
                 <div class="row">
                     <div class="d-flex align-items-center justify-content-between">
-                        <i class="bi bi-list toggle-sidebar-btn"></i>
-                        <a href="{{ url('/') }}" class="logo d-flex align-items-center">
-                            <img src="{{ asset('/img/logo.png') }}" style="width: 150px;height: 50px;padding: 3px;"
+                        <div class="col-4" style="justify-content:end;margin-right: 17px">
+                            <i class="bi bi-list toggle-sidebar-btn"></i>
+                        </div>
+                        <a class="logo d-flex align-items-center">
+                            <img src="{{ asset('/img/logoo.png') }}" style="width: 60px;height: 40px;margin: 10px"
                                 alt="">
+                            <span class="d-none d-lg-block"
+                                style="font-family: 'Cairo', sans-serif ;color: white; ">{{ __('الشهباء') }}</span>
                         </a>
                     </div><!-- End Logo -->
                 </div>
             </div>
+
         </div>
     </div>
 </header><!-- End Header -->
@@ -152,7 +102,6 @@
             <a class="nav-link " href="{{ url('/dashboard') }}">
                 <span class="ms-auto">لوحة التحكم</span>
                 <i class="bi bi-grid " style="margin-left: 10px"></i>
-
             </a>
         </li><!-- End Dashboard Nav -->
         <li class="nav-item">
@@ -160,60 +109,60 @@
                 <i class="bi bi-chevron-down"></i><span class="ms-auto">السائقين</span><i
                     class="bi bi-menu-button-wide " style="margin-left: 10px"></i>
             </a>
-            <ul id="components-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="{{ url('/drivers/') }}">
-                        <div class="ms-auto" style="margin-right: 30px">
-                            <span>عرض السائقين</span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('create.driver') }}">
-                        <div class="ms-auto" style="margin-right: 30px">
-                            <span>اضافة سائق</span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                        </div>
-                    </a>
-                </li>
-            </ul>
+        <li style="margin-left: 80px">
+            <a href="{{ route('drivers.index') }}">
+                <div class="ms-auto" style="margin-right: 30px">
+                    <span>عرض السائقين</span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                </div>
+            </a>
         </li>
-
+        <li style="margin-left: 94px">
+            <a href="{{ route('create.driver') }}">
+                <div class="ms-auto" style="margin-right: 30px">
+                    <span>اضافة سائق</span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                </div>
+            </a>
+        </li>
+        </li>
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-chevron-down "></i><span class="ms-auto">السيارات</span><i
-                    class="bi bi-cart4 "style="margin-left: 10px"></i>
+                <i class="bi bi-chevron-down "></i><span class="ms-auto">السيارات</span><i class="bi bi-taxi-front-fill"
+                    style="margin-left: 10px"></i>
             </a>
-            <ul id="forms-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="{{ url('/taxi') }}">
-                        <div class="ms-auto" style="margin-right: 30px">
-                            <span> عرض السيارات </span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('taxis.create') }}">
-                        <div class="ms-auto" style="margin-right: 30px">
-                            <span> اضافة سيارة </span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                        </div>
-                    </a>
-                </li>
-            </ul>
+        <li style="margin-left: 80px">
+            <a href="{{ route('taxis.index') }}">
+                <div class="ms-auto" style="margin-right: 30px">
+                    <span> عرض السيارات </span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                </div>
+            </a>
+        </li>
+        <li style="margin-left: 90px">
+            <a href="{{ route('taxis.create') }}">
+                <div class="ms-auto" style="margin-right: 30px">
+                    <span> اضافة سيارة </span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                </div>
+            </a>
+        </li>
         </li><!-- End Forms Nav -->
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#taxi-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-chevron-down "></i><span class="ms-auto">الطلبات الحية</span><i
-                    class="bi bi-cart4 "style="margin-left: 10px"></i>
+                <i class="bi bi-chevron-down "></i><span class="ms-auto">الطلبات</span><i class="bi bi-hourglass"
+                    style="margin-left: 10px"></i>
             </a>
-            <ul id="taxi-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="{{ route('current.taxi.movement') }}">
-                        <div class="ms-auto" style="margin-right: 30px">
-                            <span> الطلبات الحالية </span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                        </div>
-                    </a>
-                </li>
-            </ul>
+        <li style="margin-left: 80px">
+            <a href="{{ route('current.taxi.movement') }}">
+                <div class="ms-auto" style="margin-right: 30px">
+                    <span> الطلبات الحالية </span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                </div>
+            </a>
+        </li>
+        <li style="margin-left: 61px">
+            <a href="{{ route('completed.requests') }}">
+                <div class="ms-auto" style="margin-right: 30px">
+                    <span> الطلبات المكتملة </span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                </div>
+            </a>
+        </li>
         </li><!-- End Forms Nav -->
 
         <li class="nav-item">
@@ -221,39 +170,34 @@
                 <i class="bi bi-chevron-down "></i><span class=" ms-auto">الاضافات</span>
                 <i class="bi bi-layout-text-window-reverse" style="margin-left: 10px"></i>
             </a>
-            <ul id="tables-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="{{ url('/serve') }}">
-                        <div class="ms-auto" style="margin-right: 30px">
-                            <span>الخدمات</span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a href="{{ route('offers.index') }}">
-                        <div class="ms-auto" style="margin-right: 30px">
-                            <span>العروض</span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                        </div>
-                    </a>
-                </li>
-            </ul>
+        <li style="margin-left: 120px">
+            <a href="{{ url('/services') }}">
+                <div class="ms-auto" style="margin-right: 30px">
+                    <span>الخدمات</span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                </div>
+            </a>
+        </li>
+        <li style="margin-left: 123px">
+            <a href="{{ route('offers.index') }}">
+                <div class="ms-auto" style="margin-right: 30px">
+                    <span>العروض</span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                </div>
+            </a>
+        </li>
         </li><!-- End Tables Nav -->
 
-        <li class="nav-item">
         <li class="nav-item">
             <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
                 <i class="bi bi-chevron-down "></i> <span class="ms-auto">الرصيد والحسابات</span><i
                     class="bi bi-gem "style="margin-left: 10px"></i>
             </a>
-            <ul id="icons-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-                <li>
-                    <a href="{{ route('calculations.index') }}">
-                        <div class="ms-auto" style="margin-right: 30px">
-                            <span> رصيد السائقين </span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                        </div>
-                    </a>
-                </li>
-            </ul>
+        <li style="margin-left: 75px">
+            <a href="{{ route('calculations.index') }}">
+                <div class="ms-auto" style="margin-right: 30px">
+                    <span> رصيد السائقين </span><i class="bi bi-circle" style="margin-left: 10px"></i>
+                </div>
+            </a>
+        </li>
         </li><!-- End Icons Nav -->
 
         <center>
@@ -271,25 +215,11 @@
 
             </a>
         </li><!-- End Profile Page Nav -->
-
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="{{ url('/Contact') }}">
-                <span class="ms-auto">التواصل</span>
-                <i class="bi bi-envelope " style="margin-left: 10px"></i>
-            </a>
-        </li><!-- End Contact Page Nav -->
-
         <li class="nav-item">
             <a class="nav-link collapsed" href="{{ url('/profiles') }}">
                 <span class="ms-auto">الاعدادات</span>
                 <i class="bi bi-gear " style="margin-left: 10px"></i>
             </a>
-        </li><!-- End Blank Page Nav -->
-        <li class="nav-item">
-            <a class="nav-link nav-icon" href="{{ url('#') }}">
-                <span class="ms-auto">الاشعارات</span>
-                <i class="bi bi-bell " style="margin-left: 10px"></i>
-            </a><!-- End Notification Icon -->
         </li><!-- End Blank Page Nav -->
         <li class="nav-item">
             <form method="POST" action="{{ route('logout') }}">

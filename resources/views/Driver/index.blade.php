@@ -2,6 +2,8 @@
 
 @section('content')
     <main id="main" class="main">
+
+
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
                 <div class="filter">
@@ -20,35 +22,66 @@
                             {{ session('success') }}
                         </div>
                     @endif
-                    <table class="table table-borderless datatable" >
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    <table class="table table-borderless datatable">
                         <thead>
-                            <tr style="margin-left: 15px" >
+                            <tr style="margin-left: 15px">
                                 <th scope="col">#</th>
-                                <th scope="col"><p class="text-center">{{ __('السائق') }}</p></th>
-                                <th scope="col"><p class="text-center">{{ __('الايميل') }}</p></th>
-                                <th scope="col"><p class="text-center">{{ __('الرصيد') }}</p></th>
-                                <th scope="col"><p class="text-center">{{ __('رقم السيارة') }}</p></th>
-                                <th scope="col"><p class="text-center">{{ __('حالة الحساب') }}</p></th>
-                                <th scope="col"><p class="text-center">{{ __('ادارة') }}</p></th>
+                                <th scope="col">
+                                    <p class="text-center">{{ __('السائق') }}</p>
+                                </th>
+                                <th scope="col">
+                                    <p class="text-center">{{ __('الايميل') }}</p>
+                                </th>
+                                <th scope="col">
+                                    <p class="text-center">{{ __('رقم الجوال') }}</p>
+                                </th>
+                                <th scope="col">
+                                    <p class="text-center">{{ __('رقم لوحة السيارة') }}</p>
+                                </th>
+                                <th scope="col">
+                                    <p class="text-center">{{ __('رقم فانوس السيارة') }}</p>
+                                </th>
+                                <th scope="col">
+                                    <p class="text-center">{{ __('حالة الحساب') }}</p>
+                                </th>
+                                <th scope="col">
+                                    <p class="text-center">{{ __('حالة السائق') }}</p>
+                                </th>
+                                <th scope="col">
+                                    <p class="text-center">{{ __('المبلغ غير المسلم') }}</p>
+                                </th>
+                                <th scope="col">
+                                    <p class="text-center">{{ __('ادارة') }}</p>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($drivers as $driver)
-                                <tr >
+                                <tr>
                                     <th scope="row"><a href="#">{{ $loop->iteration }}</a></th>
-                                    <td><p class="text-center">{{ $driver->name }}</p></td>
-                                    <td><a href="#" class="text-primary"><p class="text-center">{{ $driver->email }}</p></a></td>
                                     <td>
-                                        {{-- balances --}}
-                                        {{-- @if ($driver->padding)
-                                            <a href="{{ route('balances.show', $driver->id) }}">$
-                                                {{ $driver->balance->credit_balance }}</a>
-                                        @else
-                                            {{ __('No balance available') }}
-                                        @endif --}}
+                                        <p class="text-center">{{ $driver->name }}</p>
+                                    </td>
+                                    <td><a href="#" class="text-primary">
+                                            <p class="text-center">{{ $driver->email }}</p>
+                                        </a></td>
+                                    <td>
+                                        <p class="text-center">{{ $driver->phoneNumber }}</p>
                                     </td>
                                     <td>
-                                        <a href="#"><p class="text-center">{{ $driver->plate_number }}</p></a>
+                                        <p class="text-center">{{ $driver->plate_number }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-center">{{ $driver->lamp_number }}</p>
                                     </td>
                                     <td>
                                         <span class="badge {{ $driver->is_active ? 'bg-success' : 'bg-danger' }} ">
@@ -56,20 +89,37 @@
                                         </span>
                                     </td>
                                     <td>
-                                        {{-- <form action="{{ route('users.toggleStatus', $driver->id) }}" method="POST"
-                                            onsubmit="return confirmStatusChange(event, {{ $driver->is_active }})">
-                                            @csrf
-                                            @method('POST')
-                                            <button type="submit">
-                                                <i class="bi bi-power" style="margin-left: 30px;"></i>
-                                            </button>
-                                        </form> --}}
-                                         <a href="{{ route('drivers.show', ['id' => $driver->id]) }}" class="btn btn-primary">
-                                            {{ __('تفاصيل') }}
-                                        </a>
+                                        @if ($driver->state == 'ready')
+                                            <span class="badge bg-success ">
+                                                <center>مستعد للعمل</center>
+                                            </span>
+                                        @elseif ($driver->state == 'in_break')
+                                            <span class="badge bg-primary">
+                                                <center>في استراحة</center>
+                                            </span>
+                                        @else
+                                            <span class="badge bg-danger ">
+                                                <center>مشغول</center>
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <p class="text-center">{{ $driver->unBring }}</p>
+                                    </td>
+                                    <td>
+                                        @if ($driver->unBring > 0)
+                                            <a href="{{ route('calculations.bring', $driver->driver_id) }}"
+                                                class="btn btn-primary">استلام</a>
+                                        @endif
+
+                                    </td>
+                                    <td>
+                                        <x-buttons :delete-route="route('drivers.destroy', ['id' => $driver->driver_id])" :edit-route="route('drivers.edit', ['id' => $driver->driver_id])" :show-route="route('drivers.show', ['id' => $driver->driver_id])" :showDeleteButton="true"
+                                            :showEditButton="true" :showDetailsButton="true" />
                                     </td>
                                 </tr>
                             @endforeach
+
                         </tbody>
                     </table>
                 </div>

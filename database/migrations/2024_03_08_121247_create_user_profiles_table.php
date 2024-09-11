@@ -17,10 +17,10 @@ return new class extends Migration
             $table->string('name');
             $table->string('avatar')->default('/images/profile_images/avatar.png');
             $table->string('phoneNumber')->nullable();
+            $table->enum('gender',['male','female'])->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
-            $table->softDeletes();
-        });
+            $table->SoftDeletes();        });
     }
 
     /**

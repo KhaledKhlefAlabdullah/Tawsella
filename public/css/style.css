@@ -98,7 +98,6 @@ body {
 }
 
 body {
-    font-family: "Open Sans", sans-serif;
     background: #f6f9ff;
     color: #444444;
 }
@@ -113,6 +112,9 @@ a:hover {
     text-decoration: none;
 }
 
+.pipe {
+    margin: 0 5px;
+}
 
 /* CSS */
 .button-3 {
@@ -125,7 +127,6 @@ a:hover {
     color: #fff;
     cursor: pointer;
     display: inline-block;
-    font-family: -apple-system,system-ui,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
     font-size: 14px;
     font-weight: 600;
     line-height: 20px;
@@ -139,34 +140,34 @@ a:hover {
     vertical-align: middle;
     white-space: nowrap;
   }
-  
+
   .button-3:focus:not(:focus-visible):not(.focus-visible) {
     box-shadow: none;
     outline: none;
   }
-  
+
   .button-3:hover {
     background-color: #2c974b;
   }
-  
+
   .button-3:focus {
     box-shadow: rgba(46, 164, 79, .4) 0 0 0 3px;
     outline: none;
   }
-  
+
   .button-3:disabled {
     background-color: #94d3a2;
     border-color: rgba(27, 31, 35, .1);
     color: rgba(255, 255, 255, .8);
     cursor: default;
   }
-  
+
   .button-3:active {
     background-color: #298e46;
     box-shadow: rgba(20, 70, 32, .2) 0 1px 0 inset;
   }
 
-  
+
 
 /* CSS */
 .button-1 {
@@ -177,7 +178,6 @@ a:hover {
     color: #FFFFFF;
     cursor: pointer;
     display: inline-block;
-    font-family: "Haas Grot Text R Web", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 14px;
     font-weight: 500;
     height: 40px;
@@ -195,13 +195,13 @@ a:hover {
     -webkit-user-select: none;
     touch-action: manipulation;
   }
-  
+
   .button-1:hover,
   .button-1:focus {
     background-color: #F082AC;
   }
 *{
-    font-family: "Cairo", sans-serif;
+    font-family: "Cairo", sans-serif !important;
 }
 
 /* CSS Styles */
@@ -331,7 +331,9 @@ a:hover {
 .dropdown-menu .dropdown-item:hover {
     background-color: #f6f9ff;
 }
-
+.card-title{
+    font-family: "Cairo", sans-serif !important;
+}
 @media (min-width: 768px) {
     .dropdown-menu-arrow::before {
         content: "";
@@ -418,7 +420,6 @@ a:hover {
     font-size: 18px;
     font-weight: 500;
     color: #012970;
-    font-family: "Poppins", sans-serif;
 }
 
 .card-title span {
@@ -438,7 +439,6 @@ a:hover {
 /* Alerts */
 .alert-heading {
     font-weight: 500;
-    font-family: "Poppins", sans-serif;
     font-size: 20px;
 }
 
@@ -489,7 +489,6 @@ a:hover {
 /* Breadcrumbs */
 .breadcrumb {
     font-size: 14px;
-    font-family: "Nunito", sans-serif;
     color: #899bbd;
     font-weight: 600;
 }
@@ -539,6 +538,7 @@ a:hover {
 --------------------------------------------------------------*/
 .logo {
     line-height: 1;
+
 }
 
 @media (min-width: 1200px) {
@@ -548,7 +548,7 @@ a:hover {
 }
 
 .logo img {
-    max-height: 50px;
+    max-height: 80px;
     margin-right: 6px;
 }
 
@@ -556,7 +556,6 @@ a:hover {
     font-size: 26px;
     font-weight: 700;
     color: #012970;
-    font-family: "Nunito", sans-serif;
 }
 
 .header {
@@ -850,7 +849,6 @@ a:hover {
 }
 
 #hero .btn-get-started {
-    font-family: "Raleway", sans-serif;
     font-weight: 500;
     font-size: 14px;
     letter-spacing: 1px;
@@ -1041,13 +1039,15 @@ a:hover {
 # Dashboard
 --------------------------------------------------------------*/
 /* Filter dropdown */
-.dashboard .filter {
+/*.dashboard*/
+ .filter {
     position: absolute;
     right: 0px;
     top: 15px;
 }
 
-.dashboard .filter .icon {
+/*.dashboard*/
+ .filter .icon {
     color: #aab7cf;
     padding-right: 20px;
     padding-bottom: 5px;
@@ -1055,16 +1055,20 @@ a:hover {
     font-size: 16px;
 }
 
-.dashboard .filter .icon:hover,
-.dashboard .filter .icon:focus {
+/*.dashboard*/
+ .filter .icon:hover,
+/*.dashboard*/
+ .filter .icon:focus {
     color: #4154f1;
 }
 
-.dashboard .filter .dropdown-header {
+/*.dashboard*/
+ .filter .dropdown-header {
     padding: 8px 15px;
 }
 
-.dashboard .filter .dropdown-header h6 {
+/*.dashboard*/
+ .filter .dropdown-header h6 {
     text-transform: uppercase;
     font-size: 14px;
     font-weight: 600;
@@ -1074,16 +1078,19 @@ a:hover {
     padding: 0;
 }
 
-.dashboard .filter .dropdown-item {
+/*.dashboard*/
+ .filter .dropdown-item {
     padding: 8px 15px;
 }
 
 /* Info Cards */
-.dashboard .info-card {
+/*.dashboard*/
+ .info-card {
     padding-bottom: 10px;
 }
 
-.dashboard .info-card h6 {
+/*.dashboard*/
+ .info-card h6 {
     font-size: 28px;
     color: #012970;
     font-weight: 700;
@@ -1091,7 +1098,8 @@ a:hover {
     padding: 0;
 }
 
-.dashboard .card-icon {
+/*.dashboard*/
+ .card-icon {
     font-size: 32px;
     line-height: 0;
     width: 64px;
@@ -1100,27 +1108,32 @@ a:hover {
     flex-grow: 0;
 }
 
-.dashboard .sales-card .card-icon {
+/*.dashboard*/
+ .sales-card .card-icon {
     color: #4154f1;
     background: #f6f6fe;
 }
 
-.dashboard .revenue-card .card-icon {
+/*.dashboard*/
+ .revenue-card .card-icon {
     color: #2eca6a;
     background: #e0f8e9;
 }
 
-.dashboard .customers-card .card-icon {
+/*.dashboard*/
+ .customers-card .card-icon {
     color: #ff771d;
     background: #ffecdf;
 }
 
 /* Activity */
-.dashboard .activity {
+/*.dashboard*/
+ .activity {
     font-size: 14px;
 }
 
-.dashboard .activity .activity-item .activite-label {
+/*.dashboard*/
+ .activity .activity-item .activite-label {
     color: #888;
     position: relative;
     flex-shrink: 0;
@@ -1128,7 +1141,8 @@ a:hover {
     min-width: 64px;
 }
 
-.dashboard .activity .activity-item .activite-label::before {
+/*.dashboard*/
+ .activity .activity-item .activite-label::before {
     content: "";
     position: absolute;
     right: -11px;
@@ -1138,7 +1152,8 @@ a:hover {
     background-color: #eceefe;
 }
 
-.dashboard .activity .activity-item .activity-badge {
+/*.dashboard*/
+ .activity .activity-item .activity-badge {
     margin-top: 3px;
     z-index: 1;
     font-size: 11px;
@@ -1149,91 +1164,110 @@ a:hover {
     flex-grow: 0;
 }
 
-.dashboard .activity .activity-item .activity-content {
+/*.dashboard*/
+ .activity .activity-item .activity-content {
     padding-left: 10px;
     padding-bottom: 20px;
 }
 
-.dashboard .activity .activity-item:first-child .activite-label::before {
+/*.dashboard*/
+ .activity .activity-item:first-child .activite-label::before {
     top: 5px;
 }
 
-.dashboard .activity .activity-item:last-child .activity-content {
+/*.dashboard*/
+ .activity .activity-item:last-child .activity-content {
     padding-bottom: 0;
 }
 
 /* News & Updates */
-.dashboard .news .post-item+.post-item {
+/*.dashboard*/
+ .news .post-item+.post-item {
     margin-top: 15px;
 }
 
-.dashboard .news img {
+/*.dashboard*/
+ .news img {
     width: 80px;
     float: left;
     border-radius: 5px;
 }
 
-.dashboard .news h4 {
+/*.dashboard*/
+ .news h4 {
     font-size: 15px;
     margin-left: 95px;
     font-weight: bold;
     margin-bottom: 5px;
 }
 
-.dashboard .news h4 a {
+/*.dashboard*/
+ .news h4 a {
     color: #012970;
     transition: 0.3s;
 }
 
-.dashboard .news h4 a:hover {
+/*.dashboard*/
+ .news h4 a:hover {
     color: #4154f1;
 }
 
-.dashboard .news p {
+/*.dashboard*/
+ .news p {
     font-size: 14px;
     color: #777777;
     margin-left: 95px;
 }
 
 /* Recent Sales */
-.dashboard .recent-sales {
+/*.dashboard*/
+ .recent-sales {
     font-size: 14px;
 }
 
-.dashboard .recent-sales .table thead {
+/*.dashboard*/
+ .recent-sales .table thead {
     background: #f6f6fe;
 }
 
-.dashboard .recent-sales .table thead th {
+/*.dashboard*/
+ .recent-sales .table thead th {
     border: 0;
 }
 
-.dashboard .recent-sales .dataTable-top {
+/*.dashboard*/
+ .recent-sales .dataTable-top {
     padding: 0 0 10px 0;
 }
 
-.dashboard .recent-sales .dataTable-bottom {
+/*.dashboard*/
+ .recent-sales .dataTable-bottom {
     padding: 10px 0 0 0;
 }
 
 /* Top Selling */
-.dashboard .top-selling {
+/*.dashboard*/
+ .top-selling {
     font-size: 14px;
 }
 
-.dashboard .top-selling .table thead {
+/*.dashboard*/
+ .top-selling .table thead {
     background: #f6f6fe;
 }
 
-.dashboard .top-selling .table thead th {
+/*.dashboard*/
+ .top-selling .table thead th {
     border: 0;
 }
 
-.dashboard .top-selling .table tbody td {
+/*.dashboard*/
+ .top-selling .table tbody td {
     vertical-align: center;
 }
 
-.dashboard .top-selling img {
+/*.dashboard*/
+ .top-selling img {
     border-radius: 5px;
     max-width: 60px;
 }
@@ -1263,7 +1297,6 @@ a:hover {
 }
 
 .iconslist .label {
-    font-family: var(--bs-font-monospace);
     display: inline-block;
     width: 100%;
     overflow: hidden;

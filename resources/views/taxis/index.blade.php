@@ -20,26 +20,63 @@
                             {{ session('success') }}
                         </div>
                     @endif
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <table class="table table-borderless datatable">
                         <thead>
                             <tr style="margin-left: 15px">
-                                <th scope="col">#</th>
-                                <th scope="col"><p class="text-center">{{ __('اسم السائق') }}</p></th>
-                                <th scope="col"><p class="text-center">{{ __('اسم السيارة') }}</p></th>
-                                <th scope="col"><p class="text-center">{{ __('رقم المصباح') }}</p></th>
-                                <th scope="col"><p class="text-center">{{ __('رقم اللوحة') }}</p></th>
-                                <th scope="col"><p class="text-center">{{ __('تفاصيل السيارة') }}</p></th>
+                                <th>#</th>
+                                <th>
+                                    <p class="text-center">{{ __('اسم السائق') }}</p>
+                                </th>
+                                <th>
+                                    <p class="text-center">{{ __('اسم السيارة') }}</p>
+                                </th>
+                                <th>
+                                    <p class="text-center">{{ __('رقم المصباح') }}</p>
+                                </th>
+                                <th>
+                                    <p class="text-center">{{ __('رقم اللوحة') }}</p>
+                                </th>
+                                <th>
+                                    <p class="text-center">{{ __('تفاصيل السيارة') }}</p>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($taxis as $taxi)
                                 <tr>
-                                    <th scope="row">{{ $loop->iteration }}</th>
-                                    <td><p class="text-center">{{ $taxi->driverName }}</p></td>
-                                    <td><p class="text-center">{{ $taxi->car_name }}</p></td>
-                                    <td><p class="text-center">{{ $taxi->lamp_number }}</p></td>
-                                    <td><p class="text-center">{{ $taxi->plate_number }}</p></td>
-                                    <td><p class="text-center"><a href="{{ route('taxis.show', $taxi->id) }}" class="btn btn-primary">{{ __('تفاصيل') }}</a></p></td> <!-- زر التفاصيل -->
+                                    <td>
+                                        <p class="text-center">{{ $loop->iteration }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-center">{{ $taxi->driverName ?? 'لا يوجد سائق' }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-center">{{ $taxi->car_name }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-center">{{ $taxi->lamp_number }}</p>
+                                    </td>
+                                    <td>
+                                        <p class="text-center">{{ $taxi->plate_number }}</p>
+                                    </td>
+                                    <td class="d-flex align-items-center justify-content-center">
+                                        <x-buttons 
+                                        :delete-route="route('taxis.destroy', $taxi->id)" 
+                                        :edit-route="route('taxis.edit', $taxi->id)" 
+                                        :showDeleteButton="true"
+                                        :showEditButton="true"
+                                        :showDetailsButton="false" />
+                                       
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

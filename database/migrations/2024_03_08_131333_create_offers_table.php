@@ -22,8 +22,7 @@ return new class extends Migration
             $table->foreign('movement_type_id')->references('id')->on('taxi_movement_types')->onDelete('cascade');
             $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
-            $table->softDeletes();
-        });
+            $table->SoftDeletes();        });
     }
 
     /**
