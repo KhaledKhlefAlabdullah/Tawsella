@@ -54,6 +54,6 @@ class TaxiMovement extends Model
     }
 
     public function calculations(){
-        return $this->hasMany(calculations::class,'taxi_movement_id');
+        return $this->hasMany(Calculation::class,'taxi_movement_id');
     }
 }

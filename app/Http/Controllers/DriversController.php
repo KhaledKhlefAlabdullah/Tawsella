@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
-use App\Models\Calculations;
+use App\Models\Calculation;
 use App\Models\Taxi;
 use App\Models\TaxiMovement;
 use Carbon\Carbon;
@@ -140,7 +140,7 @@ class DriversController extends Controller
         $combinedAccounts = [];
         foreach ($drivers as $driver) {
             $driver_id = $driver->id;
-            $unBring = Calculations::where('driver_id', $driver_id)->whereNot( 'is_bring', true)->sum('totalPrice');
+            $unBring = Calculation::where('driver_id', $driver_id)->whereNot( 'is_bring', true)->sum('totalPrice');
             $combinedAccounts[] = (object)[
                 'driver_id' => $driver_id,
                 'name' => $driver->name,

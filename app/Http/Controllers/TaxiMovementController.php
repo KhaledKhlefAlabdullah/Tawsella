@@ -7,7 +7,7 @@ use App\Events\CreateTaxiMovementEvent;
 use App\Events\MovementFindUnFindEvent;
 use App\Events\RejectTaxiMovemntEvent;
 use App\Http\Requests\TaxiMovementRequest;
-use App\Models\Calculations;
+use App\Models\Calculation;
 use App\Models\Taxi;
 use App\Models\TaxiMovement;
 use App\Models\TaxiMovementType;
@@ -299,7 +299,7 @@ class TaxiMovementController extends Controller
                 $totalPrice = $movement_type->price;
             }
 
-            $Calculation = Calculations::create([
+            $calculation = Calculation::create([
                 'driver_id' => Auth::id(),
                 'taxi_movement_id' => $id,
                 'totalPrice' => $totalPrice,
@@ -323,7 +323,7 @@ class TaxiMovementController extends Controller
                 'تم اكمال طلب الزبون من ' . $from . 'إلى ' . $to
             );
 
-            return api_response(data: $Calculation->totalPrice ,message: 'success');
+            return api_response(data: $calculation->totalPrice ,message: 'success');
         } catch (Exception $e) {
             return api_response(errors: $e->getMessage(), message: 'error', code: 500);
         }

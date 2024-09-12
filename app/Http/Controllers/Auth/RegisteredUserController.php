@@ -69,12 +69,15 @@ class RegisteredUserController extends Controller
             ]);
 
             if ($request->wantsJson()) {
+                $user->sendEmailVerificationNotification(true);
 
-                $token = createToken($user, 'register-token');
+                $token = createUserToken($user, 'register-token');
 
                 return api_response(data: ['token' => $token, 'user_id' => $user->id], message: 'register-success');
             }
 
+            $user->mail_code_verified_at = now();
+            $user->save();
             Session::flash('success', 'تم إنشاء حساب السائق بنجاح.');
 
             // Redirect back or to any other page

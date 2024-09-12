@@ -22,6 +22,11 @@ return new class extends Migration
             $table->enum('user_type',['customer','driver','admin'])->default('customer');
             $table->enum('driver_state',['ready','in_break','reserved'])->nullable();
             $table->boolean('is_active')->default(true);
+            $table->timestamp('mail_code_verified_at')->nullable();
+            $table->string('mail_verify_code')->nullable();
+            $table->tinyInteger('mail_code_attempts_left')->default(0);
+            $table->timestamp('mail_code_last_attempt_date')->nullable();
+            $table->timestamp('mail_verify_code_sent_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->SoftDeletes();

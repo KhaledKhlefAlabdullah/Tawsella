@@ -33,7 +33,7 @@ Route::get('/driver-request/{id}', [TaxiMovementController::class, 'get_request_
 
 Route::post('/get-taxi-location/{driver_id}',[TaxiController::class,'getTaxiLocation']);
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'verified.email'])->group(function () {
 
     // for driver
     Route::post('/drivers/set-state', [DriversController::class, 'setState']);
@@ -74,7 +74,7 @@ Route::post('/contact-us', [ContactUsMessageController::class, 'store']);
 Route::get('/phone',function(){
 
     $phone = User::where('user_type','admin')->first()->user_profile->phoneNumber ?? '+3520000000';
-    
+
     return $phone;
 });
 

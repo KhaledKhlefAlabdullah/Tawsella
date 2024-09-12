@@ -2,18 +2,22 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-
+use App\Interfaces\IMustVerifyEmailByCode;
 use App\Models\Traits\HasUuid;
+use App\Models\Traits\UserTraits\CustomerTait;
+use App\Models\Traits\UserTraits\DriverTrait;
+use App\Models\Traits\UserTraits\MustVerifyEmailByCode;
+use App\Models\Traits\UserTraits\UserTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class User extends Authenticatable implements IMustVerifyEmailByCode
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuid, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, HasUuid, UserTrait, DriverTrait, CustomerTait;
+
+    use MustVerifyEmailByCode;
 
     protected $keyType='string';
 
@@ -31,7 +35,12 @@ class User extends Authenticatable
         'password',
         'user_type',
         'driver_state',
-        'is_active'
+        'is_active',
+        'mail_verify_code',
+        'mail_code_verified_at',
+        'mail_code_attempts_left',
+        'mail_code_last_attempt_date',
+        'mail_verify_code_sent_at'
     ];
 
     /**
@@ -95,6 +104,6 @@ class User extends Authenticatable
     }
 
     public function calculations(){
-        return $this->hasMany(calculations::class,'driver_id');
+        return $this->hasMany(calculation::class,'driver_id');
     }
 }

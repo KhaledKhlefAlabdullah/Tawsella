@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Calculations;
+use App\Models\Calculation;
 use App\Models\TaxiMovement;
 use App\Models\User;
 use App\Models\UserProfile;
@@ -10,7 +10,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
-class CalculationsController extends Controller
+class CalculationController extends Controller
 {
 
     /**
@@ -55,7 +55,7 @@ class CalculationsController extends Controller
             // Get today's date
             $today = Carbon::now()->toDateString();
 
-            $todayAccounts = Calculations::where('driver_id', $driver_id)
+            $todayAccounts = Calculation::where('driver_id', $driver_id)
                 ->where('is_bring', false)
                 ->whereDate('created_at', $today)
                 ->sum('totalPrice');
@@ -72,7 +72,7 @@ class CalculationsController extends Controller
     public function totalAccounts(string $driver_id)
     {
         try {
-            $totalAccounts = Calculations::where('driver_id', $driver_id)
+            $totalAccounts = Calculation::where('driver_id', $driver_id)
                 ->where('is_bring', false)
                 ->sum('totalPrice');
 
@@ -102,7 +102,7 @@ class CalculationsController extends Controller
                 'calculate' => 'required|numeric',
             ]);
 
-            Calculations::create($data);
+            Calculation::create($data);
 
             return redirect()->route('calculations.index')->with('success', 'تم إنشاء الحساب بنجاح');
         } catch (Exception $e) {
@@ -120,7 +120,7 @@ class CalculationsController extends Controller
 
     //         $driverMovements = TaxiMovement::where(['driver_id' => $driver_id, 'is_completed' => true])->count();
     //         $totalMount = $this->totalAccounts($driver_id);
-    //         $totalWay = Calculations::where('driver_id', $driver_id)->sum('way');
+    //         $totalWay = Calculation::where('driver_id', $driver_id)->sum('way');
     //         $details = [
     //             'driverMovements' => $driverMovements,
     //             'totalMount' => $totalMount,
@@ -153,7 +153,7 @@ class CalculationsController extends Controller
         try {
             $driverMovements = TaxiMovement::where(['driver_id' => $driver_id, 'is_completed' => true])->count();
             $totalMount = $this->totalAccounts($driver_id);
-            $totalWay = Calculations::where('driver_id', $driver_id)->sum('way');
+            $totalWay = Calculation::where('driver_id', $driver_id)->sum('way');
             $details = [
                 'driverMovements' => $driverMovements,
                 'totalMount' => $totalMount,
@@ -192,7 +192,7 @@ class CalculationsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Calculations $calculations)
+    public function edit(Calculation $calculations)
     {
         return view('calculations.edit', ['calculations' => $calculations]);
     }
@@ -201,7 +201,7 @@ class CalculationsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Calculations $calculations)
+    public function update(Request $request, Calculation $calculation)
     {
         try {
             $data = $request->validate([
@@ -210,7 +210,7 @@ class CalculationsController extends Controller
                 'calculate' => 'required|numeric',
             ]);
 
-            $calculations->update($data);
+            $calculation->update($data);
 
             return redirect()->route('calculations.index')->with('success', 'تم تحديث الحساب بنجاح');
         } catch (Exception $e) {
@@ -224,12 +224,12 @@ class CalculationsController extends Controller
     public function bring(string $id)
     {
         try {
-            
-            $bringCout = Calculations::where(['driver_id' => $id, 'is_bring' => false])->count();
+
+            $bringCout = Calculation::where(['driver_id' => $id, 'is_bring' => false])->count();
             if($bringCout == 0){
                 return redirect()->route('drivers.index')->with('success', 'السائق ليس لديه أي ملغ بعد');
             }
-            Calculations::where(['driver_id' => $id, 'is_bring' => false])
+            Calculation::where(['driver_id' => $id, 'is_bring' => false])
                 ->update(['is_bring' => true]);
 
             return redirect()->route('drivers.index')->with('success', 'تم إستلام المبلغ بنجاح');
@@ -242,10 +242,10 @@ class CalculationsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Calculations $calculations)
+    public function destroy(Calculation $calculation)
     {
         try {
-            $calculations->delete();
+            $calculation->delete();
 
             return redirect()->route('calculations.index')->with('success', 'تم حذف سجل الحساب بنجاح');
         } catch (Exception $e) {

@@ -42,7 +42,7 @@ class AuthenticatedSessionController extends Controller
                 $user = $request->user();
 
                 // Create a new token for the user
-                $token = createToken($user, 'login-token');
+                $token = createUserToken($user, 'login-token');
 
                 return api_response(data: ['token' => $token, 'user' => $user], message: 'نجح تسجيل الدخول');
             }
