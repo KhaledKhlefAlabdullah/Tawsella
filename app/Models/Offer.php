@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use App\Models\Traits\HasUuid;
+use App\Models\Traits\OfferTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 class Offer extends Model
 {
-    use HasFactory,HasUuid,SoftDeletes;
+    use HasFactory,HasUuid,OfferTrait;
 
     protected $keyType = 'string';
     protected $primaryKey = 'id';
@@ -19,7 +19,7 @@ class Offer extends Model
         'admin_id',
         'offer',
         'value_of_discount',
-        'valide_date',
+        'valid_date',
         'description'
     ];
 

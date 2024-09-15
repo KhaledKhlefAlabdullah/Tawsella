@@ -12,10 +12,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements IMustVerifyEmailByCode
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuid, UserTrait, DriverTrait, CustomerTait;
+    use HasApiTokens, HasFactory, Notifiable, HasUuid, HasRoles, UserTrait, DriverTrait, CustomerTait;
 
     use MustVerifyEmailByCode;
 
@@ -63,7 +64,8 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
         'password' => 'hashed',
     ];
 
-    public function user_profile(){
+
+    public function profile(){
         return $this->hasOne(UserProfile::class,'user_id');
     }
 

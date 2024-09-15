@@ -2,88 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserEnums\UserType;
+use App\Http\Requests\CalculationRequest;
 use App\Models\Calculation;
 use App\Models\TaxiMovement;
 use App\Models\User;
-use App\Models\UserProfile;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Redirect;
 
 class CalculationController extends Controller
 {
 
     /**
-     * Display a listing of the resource.
+     * View list of calculations.
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-
+     * @return \Illuminate\Http\RedirectResponse to view page
      */
     public function index()
     {
         try {
+            $drivers = User::where('user_type', UserType::TaxiDriver)->paginate(10);
 
-            $drivers = User::select('users.id', 'up.name', 't.plate_number')
-                ->join('user_profiles as up', 'users.id', '=', 'up.user_id')
-                ->join('taxis as t', 'users.id', '=', 't.driver_id')->get();
-            $combinedAccounts = [];
-            foreach ($drivers as $driver) {
-                $driver_id = $driver->id;
-                $total_today = $this->todayAccounts($driver_id);
-                $total_previous = $this->totalAccounts($driver_id);
-
-                $combinedAccounts[] = (object)[
-                    'driver_id' => $driver_id,
-                    'name' => $driver->name,
-                    'plate_number' => $driver->plate_number,
-                    'today_account' => $total_today,
-                    'all_account' => $total_previous
-                ];
-            }
-
-
-            return view('calculations.index', ['calculations' => $combinedAccounts]);
+            return view('calculations.index', [
+                'calculations' => Calculation::mappingDriversCalculations($drivers),
+                'drivers' => $drivers
+            ]);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in getting drivers with calculations\n errors:' . $e->getMessage())->withInput();
         }
     }
 
-
-    /**
-     * Calculate today accounts
-     */
-    public function todayAccounts(string $driver_id)
-    {
-        try {
-            // Get today's date
-            $today = Carbon::now()->toDateString();
-
-            $todayAccounts = Calculation::where('driver_id', $driver_id)
-                ->where('is_bring', false)
-                ->whereDate('created_at', $today)
-                ->sum('totalPrice');
-
-            return $todayAccounts ?? 0;
-        } catch (Exception $e) {
-            return redirect()->back()->withErrors($e->getMessage() . 'هناك خطأ في حساب المبالغ التي استلمها السائق اليوم')->withInput();
-        }
-    }
-
-    /**
-     * Get the all previos accounts for driver
-     */
-    public function totalAccounts(string $driver_id)
-    {
-        try {
-            $totalAccounts = Calculation::where('driver_id', $driver_id)
-                ->where('is_bring', false)
-                ->sum('totalPrice');
-
-            return $totalAccounts ?? 0;
-        } catch (Exception $e) {
-            return redirect()->back()->withErrors($e->getMessage() . 'هناك خطأ في حساب المبالغ التي استلمها السائق')->withInput();
-        }
-    }
 
     /**
      * Show the form for creating a new resource.
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-
+     * @return \Illuminate\Http\RedirectResponse to view page
      */
     public function create()
     {
@@ -92,98 +48,46 @@ class CalculationController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-
+     * @return \Illuminate\Http\RedirectResponse to view page
      */
-    public function store(Request $request)
+    public function store(CalculationRequest $request)
     {
         try {
-            $data = $request->validate([
-                'driver_id' => 'required',
-                'taxi_movement_id' => 'required',
-                'calculate' => 'required|numeric',
-            ]);
+            $validatedData = $request->validated();
 
-            Calculation::create($data);
+            Calculation::create($validatedData);
 
             return redirect()->route('calculations.index')->with('success', 'تم إنشاء الحساب بنجاح');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
         }
     }
 
 
     /**
      * Display the specified resource.
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-
+     * @return \Illuminate\Http\RedirectResponse to view page
      */
-    // public function show(string $driver_id)
-    // {
-    //     try {
-
-    //         $driverMovements = TaxiMovement::where(['driver_id' => $driver_id, 'is_completed' => true])->count();
-    //         $totalMount = $this->totalAccounts($driver_id);
-    //         $totalWay = Calculation::where('driver_id', $driver_id)->sum('way');
-    //         $details = [
-    //             'driverMovements' => $driverMovements,
-    //             'totalMount' => $totalMount,
-    //             'totalWay' => $totalWay
-    //         ];
-
-    //         $movements = TaxiMovement::select(
-    //             'taxi_movements.my_address as saddress',
-    //             'taxi_movements.destnation_address as eaddress',
-    //             'taxi_movements.start_latitude as slat',
-    //             'taxi_movements.start_longitude as along',
-    //             'taxi_movements.end_latitude as elat',
-    //             'taxi_movements.end_longitude as elong',
-    //             'taxi_movements.created_at as date',
-    //             'c.totalPrice',
-    //             'c.way'
-    //         )
-    //             ->join('calculations as c', 'taxi_movements.id', '=', 'c.taxi_movement_id')
-    //             ->where(['taxi_movements.driver_id' => $driver_id, 'taxi_movements.is_completed' => true])
-    //             ->get();
-
-    //         return view('calculations.show', ['details' => $details, 'movements' => $movements]);
-    //     } catch (Exception $e) {
-    //         return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
-    //     }
-    // }
-
-    public function show(string $driver_id)
+    public function show(User $driver)
     {
         try {
-            $driverMovements = TaxiMovement::where(['driver_id' => $driver_id, 'is_completed' => true])->count();
-            $totalMount = $this->totalAccounts($driver_id);
-            $totalWay = Calculation::where('driver_id', $driver_id)->sum('way');
+            $driverMovements = count_items(TaxiMovement::class,['driver_id' => $driver->id, 'is_completed' => true]);
+            $totalMount = Calculation::totalAccounts($driver->id);
+            $totalWay = Calculation::where('driver_id', $driver->id)->sum('way');
+            $movements = Calculation::driverMovementsCalculations($driver->id);
             $details = [
                 'driverMovements' => $driverMovements,
                 'totalMount' => $totalMount,
                 'totalWay' => $totalWay
             ];
 
-            $movements = TaxiMovement::select(
-                'taxi_movements.my_address as saddress',
-                'taxi_movements.destnation_address as eaddress',
-                'taxi_movements.start_latitude as slat',
-                'taxi_movements.start_longitude as along',
-                'taxi_movements.end_latitude as elat',
-                'taxi_movements.end_longitude as elong',
-                'taxi_movements.created_at as date',
-                'c.totalPrice',
-                'c.way'
-            )
-                ->join('calculations as c', 'taxi_movements.id', '=', 'c.taxi_movement_id')
-                ->where([
-                    'taxi_movements.driver_id' => $driver_id,
-                    'taxi_movements.is_completed' => true
-                ])
-                ->whereHas('calculations', function ($query) {
-                    $query->where('is_bring', false);
-                })
-                ->get();
-
             return view('calculations.show', ['details' => $details, 'movements' => $movements]);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
         }
     }
 
@@ -191,6 +95,9 @@ class CalculationController extends Controller
 
     /**
      * Show the form for editing the specified resource.
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application to view page
      */
     public function edit(Calculation $calculations)
     {
@@ -200,56 +107,63 @@ class CalculationController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-
+     * @return \Illuminate\Http\RedirectResponse to view page
      */
-    public function update(Request $request, Calculation $calculation)
+    public function update(CalculationRequest $request, Calculation $calculation)
     {
         try {
-            $data = $request->validate([
-                'driver_id' => 'required',
-                'taxi_movement_id' => 'required',
-                'calculate' => 'required|numeric',
-            ]);
+            $validatedData = $request->validated();
 
-            $calculation->update($data);
+            $calculation->update($validatedData);
 
-            return redirect()->route('calculations.index')->with('success', 'تم تحديث الحساب بنجاح');
+            return redirect()->route('calculations.index')->with('success', 'Successfully editing calculation.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in editing calculation.\n errors::' . $e->getMessage())->withInput();
         }
     }
 
     /**
      * Bring The mounts
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-
+     * @return \Illuminate\Http\RedirectResponse to view page
      */
-    public function bring(string $id)
+    public function bring(User $driver)
     {
         try {
+            $bringCount = $driver->calculations()->where('is_bring', false)->count();
 
-            $bringCout = Calculation::where(['driver_id' => $id, 'is_bring' => false])->count();
-            if($bringCout == 0){
-                return redirect()->route('drivers.index')->with('success', 'السائق ليس لديه أي ملغ بعد');
+            if($bringCount == 0) {
+                return redirect()->route('drivers.index')->with('success', 'The driver has no outstanding payments to bring.');
             }
-            Calculation::where(['driver_id' => $id, 'is_bring' => false])
+
+            $driver->calculations()->where('is_bring', false)
                 ->update(['is_bring' => true]);
 
-            return redirect()->route('drivers.index')->with('success', 'تم إستلام المبلغ بنجاح');
+            return redirect()->route('drivers.index')->with('success', 'The outstanding payments have been successfully marked as brought.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error bringing payments. Please try again. Error details: ' . $e->getMessage())->withInput();
         }
     }
 
 
+
     /**
      * Remove the specified resource from storage.
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-
+     * @return \Illuminate\Http\RedirectResponse to view page
      */
     public function destroy(Calculation $calculation)
     {
         try {
             $calculation->delete();
 
-            return redirect()->route('calculations.index')->with('success', 'تم حذف سجل الحساب بنجاح');
+            return redirect()->route('calculations.index')->with('success', 'Successfully calculation deleted.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in deleted calculation.\n errors:'.$e->getMessage())->withInput();
         }
     }
 }

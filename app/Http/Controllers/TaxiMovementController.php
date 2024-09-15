@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\AcceptTaxiMovemntEvent;
-use App\Events\CreateTaxiMovementEvent;
-use App\Events\MovementFindUnFindEvent;
-use App\Events\RejectTaxiMovemntEvent;
+use App\Events\Movement\AcceptTaxiMovemntEvent;
+use App\Events\Movement\CreateTaxiMovementEvent;
+use App\Events\Movement\MovementFindUnFindEvent;
+use App\Events\Movement\RejectTaxiMovemntEvent;
 use App\Http\Requests\TaxiMovementRequest;
 use App\Models\Calculation;
 use App\Models\Taxi;
@@ -32,16 +32,16 @@ class TaxiMovementController extends Controller
         $taxiMovement = $this->get_data([
             'taxi_movements.id as movement_id',
             'taxi_movements.my_address',
-            'taxi_movements.destnation_address',
+            'taxi_movements.destination_address',
             'taxi_movements.gender',
             'taxi_movements.start_latitude',
             'taxi_movements.start_longitude',
             'driver.email as driver_email',
             'customer.email as customer_email',
             'driver_profile.name as driver_name',
-            'driver_profile.phoneNumber as driver_phone',
+            'driver_profile.phone_number as driver_phone',
             'customer_profile.name as customer_name',
-            'customer_profile.phoneNumber as customer_phone',
+            'customer_profile.phone_number as customer_phone',
             'taxis.id as taxi_id',
             'taxis.car_name as car_car_name',
             'taxis.lamp_number as car_lamp_number',
@@ -63,16 +63,16 @@ class TaxiMovementController extends Controller
         $completedRequests = $this->get_data([
             'taxi_movements.id as movement_id',
             'taxi_movements.my_address',
-            'taxi_movements.destnation_address',
+            'taxi_movements.destination_address',
             'taxi_movements.gender',
             'taxi_movements.start_latitude',
             'taxi_movements.start_longitude',
             'driver.email as driver_email',
             'customer.email as customer_email',
             'driver_profile.name as driver_name',
-            'driver_profile.phoneNumber as driver_phone',
+            'driver_profile.phone_number as driver_phone',
             'customer_profile.name as customer_name',
-            'customer_profile.phoneNumber as customer_phone',
+            'customer_profile.phone_number as customer_phone',
             'taxis.id as taxi_id',
             'taxis.car_name as car_car_name',
             'taxis.lamp_number as car_lamp_number',
@@ -108,7 +108,7 @@ class TaxiMovementController extends Controller
             return $data;
 
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
         }
     }
 
@@ -133,7 +133,7 @@ class TaxiMovementController extends Controller
 
             return view('taxi_movement.map', ['data' => $data])->with('success', 'تم عرض الخريطة بنحاح');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
         }
     }
 
@@ -228,7 +228,7 @@ class TaxiMovementController extends Controller
         } catch (ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
         }
     }
 
@@ -315,7 +315,7 @@ class TaxiMovementController extends Controller
             $customerName = UserProfile::where('user_id',  $taxiMovement->customer_id)->first()->name;
 
             $from = $taxiMovement->my_address;
-            $to = $taxiMovement->destnation_address;
+            $to = $taxiMovement->destination_address;
 
             MovementFindUnFindEvent::dispatch(
                 $driverName,
@@ -339,9 +339,9 @@ class TaxiMovementController extends Controller
             $request = TaxiMovement::select(
                 'taxi_movements.id as request_id',
                 'up.name',
-                'up.phoneNumber',
+                'up.phone_number',
                 'taxi_movements.my_address as customer_address',
-                'taxi_movements.destnation_address as destnation_address',
+                'taxi_movements.destination_address as destination_address',
                 'taxi_movements.gender as gender',
                 'taxi_movements.start_latitude as location_lat',
                 'taxi_movements.start_longitude as location_long',
@@ -373,7 +373,7 @@ class TaxiMovementController extends Controller
 
             return redirect()->back()->with('success', 'تم حذف الطلب بنجاح');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
         }
     }
 }

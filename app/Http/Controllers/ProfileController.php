@@ -37,15 +37,15 @@ class ProfileController extends Controller
             'email' => $request->input('email')
         ]);
 
-        if ($request->user()->user_profile) {
-            $request->user()->user_profile->update([
+        if ($request->user()->profile) {
+            $request->user()->profile->update([
                 'name' => $request->input('name'),
-                'phoneNumber' => $request->input('phoneNumber')
+                'phone_number' => $request->input('phone_number')
             ]);
         } else {
             UserProfile::create([
                 'name' => $request->input('name'),
-                'phoneNumber' => $request->input('phoneNumber'),
+                'phone_number' => $request->input('phone_number'),
                 'user_id' => $request->user()->id,
             ]);
         }

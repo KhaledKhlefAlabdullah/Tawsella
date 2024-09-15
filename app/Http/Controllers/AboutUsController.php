@@ -5,24 +5,29 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AboutUsRequest;
 use App\Models\AboutUs;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class AboutUsController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @return JsonResponse
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-30
      */
     public function index()
     {
         try {
-            $aboutUsRecords = AboutUs::select('title', 'description', 'complaints_number')->first();
+            $aboutUsRecords = AboutUs::select('id', 'title', 'description', 'complaints_number', 'image');
 
             if (request()->wantsJson()) {
-                return api_response(data: $aboutUsRecords, message: 'نجحنا في الحصول على التفاصيل عنا');
+                return api_response(data: $aboutUsRecords, message: 'Successfully retrieved about us.');
             }
 
-            $additional_info = AboutUs::where('is_general', false)->select('title', 'description')->get();
+            $additional_info = AboutUs::select('id', 'title', 'description', 'image')->where('is_general', false)->get();
 
             return view('aboutus.index', ['aboutUsRecords' => $aboutUsRecords, 'additional_info' => $additional_info]);
 
@@ -31,69 +36,99 @@ class AboutUsController extends Controller
                 return api_response(errors: [$e->getMessage()], message: 'نجحنا في الحصول على التفاصيل عنا', code: 500);
             }
 
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:\n errors:' . $e->getMessage())->withInput();
         }
     }
 
 
     /**
      * Get the additional information
+     * @return JsonResponse
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-30
      */
-    public function get_addition_information()
+    public function getAdditionInformation()
     {
         try {
+            $data = AboutUs::select('id', 'title', 'description', 'image')->where('is_general', false)->get();
 
-            $data = AboutUs::where('is_general', false)->select('title', 'description')->get();
-
-            return api_response(data: $data, message: 'الحصول على معلومات إضافية ناجحة');
+            return api_response(data: $data, message: 'Successfully retrieved additional about us information.');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'الحصول على خطأ معلومات إضافية', code: 500);
+            return api_response(errors: $e->getMessage(), message: 'Error in retrieved additional about us information.', code: 500);
         }
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Store or update the general about us details
+     * @param AboutUsRequest $request
+     * @return \Illuminate\Http\RedirectResponse to view page
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-30
      */
     public function create()
     {
-        // يمكنك تعيين البيانات التي تحتاجها في صفحة الإنشاء هنا
         return view('aboutus.create');
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Store or update the general about us details
+     * @param AboutUsRequest $request
+     * @return \Illuminate\Http\RedirectResponse to view page
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-30
      */
     public function edit(AboutUs $aboutUs)
     {
-        // يمكنك تعيين البيانات التي تحتاجها في صفحة التحرير هنا
         return view('aboutus.edit', ['aboutUs' => $aboutUs]);
     }
 
     /**
-     * Store a newly created resource in storage.
-     * Or
-     * Update the exists aboutus details
+     * Store or update the general about us details
+     * @param AboutUsRequest $request
+     * @return \Illuminate\Http\RedirectResponse to view page
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-30
      */
-    public function store_or_update(AboutUsRequest $request)
+    public function storeOrUpdate(AboutUsRequest $request)
     {
         try {
-
             $validatedData = $request->validated();
+            $aboutUs = AboutUs::where('is_general', true)->first();
 
-            if (AboutUs::where('is_general', true)->count() == 0) {
-                AboutUs::create($validatedData);
+            if (is_null($aboutUs)) {
+                $imagePath = storeFile($validatedData['image'], '/images/aboutUs');
+                AboutUs::create([
+                    'admin_id' => $validatedData['admin_id'],
+                    'title' => $validatedData['title'],
+                    'description' => $validatedData['description'],
+                    'complaints_number' => $validatedData['complaints_number'],
+                    'is_general' => true,
+                    'image' => $imagePath
+                ]);
+
+                $messag = 'Successfully created about us.';
             } else {
-                AboutUs::where('is_general', true)->first()->update($validatedData);
+                $imagePath = $validatedData['image'] ? editFile($aboutUs->image, '/images/aboutUs', $validatedData['image']) : $aboutUs->image;
+                $aboutUs->update([
+                    'title' => $validatedData['title'],
+                    'description' => $validatedData['description'],
+                    'complaints_number' => $validatedData['complaints_number'],
+                    'image' => $imagePath
+                ]);
+                $messag = 'Successfully updated about us.';
             }
-
-            return redirect()->route('aboutus.index')->with('success', 'تم إنشاء نبذة عنا بنجاح.');
+            return redirect()->route('aboutus.index')->with('success', $messag);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('There error in proceced data.\n errors:' . $e->getMessage())->withInput();
         }
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Create additional info records
+     * @param AboutUsRequest $request
+     * @return \Illuminate\Http\RedirectResponse to view page
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-
      */
     public function create_additional_info()
     {
@@ -102,58 +137,88 @@ class AboutUsController extends Controller
     }
 
     /**
-     * Create Additional info records
+     * Create additional info records
+     * @param AboutUsRequest $request
+     * @return \Illuminate\Http\RedirectResponse to view page
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-
      */
-    public function store_additional_info(AboutUsRequest $request){
-        try{
+    public function storeAdditionalInfo(AboutUsRequest $request)
+    {
+        try {
 
             $validatedData = $request->validated();
+            $imagePath = storeFile($validatedData['image'], '/images/aboutUs/additional');
+            AboutUs::create([
+                'title' => $validatedData['title'],
+                'description' => $validatedData['description'],
+                'image' => $imagePath
+            ]);
 
-            AboutUs::create($validatedData);
+            return redirect()->route('aboutus.index')->with('success', 'Successfully created additional info.');
 
-            return redirect()->route('aboutus.index')->with('success', 'تم إضافة معلومات إضافية بنجاح.');
-
-        }
-        catch(Exception $e){
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors('Error in create additional info\n errors:' . $e->getMessage())->withInput();
         }
     }
 
-
+    /**
+     * Update additional info records
+     * @param AboutUsRequest $request
+     * @param AboutUs $aboutUs
+     * @return \Illuminate\Http\RedirectResponse to view page
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-
+     */
     public function edit_additional_info(AboutUs $aboutUs)
     {
-        // يمكنك تعيين البيانات التي تحتاجها في صفحة التحرير هنا
         return view('aboutus.edit', ['aboutUs' => $aboutUs]);
     }
 
-     /**
-     * Update Additional info records
+    /**
+     * Update additional info records
+     * @param AboutUsRequest $request
+     * @param AboutUs $aboutUs
+     * @return \Illuminate\Http\RedirectResponse to view page
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-
      */
-    public function update_additional_info(AboutUsRequest $request, AboutUs $aboutUs){
-        try{
+    public function updateAdditionalInfo(AboutUsRequest $request, AboutUs $aboutUs)
+    {
+        try {
 
             $validatedData = $request->validated();
+            $imagePath = $validatedData['image'] ? editFile($aboutUs->image, '/images/aboutUs/additional', $validatedData['image']) : $aboutUs->image;
+            $aboutUs->update([
+                'title' => $validatedData['title'],
+                'description' => $validatedData['description'],
+                'image' => $imagePath
+            ]);
+            return redirect()->route('aboutus.index')->with('success', 'Updated additional info.');
 
-            $aboutUs->update($validatedData);
-
-            return redirect()->route('aboutus.index')->with('success', 'تم تعديل البيانات بنجاح.');
-
-        }
-        catch(Exception $e){
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+        } catch (Exception $e) {
+            return redirect()->back()->withErrors('Error in update additional info.\n errors:' . $e->getMessage())->withInput();
         }
     }
 
     /**
      * Remove the specified resource from storage.
+     * @param AboutUs $aboutUs
+     * @return \Illuminate\Http\RedirectResponse to view page
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-
      */
     public function destroy(AboutUs $aboutUs)
     {
         try {
+            $message = removeFile($aboutUs->image);
+            if ($message == 'failed')
+                return redirect()->back()->withErrors('')->withInput();
+
             $aboutUs->delete();
-            return redirect()->route('aboutus.index')->with('success', 'تم حذف نبذة عنا بنجاح.');
+            return redirect()->route('aboutus.index')->with('success', 'Successfully deleted about us.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in deleted about us\n errors:' . $e->getMessage())->withInput();
         }
     }
 }

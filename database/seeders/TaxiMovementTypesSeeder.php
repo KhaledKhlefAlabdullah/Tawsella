@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\TaxiMovementType;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -58,22 +59,17 @@ class TaxiMovementTypesSeeder extends Seeder
         ];
 
         foreach ($movementTypes as $movementType) {
-            DB::table('taxi_movement_types')->insert([
-                'id' => Str::uuid(),
-                'type' => $movementType['type'],
-                'price' => $movementType['price'],
-                'payment' => 'TL'
-            ]);
-        }   
-        
-        DB::table('taxi_movement_types')->insert([
+            TaxiMovementType::create($movementType);
+        }
+
+        TaxiMovementType::create([
             'id' => 't-m-t-1',
             'type' => 'طلب داخلي',
             'price' => 50,
             'payment' => 'TL'
         ]);
 
-        DB::table('taxi_movement_types')->insert([
+        TaxiMovementType::create([
             'id' => 't-m-t-2',
             'type' => 'طلب خارجي',
             'is_onKM' => true,
@@ -81,7 +77,7 @@ class TaxiMovementTypesSeeder extends Seeder
             'payment' => '$'
         ]);
 
-        DB::table('taxi_movement_types')->insert([
+        TaxiMovementType::create([
             'id' => 't-m-t-3',
             'type' => 'استأجار سيارة لمدة زمنية',
             'description' => 'تواصل معنا على الرقم',

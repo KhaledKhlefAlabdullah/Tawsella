@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Movement;
 
+use App\Events\BaseEvent;
 use App\Models\TaxiMovementType;
 use App\Models\UserProfile;
 use Illuminate\Broadcasting\PrivateChannel;

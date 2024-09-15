@@ -1,12 +1,13 @@
 <?php
 
-use App\Mail\TawsellaMail;
+use App\Mail\StarTa;
 use App\Notifications\TawsellaNotification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
+use \App\Models\User;
 
 if (!function_exists('getAndCheckModelById')) {
     /**
@@ -171,7 +172,7 @@ if (!function_exists('getAdminId')) {
      */
     function getAdminId()
     {
-        $admin_id = \App\Models\User::role(\App\Enums\UserEnums\UserType::Admin()->key)->first()->id;
+        $admin_id = \App\Models\User::role(UserType::Admin()->key)->first()->id;
         return $admin_id;
     }
 }
@@ -228,7 +229,6 @@ if (!function_exists('count_items')) {
         }
     }
 }
-
 
 if (!function_exists('send_notifications')) {
     /**

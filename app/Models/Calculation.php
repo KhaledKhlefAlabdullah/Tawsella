@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\CalculationTrait;
 use App\Models\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Calculation extends Model
 {
-    use HasFactory, HasUuid, SoftDeletes;
+    use HasFactory, HasUuid, SoftDeletes, CalculationTrait;
 
     protected $keyType = 'string';
     protected $primaryKey = 'id';

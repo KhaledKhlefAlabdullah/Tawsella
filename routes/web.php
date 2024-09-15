@@ -2,7 +2,7 @@
 
 use App\Events\GetTaxiLocationsEvent;
 use App\Http\Controllers\Auth\RegisteredUserController;
-use App\Http\Controllers\CalculationsController;
+use App\Http\Controllers\CalculationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DriversController;
 use App\Http\Controllers\OfferController;
@@ -77,17 +77,17 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/create-driver', [RegisteredUserController::class, 'create'])
         ->name('create.driver');
     // For create the drivers acounts
-    Route::post('/store-driver', [RegisteredUserController::class, 'admin_store'])->name('store-driver');
+    Route::post('/store-driver', [RegisteredUserController::class, 'create_driver'])->name('store-driver');
     Route::group(['prefix' => 'drivers'], function () {
         Route::get('/', [DriversController::class, 'index'])->name('drivers.index');
-        Route::get('/{id}', [DriversController::class, 'show'])->name('drivers.show');
-        Route::get('/edit/{id}', [DriversController::class, 'edit'])->name('drivers.edit');
-        Route::put('/update/{id}', [UserProfileController::class, 'update'])->name('drivers.update');
-        Route::delete('/delete/{id}', [DriversController::class, 'destroy'])->name('drivers.destroy');
+        Route::get('/{driver}', [DriversController::class, 'show'])->name('drivers.show');
+        Route::get('/edit/{driver}', [DriversController::class, 'edit'])->name('drivers.edit');
+        Route::put('/update/{driver}', [UserProfileController::class, 'update'])->name('drivers.update');
+        Route::delete('/delete/{driver}', [DriversController::class, 'destroy'])->name('drivers.destroy');
     });
 
 
-    // Route::post('/drivers/set-state', [DriversController::class, 'setState'])->name('drivers.set_state');
+    // Route::post('/drivers/set-state', [DriversController::class, 'changeDriverState'])->name('drivers.set_state');
 
     //***************************End route driver ******************************** */
     //**************************************************************************** */
@@ -139,18 +139,18 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     //*************************** Start route calculations *********************************** */
     Route::group(['prefix' => 'calculations'], function () {
-        Route::get('/', [CalculationsController::class, 'index'])->name('calculations.index');
+        Route::get('/', [CalculationController::class, 'index'])->name('calculations.index');
 
-        Route::get('/{calculations}', [CalculationsController::class, 'show'])->name('calculations.show');
-        Route::get('/bring/{calculations}', [CalculationsController::class, 'bring'])->name('calculations.bring');
+        Route::get('/{driver}', [CalculationController::class, 'show'])->name('calculations.show');
+        Route::get('/bring/{driver}', [CalculationController::class, 'bring'])->name('calculations.bring');
 
-        Route::get('/create', [CalculationsController::class, 'create'])->name('calculations.create');
-        Route::post('/store', [CalculationsController::class, 'store'])->name('calculations.store');
+        Route::get('/create', [CalculationController::class, 'create'])->name('calculations.create');
+        Route::post('/store', [CalculationController::class, 'store'])->name('calculations.store');
 
-        Route::get('/edit/{calculations}', [CalculationsController::class, 'edit'])->name('calculations.edit');
-        Route::put('/update/{calculations}', [CalculationsController::class, 'update'])->name('calculations.update');
+        Route::get('/edit/{calculations}', [CalculationController::class, 'edit'])->name('calculations.edit');
+        Route::put('/update/{calculations}', [CalculationController::class, 'update'])->name('calculations.update');
 
-        Route::delete('/delete/{calculations}', [CalculationsController::class, 'destroy'])->name('calculations.destroy');
+        Route::delete('/delete/{calculations}', [CalculationController::class, 'destroy'])->name('calculations.destroy');
     });
 
     //*************************** End route calculations *********************************** */

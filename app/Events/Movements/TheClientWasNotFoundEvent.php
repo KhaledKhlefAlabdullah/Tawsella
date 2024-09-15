@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Movements;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -10,33 +10,35 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MovementFindUnFindEvent implements ShouldBroadcast
+class TheClientWasNotFoundEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    
     protected $driverName;
     protected $customerName;
-    protected $message;
+    protected string $message;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($driverName, $customerName, $message)
+    public function __construct($driverName, $customerName, $message = null)
     {
         $this->driverName = $driverName;
         $this->customerName = $customerName;
-        $this->message = $message;
+        $this->message = $message ?? __('Customer-Was-Not-Found').' '.$customerName;
 
     }
 
     /**
      * Get the channels the event should broadcast on.
      *
+     * @return array<int, \Illuminate\Broadcasting\Channel>
      */
-    public function broadcastOn(): Channel
+    public function broadcastOn(): array
     {
-        return new PrivateChannel('movemnt.'.getAdminId());
+        return [
+            new PrivateChannel('movement-was-not-found.'.getAdminId()),
+        ];
     }
 
     public function broadcastWith():array
@@ -46,5 +48,10 @@ class MovementFindUnFindEvent implements ShouldBroadcast
             'customer' => $this->customerName ,
             'message' => $this->message
         ];
+    }
+
+    public function broadcastAs(): string
+    {
+        return 'movement-customer-was-not-found';
     }
 }

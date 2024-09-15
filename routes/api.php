@@ -1,18 +1,16 @@
 <?php
 
-use App\Events\MovementFindUnFindEvent;
 use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\ContactUsMessageController;
+use App\Http\Controllers\DriversController;
 use App\Http\Controllers\OfferController;
+use App\Http\Controllers\TaxiController;
 use App\Http\Controllers\TaxiMovementController;
 use App\Http\Controllers\TaxiMovementTypeController;
 use App\Http\Controllers\UserProfileController;
-use App\Models\AboutUs;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DriversController;
-use App\Http\Controllers\TaxiController;
 use App\Models\User;
 use Illuminate\Support\Facades\Broadcast;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -36,7 +34,7 @@ Route::post('/get-taxi-location/{driver_id}',[TaxiController::class,'getTaxiLoca
 Route::middleware(['auth:sanctum', 'verified.email'])->group(function () {
 
     // for driver
-    Route::post('/drivers/set-state', [DriversController::class, 'setState']);
+    Route::post('/drivers/set-state', [DriversController::class, 'changeDriverState']);
 
     Route::post('/make-is-completed/{id}', [TaxiMovementController::class, 'makeMovementIsCompleted']);
 
@@ -60,7 +58,7 @@ Route::post('/profile/edit/{user_id}', [UserProfileController::class, 'update'])
 Route::group(['prefix' => 'info'], function () {
     Route::get('/about-us', [AboutUsController::class, 'index']);
 
-    Route::get('/addition', [AboutUsController::class, 'get_addition_information']);
+    Route::get('/addition', [AboutUsController::class, 'getAdditionInformation']);
 });
 
 Route::get('/movement-types', [TaxiMovementTypeController::class, 'index']);

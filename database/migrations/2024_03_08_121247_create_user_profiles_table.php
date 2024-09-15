@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use \App\Enums\UserEnums\UserGender;
 
 return new class extends Migration
 {
@@ -15,9 +16,9 @@ return new class extends Migration
             $table->uuid('id')->unique()->primary();
             $table->string('user_id');
             $table->string('name');
-            $table->string('avatar')->default('/images/profile_images/avatar.png');
-            $table->string('phoneNumber')->nullable();
-            $table->enum('gender',['male','female'])->nullable();
+            $table->string('avatar')->default('/images/profile_images/man.png');
+            $table->string('phone_number')->nullable();
+            $table->integer('gender')->default(UserGender::Male);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
             $table->SoftDeletes();        });

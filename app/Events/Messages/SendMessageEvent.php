@@ -1,29 +1,27 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Messages;
 
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class RejectTaxiMovemntEvent implements ShouldBroadcast
+class SendMessageEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    protected $customer_id;
-    protected $message;
+    private $message;
+    private $receiver_id;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(string $customer_id, string $message)
+    public function __construct($message, $receiver_id)
     {
-        $this->customer_id = $customer_id;
         $this->message = $message;
+        $this->receiver_id = $receiver_id;
     }
 
     /**
@@ -31,16 +29,14 @@ class RejectTaxiMovemntEvent implements ShouldBroadcast
      *
      * @return array<int, \Illuminate\Broadcasting\Channel>
      */
-    public function broadcastOn(): Channel
-    {   
-        $customer_id = $this->customer_id;
-        return new PrivateChannel('customer.'.$customer_id);
-    }
-
-    public function broadcastWith():array
+    public function broadcastOn(): array
     {
         return [
-            'message' => $this->message
+            new PrivateChannel('send-message.'.$this->receiver_id),
         ];
+    }
+
+    public function broadCastWith(){
+        return $this->message;
     }
 }

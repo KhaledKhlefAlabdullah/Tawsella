@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use \App\Enums\UserEnums\DriverState;
+use \App\Enums\UserEnums\UserType;
 
 return new class extends Migration
 {
@@ -19,8 +21,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('user_type',['customer','driver','admin'])->default('customer');
-            $table->enum('driver_state',['ready','in_break','reserved'])->nullable();
+            $table->integer('user_type')->default(UserType::Customer);
+            $table->integer('driver_state')->default(DriverState::Ready);
             $table->boolean('is_active')->default(true);
             $table->timestamp('mail_code_verified_at')->nullable();
             $table->string('mail_verify_code')->nullable();
@@ -31,15 +33,6 @@ return new class extends Migration
             $table->timestamps();
             $table->SoftDeletes();
         });
-
-        $password=Hash::make('12345678');
-        DB::table('users')->insert([
-            'id' => Str::uuid(),
-            'email'=>'admin.star.taxi@gmail.com',
-            'password'=>$password,
-            'user_type' => 'admin',
-            'created_at' => now(),
-        ]);
     }
 
     /**

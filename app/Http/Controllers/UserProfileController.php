@@ -3,84 +3,91 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserProfileRequest;
-use App\Models\Taxi;
+
+use App\Http\Requests\UserRequests\UserRequest;
 use App\Models\User;
-use App\Models\UserProfile;
 use Exception;
-use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
-use function Laravel\Prompts\error;
 
 class UserProfileController extends Controller
 {
+
     /**
-     * Display a listing of the resource.
+     * Return Auth User Profile
+     * @return JsonResponse UserProfile data
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-13
      */
     public function index()
     {
         try {
 
-            $profile = UserProfile::select('users.id as user_id', 'user_profiles.name', 'user_profiles.avatar', 'user_profiles.phoneNumber', 'users.email')
-                ->join('users', 'user_profiles.user_id', '=', 'users.id')
-                ->where('user_profiles.user_id', getMyId())
-                ->first();
+            $use = Auth::user();
 
-            return api_response(data: $profile, message: 'تفاصيل ملف تعريف المستخدم تحقق النجاح');
+            $profile = [
+                'id' => $use->id,
+                'name' => $use->profile->name,
+                'avatar' => $use->profile->avatar,
+                'phone_number' => $use->profile->phone_number,
+                'email' => $use->email
+            ];
+
+            return api_response(data: $profile, message: 'Profile retrieved successfully.');
         } catch (Exception $e) {
-            return api_response(errors: $e->getMessage(), message: 'تفاصيل ملف تعريف المستخدم تحصل على خطأ', code: 500);
+            return api_response(errors: $e->getMessage(), message: 'Profile retrieved error.', code: 500);
         }
     }
 
     /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(UserProfile $userProfile)
-    {
-    }
-
-    /**
      * Update the specified resource in storage.
+     * @param UserProfileRequest $request is profile data
+     * @param User $user is user to edit his profile
+     * @return JsonResponse
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-14
      */
-    // تلقا بشقك 
-    // غير قابل للتعديل
-    public function update(UserProfileRequest $request, string $id)
+    public function update(UserRequest $request)
     {
         try {
+            DB::beginTransaction();
+            $validatedData = $request->validated();
 
-            $request->validated();
-            $user = getAndCheckModelById(User::class, $id);
+            $user = Auth::user();
+
             if (request()->has('email'))
                 $user->update([
-                    'email' => $request->input('email')
+                    'email' => $validatedData['email']
                 ]);
-                
+
             if (request()->has('password'))
                 $user->update([
                     'password' => Hash::make($request->password),
                 ]);
 
-            $userProfile = UserProfile::where('user_id', $id)->first();
+            $userProfile = $user->profile();
 
             $userProfile->update([
-                'name' => $request->input('name'),
-                'phoneNumber' => $request->input('phoneNumber')
+                'name' => $validatedData['name'],
+                'phone_number' => $validatedData['phone_number']
             ]);
 
             if ($request->has('avatar')) {
 
-                if (!empty($request->input('avatar'))) {
+                if (!empty($validatedData['avatar'])) {
                     $avatar = $request->avatar;
 
                     $path = 'images/profiles';
 
                     if ($userProfile->avatar == '/images/profile_images/user_profile.png') {
 
-                        $avatar_path = storeProfileAvatar($avatar, $path);
+                        $avatar_path = storeFile($avatar, $path);
                     } else {
 
-                        $avatar_path = editProfileAvatar($userProfile->avatar, $path, $avatar);
+                        $avatar_path = editFile($userProfile->avatar, $path, $avatar);
                     }
 
                     $userProfile->update([
@@ -88,16 +95,12 @@ class UserProfileController extends Controller
                     ]);
                 }
             }
-
-            if ($request->wantsJson())
-                return api_response(message: 'تم تعديل البيانات بنجاح');
-
-            return redirect()->back()->with('success', 'تم تعديل بيانات السائق بنجاح');
+            DB::commit();
+            return api_response(message: 'Profile updated successfully.');
         } catch (Exception $e) {
-            if ($request->wantsJson())
-                return api_response(errors: [$e->getMessage()], message: 'حدث خطأ في تعديل البيانات', code: 500);
-
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى. الاخطاء:' . $e->getMessage())->withInput();
+            DB::rollBack();
+            return api_response(errors: [$e->getMessage()], message: 'Profile updated error.', code: 500);
         }
     }
+
 }

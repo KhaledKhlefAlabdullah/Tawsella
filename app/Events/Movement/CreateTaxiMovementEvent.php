@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Movement;
 
-use App\Models\Taxi;
+use App\Events\BaseEvent;
 use App\Models\TaxiMovement;
 use App\Models\UserProfile;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\PrivateChannel;
+use function App\Events\getReadyDrivers;
 
 class CreateTaxiMovementEvent extends BaseEvent
 {
