@@ -41,6 +41,8 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
         'points',
         'user_type',
         'driver_state',
+        'KMPaid',
+        'movementPaid',
         'is_active',
         'activation_expired_date',
         'last_location_latitude',
@@ -51,7 +53,6 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
         'mail_code_last_attempt_date',
         'mail_verify_code_sent_at',
     ];
-
     /**
      * The attributes that should be hidden for serialization.
      *

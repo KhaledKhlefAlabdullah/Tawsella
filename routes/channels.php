@@ -31,3 +31,8 @@ Broadcast::channel('customer-location.{id}', function ($user, $id) {
 Broadcast::channel('movement-request-to.{id}', function ($user, $id) {
     return (string) $user->id === (string) $id;
 });
+
+// send new driver state to dashboard
+Broadcast::channel('driver-change-state.{id}', function ($user, $id) {
+    return (string) $user->id === (string) $id;
+});

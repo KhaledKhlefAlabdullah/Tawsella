@@ -22,9 +22,9 @@ class MarkMovementAsCompletedRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'way' => ['sometimes','numeric'],
-            'end_lat' => ['required','numeric'],
-            'end_lon' => ['required','numeric']
+            'distance' => ['sometimes','numeric'],
+            'end_latitude' => ['required','numeric'],
+            'end_longitude' => ['required','numeric']
         ];
     }
 }
