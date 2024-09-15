@@ -1,0 +1,146 @@
+<?php
+
+namespace App\Models\Traits\UserTraits;
+
+use App\Enums\UserEnums\DriverState;
+use App\Enums\UserEnums\UserType;
+use App\Models\Movement;
+use App\Models\TaxiMovement;
+use App\Models\User;
+
+trait DriverTrait
+{
+    /**
+     * Processed movement state
+     * @param TaxiMovement $movement
+     * @param int $state
+     * @param string|null $message
+     * @return \Illuminate\Http\JsonResponse|void
+     */
+    public static function processMovementState(TaxiMovement $movement, int $state, string $message = null)
+    {
+        if ($movement->is_canceled) {
+            return api_response(
+                message: 'The request has already been canceled by the customer. We apologize for any inconvenience caused.',
+                code: 410);
+        } else {
+            // Update the request state
+            $movement->update([
+                'request_state' => $state,
+                'state_message' => $message
+            ]);
+        }
+    }
+
+    /**
+     * Get all ready drivers
+     * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection|never
+     */
+    public static function getReadyDrivers()
+    {
+        $drivers = User::with(['taxi', 'profile'])
+            ->where([
+                'user_type' => UserType::TaxiDriver,
+                'driver_state' => DriverState::Ready,
+                'is_active' => true
+            ])
+            ->has('taxi') // Ensure the user has a related taxi
+            ->get();
+
+        if ($drivers->isEmpty()) {
+            return abort(404, 'There are no drivers ready to work.');
+        }
+
+        $mappedDrivers = $drivers->map(function ($driver) {
+            return [
+                'id' => $driver->id,
+                'name' => $driver->profile->name,
+                'gender' => $driver->profile->gender,
+                'avatar' => $driver->profile->avatar
+            ];
+        });
+
+        return $mappedDrivers;
+    }
+
+    /**
+     * Get all drivers in the database with pagination.
+     * @param int $perPage
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public static function getDrivers($perPage = 15)
+    {
+        $drivers = User::with(['taxi', 'profile'])
+            ->where('user_type', UserType::TaxiDriver)
+            ->paginate($perPage); // Use paginate instead of get()
+
+        if ($drivers->isEmpty()) {
+            return abort(404, 'There are no drivers.');
+        }
+
+        // Map the drivers data using the mapping method
+        $mappedDrivers = self::mappingDrivers($drivers);
+
+        // Return paginated mapped drivers
+        return $mappedDrivers;
+    }
+
+
+    /**
+     * Mapping the drivers.
+     * @param \Illuminate\Contracts\Pagination\LengthAwarePaginator $drivers
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public static function mappingDrivers($drivers)
+    {
+        // Extract the items and map the driver data
+        $mappedDrivers = $drivers->getCollection()->map(function ($driver) {
+            $unBring = $driver->calculations()->where('is_bring', false)->sum('totalPrice');
+            return [
+                'driver_id' => $driver->id,
+                'name' => $driver->profile->name,
+                'email' => $driver->email,
+                'phone_number' => $driver->profile->phone_number,
+                'avatar' => $driver->profile->avatar,
+                'is_active' => $driver->is_active,
+                'unBring' => $unBring,
+                'driver_state' => DriverState::getKey($driver->driver_state),
+                'plate_number' => $driver->taxi->plate_number,
+                'lamp_number' => $driver->taxi->lamp_number,
+            ];
+        });
+
+        // Replace the items in the paginator with the mapped items
+        return new \Illuminate\Pagination\LengthAwarePaginator(
+            $mappedDrivers, // Mapped items
+            $drivers->total(), // Total items
+            $drivers->perPage(), // Items per page
+            $drivers->currentPage(), // Current page
+            ['path' => request()->url()] // Path for pagination links
+        );
+    }
+
+    /**
+     * Mapping a single driver
+     * @param User $driver
+     * @return array
+     */
+    public static function mappingSingleDriver(User $driver)
+    {
+        $unBring = $driver->calculations()->where('is_bring', false)->sum('totalPrice');
+
+        return [
+            'driver_id' => $driver->id,
+            'name' => $driver->profile->name,
+            'email' => $driver->email,
+            'phone_number' => $driver->profile->phone_number,
+            'avatar' => $driver->profile->avatar,
+            'is_active' => $driver->is_active,
+            'unBring' => $unBring,
+            'driver_state' => DriverState::getKey($driver->driver_state),
+            'plate_number' => $driver->taxi->plate_number,
+            'lamp_number' => $driver->taxi->lamp_number,
+        ];
+    }
+
+}

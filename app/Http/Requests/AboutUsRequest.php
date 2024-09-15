@@ -16,9 +16,9 @@ class AboutUsRequest extends FormRequest
 
     protected function prepareForValidation()
     {
-            $this->merge([
-                'admin_id' => getAdminId(),
-            ]);
+        $this->merge([
+            'admin_id' => getAdminId(),
+        ]);
     }
 
     /**
@@ -29,10 +29,11 @@ class AboutUsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'admin_id' => 'string|required|exists:users,is',
-            'title' => 'required|string',
-            'description' => 'required|string',
-            'complaints_number' => 'sometimes|required|string|regex:/^+[0-9]{9,20}$/'
+            'admin_id' => ['uuid', 'exists:users,id'],
+            'title' => ['required', 'string'],
+            'description' => ['required', 'string'],
+            'complaints_number' => ['sometimes', 'required', 'string', 'regex:/^(\+|00)[0-9]{9,20}$/'],
+            'image' => ['nullable', 'image', 'mimes:jpg,png,jpeg','max:10024'],
         ];
     }
 }

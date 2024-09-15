@@ -42,7 +42,7 @@ class AuthenticatedSessionController extends Controller
                 $user = $request->user();
 
                 // Create a new token for the user
-                $token = createToken($user, 'login-token');
+                $token = createUserToken($user, 'login-token');
 
                 return api_response(data: ['token' => $token, 'user' => $user], message: 'نجح تسجيل الدخول');
             }
@@ -54,16 +54,16 @@ class AuthenticatedSessionController extends Controller
             // Catch AuthenticationException and return an unauthorized response
             if ($request->wantsJson())
                 return api_response(errors: [$e->getMessage(), 'دخول غير مرخص'], message: 'بيانات الاعتماد غير صالحة', code: 401);
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
         } catch (ValidationValidationException $e) {
             // Catch ValidationException and return a validation error response
             if ($request->wantsJson())
                 return api_response(errors: [$e->errors()], message: 'خطئ في التحقق', code: 422);
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
         } catch (Exception $e) {
             if ($request->wantsJson())
                 return api_response(errors: [$e->getMessage()], message: 'خطأ في تسجيل الدخول', code: 500);
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
         }
     }
 

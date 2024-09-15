@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 class ContactUsMessage extends Model
 {
-    use HasFactory,HasUuid,SoftDeletes;
+    use HasFactory,HasUuid;
 
     protected $keyType = 'string';
     protected $primaryKey = 'id';
@@ -16,10 +16,12 @@ class ContactUsMessage extends Model
 
     protected $fillable =[
         'admin_id',
-        'description',
+        'sender_name',
+        'message',
         'email',
         'phone_number',
-        'is_answerd'
+        'is_registeredInApp',
+        'is_answered'
     ];
 
     public function admin(){
@@ -27,4 +29,3 @@ class ContactUsMessage extends Model
     }
 
 }
-//Symfony\Component\ErrorHandler\Error\FatalError: Trait "App\Models\Traits\HasUuid" not found in file D:\SmartCode Projects\star-taxi-12\star-taxi\app\Models\User.php on line 14

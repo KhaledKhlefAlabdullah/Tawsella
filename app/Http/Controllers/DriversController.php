@@ -2,86 +2,84 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserEnums\DriverState;
+use App\Http\Requests\DriverStateRequest;
 use App\Models\User;
 use Exception;
-use Illuminate\Http\Request;
-use App\Models\Calculations;
 use App\Models\Taxi;
-use App\Models\TaxiMovement;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class DriversController extends Controller
 {
+    /**
+     * Retrieve drivers details
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Http\RedirectResponse
+     */
     public function index()
     {
         try {
+            $drivers = User::getDrivers(15); // 15 items per page
 
-            $drivers = $this->getDrivers(['users.user_type' => 'driver'], 'get');
-
-            $combinedAccounts = $this->getCalculations($drivers);
-
-            return view('Driver.index', ['drivers' => $combinedAccounts]);
+            return view('Driver.index', ['drivers' => $drivers]);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in getting drivers data.\n errors:' . $e->getMessage())->withInput();
         }
     }
 
-    public function show($id)
+
+    /**
+     * Retrieve driver details
+     * @param User $driver
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Http\RedirectResponse|never
+     */
+    public function show(User $driver)
     {
         try {
-            // العثور على بيانات السائق باستخدام المعرف الممرر
-            $driver = $this->getDrivers(['users.id' => $id, 'users.user_type' => 'driver'], 'first');
-            // التحقق مما إذا كان السائق موجودًا
-            if (!$driver) {
-                return abort(404, 'Driver not found');
-            }
+            $driver = User::mappingSingleDriver($driver);
 
-            // إعادة عرض بيانات السائق
             return view('Driver.show', ['driver' => $driver]);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in getting driver details.\n errors:'.$e->getMessage())->withInput();
         }
     }
 
-    public function edit($id)
+
+    /**
+     * Redirect to edit driver page
+     * @param User $driver
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Http\RedirectResponse
+     */
+    public function edit(User $driver)
     {
         try {
 
-            $driver = $this->getDrivers(['users.id' => $id, 'users.user_type' => 'driver'], 'first');
+            $driver = User::mappingSingleDriver($driver);
 
-            if (!$driver) {
-                return redirect()->back()->withErrors(["السائق غير موجود حدث خطأ يرجى المحاولة مرة اخرى"])->withInput();
-            }
             return view('Driver.show', ['driver' => $driver]);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('There error in redirect to edit driver page.\n errors:'.$e->getMessage())->withInput();
         }
     }
 
-    public function setState(Request $request)
+    /**
+     * Change driver state from received to ready or to in break
+     * @param DriverStateRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function changeDriverState(DriverStateRequest $request)
     {
         try {
-            $driverId = auth()->id();
+            $validatedData = $request->validated();
 
-            // التحقق من وجود السائق في قاعدة البيانات
-            $driver = User::where('id', $driverId)->where('user_type', 'driver')->first();
-            if (!$driver) {
-                return api_response(null, 'السائق غير موجود', 404);
-            }
+            $driver = Auth::user();
 
-            // تحديث حالة السائق بناءً على القيمة المرسلة في الطلب
-            if ($request->state == 0) {
-                $driver->driver_state = 'in_break';
+            if ($validatedData['state'] == DriverState::InBreak) {
                 $message = 'Driver is in_break';
-            } elseif ($request->state == 1) {
-                $driver->driver_state = 'Ready';
+            } elseif ($validatedData['state'] == DriverState::Ready) {
                 $message = 'Driver is Ready';
-            } else {
-                // إذا كانت القيمة المرسلة غير صالحة
-                return api_response(null, 'Invalid state value', 400);
             }
 
+            $driver->state = $validatedData['state'];
             $driver->save();
             return api_response($message, 200);
         } catch (Exception $e) {
@@ -89,71 +87,27 @@ class DriversController extends Controller
         }
     }
 
-    public function destroy(string $id)
+    /**
+     * Delete driver
+     * @param User $driver
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroy(User $driver)
     {
         try {
-            $driver = getAndCheckModelById(User::class, $id);
 
-            $taxi = Taxi::where('driver_id',$id)->first();
-            if($taxi){
-                $taxi->update([
-                    'driver_id' => null
-                ]);
+            $taxi = $driver->taxi;
+
+            // If the driver has an associated taxi, nullify the driver_id
+            if ($taxi) {
+                $taxi->update(['driver_id' => null]);
             }
 
             $driver->delete();
 
-            return redirect()->back()->with('success', 'تم حذف السائق بنجاح');
+            return redirect()->back()->with('success', 'Successfully deleted driver.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in deleting driver.\n errors:'.$e->getMessage())->withInput();
         }
-    }
-
-    ///////////////////////////////// helper functions here /////////////////////////////////////
-
-    /**
-     * Get Drivers data
-     */
-    public function getDrivers(array $conditions, $method)
-    {
-        $query = User::select('users.id', 'user_profiles.name', 'users.email', 'user_profiles.phoneNumber', 'user_profiles.avatar', 'users.id', 'users.is_active', 'users.driver_state', 'taxis.plate_number', 'taxis.lamp_number')
-            ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
-            ->leftJoin('taxis', 'users.id', '=', 'taxis.driver_id')
-            ->where($conditions);
-
-        // Apply the specified method
-        if ($method === 'get') {
-            return $query->get();
-        } elseif ($method === 'first') {
-            return $query->first(); // Change the limit value as needed
-        } else {
-            return $query->get(); // Default to getting all records if method is not recognized
-        }
-    }
-
-    /**
-     * Get Drivers calculations
-     */
-    public function getCalculations($drivers)
-    {
-        // Combine today's and previous accounts
-        $combinedAccounts = [];
-        foreach ($drivers as $driver) {
-            $driver_id = $driver->id;
-            $unBring = Calculations::where('driver_id', $driver_id)->whereNot( 'is_bring', true)->sum('totalPrice');
-            $combinedAccounts[] = (object)[
-                'driver_id' => $driver_id,
-                'name' => $driver->name,
-                'email' => $driver->email,
-                'phoneNumber' => $driver->phoneNumber,
-                'is_active' => $driver->is_active,
-                'state' => $driver->driver_state,
-                'unBring' => $unBring,
-                'plate_number' => $driver->plate_number,
-                'lamp_number' => $driver->lamp_number
-            ];
-        }
-
-        return $combinedAccounts;
     }
 }
