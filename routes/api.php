@@ -11,6 +11,7 @@ use App\Http\Controllers\UserProfileController;
 use App\Models\User;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
+use \App\Http\Middleware\EnsureEmailIsVerifiedByCodeMiddleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,7 +32,7 @@ Route::get('/driver-request/{id}', [TaxiMovementController::class, 'get_request_
 
 Route::post('/get-taxi-location/{driver_id}',[TaxiController::class,'getTaxiLocation']);
 
-Route::middleware(['auth:sanctum', 'verified.email'])->group(function () {
+Route::middleware(['auth:sanctum', EnsureEmailIsVerifiedByCodeMiddleware::class])->group(function () {
 
     // for driver
     Route::post('/drivers/set-state', [DriversController::class, 'changeDriverState']);
