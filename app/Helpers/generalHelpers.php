@@ -1,13 +1,12 @@
 <?php
 
-use App\Mail\StarTa;
+use App\Mail\TawsellaMail;
 use App\Notifications\TawsellaNotification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
-use \App\Models\User;
 
 if (!function_exists('getAndCheckModelById')) {
     /**
