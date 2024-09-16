@@ -125,7 +125,7 @@ class OfferController extends Controller
         try {
             $validatedData = $request->validated();
 
-            $offer->update($this->validate());
+            $offer->update($validatedData);
 
             return redirect()->route('offers.index')->with('success', 'Successfully updated offer.');
         } catch (Exception $e) {

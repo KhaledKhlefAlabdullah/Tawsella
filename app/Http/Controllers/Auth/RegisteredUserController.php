@@ -59,14 +59,14 @@ class RegisteredUserController extends Controller
 
                 $token = createUserToken($user, 'register-token');
                 DB::commit();
-                return api_response(data: ['token' => $token, 'user_id' => $user->id], message: 'register-success');
+                return api_response(data: ['token' => $token, 'user_id' => $user->id, 'mail_code_verified_at' => $user->mail_code_verified_at], message: 'register-success');
             }
 
             $user->assignRole(UserType::TaxiDriver()->key);
 
             $user->mail_code_verified_at = now();
             $user->save();
-            Session::flash('success', 'تم إنشاء حساب السائق بنجاح.');
+            Session::flash('success', 'Successfully created user!.');
             DB::commit();
 
             // Redirect back or to any other page
@@ -77,7 +77,7 @@ class RegisteredUserController extends Controller
             if (request()->wantsJson()) {
                 return api_response(message: $e->getMessage(), code: 500);
             }
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى :' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in create new user \n errors:' . $e->getMessage())->withInput();
         }
     }
 
