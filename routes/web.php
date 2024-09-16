@@ -1,6 +1,6 @@
 <?php
 
-use App\Events\GetTaxiLocationsEvent;
+use \App\Http\Middleware\RolesMiddlewares\AdminMiddleware;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\CalculationController;
 use App\Http\Controllers\DashboardController;
@@ -35,7 +35,7 @@ Route::get('/Applatform', function () {
 });
 //*****************************End route AppPlatform ******************************** */
 //******************************************************************************* */
-Route::middleware(['auth', 'admin'])->group(function () {
+Route::middleware(['auth', AdminMiddleware::class])->group(function () {
 
     //*****************************End route services ******************************** */
     Route::group(['prefix' => 'services'], function () {
