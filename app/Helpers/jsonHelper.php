@@ -79,7 +79,7 @@ if (!function_exists('createUserToken')) {
         $expiresAt = Carbon::now()->addDays(30);
 
         // Create a new token for the user
-        $token = $user->createUserToken($token_name, ['*'], $expiresAt);
+        $token = $user->createToken($token_name, ['*'], $expiresAt);
 
         return $token->plainTextToken;
     }

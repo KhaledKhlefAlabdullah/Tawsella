@@ -30,7 +30,7 @@ class UserRequest extends FormRequest
             'name' => ['sometimes', 'string', 'max:255'],
             'email' => ['sometimes', 'string', 'lowercase', 'email', 'max:255', is_null($id) ? 'unique:' . User::class : Rule::unique('users')->ignore($id)],
             'phone_number' => ['sometimes', 'nullable', 'string', new PhoneNumber, is_null($id) ? 'unique:' . UserProfile::class : Rule::unique('user_profiles')->ignore($id)],
-            'gender' => ['sometimes', 'string', Rule::in(UserGender::getValues())],
+            'gender' => ['sometimes', 'string', Rule::in(UserGender::getKeys())],
             'password' => ['sometimes',],
         ];
     }

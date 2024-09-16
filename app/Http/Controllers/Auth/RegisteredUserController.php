@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Enums\UserEnums\DriverState;
+use App\Enums\UserEnums\UserGender;
 use App\Enums\UserEnums\UserType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequests\UserRequest;
@@ -41,13 +42,12 @@ class RegisteredUserController extends Controller
                 'email' => $validatedData['email'],
                 'password' => Hash::make($validatedData['password']),
                 'user_type' => $user_type,
-                'driver_state' => $user_type == UserType::TaxiDriver ? DriverState::Ready : null
             ]);
 
             UserProfile::create([
                 'user_id' => $user->id,
                 'name' => $validatedData['name'],
-                'gender' => $validatedData['gender'],
+                'gender' => UserGender::getValue($validatedData['gender']),
                 'phone_number' => $validatedData['phone_number'],
             ]);
 
