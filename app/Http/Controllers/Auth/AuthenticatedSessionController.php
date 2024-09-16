@@ -10,6 +10,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Validation\ValidationException as ValidationValidationException;
 use Illuminate\View\View;
 
@@ -46,7 +47,7 @@ class AuthenticatedSessionController extends Controller
                 // Create a new token for the user
                 $token = createUserToken($user, 'login-token');
 
-                return api_response(data: ['token' => $token, 'user' => $user], message: 'Successfully logged in');
+                return api_response(data: ['token' => $token, 'user' => $user, 'mail_code_verified_at' => $user->mail_code_verified_at], message: 'Successfully logged in');
             }
 
             $request->session()->regenerate();
@@ -55,18 +56,19 @@ class AuthenticatedSessionController extends Controller
         } catch (AuthenticationException $e) {
             // Catch AuthenticationException and return an unauthorized response
             if ($request->wantsJson())
-                return api_response(errors: [$e->getMessage(), 'دخول غير مرخص'], message: 'بيانات الاعتماد غير صالحة', code: 401);
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
-        } catch (ValidationValidationException $e) {
+                return api_response(errors: [$e->getMessage(), 'Unauthorized access'], message: 'Invalid credentials', code: 401);
+            return redirect()->back()->withErrors('There was an error retrieving the data, please try again. \n errors:'.$e->getMessage())->withInput();
+        } catch (ValidationException $e) {
             // Catch ValidationException and return a validation error response
             if ($request->wantsJson())
-                return api_response(errors: [$e->errors()], message: 'خطئ في التحقق', code: 422);
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
+                return api_response(errors: [$e->errors()], message: 'Validation error', code: 422);
+            return redirect()->back()->withErrors('There was an error retrieving the data, please try again. \n errors:'.$e->getMessage())->withInput();
         } catch (Exception $e) {
             if ($request->wantsJson())
-                return api_response(errors: [$e->getMessage()], message: 'خطأ في تسجيل الدخول', code: 500);
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
+                return api_response(errors: [$e->getMessage()], message: 'Login error', code: 500);
+            return redirect()->back()->withErrors('There was an error retrieving the data, please try again. \n errors:'.$e->getMessage())->withInput();
         }
+
     }
 
     /**
