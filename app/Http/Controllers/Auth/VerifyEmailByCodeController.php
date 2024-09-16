@@ -14,9 +14,9 @@ class VerifyEmailByCodeController extends Controller
         $request->validate([
             'code' => 'required|numeric|digits:6'
         ], [
-            'code.required' => 'رمز التأكيد مطلوب',
-            'code.numeric' => 'يجب أن يكون رمز التأكيد عبارة عن أرقام',
-            'code.digits' => 'بجي أن يتألف رمز التأكيد من 6 خانات'
+            'code.required' => 'The confirmation code is required',
+            'code.numeric' => 'The confirmation code must be numeric',
+            'code.digits' => 'The confirmation code must be 6 digits'
         ]);
 
         if ($request->code === $user->mail_verify_code) {
@@ -30,11 +30,11 @@ class VerifyEmailByCodeController extends Controller
 
                 $user->sendEmailVerificationNotification(true);
 
-                return api_response(errors: ' لقد انتهت صلاحية رمز التأكيد حاول مرة أخرى ', code: 500);
+                return api_response(errors: 'The confirmation code has expired. Please try again.', code: 500);
             } else {
 
                 $user->markEmailAsVerified();
-                return api_response(message: 'تم تأكيد حسابك بنجاح');
+                return api_response(message: 'Your account has been successfully verified.');
             }
         }
 
@@ -55,19 +55,19 @@ class VerifyEmailByCodeController extends Controller
                 $seconds_left = (int) config('mailCode.attempts_ban_seconds') - $mailCodeLastAttemptDate->diffInSeconds();
 
                 if ($seconds_left > 0) {
-                    return api_response(errors: 'هناك خطأ في التحقق من الحساب إنتظر ' . $seconds_left . ' ثواني قبل المحاولة مرة أخرى', code: 500);
+                    return api_response(errors: 'There was an error verifying the account. Please wait ' . $seconds_left . ' seconds before trying again.', code: 500);
                 }
 
                 // Send new code and set new attempts when the user is no longer banned
                 $user->sendEmailVerificationNotification(true);
-                return api_response(message: 'تم إرسال رمز جديد إلى بريدك', code: 500);
+                return api_response(message: 'A new code has been sent to your email.', code: 500);
             }
 
             $user->decrement('mail_code_attempts_left');
             $user->update(['mail_code_last_attempt_date' => now()]);
-            return api_response(errors: 'لقد قمت ب' . $user->mail_code_attempts_left . ' محاولات', code: 500);
+            return api_response(errors: 'You have ' . $user->mail_code_attempts_left . ' attempts left.', code: 500);
         }
 
-        return api_response(errors: 'الرمز الذي أدخلته خاطء حاول مرة أخرى', code: 500);
+        return api_response(errors: 'The code you entered is incorrect. Please try again.', code: 500);
     }
 }
