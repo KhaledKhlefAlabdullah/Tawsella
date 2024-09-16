@@ -31,7 +31,6 @@ return new class extends Migration
             $table->timestamp('mail_verify_code_sent_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
-            $table->SoftDeletes();
         });
     }
 

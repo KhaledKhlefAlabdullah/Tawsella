@@ -24,7 +24,9 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle an incoming authentication request.
+     * Login to the app
+     * @param LoginRequest $request
+     * @return \Illuminate\Http\JsonResponse|RedirectResponse
      */
     public function store(LoginRequest $request)
     {
@@ -44,7 +46,7 @@ class AuthenticatedSessionController extends Controller
                 // Create a new token for the user
                 $token = createUserToken($user, 'login-token');
 
-                return api_response(data: ['token' => $token, 'user' => $user], message: 'نجح تسجيل الدخول');
+                return api_response(data: ['token' => $token, 'user' => $user], message: 'Successfully logged in');
             }
 
             $request->session()->regenerate();
@@ -68,7 +70,9 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Destroy an authenticated session.
+     * Logout function
+     * @param Request $request
+     * @return \Illuminate\Foundation\Application|\Illuminate\Http\JsonResponse|RedirectResponse|\Illuminate\Routing\Redirector|never
      */
     public function destroy(Request $request)
     {
@@ -76,7 +80,7 @@ class AuthenticatedSessionController extends Controller
             if (request()->wantsJson()) {
                 $request->user()->currentAccessToken()->delete();
 
-                return api_response(message: 'تسجيل الخروج بنجاح');
+                return api_response(message: 'Successfully logged out');
             }
 
             Auth::guard('web')->logout();
@@ -90,10 +94,10 @@ class AuthenticatedSessionController extends Controller
             if (request()->wantsJson()) {
 
                 // Handle any exceptions that might occur during logout
-                return api_response(errors: [$e->getMessage()], message: 'هناك خطأ في تسجيل الخروج حاول مرة أخرى');
+                return api_response(errors: [$e->getMessage()], message: 'Logged out error');
             }
         }
 
-        return abort(500, 'هناك خطأ في تسجيل الخروج حاول مرة أخرى');
+        return abort(500, 'Logged out error');
     }
 }
