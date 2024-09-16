@@ -29,7 +29,8 @@ class RegisteredUserController extends Controller
 
     /**
      * Handle an incoming registration request.
-     * @return JsonResponse|Redirect if request want json return json response if not redirect to main page
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Validation\ValidationException|JsonResponse if request want json return json response if not redirect to main page
+     * @returns
      * @throws \Illuminate\Validation\ValidationException
      */
     public function store(UserRequest $request, string $user_type = UserType::Customer)
@@ -83,7 +84,7 @@ class RegisteredUserController extends Controller
 
     /**
      * Admin register to create driver account
-     * @return store_function
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Validation\ValidationException|JsonResponse
      * @throws \Illuminate\Validation\ValidationException
      */
     public function create_driver(UserRequest $request)

@@ -68,7 +68,7 @@ if (!function_exists('get_pagination')) {
 
 if (!function_exists('createUserToken')) {
     /**
-     * @param Model $user is the user whill make token for it
+     * @param \App\Models\User $user is the user whill make token for it
      * @param string $token_name is the user token name
      * @return string token
      */
