@@ -74,10 +74,6 @@ trait DriverTrait
             ->where('user_type', UserType::TaxiDriver)
             ->paginate($perPage); // Use paginate instead of get()
 
-        if ($drivers->isEmpty()) {
-            return abort(404, 'There are no drivers.');
-        }
-
         // Map the drivers data using the mapping method
         $mappedDrivers = self::mappingDrivers($drivers);
 
