@@ -4,12 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\TaxiMovement;
 use App\Models\User;
-use Carbon\Carbon;
 use Exception;
-use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
+
     public function index()
     {
         try{
