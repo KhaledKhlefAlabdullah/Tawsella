@@ -47,9 +47,9 @@ trait DriverTrait
             ->has('taxi') // Ensure the user has a related taxi
             ->get();
 
-        if ($drivers->isEmpty()) {
-            return abort(404, 'There are no drivers ready to work.');
-        }
+//        if ($drivers->isEmpty()) {
+//            return abort(404, 'There are no drivers ready to work.');
+//        }
 
         $mappedDrivers = $drivers->map(function ($driver) {
             return [
@@ -73,10 +73,6 @@ trait DriverTrait
         $drivers = User::with(['taxi', 'profile'])
             ->where('user_type', UserType::TaxiDriver)
             ->paginate($perPage); // Use paginate instead of get()
-
-        if ($drivers->isEmpty()) {
-            return abort(404, 'There are no drivers.');
-        }
 
         // Map the drivers data using the mapping method
         $mappedDrivers = self::mappingDrivers($drivers);
