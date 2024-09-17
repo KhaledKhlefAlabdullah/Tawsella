@@ -47,9 +47,9 @@ trait DriverTrait
             ->has('taxi') // Ensure the user has a related taxi
             ->get();
 
-        if ($drivers->isEmpty()) {
-            return abort(404, 'There are no drivers ready to work.');
-        }
+//        if ($drivers->isEmpty()) {
+//            return abort(404, 'There are no drivers ready to work.');
+//        }
 
         $mappedDrivers = $drivers->map(function ($driver) {
             return [

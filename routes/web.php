@@ -35,7 +35,7 @@ Route::get('/Applatform', function () {
 });
 //*****************************End route AppPlatform ******************************** */
 //******************************************************************************* */
-Route::middleware(['auth', AdminMiddleware::class])->group(function () {
+Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
 
     //*****************************End route services ******************************** */
     Route::group(['prefix' => 'services'], function () {

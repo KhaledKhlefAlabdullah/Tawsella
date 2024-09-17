@@ -120,12 +120,12 @@ trait MovementTrait
      * Get today Movement requests
      * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
      */
-    public function getTaxiMovementsForToday()
+    public static function getTaxiMovementsForToday(): \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
     {
         $currentDate = Carbon::now()->toDateString();
 
         // Query to get requests for the current day
-        $taxiMovements = TaxiMovement::with(['customer.profile', 'movementType'])
+        return TaxiMovement::with(['customer.profile', 'movementType'])
             ->whereDate('created_at', $currentDate)
             ->where([
                 'is_don' => false,
@@ -147,8 +147,6 @@ trait MovementTrait
                     'time' => $taxiMovement->created_at,
                 ];
             });
-
-        return $taxiMovements;
     }
 
 }

@@ -43,7 +43,7 @@
                                         <i class="bi bi-currency-dollar"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>LT {{ $calcolations }}</h6>
+{{--                                        <h6>LT {{ $calcolations }}</h6>--}}
                                         <hr>
                                     </div>
                                 </div>
@@ -64,7 +64,7 @@
                                         <i class="bi bi-bookmark-star-fill"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>{{ $requests }}</h6>
+{{--                                        <h6>{{ $requests }}</h6>--}}
                                         <hr>
                                     </div>
                                 </div>
@@ -87,7 +87,7 @@
                                         <i class="bi bi-people"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>{{ $totalDrivers }}</h6>
+{{--                                        <h6>{{ $totalDrivers }}</h6>--}}
                                         <hr>
                                     </div>
                                 </div>
@@ -110,7 +110,7 @@
                                         <i class="bi bi-taxi-front-fill"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>{{ $totalTaxi }}</h6>
+{{--                                        <h6>{{ $totalTaxi }}</h6>--}}
                                         <hr>
                                     </div>
                                 </div>
