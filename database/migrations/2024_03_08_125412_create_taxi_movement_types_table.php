@@ -3,9 +3,9 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use \App\Enums\PaymentTypesEnum;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -17,9 +17,10 @@ return new class extends Migration
             $table->float('price');
             $table->text('description')->nullable();
             $table->boolean('is_onKM')->default(false);
-            $table->enum('payment',['TL','$']);
+            $table->integer('payment')->default(PaymentTypesEnum::TL);
+            $table->boolean('is_general')->default(false);
             $table->timestamps();
-            $table->SoftDeletes();        });
+        });
     }
 
     /**

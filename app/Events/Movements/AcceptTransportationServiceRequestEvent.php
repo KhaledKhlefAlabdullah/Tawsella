@@ -14,14 +14,14 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    protected TaxiMovement $movement;
+    protected TaxiMovement $taxiMovement;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(TaxiMovement $movement)
+    public function __construct(TaxiMovement $taxiMovement)
     {
-        $this->movement = $movement;
+        $this->taxiMovement = $taxiMovement;
     }
 
     /**
@@ -31,27 +31,69 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
+        $customer_id = $this->taxiMovement->customer_id;
+        $driver_id = $this->taxiMovement->driver_id;
+
         return [
-            new PrivateChannel('accept-movement-request.' . $this->movement->customer_id),
+            new PrivateChannel('customer.' . $customer_id),
+            new PrivateChannel('driver.' . $driver_id)        ];
+    }
+
+    public function getDriverData()
+    {
+        return [
+            'gender' => $this->taxiMovement->gender,
+            'customer_address' => $this->taxiMovement->start_address,
+            'destination_address' => $this->taxiMovement->destination_address,
+            'location_lat' => $this->taxiMovement->start_latitude,
+            'location_long' => $this->taxiMovement->start_longitude,
+            'type' => $this->taxiMovement->movement_type->type
         ];
     }
 
+    public function broadcastWithDriver(): array
+    {
+        $customer_profile = $this->taxiMovement->customer->profile;
+
+        return [
+            'request_id' => $this->taxiMovement->id,
+            'customer' => $customer_profile,
+            'taxiMovementInfo' => $this->getDriverData()
+        ];
+    }
+
+    public function broadcastWithCustomer(): array
+    {
+        $driver_profile = $this->taxiMovement->driver->profile;
+        return [
+            'message' => 'accepted',
+            'driver' => $driver_profile
+        ];
+    }
+
+    /**
+     * Get the data to broadcast.
+     *
+     * @return array
+     */
     public function broadcastWith(): array
     {
-        $driver = getAndCheckModelById(User::class, $this->movement->driver_id);
-        return [
-            'message' => $this->movement->state_message,
-            'driver' => [
-                'id' => $driver->id,
-                'name' => $driver->profile->name,
-                'avatar' => $driver->profile->avatar,
-                'phone_number' => $driver->profile->phone_number,
-            ]
-        ];
+        $channels = $this->broadcastOn();
+
+        // Check which channel is being broadcast to
+        foreach ($channels as $channel) {
+            if ($channel instanceof PrivateChannel && strpos($channel->name, 'customer') !== false) {
+                return $this->broadcastWithCustomer();
+            } elseif ($channel instanceof PrivateChannel && strpos($channel->name, 'driver') !== false) {
+                return $this->broadcastWithDriver();
+            }
+        }
+
+        // Default data if channel not recognized
+        return [];
     }
 
-    public function broadcastAs(): string
-    {
-        return 'transportation-service-accepted';
+    public function broadcastAs(){
+        return 'accept-request';
     }
 }

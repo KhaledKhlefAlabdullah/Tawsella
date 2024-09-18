@@ -35,8 +35,8 @@ class AcceptTaxiMovemntEvent extends BaseEvent
 
 
         return [
-            new PrivateChannel('customer.' . $customer_id),
-            new PrivateChannel('driver.' . $driver_id)
+            new PrivateChannel('customer-channel.' . $customer_id),
+            new PrivateChannel('driver-channel.' . $driver_id)
         ];
     }
 
@@ -45,7 +45,7 @@ class AcceptTaxiMovemntEvent extends BaseEvent
         return [
             'gender' => $this->gender,
             'customer_address' => $this->customer_address,
-            'destnation_address' => $this->customer_destnation_address,
+            'destination_address' => $this->customer_destination_address,
             'location_lat' => $this->location_lat,
             'location_long' => $this->location_long,
             'type' => $this->movement_type

@@ -27,7 +27,7 @@ class TaxiController extends Controller
 
             return view('taxis.index', compact('taxis'));
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.'."\n errors:".$e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.' . "\n errors:" . $e->getMessage())->withInput();
         }
     }
 
@@ -62,6 +62,17 @@ class TaxiController extends Controller
         }
     }
 
+    public function viewLifeMap(Taxi $taxi)
+    {
+        $data = [
+            'lat' => $taxi->last_location_latitude,
+            'driver_id' => $taxi->driver_id,
+            'long' => $taxi->last_location_longitude,
+            'name' => $taxi->driver->profile->name,
+        ];
+        return view('taxi_movement.map', ['data' => $data])->with('success', __('success-view-map'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -82,7 +93,7 @@ class TaxiController extends Controller
 
             return view('taxis.create', compact('drivers'));
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.'."\n errors:".$e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.' . "\n errors:" . $e->getMessage())->withInput();
         }
     }
 
@@ -101,14 +112,14 @@ class TaxiController extends Controller
             // إعادة توجيه أو عرض رسالة نجاح
             return redirect()->back()->with('success', 'تم إنشاء سجل التاكسي بنجاح.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.'."\n errors:".$e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.' . "\n errors:" . $e->getMessage())->withInput();
         }
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Taxi  $taxi
+     * @param \App\Models\Taxi $taxi
      */
     public function edit(Taxi $taxi)
     {
@@ -119,14 +130,14 @@ class TaxiController extends Controller
 
             return view('taxis.edit', compact('taxi', 'drivers'));
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.'."\n errors:".$e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.' . "\n errors:" . $e->getMessage())->withInput();
         }
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Models\Taxi  $taxi
+     * @param \App\Models\Taxi $taxi
      */
     public function update(TaxiRequest $request, string $id)
     {
@@ -148,7 +159,7 @@ class TaxiController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     * @param  \App\Models\Taxi  $taxi
+     * @param \App\Models\Taxi $taxi
      */
     public function destroy(string $id)
     {
@@ -167,7 +178,7 @@ class TaxiController extends Controller
             // إعادة توجيه أو عرض رسالة نجاح
             return redirect()->route('taxis.index')->with('success', 'تم حذف سجل التاكسي بنجاح.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.'."\n errors:".$e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.' . "\n errors:" . $e->getMessage())->withInput();
         }
     }
 }

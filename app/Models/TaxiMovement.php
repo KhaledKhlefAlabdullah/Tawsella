@@ -20,19 +20,43 @@ class TaxiMovement extends Model
         'customer_id',
         'taxi_id',
         'movement_type_id',
-        'my_address',
-        'destnation_address',
+        'start_address',
+        'destination_address',
         'gender',
         'start_latitude',
         'start_longitude',
         'end_latitude',
         'end_longitude',
-        'is_don',
+        'path',
+        'is_redirected',
         'is_completed',
         'is_canceled',
+        'state_message',
         'request_state',
         'total_price_for_this_movement'
     ];
+
+    public function addPointToPath($latitude, $longitude)
+    {
+        $newPoint = ['longitude' => $longitude, 'latitude' => $latitude];
+
+        if ($this->path) {
+            // Decode the existing path from JSON
+            $path = json_decode($this->path, true);
+
+            // Append the new point to the path
+            $path[] = $newPoint;
+
+            // Encode the path back to JSON
+            $this->path = json_encode($path);
+        } else {
+            // No path exists, create a new path with the new point
+            $this->path = json_encode([$newPoint]);
+        }
+
+        // Save the updated model
+        $this->save();
+    }
 
     public function customer()
     {

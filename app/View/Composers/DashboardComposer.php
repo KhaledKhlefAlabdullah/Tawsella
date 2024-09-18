@@ -26,7 +26,7 @@ class DashboardComposer
         $data['totalTaxi'] = Taxi::count();
         $data['calculations'] = Calculation::where('is_bring', true)->sum('totalPrice');
         $data['requests'] = TaxiMovement::where('is_completed', true)->count();
-        $data['lifeTaxiMovements'] = TaxiMovement::getTaxiMovementsForToday() ?? null;
+        $data['lifeTaxiMovements'] = TaxiMovement::getLifeTaxiMovements() ?? null;
         $data['drivers'] = User::getReadyDrivers() ?? null;
         $view->with($data);
     }

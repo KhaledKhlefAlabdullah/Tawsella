@@ -3,11 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserEnums\DriverState;
+use App\Enums\UserEnums\UserType;
 use App\Http\Requests\DriverStateRequest;
+use App\Http\Requests\UserRequests\UserRequest;
 use App\Models\User;
 use Exception;
 use App\Models\Taxi;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class DriversController extends Controller
 {
@@ -26,6 +29,18 @@ class DriversController extends Controller
         }
     }
 
+    /**
+     * Display the registration view.
+     * @return View
+     */
+    public function create(): View
+    {
+        return view('auth.register');
+    }
+
+    public function store(UserRequest $request){
+        return User::registerUser($request, UserType::TaxiDriver);
+    }
 
     /**
      * Retrieve driver details

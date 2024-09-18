@@ -189,7 +189,7 @@
                                 <button id='cancel{{ $loop->index }}' class="btn" style="display: none;"
                                     onclick="showButtons({{ $loop->index }})"><i class="fa-solid fa-x"></i></button>
                                 <form id="accept-form{{ $loop->index }}" method="POST"
-                                    action="{{ route('accept.reject.request', ['id' => $lifeTaxiMovement->id]) }}"
+                                    action="{{ route('taxiMovement.accept.request', ['taxiMovement' => $lifeTaxiMovement]) }}"
                                     style="display: none;">
                                     @csrf <!-- Add CSRF token for Laravel form submission -->
                                     @if ($errors->any())
@@ -213,13 +213,11 @@
                                             @endforeach
                                         </select>
                                     </div>
-                                    <!-- Hidden input field for static state -->
-                                    <input type="hidden" name="state" value="accepted">
                                     <input type="submit" class="form-submit">
                                 </form>
 
                                 <form id="reject-form{{ $loop->index }}" method="POST"
-                                    action="{{ route('accept.reject.request', ['id' => $lifeTaxiMovement->id]) }}"
+                                    action="{{ route('taxiMovement.reject.request', ['taxiMovement' => $lifeTaxiMovement]) }}"
                                     style="display: none;">
                                     @csrf <!-- Add CSRF token for Laravel form submission -->
                                     @if ($errors->any())
@@ -235,13 +233,8 @@
                                         <label for="reason" class="form-label">السبب:</label><br>
                                         <textarea id="reason{{ $loop->index }}" name="message" class="form-input" rows="4" cols="50" required>{{ old('message') }}</textarea>
                                     </div>
-                                    <!-- Hidden input field for static state -->
-                                    <input type="hidden" name="state" value="rejected">
                                     <input type="submit" class="form-submit">
                                 </form>
-
-
-
                             </div>
                             <script>
                                 var map{{ $loop->index }} = L.map('map{{ $loop->index }}').setView([{{ $lifeTaxiMovement->lat }},

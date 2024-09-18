@@ -26,7 +26,7 @@ use \App\Http\Middleware\EnsureEmailIsVerifiedByCodeMiddleware;
 
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
-Route::post('/found-customer/{id}', [TaxiMovementController::class, 'foundCustomer']);
+Route::post('/found-customer/{taxiMovement}', [TaxiMovementController::class, 'foundCustomer']);
 
 Route::get('/driver-request/{id}', [TaxiMovementController::class, 'get_request_data']);
 
@@ -64,7 +64,7 @@ Route::group(['prefix' => 'info'], function () {
 
 Route::get('/movement-types', [TaxiMovementTypeController::class, 'index']);
 
-Route::get('/get-car', [TaxiMovementTypeController::class, 'getMovement3']);
+Route::get('/movements-types/{movement}', [TaxiMovementTypeController::class, 'show']);
 
 Route::get('/offers', [OfferController::class, 'index']);
 

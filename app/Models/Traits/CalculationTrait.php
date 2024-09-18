@@ -83,7 +83,7 @@ trait CalculationTrait
         return $driverMovements->map(function ($movement) {
             $calculation = $movement->calculations->first();
             return [
-                'saddress' => $movement->my_address,
+                'saddress' => $movement->start_address,
                 'eaddress' => $movement->destination_address,
                 'slat' => $movement->start_latitude,
                 'along' => $movement->start_longitude,

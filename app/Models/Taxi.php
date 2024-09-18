@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 class Taxi extends Model
 {
-    use HasFactory, HasUuid ,SoftDeletes;
+    use HasFactory, HasUuid;
 
     protected $keyType = 'string';
     protected $primaryKey = 'id';
@@ -19,7 +19,7 @@ class Taxi extends Model
         'car_name',
         'lamp_number',
         'plate_number',
-        'car_detailes',
+        'car_details',
         'last_location_latitude',
         'last_location_longitude'
     ];

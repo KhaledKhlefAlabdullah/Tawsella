@@ -9,5 +9,16 @@
     "movement-type-delete-success": "Successfully deleted movement type",
     "movement-type-delete-error": "Error in deleting movement type",
     "getting-movements-types-success": "Successfully getting movements types",
-    "getting-movements-types-error": "Error in getting movements types"
+    "getting-movements-types-error": "Error in getting movements types",
+    "getting-movements-type-details-success": "Successfully getting movement type details",
+    "taxi-movement-type-created-success":"Successfully created new taxi movement type",
+    "taxi-movement-type-created-error":"Error in creating new taxi movement type",
+    "taxi-movement-type-edited-success":"Successfully editing taxi movement type",
+    "taxi-movement-type-edited-error":"Error in editing taxi movement type",
+    "register-success": "Successfully registered new user",
+    "register-error": "Error in registered new user",
+    "success-view-map": "Successfully view map"و
+    "success-reject-movement": "Request rejected successfully"
+
+
 }

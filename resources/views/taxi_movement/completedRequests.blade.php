@@ -44,9 +44,9 @@
                                     <tr>
                                         <td>{{ $movement->customer_name }}</td>
                                         <td>{{ $movement->customer_phone }}</td>
-                                        <td>{{ $movement->my_address }}</td>
-                                        <td>{{ $movement->destnation_address }}</td>
-                                        <td>{{ $movement->gender == 'male' ? 'ذكر' : 'انثى' }}</td>
+                                        <td>{{ $movement->start_address }}</td>
+                                        <td>{{ $movement->destination_address }}</td>
+                                        <td>{{ $movement->gender == \App\Enums\UserEnums\UserGender::male ? 'ذكر' : 'انثى' }}</td>
                                         <td>{{ $movement->driver_name }}</td>
                                         <td>{{ $movement->driver_phone }}</td>
                                         <td>{{ $movement->car_lamp_number }}</td>
@@ -58,7 +58,7 @@
                                         </td>
                                         <td>
                                             @if ($movement->taxi_id)
-                                                <a href="{{ route('map', ['selector' => 'completed', 'id' => $movement->movement_id]) }}"
+                                                <a href="{{ route('movement.completed.map', ['taxiMovement' => $movement]) }}"
                                                     class="btn btn-success">موقع العميل</a>
                                             @else
                                                 <!-- Handle the case when taxi_id is missing or null -->

@@ -171,7 +171,7 @@
                 <i class="bi bi-layout-text-window-reverse" style="margin-left: 10px"></i>
             </a>
         <li style="margin-left: 120px">
-            <a href="{{ url('/services') }}">
+            <a href="{{ url('/movement-types') }}">
                 <div class="ms-auto" style="margin-right: 30px">
                     <span>الخدمات</span><i class="bi bi-circle" style="margin-left: 10px"></i>
                 </div>

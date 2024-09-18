@@ -33,7 +33,7 @@ class RejectTaxiMovemntEvent implements ShouldBroadcast
     public function broadcastOn(): Channel
     {
         $customer_id = $this->customer_id;
-        return new PrivateChannel('customer.'.$customer_id);
+        return new PrivateChannel('customer-channel.'.$customer_id);
     }
 
     public function broadcastWith():array

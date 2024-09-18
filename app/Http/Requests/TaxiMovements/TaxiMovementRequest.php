@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\TaxiMovements;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -32,8 +32,8 @@ class TaxiMovementRequest extends FormRequest
             'customer_id' => ['sometimes', 'required', 'string', 'exists:users,id'],
             'taxi_id' => ['sometimes', 'required', 'string', 'exists:taxis,id'],
             'movement_type_id' => ['sometimes', 'required', 'string', 'exists:taxi_movement_types,id'],
-            'my_address' => ['nullable', 'sometimes', 'string'],
-            'destnation_address' => ['nullable', 'sometimes', 'string'],
+            'start_address' => ['nullable', 'sometimes', 'string'],
+            'destination_address' => ['nullable', 'sometimes', 'string'],
             'gender' => ['required', 'sometimes', 'string'],
             'start_latitude' => ['sometimes', 'required', 'numeric'],
             'start_longitude' => ['sometimes', 'required', 'numeric'],

@@ -24,11 +24,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 Route::get('/', function () {
-         return view('welcom');
-     });
-// Route::get('/', function () {
-//     return view('auth.login');
-// });
+    return view('welcom');
+});
+
 //***************************start route AppPlatform ******************************** */
 Route::get('/Applatform', function () {
     return view('ApplicationPlatform');
@@ -38,14 +36,25 @@ Route::get('/Applatform', function () {
 Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
 
     //*****************************End route services ******************************** */
-    Route::group(['prefix' => 'services'], function () {
-        Route::get('/', [TaxiMovementTypeController::class, 'index'])->name('services');
-        Route::get('/cretae', [TaxiMovementTypeController::class, 'create'])->name('service.create');
-        Route::post('/store', [TaxiMovementTypeController::class, 'store'])->name('service.store');
-        Route::get('/edit/{movementType}', [TaxiMovementTypeController::class, 'edit'])->name('service.edit');
-        Route::put('/update/{movementType}', [TaxiMovementTypeController::class, 'update'])->name('service.update');
-        Route::delete('/delete/{movementType}', [TaxiMovementTypeController::class, 'destroy'])->name('service.destroy');
-    });
+    // todo must change it after add new views
+    Route::resource('movement-types', TaxiMovementTypeController::class)->names([
+        'index' => 'movement-types',
+        'create' => 'movement-types.create',
+        'store' => 'movement-types.store',
+        'show' => 'movement-types.show',
+        'edit' => 'movement-types.edit',
+        'update' => 'movement-types.update',
+        'destroy' => 'movement-types.destroy',
+    ]);
+
+//    Route::group(['prefix' => 'services'], function () {
+//        Route::get('/', [TaxiMovementTypeController::class, 'index'])->name('services');
+//        Route::get('/cretae', [TaxiMovementTypeController::class, 'create'])->name('service.create');
+//        Route::post('/store', [TaxiMovementTypeController::class, 'store'])->name('service.store');
+//        Route::get('/edit/{movementType}', [TaxiMovementTypeController::class, 'edit'])->name('service.edit');
+//        Route::put('/update/{movementType}', [TaxiMovementTypeController::class, 'update'])->name('service.update');
+//        Route::delete('/delete/{movementType}', [TaxiMovementTypeController::class, 'destroy'])->name('service.destroy');
+//    });
 
     //*****************************End route services ******************************** */
     //******************************************************************************* */
@@ -59,82 +68,80 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     });
 
     //***************************start route dashboard ******************************** */
-    Route::get('/dashboard', function (){
+    Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
     //***************************End route dashboard ******************************** */
     //******************************************************************************* */
 
     //***************************start route profile ******************************** */
-    Route::group(['prefix' => 'profile'], function () {
-        Route::get('/', [ProfileController::class, 'edit'])->name('profile.edit');
-        Route::patch('/update', [ProfileController::class, 'update'])->name('profile.update');
-        Route::delete('/delete', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    });
-
+    Route::resource('profile', ProfileController::class)->only(['edit', 'update', 'destroy'])
+        ->names([
+            'edit' => 'profile.edit',
+            'update' => 'profile.update',
+            'destroy' => 'profile.destroy'
+        ]);
     //***************************End route profile ******************************** */
     //***************************************************************************** */
 
     //***************************start route driver ******************************** */
-    Route::get('/create-driver', [RegisteredUserController::class, 'create'])
-        ->name('create.driver');
-    // For create the drivers acounts
-    Route::post('/store-driver', [RegisteredUserController::class, 'create_driver'])->name('store-driver');
-    Route::group(['prefix' => 'drivers'], function () {
-        Route::get('/', [DriversController::class, 'index'])->name('drivers.index');
-        Route::get('/{driver}', [DriversController::class, 'show'])->name('drivers.show');
-        Route::get('/edit/{driver}', [DriversController::class, 'edit'])->name('drivers.edit');
-        Route::put('/update/{driver}', [UserProfileController::class, 'update'])->name('drivers.update');
-        Route::delete('/delete/{driver}', [DriversController::class, 'destroy'])->name('drivers.destroy');
-    });
+//    Route::get('/create-driver', [RegisteredUserController::class, 'create'])
+//
+//    // For create the drivers acounts
+//    Route::post('/store-driver', [RegisteredUserController::class, 'create_driver'])
 
+    Route::resource('drivers', DriversController::class)->names([
+        'index' => 'drivers.index',
+        // todo need to edit
+        'create' => 'drivers.create',
+        //->name('create.driver'); old
+        'store' => 'drivers.store',
+        //->name('store-driver'); old
 
-    // Route::post('/drivers/set-state', [DriversController::class, 'changeDriverState'])->name('drivers.set_state');
-
+        'show' => 'drivers.show',
+        'edit' => 'drivers.edit',
+        'update' => 'drivers.update',
+        'destroy' => 'drivers.destroy'
+    ]);
     //***************************End route driver ******************************** */
     //**************************************************************************** */
 
     //***************************start route Taxi ******************************** */
-    Route::group(['prefix' => 'taxis'], function () {
-        Route::get('/', [TaxiController::class, 'index'])->name('taxis.index');
-
-        Route::get('/create', [TaxiController::class, 'create'])->name('taxis.create');
-        Route::post('/store', [TaxiController::class, 'store'])->name('taxis.store');
-
-        Route::get('/edit/{taxi}', [TaxiController::class, 'edit'])->name('taxis.edit');
-        Route::put('/update/{taxi}', [TaxiController::class, 'update'])->name('taxis.update');
-
-        Route::delete('/delete/{id}', [TaxiController::class, 'destroy'])->name('taxis.destroy');
-    });
-
+    Route::resource('taxis', TaxiController::class)->names([
+        'index' => 'taxis.index',
+        'create' => 'taxis.create',
+        'store' => 'taxis.store',
+        'show' => 'taxis.show',
+        'edit' => 'taxis.edit',
+        'update' => 'taxis.update',
+        'destroy' => 'taxis.destroy'
+    ]);
     //*************************** End route Taxi *********************************** */
     //**************************************************************************** */
 
     //*************************** Start route offers *********************************** */
-    Route::group(['prefix' => 'offers'], function () {
-        Route::get('/', [OfferController::class, 'index'])->name('offers.index');
-
-        Route::get('/create', [OfferController::class, 'create'])->name('offers.create');
-        Route::post('/store', [OfferController::class, 'store'])->name('offers.store');
-
-        Route::get('/edit/{offer}', [OfferController::class, 'edit'])->name('offers.edit');
-        Route::put('/update/{offer}', [OfferController::class, 'update'])->name('offers.update');
-
-        Route::delete('/delete/{offer}', [OfferController::class, 'destroy'])->name('offers.destroy');
-    });
-
+    Route::resource('offers', OfferController::class)->names([
+        'index' => 'offers.index',
+        'create' => 'offers.create',
+        'store' => 'offers.store',
+        'show' => 'offers.show',
+        'edit' => 'offers.edit',
+        'update' => 'offers.update',
+        'destroy' => 'offers.destroy'
+    ]);
     //*************************** End route offers *********************************** */
     //**************************************************************************** */
 
 
-    Route::post('/accept-reject-request/{id}', [TaxiMovementController::class, 'accept_reject_request'])->name('accept.reject.request');
+    Route::post('/accept-request/{taxiMovement}', [TaxiMovementController::class, 'acceptRequest'])->name('taxiMovement.accept.request');
+    Route::post('/reject-request/{taxiMovement}', [TaxiMovementController::class, 'rejectMovement'])->name('taxiMovement.reject.request');
 
     //*************************** START route taxi-movement *********************************** */
 
+    // todo need refactoring
+    Route::get('/current-taxi-movement', [TaxiMovementController::class, 'LifeTaxiMovements'])->name('current.taxi.movement');
 
-    Route::get('/current-taxi-movement', [TaxiMovementController::class, 'currentTaxiMovement'])->name('current.taxi.movement');
-
-    Route::get('/completed-requests', [TaxiMovementController::class, 'completedRequests'])->name('completed.requests');
+    Route::get('/completed-requests', [TaxiMovementController::class, 'completedTaxiMovements'])->name('completed.requests');
 
     //*************************** End route taxi-movement *********************************** */
     //**************************************************************************** */
@@ -158,9 +165,11 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     //*************************** End route calculations *********************************** */
     //**************************************************************************** */
 
-    Route::get('/view-map/{selector}/{id}', [TaxiMovementController::class, 'view_map'])->name('map');
-});
+    //*************************** Start route view maps *********************************** */
+    Route::get('/view-completed-movement-map/{taxiMovement}', [TaxiMovementController::class, 'view_map'])->name('movement.completed.map');
+    Route::get('/view-life-movement-map/{taxi}', [TaxiController::class, 'viewLifeMap'])->name('movement.life.map');
 
+});
 
 
 require __DIR__ . '/auth.php';

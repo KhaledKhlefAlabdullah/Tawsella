@@ -19,7 +19,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-8">
-                    <a href="{{ route('service.create') }}" class="btn btn-primary mb-3">إضافة خدمة جديدة</a>
+                    <a href="{{ route('movement-types.create') }}" class="btn btn-primary mb-3">إضافة خدمة جديدة</a>
                 </div>
             </div>
             <div class="row">
@@ -37,9 +37,9 @@
                                 @else
                                     <span class="badge bg-secondary">غير معتمد على كيلومترات</span>
                                 @endif
-                                <x-buttons 
-                                :delete-route="route('service.destroy', $movementType->id) " 
-                                :edit-route="route('service.edit', $movementType->id)" 
+                                <x-buttons
+                                :delete-route="route('movement-types.destroy', $movementType->id) "
+                                :edit-route="route('movement-types.edit', $movementType->id)"
                                 :showDeleteButton="false"
                                 :showEditButton="true"
                                 :showDetailsButton="false" />
@@ -59,9 +59,9 @@
                             </div>
                             <div class="card-footer">
                                 <span class="badge bg-primary"> سعر ثابت </span>
-                                <x-buttons 
-                                :delete-route="route('service.destroy', $movement->id)" 
-                                :edit-route="route('service.edit', $movement->id)" 
+                                <x-buttons
+                                :delete-route="route('movement-types.destroy', $movement->id)"
+                                :edit-route="route('movement-types.edit', $movement->id)"
                                 :showDeleteButton="true"
                                 :showEditButton="true"
                                 :showDetailsButton="false" />

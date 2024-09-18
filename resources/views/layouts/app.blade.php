@@ -150,7 +150,7 @@
                     var locationLong = event.long;
                     var gender = event.gender;
                     var customer_address = event.customer_address;
-                    var destnation_address = event.destnation_address;
+                    var destination_address = event.destination_address;
                     var time = event.time;
 
                     Swal.fire({
@@ -201,7 +201,7 @@
                             </div>
                             <div class="col-lg-6 mb-6">
                                 <div class="text-center card-content" style="margin: 10px;">
-                                    <h4>وجهة العميل: ${destnation_address}</h4>
+                                    <h4>وجهة العميل: ${destination_address}</h4>
                                 </div>
                             </div>
                         </div>

@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\TaxiMovements;
 
+use App\Enums\PaymentTypesEnum;
 use Illuminate\Foundation\Http\FormRequest;
 
 class TaxiMovementsTypesRequest extends FormRequest
@@ -22,10 +23,12 @@ class TaxiMovementsTypesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => ['required','sometimes'],
-            'price' => ['required','sometimes'],
-            'description' => ['required','sometimes'],
-            'is_onKM' => ['required','sometimes']
+            'type' => ['required'],
+            'price' => ['required', 'numeric'],
+            'description' => ['nullable'],
+            'is_onKM' => ['required', 'boolean'],
+            'payment' => ['required', 'in:' . implode(',', PaymentTypesEnum::getValues())],
+            'is_general' => ['required', 'boolean'],
         ];
     }
 }
