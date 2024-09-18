@@ -5,5 +5,9 @@
     "media-receive":"",
     "contact-us-send-success":"Contact-us message send Successfully",
     "contact-us-send-pand-admin": "The admin cann't send contact-us message",
-    "contact-us-send-error":"Contact-us message send error"
+    "contact-us-send-error":"Contact-us message send error",
+    "movement-type-delete-success": "Successfully deleted movement type",
+    "movement-type-delete-error": "Error in deleting movement type",
+    "getting-movements-types-success": "Successfully getting movements types",
+    "getting-movements-types-error": "Error in getting movements types"
 }

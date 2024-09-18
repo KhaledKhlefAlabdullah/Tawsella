@@ -59,7 +59,9 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     });
 
     //***************************start route dashboard ******************************** */
-    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/dashboard', function (){
+        return view('dashboard');
+    })->name('dashboard');
     //***************************End route dashboard ******************************** */
     //******************************************************************************* */
 

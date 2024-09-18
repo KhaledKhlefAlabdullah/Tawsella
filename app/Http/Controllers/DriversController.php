@@ -22,7 +22,7 @@ class DriversController extends Controller
 
             return view('Driver.index', ['drivers' => $drivers]);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error in getting drivers data.\n errors:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in getting drivers data.'."\n errors:" . $e->getMessage())->withInput();
         }
     }
 
@@ -39,7 +39,7 @@ class DriversController extends Controller
 
             return view('Driver.show', ['driver' => $driver]);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error in getting driver details.\n errors:'.$e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in getting driver details.'."\n errors:".$e->getMessage())->withInput();
         }
     }
 
@@ -57,7 +57,7 @@ class DriversController extends Controller
 
             return view('Driver.show', ['driver' => $driver]);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('There error in redirect to edit driver page.\n errors:'.$e->getMessage())->withInput();
+            return redirect()->back()->withErrors('There error in redirect to edit driver page.'."\n errors:".$e->getMessage())->withInput();
         }
     }
 
@@ -107,7 +107,7 @@ class DriversController extends Controller
 
             return redirect()->back()->with('success', 'Successfully deleted driver.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error in deleting driver.\n errors:'.$e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in deleting driver.'."\n errors:".$e->getMessage())->withInput();
         }
     }
 }

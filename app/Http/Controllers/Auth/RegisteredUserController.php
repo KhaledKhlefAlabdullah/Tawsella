@@ -77,7 +77,7 @@ class RegisteredUserController extends Controller
             if (request()->wantsJson()) {
                 return api_response(message: $e->getMessage(), code: 500);
             }
-            return redirect()->back()->withErrors('Error in create new user \n errors:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in create new user '."\n errors:" . $e->getMessage())->withInput();
         }
     }
 

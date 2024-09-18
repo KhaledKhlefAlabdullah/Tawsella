@@ -44,7 +44,7 @@ class UserProfileController extends Controller
 
     /**
      * Update the specified resource in storage.
-     * @param UserProfileRequest $request is profile data
+     * @param UserRequest $request is profile data
      * @param User $user is user to edit his profile
      * @return JsonResponse
      * @author Khaled <khaledabdullah2001104@gmail.com>

@@ -19,7 +19,8 @@ class TaxiMovementType extends Model
         'description',
         'is_onKM',
         'price',
-        'payment'
+        'payment',
+        'is_general'
     ];
 
     public function type_movements()
