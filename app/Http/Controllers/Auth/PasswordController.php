@@ -14,6 +14,8 @@ class PasswordController extends Controller
 {
     /**
      * Update the user's password.
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse|RedirectResponse
      */
     public function update(Request $request)
     {
@@ -28,31 +30,38 @@ class PasswordController extends Controller
             ]);
 
             if (request()->wantsJson()) {
-                return api_response(message: 'تم تغيير كلمة المرور بنجاح');
+                return api_response(message: 'Successfully change password');
             }
 
-            return redirect()->back()->with('success', 'تم تحديث كلمة السر');
+            return redirect()->back()->with('success', __('password-change-success'));
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هناك خطأ' . $e->getMessage());
+            if (request()->wantsJson()) {
+                return api_response(errors: $e->getMessage(), message: 'Error change password', code: 500);
+            }
+            return redirect()->back()->withErrors(__('password-change-error') . $e->getMessage());
         }
     }
 
-
-    public function updateDriverPassword(Request $request, string $id)
+    /**
+     * Change driver password
+     * @param Request $request
+     * @param User $driver
+     * @return RedirectResponse
+     */
+    public function updateDriverPassword(Request $request, User $driver)
     {
         try {
             $validated = $request->validate([
                 'password' => ['required', Password::defaults(), 'confirmed'],
             ]);
 
-            $driver = getAndCheckModelById(User::class, $id);
             $driver->update([
                 'password' => Hash::make($validated['password']),
             ]);
 
-            return redirect()->back()->with('success', 'تم تحديث كلمة السر');
+            return redirect()->back()->with('success', __('password-change-success'));
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هناك خطأ' . $e->getMessage());
+            return redirect()->back()->withErrors(__('password-change-error') . $e->getMessage());
         }
     }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Taxis;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TaxiMovementsTypesRequest extends FormRequest
+class GetTaxiLocationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,8 @@ class TaxiMovementsTypesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'type' => ['required','sometimes'],
-            'price' => ['required','sometimes'],
-            'description' => ['required','sometimes'],
-            'is_onKM' => ['required','sometimes']
+            'lat' => ['numeric','required'],
+            'long' => ['numeric','required']
         ];
     }
 }

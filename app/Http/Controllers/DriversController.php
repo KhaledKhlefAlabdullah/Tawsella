@@ -3,11 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserEnums\DriverState;
+use App\Enums\UserEnums\UserType;
+use App\Events\Movements\DriverChangeStateEvent;
 use App\Http\Requests\DriverStateRequest;
+use App\Http\Requests\UserRequests\UserRequest;
 use App\Models\User;
 use Exception;
 use App\Models\Taxi;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class DriversController extends Controller
 {
@@ -22,10 +26,22 @@ class DriversController extends Controller
 
             return view('Driver.index', ['drivers' => $drivers]);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error in getting drivers data.\n errors:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in getting drivers data.'."\n errors:" . $e->getMessage())->withInput();
         }
     }
 
+    /**
+     * Display the registration view.
+     * @return View
+     */
+    public function create(): View
+    {
+        return view('auth.register');
+    }
+
+    public function store(UserRequest $request){
+        return User::registerUser($request, UserType::TaxiDriver);
+    }
 
     /**
      * Retrieve driver details
@@ -39,7 +55,7 @@ class DriversController extends Controller
 
             return view('Driver.show', ['driver' => $driver]);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error in getting driver details.\n errors:'.$e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in getting driver details.'."\n errors:".$e->getMessage())->withInput();
         }
     }
 
@@ -57,7 +73,7 @@ class DriversController extends Controller
 
             return view('Driver.show', ['driver' => $driver]);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('There error in redirect to edit driver page.\n errors:'.$e->getMessage())->withInput();
+            return redirect()->back()->withErrors('There error in redirect to edit driver page.'."\n errors:".$e->getMessage())->withInput();
         }
     }
 
@@ -81,6 +97,9 @@ class DriversController extends Controller
 
             $driver->state = $validatedData['state'];
             $driver->save();
+
+            DriverChangeStateEvent::dispatch($driver);
+
             return api_response($message, 200);
         } catch (Exception $e) {
             return api_response(null, 'Failed to update driver state', 500, null, ['error' => $e->getMessage()]);
@@ -96,18 +115,22 @@ class DriversController extends Controller
     {
         try {
 
+            if (file_exists($driver->profile->avatar)) {
+                if (!in_array($driver->profile->avatar, ['/images/profile_images/man', '/images/profile_images/woman']))
+                    unlink(public_path($driver->profile->avatar));
+            }
+
             $taxi = $driver->taxi;
 
-            // If the driver has an associated taxi, nullify the driver_id
             if ($taxi) {
                 $taxi->update(['driver_id' => null]);
             }
 
             $driver->delete();
 
-            return redirect()->back()->with('success', 'Successfully deleted driver.');
+            return redirect()->back()->with('success', __('delete-driver-success'));
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error in deleting driver.\n errors:'.$e->getMessage())->withInput();
+            return redirect()->back()->withErrors(__('delete-driver-error')."\n errors:".$e->getMessage())->withInput();
         }
     }
 }

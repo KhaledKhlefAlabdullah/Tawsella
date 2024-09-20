@@ -2,28 +2,25 @@
 
 namespace App\Events\Movements;
 
-use App\Models\Movement;
-use App\Models\User;
-use Illuminate\Broadcasting\Channel;
+use App\Models\TaxiMovement;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class RejecttTransportationServiceRequestEvent implements ShouldBroadcast
+class RejectTransportationServiceRequestEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    protected Movement $movement;
+    protected TaxiMovement $taxiMovement;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(Movement $movement)
+    public function __construct(TaxiMovement $taxiMovement)
     {
-        $this->movement = $movement;
+        $this->taxiMovement = $taxiMovement;
     }
 
     /**
@@ -34,21 +31,14 @@ class RejecttTransportationServiceRequestEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('reject-movement-request.' . $this->movement->customer_id),
+            new PrivateChannel('customer-channel.' . $this->taxiMovement->customer_id),
         ];
     }
 
     public function broadcastWith(): array
     {
-        $driver = getAndCheckModelById(User::class, $this->movement->driver_id);
         return [
-            'message' => $this->movement->state_message,
-            'driver' => [
-                'id' => $driver->id,
-                'name' => $driver->profile->name,
-                'avatar' => $driver->profile->avatar,
-                'phone_number' => $driver->profile->phone_number,
-            ]
+            'message' => $this->taxiMovement->state_message,
         ];
     }
 

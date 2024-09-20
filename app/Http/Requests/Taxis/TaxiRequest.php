@@ -1,11 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Taxis;
 
-use App\Models\Taxi;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use Mockery\Generator\Method;
 
 class TaxiRequest extends FormRequest
 {
@@ -24,7 +21,7 @@ class TaxiRequest extends FormRequest
      */
     public function rules(): array
     {
-        
+
         if (request()->isMethod('put')) {
             $id = $this->id;
             return [
@@ -34,7 +31,7 @@ class TaxiRequest extends FormRequest
                 //  Rule::unique('taxis', 'lamp_number')->ignore($id,'id')],
                 'plate_number' => ['required', 'string'],
                 //  Rule::unique('taxis', 'plate_number')->ignore($id,'id')],
-                'car_detailes' => ['nullable', 'string']
+                'car_details' => ['nullable', 'string']
             ];
         }
 
@@ -43,7 +40,7 @@ class TaxiRequest extends FormRequest
             'car_name' => ['required','string'],
             'lamp_number' => ['required','string'],
             'plate_number' => ['required','string'],
-            'car_detailes' => ['nullable','string']
+            'car_details' => ['nullable','string']
         ];
     }
 }

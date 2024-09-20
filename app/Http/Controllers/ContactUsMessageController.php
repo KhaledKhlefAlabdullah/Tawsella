@@ -29,7 +29,7 @@ class ContactUsMessageController extends Controller
 
             return view('contctus', [$contact_us]);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error in getting contact us messages.\n errors:'.$e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in getting contact us messages.'."\n errors:".$e->getMessage())->withInput();
         }
     }
 
@@ -77,7 +77,7 @@ class ContactUsMessageController extends Controller
 
             return view();
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.'."\n errors:".$e->getMessage())->withInput();
         }
     }
 
@@ -93,7 +93,7 @@ class ContactUsMessageController extends Controller
 
             return view('contact_us.show', ['contactDetails' => $contactUsMessage]);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error in getting contact us message details.\n errors:'.$e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in getting contact us message details.'."\n errors:".$e->getMessage())->withInput();
         }
     }
 
@@ -112,7 +112,7 @@ class ContactUsMessageController extends Controller
             return redirect()->back()->with('message', 'Contact us message deleted successfully');
         }
         catch(Exception $e){
-            return redirect()->back()->withErrors('Error in deleting contact us message.\n errors:'.$e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in deleting contact us message.'."\n errors:".$e->getMessage())->withInput();
         }
     }
 }

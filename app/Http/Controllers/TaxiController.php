@@ -2,172 +2,151 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\GetTaxiLocationsEvent;
-use App\Http\Requests\TaxiRequest;
+use App\Enums\MovementRequestStatus;
+use App\Events\Locations\GetTaxiLocationsEvent;
+use App\Http\Requests\Taxis\GetTaxiLocationRequest;
+use App\Http\Requests\Taxis\TaxiRequest;
 use App\Models\Taxi;
 use App\Models\User;
 use Exception;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class TaxiController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Http\RedirectResponse
      */
     public function index()
     {
-        try {
+        $taxisDetails = Taxi::with('driver.profile')->get();
 
-            // احصل على جميع السجلات وعرضها، يمكنك تخصيص هذه الوظيفة حسب احتياجاتك
-            $taxis = Taxi::select('user_profiles.name as driverName', 'taxis.id', 'taxis.car_name', 'taxis.lamp_number', 'taxis.plate_number')
-                ->leftJoin('user_profiles', 'taxis.driver_id', '=', 'user_profiles.user_id')
-                ->get();
+        $taxis = Taxi::mappingTaxis($taxisDetails);
 
-            return view('taxis.index', compact('taxis'));
-        } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
-        }
+        return view('taxis.index', compact('taxis'));
     }
 
     /**
      * Get the taxi location
+     * @param GetTaxiLocationRequest $request
+     * @param string $driver_id
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function getTaxiLocation(Request $request, string $driver_id)
+    public function getTaxiLocation(GetTaxiLocationRequest $request, User $driver)
     {
         try {
 
-            $request->validate([
-                'lat' => 'numeric|required',
-                'long' => 'numeric|required'
-            ]);
+            $validatedData = $request->validated();
 
-
-            $taxi = Taxi::where('driver_id', $driver_id)->first();
+            $taxi = $driver->taxi;
 
             $taxi->update([
-                'last_location_latitude' => $request->input('lat'),
-                'last_location_longitude' => $request->input('long')
+                'last_location_latitude' => $validatedData['lat'],
+                'last_location_longitude' => $validatedData['long']
             ]);
 
-            GetTaxiLocationsEvent::dispatch(
-                $driver_id,
-                $request->lat,
-                $request->long
-            );
-            return api_response(message: 'تم الحصول على الموقع بنجاح');
+            $lifeMovementForDriver = $driver->driver_movements()->where(['is_completed' => false, 'is_canceled' => false])
+                ->where('request_state', MovementRequestStatus::Accepted)->first();
+
+            $receiver = $lifeMovementForDriver->customer ?? null;
+
+            GetTaxiLocationsEvent::dispatch($receiver, $taxi);
+
+            return api_response(message: 'Successfully updating taxi locations.');
         } catch (Exception $e) {
-            return api_response(errors: $e->getMessage(), message: 'هناك خطأ في الحصول على موقع سيارة الأجرة', code: 500);
+            return api_response(errors: $e->getMessage(), message: 'Error in updating taxi location', code: 500);
         }
+    }
+
+    /**
+     * View taxi location map life
+     * @param Taxi $taxi
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
+     */
+    public function viewLifeMap(Taxi $taxi)
+    {
+        $data = [
+            'lat' => $taxi->last_location_latitude,
+            'driver_id' => $taxi->driver_id,
+            'long' => $taxi->last_location_longitude,
+            'name' => $taxi->driver->profile->name,
+        ];
+        return view('taxi_movement.map', ['data' => $data])->with('success', __('success-view-map'));
     }
 
     /**
      * Show the form for creating a new resource.
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Http\RedirectResponse
      */
     public function create()
     {
-        try {
+        $drivers = User::getDriversDontHaveTaxi();
 
-            // get the drivers dont have taxi
-            $drivers = User::where([
-                'users.user_type' => 'driver',
-                'users.is_active' => true
-            ])
-                ->leftJoin('taxis', 'users.id', '=', 'taxis.driver_id')
-                ->whereNull('taxis.id')
-                ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')
-                ->select('users.id', 'user_profiles.name', 'user_profiles.avatar')
-                ->get();
-
-            return view('taxis.create', compact('drivers'));
-        } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
-        }
+        return view('taxis.create', compact('drivers'));
     }
 
     /**
      * Store a newly created resource in storage.
+     * @param TaxiRequest $request
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function store(TaxiRequest $request)
     {
         try {
-            // التحقق من البيانات المدخلة
             $validatedData = $request->validated();
 
-            // إنشاء سجل جديد
             Taxi::create($validatedData);
 
-            // إعادة توجيه أو عرض رسالة نجاح
-            return redirect()->back()->with('success', 'تم إنشاء سجل التاكسي بنجاح.');
+            return redirect()->back()->with('success', __('taxi-created-success'));
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
+            return redirect()->back()->withErrors(__('taxi-created-error') . "\n errors:" . $e->getMessage())->withInput();
         }
     }
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Taxi  $taxi
+     * @param Taxi $taxi
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Http\RedirectResponse
      */
     public function edit(Taxi $taxi)
     {
-        try {
+        $drivers = User::getDriversDontHaveTaxi();
 
-            $drivers = User::select('users.id', 'user_profiles.name', 'user_profiles.avatar')
-                ->join('user_profiles', 'users.id', '=', 'user_profiles.user_id')->where('users.user_type', 'driver')->get();
-
-            return view('taxis.edit', compact('taxi', 'drivers'));
-        } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
-        }
+        return view('taxis.edit', compact('taxi', 'drivers'));
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \App\Models\Taxi  $taxi
+     * @param TaxiRequest $request
+     * @param string $id
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function update(TaxiRequest $request, string $id)
+    public function update(TaxiRequest $request, Taxi $taxi)
     {
         try {
-            // التحقق من البيانات المدخلة
             $validatedData = $request->validated();
 
-            $taxi = getAndCheckModelById(Taxi::class, $id);
-
-            // تحديث السجل بالبيانات المحدثة
             $taxi->update($validatedData);
 
-            // إعادة توجيه أو عرض رسالة نجاح
-            return redirect()->route('taxis.index')->with('success', 'تم تحديث سجل التاكسي بنجاح.');
+            return redirect()->route('taxis.index')->with('success', __('taxi-updated-success'));
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هناك خطأ ربما هناك بيانات مكررة انتبه انه لا يمكن ان  يتكرر رقم الفانوس ورقم اللوحة لدى أكثر من سيارة');
+            return redirect()->back()->withErrors(__('taxi-updated-success'). "\n errors:" . $e->getMessage())->withInput();
         }
     }
 
     /**
      * Remove the specified resource from storage.
-     * @param  \App\Models\Taxi  $taxi
+     * @param Taxi $taxi
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroy(string $id)
+    public function destroy(Taxi $taxi)
     {
         try {
 
-            $taxi = getAndCheckModelById(Taxi::class, $id);
-
-            $taxi->update([
-                'lamp_number' => null,
-                'plate_number' => null
-            ]);
-            // حذف السجل المحدد
-
             $taxi->delete();
 
-            // إعادة توجيه أو عرض رسالة نجاح
-            return redirect()->route('taxis.index')->with('success', 'تم حذف سجل التاكسي بنجاح.');
+            return redirect()->route('taxis.index')->with('success', '');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
+            return redirect()->back()->withErrors(__('taxi-deleting-error') . "\n errors:" . $e->getMessage())->withInput();
         }
     }
 }

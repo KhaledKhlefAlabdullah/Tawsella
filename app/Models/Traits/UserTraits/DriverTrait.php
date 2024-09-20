@@ -4,7 +4,6 @@ namespace App\Models\Traits\UserTraits;
 
 use App\Enums\UserEnums\DriverState;
 use App\Enums\UserEnums\UserType;
-use App\Models\Movement;
 use App\Models\TaxiMovement;
 use App\Models\User;
 
@@ -12,22 +11,25 @@ trait DriverTrait
 {
     /**
      * Processed movement state
-     * @param TaxiMovement $movement
+     * @param TaxiMovement $taxiMovement
+     * @param User $driver
      * @param int $state
      * @param string|null $message
      * @return \Illuminate\Http\JsonResponse|void
      */
-    public static function processMovementState(TaxiMovement $movement, int $state, string $message = null)
+    public static function processMovementState(TaxiMovement $taxiMovement, int $state, string $message = null, User $driver = null)
     {
-        if ($movement->is_canceled) {
+        if ($taxiMovement->is_canceled) {
             return api_response(
                 message: 'The request has already been canceled by the customer. We apologize for any inconvenience caused.',
                 code: 410);
         } else {
             // Update the request state
-            $movement->update([
+            $taxiMovement->update([
                 'request_state' => $state,
-                'state_message' => $message
+                'state_message' => $message,
+                'driver_id' => $driver->id ?? null,
+                'taxi_id' => $driver->taxi->id ?? null
             ]);
         }
     }
@@ -73,10 +75,6 @@ trait DriverTrait
         $drivers = User::with(['taxi', 'profile'])
             ->where('user_type', UserType::TaxiDriver)
             ->paginate($perPage); // Use paginate instead of get()
-
-        if ($drivers->isEmpty()) {
-            return abort(404, 'There are no drivers.');
-        }
 
         // Map the drivers data using the mapping method
         $mappedDrivers = self::mappingDrivers($drivers);
@@ -143,4 +141,17 @@ trait DriverTrait
         ];
     }
 
+    /**
+     * Get drivers dont have taxis
+     * @return mixed
+     */
+    public static function getDriversDontHaveTaxi()
+    {
+        $drivers = User::where('user_type', 'driver')
+            ->where(['is_active' => true, 'user_type' => UserType::TaxiDriver])
+            ->whereDoesntHave('taxi')
+            ->with('profile:id,user_id,name,avatar')
+            ->get(['id']);
+        return $drivers;
+    }
 }

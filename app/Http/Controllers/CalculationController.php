@@ -30,7 +30,7 @@ class CalculationController extends Controller
                 'drivers' => $drivers
             ]);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error in getting drivers with calculations\n errors:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in getting drivers with calculations'."\n errors:" . $e->getMessage())->withInput();
         }
     }
 
@@ -61,7 +61,7 @@ class CalculationController extends Controller
 
             return redirect()->route('calculations.index')->with('success', 'تم إنشاء الحساب بنجاح');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.'."\n errors:".$e->getMessage())->withInput();
         }
     }
 
@@ -87,7 +87,7 @@ class CalculationController extends Controller
 
             return view('calculations.show', ['details' => $details, 'movements' => $movements]);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.'."\n errors:".$e->getMessage())->withInput();
         }
     }
 
@@ -163,7 +163,7 @@ class CalculationController extends Controller
 
             return redirect()->route('calculations.index')->with('success', 'Successfully calculation deleted.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error in deleted calculation.\n errors:'.$e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in deleted calculation.'."\n errors:".$e->getMessage())->withInput();
         }
     }
 }

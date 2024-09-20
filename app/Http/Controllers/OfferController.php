@@ -44,7 +44,7 @@ class OfferController extends Controller
         } catch (Exception $e) {
             if (request()->wantsJson())
                 return api_response(errors: $e->getMessage(), message: 'Faild to get offers', code: 500);
-            return redirect()->back()->withErrors('Faild to get offers.\n errors:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Faild to get offers.'."\n errors:" . $e->getMessage())->withInput();
         }
     }
 
@@ -81,7 +81,7 @@ class OfferController extends Controller
 
             return redirect()->route('offers.index')->with('success', 'Successfully created offer.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error in creating offer.\n errors:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in creating offer.'."\n errors:" . $e->getMessage())->withInput();
         }
     }
 
@@ -129,7 +129,7 @@ class OfferController extends Controller
 
             return redirect()->route('offers.index')->with('success', 'Successfully updated offer.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error in updating offer.\n errors:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in updating offer.'."\n errors:" . $e->getMessage())->withInput();
         }
     }
 
@@ -148,7 +148,7 @@ class OfferController extends Controller
 
             return redirect()->route('offers.index')->with('success', 'Successfully deleted offer.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error in deleting error.\n errors:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in deleting error.'."\n errors:" . $e->getMessage())->withInput();
         }
     }
 }

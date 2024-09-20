@@ -57,16 +57,16 @@ class AuthenticatedSessionController extends Controller
             // Catch AuthenticationException and return an unauthorized response
             if ($request->wantsJson())
                 return api_response(errors: [$e->getMessage(), 'Unauthorized access'], message: 'Invalid credentials', code: 401);
-            return redirect()->back()->withErrors('There was an error retrieving the data, please try again. \n errors:'.$e->getMessage())->withInput();
+            return redirect()->back()->withErrors('There was an error retrieving the data, please try again. '."\n errors:".$e->getMessage())->withInput();
         } catch (ValidationException $e) {
             // Catch ValidationException and return a validation error response
             if ($request->wantsJson())
                 return api_response(errors: [$e->errors()], message: 'Validation error', code: 422);
-            return redirect()->back()->withErrors('There was an error retrieving the data, please try again. \n errors:'.$e->getMessage())->withInput();
+            return redirect()->back()->withErrors('There was an error retrieving the data, please try again. '."\n errors:".$e->getMessage())->withInput();
         } catch (Exception $e) {
             if ($request->wantsJson())
                 return api_response(errors: [$e->getMessage()], message: 'Login error', code: 500);
-            return redirect()->back()->withErrors('There was an error retrieving the data, please try again. \n errors:'.$e->getMessage())->withInput();
+            return redirect()->back()->withErrors('There was an error retrieving the data, please try again. '."\n errors:".$e->getMessage())->withInput();
         }
 
     }

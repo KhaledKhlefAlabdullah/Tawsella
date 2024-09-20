@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PaymentTypesEnum;
+use App\Http\Requests\TaxiMovements\TaxiMovementsTypesRequest;
 use App\Models\TaxiMovementType;
 use Exception;
 use Illuminate\Http\Request;
@@ -11,121 +13,105 @@ class TaxiMovementTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
     public function index()
     {
-        try {
-            $movements = TaxiMovementType::select('id', 'type', 'price', 'payment', 'description')->whereNotIn('id', ['t-m-t-1', 't-m-t-2', 't-m-t-3'])->get();
+        $movementTypes = TaxiMovementType::where('is_general', false)->get();
+        $generalMovementTypes = TaxiMovementType::where('is_general', true)->get();
 
-            $movementTypes = TaxiMovementType::select('id', 'type', 'price', 'payment', 'description', 'is_onKM')->whereIn('id', ['t-m-t-1', 't-m-t-2', 't-m-t-3'])->get();
-            if (request()->wantsJson())
-                return api_response(data: $movements, message: ' نجح الحصول على انواع الطلبات');
+        if (request()->wantsJson())
+            return api_response(data: $movementTypes, message: __('getting-movements-types-success'));
+        //todo must change to movementTypes
 
-            return view('services', ['movementTypes' => $movementTypes, 'movements' => $movements]);
-        } catch (Exception $e) {
-            if (request()->wantsJson())
-                return api_response(errors: [$e->getMessage()], message: 'حدث خطأ في الحصول على انواع الطلبات', code: 500);
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
-        }
+        return view('services', ['movementTypes' => $generalMovementTypes, 'movements' => $movementTypes]);
     }
 
-
-    public function getMovement3()
+    /**
+     * Get Taxi movement type details
+     * @param TaxiMovementType $movement_type
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(TaxiMovementType $movement_type)
     {
-        try {
-            $movement = getAndCheckModelById(TaxiMovementType::class, 't-m-t-3');
-
-            $data = [
-                'id' => $movement->id,
-                'type' => $movement->type,
-                'price' => $movement->price,
-                'payment' => $movement->payment,
-                'description' => $movement->description
-            ];
-            return api_response(data: $data, message: ' نجح الحصول على  البيانات');
-        } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'حدث خطأ في الحصول على انواع الطلبات', code: 500);
-        }
+        return api_response(data: $movement_type, message: __('getting-movements-type-details-success'));
     }
+
     /**
      * Show the form for creating a new resource.
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
      */
     public function create()
     {
-        return view('service.create');
+        //todo must change to movementTypes
+        return view('service.create', ['paymentTypes' => PaymentTypesEnum::asArray()]);
     }
 
     /**
      * Store a newly created resource in storage.
+     * @param TaxiMovementsTypesRequest $request is the new movement type details
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(TaxiMovementsTypesRequest $request)
     {
         try {
-            // تحقق من صحة البيانات المدخلة باستخدام القواعد المحددة في نموذج البيانات
-            $validatedData = $request->validate([
-                'type' => ['required'],
-                'price' => ['required', 'numeric'],
-                'description' => ['nullable'],
-                'is_onKM' => ['required', 'boolean'],
-                'payment' => ['required', 'in:$,TL']
+            $validatedData = $request->validated();
 
-            ]);
-
-            // إنشاء نوع حركة تاكسي جديد وحفظه في قاعدة البيانات
             TaxiMovementType::create($validatedData);
 
-            // إعادة توجيه المستخدم برسالة نجاح
-            return redirect()->route('services')->with('success', 'تم إنشاء نوع الحركة بنجاح.');
+            return redirect()->route('services')->with('success', __('taxi-movement-type-created-success'));
         } catch (ValidationException $e) {
-            // إذا حدث خطأ في التحقق من الصحة، يُعاد توجيه المستخدم مع رسالة الخطأ والبيانات المدخلة
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (Exception $e) {
-            // إذا حدث خطأ آخر، يُعاد توجيه المستخدم مع رسالة الخطأ والبيانات المدخلة
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى. الخطأ: ' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors(__('taxi-movement-type-created-error')."\n errors:" . $e->getMessage())->withInput();
         }
     }
 
     /**
      * Show the form for editing the specified resource.
+     * @param TaxiMovementType $movementType
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
      */
     public function edit(TaxiMovementType $movementType)
     {
+        //todo must change to movementTypes
         return view('service.edit', ['movementType' => $movementType]);
     }
 
-    public function update(Request $request, TaxiMovementType $movementType)
+    /**
+     * Update taxi movement type details
+     * @param TaxiMovementsTypesRequest $request
+     * @param TaxiMovementType $movementType
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(TaxiMovementsTypesRequest $request, TaxiMovementType $movementType)
     {
         try {
 
-            $data = $request->validate([
-                'type' => 'required',
-                'price' => 'required|numeric',
-                'description' => 'nullable|string',
-                'is_onKM' => 'required|boolean',
-                'payment' => 'required|in:$,TL'
-            ]);
+            $data = $request->validated();
+
             $movementType->update($data);
 
-            return redirect()->route('services')->with('success', 'تم تحديث نوع الحركة بنجاح.');
+            return redirect()->route('services')->with('success', __('taxi-movement-type-edited-success'));
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\n errors:'.$e->getMessage())->withInput();
+            return redirect()->back()->withErrors(__('taxi-movement-type-edited-error') . "\n errors:" . $e->getMessage())->withInput();
         }
     }
 
     /**
      * Remove the specified resource from storage.
+     * @param TaxiMovementType $movementType
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(TaxiMovementType $movementType)
     {
         try {
-            // حذف الحركة المحددة
+
             $movementType->delete();
 
-            // إعادة التوجيه مع رسالة نجاح
-            return redirect()->route('services')->with('success', 'تم حذف الحركة بنجاح.');
+            return redirect()->route('services')->with('success', __('movement-type-delete-success'));
         } catch (Exception $e) {
-            // إذا حدث خطأ، يتم التعامل معه وإعادة التوجيه مع رسالة الخطأ
-            return redirect()->back()->withErrors('حدث خطأ أثناء محاولة حذف الحركة. الخطأ: ' . $e->getMessage());
+            return redirect()->back()->withErrors(__('movement-type-delete-error') . "\n errors:" . $e->getMessage());
         }
     }
 }

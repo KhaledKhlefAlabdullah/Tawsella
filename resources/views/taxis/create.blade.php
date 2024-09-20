@@ -52,8 +52,8 @@
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="car_detailes" class="form-label">{{ __('تفاصيل السيارة') }}</label>
-                                    <textarea class="form-control" id="car_detailes" name="car_detailes" required></textarea>
+                                    <label for="car_details" class="form-label">{{ __('تفاصيل السيارة') }}</label>
+                                    <textarea class="form-control" id="car_details" name="car_details" required></textarea>
                                 </div>
 
                                 <button type="submit" class="btn btn-primary">{{ __('إضافة') }}</button>

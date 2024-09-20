@@ -2,6 +2,8 @@
 
 namespace App\Models\Traits;
 
+use App\Enums\MovementRequestStatus;
+use App\Models\Calculation;
 use App\Models\TaxiMovement;
 use App\Models\User;
 use Carbon\Carbon;
@@ -18,11 +20,11 @@ trait MovementTrait
         $mappedMovements = $movements->map(function ($movement) {
             $movement_state = function ($movement) {
                 $state = '';
-                if ($movement->request_state == 'accepted' and !$movement->is_completed) {
+                if ($movement->request_state == MovementRequestStatus::Accepted and !$movement->is_completed) {
                     $state = 'live';
                 }
 
-                if ($movement->request_state == 'rejected') {
+                if ($movement->request_state == MovementRequestStatus::Rejected) {
                     $state = 'rejected by driver';
                 }
                 if ($movement->is_canceled) {
@@ -34,27 +36,29 @@ trait MovementTrait
                 return $state;
             };
 
-            return [
+            return   [
                 'movement_id' => $movement->id,
+                'start_address' => $movement->start_address,
+                'destination_address' => $movement->destination_address,
+                'gender' => $movement->gender,
                 'start_latitude' => $movement->start_latitude,
                 'start_longitude' => $movement->start_longitude,
-                'end_latitude' => $movement->end_latitude,
-                'end_longitude' => $movement->end_longitude,
-                'path' => json_decode($movement->path),
-                'movement_state' => $movement_state($movement),
-                'state_message' => $movement->state_message,
-                'distance' => $movement->distance,
-                'the_amount_paid' => $movement->amountPaid,
-                'driver' => [
-                    'id' => $movement->driver->id,
-                    'name' => $movement->driver->profile->name,
-                    'avatar' => $movement->driver->profile->avatar,
-                ],
-                'customer' => [
-                    'id' => $movement->customer->id,
-                    'name' => $movement->customer->profile->name,
-                    'avatar' => $movement->customer->profile->avatar,
-                ],
+                'end_latitude' => $movement->end_latitude ?? null,
+                'end_longitude' => $movement->end_longitude ?? null,
+                'path' => json_decode($movement->path) ?? null,
+                'driver_email' => $movement->driver->email,
+                'customer_email' => $movement->customer->email,
+                'driver_name' => $movement->driver->profile->name,
+                'driver_phone' => $movement->driver->profile->phone_number,
+                'customer_name' => $movement->customer->profile->name,
+                'customer_phone' => $movement->customer->profile->phone_number,
+                'taxi_id' => $movement->taxi_id,
+                'car_name' => $movement->taxi->car_name,
+                'car_lamp_number' => $movement->taxi->lamp_number,
+                'car_plate_number' => $movement->taxi->plate_number,
+                'type' => $movement->movement_type->type,
+                'price' => $movement->calculations->totalPrice ?? null,
+                'date' => $movement->created_at,
             ];
         });
 
@@ -67,16 +71,23 @@ trait MovementTrait
      * @param User $driver
      * @return float|int|mixed
      */
-    public static function calculateAmountPaid(TaxiMovement $movement, User $driver)
+    public static function calculateAmountPaid(TaxiMovement $taxiMovement, float $way)
     {
-        $amountPaid = 0;
-        if ($movement->is_onKM) {
-            $amountPaid = $movement->distance * $driver->KMPaid;
+        $movement_type = $taxiMovement->movement_type;
+        if ($movement_type->is_onKM) {
+            $totalPrice = $way * $movement_type->price;
         } else {
-            $amountPaid = $driver->movementPaid;
+            $totalPrice = $movement_type->price;
         }
 
-        return $amountPaid;
+        $calculation = $taxiMovement->calculations()->create([
+            'driver_id' => $taxiMovement->driver_id,
+            'totalPrice' => $totalPrice,
+            'way' => $way
+        ]);
+
+
+        return $calculation;
     }
 
     /**
@@ -91,7 +102,7 @@ trait MovementTrait
         $today = Carbon::today();
 
         // Filter movements for those that are canceled and created today
-        $todayCanceledMovements = $user->movements->filter(function ($movement) use ($today) {
+        $todayCanceledMovements = $user->customer_movements->filter(function ($movement) use ($today) {
             return $movement->is_canceled && $movement->created_at->isSameDay($today);
         })->count();
 
@@ -120,7 +131,7 @@ trait MovementTrait
      * Get today Movement requests
      * @return \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
      */
-    public static function getTaxiMovementsForToday(): \Illuminate\Database\Eloquent\Collection|\Illuminate\Support\Collection
+    public static function getLifeTaxiMovements()
     {
         $currentDate = Carbon::now()->toDateString();
 
@@ -128,14 +139,14 @@ trait MovementTrait
         return TaxiMovement::with(['customer.profile', 'movementType'])
             ->whereDate('created_at', $currentDate)
             ->where([
-                'is_don' => false,
-                'request_state' => 'pending'
+                'is_redirected' => false,
+                'request_state' => MovementRequestStatus::Pending
             ])
             ->get()
             ->map(function ($taxiMovement) {
                 return [
                     'id' => $taxiMovement->id,
-                    'from' => $taxiMovement->my_address,
+                    'from' => $taxiMovement->start_address,
                     'to' => $taxiMovement->destination_address,
                     'gender' => $taxiMovement->gender,
                     'lat' => $taxiMovement->start_latitude,

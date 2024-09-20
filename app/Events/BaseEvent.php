@@ -17,21 +17,21 @@ class BaseEvent implements ShouldBroadcast
     protected $location_long;
     protected $gender;
     protected $customer_address;
-    protected $customer_destnation_address;
+    protected $customer_destination_address;
 
 
     /**
      * Create a new event instance.
      */
-    public function __construct($taxiMovement) //$customer_id, $location_lat, $location_long,$gender,$customer_address,$customer_destnation_address)
+    public function __construct($taxiMovement) //$customer_id, $location_lat, $location_long,$gender,$customer_address,$customer_destination_address)
     {
         $this->request_id = $taxiMovement->id;
         $this->customer_id = $taxiMovement->customer_id;
         $this->location_lat = $taxiMovement->start_latitude;
         $this->location_long = $taxiMovement->start_longitude;
         $this->gender = $taxiMovement->gender;
-        $this->customer_address = $taxiMovement->my_address;
-        $this->customer_destnation_address = $taxiMovement->destnation_address;
+        $this->customer_address = $taxiMovement->start_address;
+        $this->customer_destination_address = $taxiMovement->destination_address;
     }
 
 

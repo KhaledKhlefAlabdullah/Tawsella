@@ -48,7 +48,7 @@ if (!function_exists('get_pagination')) {
     /**
      * Generate pagination metadata from a paginated instance.
      *
-     * @param LengthAwarePaginator $paginator
+     * @param \Illuminate\Pagination\LengthAwarePaginator $paginator
      * @return array
      */
     function get_pagination($paginator)

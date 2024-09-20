@@ -36,7 +36,7 @@ class AboutUsController extends Controller
                 return api_response(errors: [$e->getMessage()], message: 'نجحنا في الحصول على التفاصيل عنا', code: 500);
             }
 
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:\n errors:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.\nالاخطاء:'."\n errors:" . $e->getMessage())->withInput();
         }
     }
 
@@ -119,7 +119,7 @@ class AboutUsController extends Controller
             }
             return redirect()->route('aboutus.index')->with('success', $messag);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('There error in proceced data.\n errors:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('There error in proceced data.'."\n errors:" . $e->getMessage())->withInput();
         }
     }
 
@@ -158,7 +158,7 @@ class AboutUsController extends Controller
             return redirect()->route('aboutus.index')->with('success', 'Successfully created additional info.');
 
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error in create additional info\n errors:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in create additional info'."\n errors:" . $e->getMessage())->withInput();
         }
     }
 
@@ -197,7 +197,7 @@ class AboutUsController extends Controller
             return redirect()->route('aboutus.index')->with('success', 'Updated additional info.');
 
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error in update additional info.\n errors:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in update additional info.'."\n errors:" . $e->getMessage())->withInput();
         }
     }
 
@@ -218,7 +218,7 @@ class AboutUsController extends Controller
             $aboutUs->delete();
             return redirect()->route('aboutus.index')->with('success', 'Successfully deleted about us.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error in deleted about us\n errors:' . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors('Error in deleted about us'."\n errors:" . $e->getMessage())->withInput();
         }
     }
 }

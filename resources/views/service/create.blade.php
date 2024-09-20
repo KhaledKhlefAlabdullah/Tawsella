@@ -9,7 +9,7 @@
                     <div class="card-header">إضافة نوع حركة تاكسي جديد</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('service.store') }}">
+                        <form method="POST" action="{{ route('movement-types.store') }}">
                             @csrf
 
                             <div class="form-group row">

@@ -21,7 +21,7 @@ class ServicesRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         // Set user_id based on the current user making the request
-        $this->merge(['admin_id' => Auth::id()]);
+        $this->merge(['admin_id' => getAdminId()]);
     }
 
     /**

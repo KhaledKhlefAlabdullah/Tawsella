@@ -42,8 +42,8 @@
                                     <tr>
                                         <td>{{ $movement->customer_name }}</td>
                                         <td>{{ $movement->customer_phone }}</td>
-                                        <td>{{ $movement->my_address }}</td>
-                                        <td>{{ $movement->destnation_address }}</td>
+                                        <td>{{ $movement->start_address }}</td>
+                                        <td>{{ $movement->destination_address }}</td>
                                         <td>{{ $movement->gender == 'male' ? 'ذكر' : 'انثى' }}</td>
                                         <td>{{ $movement->driver_name }}</td>
                                         <td>{{ $movement->driver_phone }}</td>
@@ -52,7 +52,7 @@
                                         <td>{{ $movement->type }}</td>
                                         <td>
                                             @if ($movement->taxi_id)
-                                                <a href="{{ route('map', ['selector' => 'taxi', 'id' => $movement->taxi_id]) }}"
+                                                <a href="{{ route('movement.life.map', ['taxi' => $movement->taxi_id]) }}"
                                                     class="btn btn-success btn-sm">موقع السيارة</a> <!-- Bootstrap small button -->
                                             @else
                                                 <span class="text-danger">No taxi ID available</span>

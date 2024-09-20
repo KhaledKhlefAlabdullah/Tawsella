@@ -3,12 +3,19 @@
 namespace App\Models\Traits\UserTraits;
 
 use App\Enums\UserEnums\UserType;
-use App\Models\Movement;
+
+use App\Models\TaxiMovement;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
 trait CustomerTait
 {
+    /**
+     * Mapping movements
+     * @param $drivers
+     * @return mixed
+     * @throws \BenSampo\Enum\Exceptions\InvalidEnumMemberException
+     */
     public static function mappingNearestDrivers($drivers)
     {
         return $drivers->map(function ($driver) {
@@ -29,7 +36,15 @@ trait CustomerTait
         );
     }
 
-    // Method to find users near a given point
+
+    /**
+     * Method to find users near a given point
+     * @param Builder $query
+     * @param float $latitude
+     * @param float $longitude
+     * @param float $radius
+     * @return Builder
+     */
     public static function scopeNearLocation(Builder $query, float $latitude, float $longitude, float $radius = 10): Builder
     {
         return $query->selectRaw(
@@ -41,9 +56,14 @@ trait CustomerTait
             ->orderBy('distance', 'asc');
     }
 
+    /**
+     * Check if the customer have any currently opened requests
+     * @param string $customer_id
+     * @return \Illuminate\Http\JsonResponse|void
+     */
     public static function checkExistingCustomerMovements(string $customer_id){
         // To check if the customer have request in last 4 mentees don't create new one and return message
-        $existsRequest = Movement::where('customer_id', $customer_id)
+        $existsRequest = TaxiMovement::where('customer_id', $customer_id)
             ->where('created_at', '>=', Carbon::now()->subMinutes(10))
             ->latest()
             ->first();

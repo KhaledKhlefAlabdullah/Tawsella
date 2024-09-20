@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserProfileRequest;
-
 use App\Http\Requests\UserRequests\UserRequest;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
 
 
 class UserProfileController extends Controller
@@ -43,10 +45,23 @@ class UserProfileController extends Controller
     }
 
     /**
+     * Display the user's profile form.
+     * @param Request $request
+     * @return View
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-14
+     */
+    public function edit(Request $request): View
+    {
+        return view('profile.edit', [
+            'user' => $request->user(),
+        ]);
+    }
+
+    /**
      * Update the specified resource in storage.
-     * @param UserProfileRequest $request is profile data
-     * @param User $user is user to edit his profile
-     * @return JsonResponse
+     * @param UserRequest $request is profile data
+     * @return JsonResponse|\Illuminate\Http\RedirectResponse
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-14
      */
@@ -58,12 +73,12 @@ class UserProfileController extends Controller
 
             $user = Auth::user();
 
-            if (request()->has('email'))
+            if ($request->has('email'))
                 $user->update([
                     'email' => $validatedData['email']
                 ]);
 
-            if (request()->has('password'))
+            if ($request->has('password'))
                 $user->update([
                     'password' => Hash::make($request->password),
                 ]);
@@ -75,7 +90,7 @@ class UserProfileController extends Controller
                 'phone_number' => $validatedData['phone_number']
             ]);
 
-            if ($request->has('avatar')) {
+            if ($request->hasFile('avatar')) {
 
                 if (!empty($validatedData['avatar'])) {
                     $avatar = $request->avatar;
@@ -96,11 +111,38 @@ class UserProfileController extends Controller
                 }
             }
             DB::commit();
-            return api_response(message: 'Profile updated successfully.');
+
+            if ($request->wantsJson()) {
+                return api_response(message: 'Profile updated successfully.');
+            }
+            return redirect()->back()->with('success', 'تم تحديث البيانات بنجاح');
+
         } catch (Exception $e) {
             DB::rollBack();
             return api_response(errors: [$e->getMessage()], message: 'Profile updated error.', code: 500);
         }
     }
 
+    /**
+     * Delete the user's account.
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function destroy(Request $request): RedirectResponse
+    {
+        $request->validateWithBag('userDeletion', [
+            'password' => ['required', 'current_password'],
+        ]);
+
+        $user = $request->user();
+
+        Auth::logout();
+
+        $user->delete();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return Redirect::to('/');
+    }
 }
