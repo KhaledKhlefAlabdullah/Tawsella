@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use App\Models\Traits\HasUuid;
+use App\Models\Traits\TaxiTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 class Taxi extends Model
 {
-    use HasFactory, HasUuid;
+    use HasFactory, HasUuid, TaxiTrait;
 
     protected $keyType = 'string';
     protected $primaryKey = 'id';

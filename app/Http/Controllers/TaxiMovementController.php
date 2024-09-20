@@ -4,17 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Enums\MovementRequestStatus;
 use App\Enums\UserEnums\DriverState;
-use App\Events\Movement\AcceptTaxiMovemntEvent;
-use App\Events\Movement\CreateTaxiMovementEvent;
-use App\Events\Movement\MovementFindUnFindEvent;
-use App\Events\Movement\RejectTaxiMovemntEvent;
 use App\Events\Movements\AcceptTransportationServiceRequestEvent;
+use App\Events\Movements\CustomerCanceledMovementEvent;
+use App\Events\Movements\DriverChangeMovementStateEvent;
 use App\Events\Movements\RejectTransportationServiceRequestEvent;
 use App\Events\Movements\RequestingTransportationServiceEvent;
+use App\Http\Requests\TaxiMovements\MarkMovementAsCompletedRequest;
 use App\Http\Requests\TaxiMovements\AcceptOrRejectMovementRequest;
+use App\Http\Requests\TaxiMovements\FoundCustomerRequest;
 use App\Http\Requests\TaxiMovements\TaxiMovementRequest;
 use App\Models\Calculation;
-use App\Models\Taxi;
 use App\Models\TaxiMovement;
 use App\Models\TaxiMovementType;
 use App\Models\User;
@@ -22,7 +21,6 @@ use App\Models\UserProfile;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
@@ -129,7 +127,7 @@ class TaxiMovementController extends Controller
             $driver = getAndCheckModelById(User::class, $validatedData['driver_id']);
             $state = MovementRequestStatus::Accepted;
 
-            User::processMovementState($taxiMovement, $state, null,$driver);
+            User::processMovementState($taxiMovement, $state, null, $driver);
 
             // Update the driver state
             $driver->driver_state = DriverState::Reserved;
@@ -176,102 +174,95 @@ class TaxiMovementController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Send notification to the dashboard if the driver find or don't find the customer
+     * @param FoundCustomerRequest $request
+     * @param TaxiMovement $taxiMovement
+     * @return JsonResponse
      */
-
-
-    public function foundCustomer(Request $request, TaxiMovement $taxiMovement)
+    public function foundCustomer(FoundCustomerRequest $request, TaxiMovement $taxiMovement)
     {
         try {
-            $request->validate([
-                'state' => 'required|boolean'
-            ]);
+            $validatedData = $request->validated();
 
-
-            $driver = UserProfile::where('user_id', $taxiMovement->driver_id)->first();
-            $customer = UserProfile::where('user_id', $taxiMovement->customer_id)->first();
-
-            $d_name = $driver->name;
-            $c_name = $customer->name;
-
-            $message = $request->input('state') ? ' السائق ' . $d_name . ' وجد العميل ' . $c_name : ' السائق' . $d_name . ' لم يعثر على العميل ' . $c_name;
-
-            MovementFindUnFindEvent::dispatch(
-                $d_name ?? 'Unknown Driver',
-                $c_name ?? 'Unknown Customer',
-                $message
+            DriverChangeMovementStateEvent::dispatch(
+                $taxiMovement, $validatedData['state']
             );
 
-            if (!$request->input('state')) {
-                // حذف taxiMovement
+            if (!$validatedData['state']) {
                 $taxiMovement->delete();
             }
 
-            return api_response(message: $message);
+            return api_response(message: 'Successfully found customer');
         } catch (Exception $e) {
             return api_response(errors: $e->getMessage(), message: 'حدث خطأ في ايجاد او عدم ايجاد الزبون', code: 500);
         }
     }
 
-
     /**
      * Make the movement is completed
+     * @param MarkMovementAsCompletedRequest $request contains the end point location
+     * @param TaxiMovement $movement is the movement who will be ended
+     * @return JsonResponse status message and code
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-49
      */
-    public function makeMovementIsCompleted(Request $request, string $id)
+    public function makeMovementIsCompleted(MarkMovementAsCompletedRequest $request, TaxiMovement $taxiMovement)
     {
         try {
-
-            $request->validate([
-                'way' => 'sometimes|numeric',
-                'end_lat' => 'required|numeric',
-                'end_lon' => 'required|numeric'
-            ]);
-
-            $taxiMovement = getAndCheckModelById(TaxiMovement::class, $id);
+            DB::beginTransaction();
+            $validatedData = $request->validated();
 
             $taxiMovement->update([
                 'is_completed' => true,
-                'end_latitude' => $request->input('end_lat'),
-                'end_longitude' => $request->input('end_lon')
+                'end_latitude' => $validatedData['end_lat'],
+                'end_longitude' => $validatedData['end_lon']
             ]);
 
-            $movement_type = TaxiMovementType::findOrFail($taxiMovement->movement_type_id);
-            if ($movement_type->is_onKM) {
-                $totalPrice = $request->input('way') * $movement_type->price;
-            } else {
-                $totalPrice = $movement_type->price;
-            }
+            $calculation = TaxiMovement::calculateAmountPaid($taxiMovement, $validatedData['way']);
 
-            $calculation = Calculation::create([
-                'driver_id' => Auth::id(),
-                'taxi_movement_id' => $id,
-                'totalPrice' => $totalPrice,
-                'way' => $request->input('way')
+            $taxiMovement->driver()->update([
+                'driver_state' => DriverState::Ready
             ]);
 
-            getAndCheckModelById(User::class, Auth::id())->update([
-                'driver_state' => 'ready'
-            ]);
-
-            $driverName = UserProfile::where('user_id', Auth::id())->first()->name;
-
-            $customerName = UserProfile::where('user_id', $taxiMovement->customer_id)->first()->name;
-
-            $from = $taxiMovement->start_address;
-            $to = $taxiMovement->destination_address;
-
-            MovementFindUnFindEvent::dispatch(
-                $driverName,
-                $customerName,
-                'تم اكمال طلب الزبون من ' . $from . 'إلى ' . $to
+            DB::commit();
+            DriverChangeMovementStateEvent::dispatch(
+                $taxiMovement,
+                'completed-movement'
             );
 
-            return api_response(data: $calculation->totalPrice, message: 'success');
+            return api_response(data: $calculation->totalPrice, message: 'Successfully completed movement request');
         } catch (Exception $e) {
+            DB::rollBack();
             return api_response(errors: $e->getMessage(), message: 'error', code: 500);
         }
     }
 
+    /**
+     * Canceled movement by customer
+     * @param TaxiMovement $taxiMovement is the movement who will be ended
+     * @return JsonResponse status message and code
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     * @Target T-49
+     */
+    public function canceledMovement(TaxiMovement $taxiMovement)
+    {
+        try {
+
+            $taxiMovement->update([
+                'is_canceled' => true
+            ]);
+
+            TaxiMovement::calculateCanceledMovements(Auth::user());
+
+            CustomerCanceledMovementEvent::dispatch($taxiMovement);
+
+            return api_response(message: 'Movement Canceled Successfully');
+        } catch (Exception $e) {
+            return api_response(errors: [$e->getMessage()], message: 'Movement Canceled error', code: 500);
+        }
+    }
+
+    //todo need to remove and use realtime
     /**
      * Send Taxi movemnt request details
      */
@@ -307,6 +298,8 @@ class TaxiMovementController extends Controller
 
     /**
      * Remove the specified resource from storage.
+     * @param TaxiMovement $taxiMovement
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function destroy(TaxiMovement $taxiMovement)
     {

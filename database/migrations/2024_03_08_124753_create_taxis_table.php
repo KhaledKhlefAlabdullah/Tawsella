@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('car_details');
             $table->double('last_location_latitude')->nullable();
             $table->double('last_location_longitude')->nullable();
-            $table->foreign('driver_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('driver_id')->references('id')->on('users')->onDelete('set null');
             $table->timestamps();
             $table->SoftDeletes();
         });

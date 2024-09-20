@@ -1,11 +1,8 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Taxis;
 
-use App\Models\Taxi;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
-use Mockery\Generator\Method;
 
 class TaxiRequest extends FormRequest
 {

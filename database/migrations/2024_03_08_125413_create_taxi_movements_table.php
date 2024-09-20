@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('taxi_movements', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
             $table->string('driver_id')->nullable();
-            $table->string('customer_id');
+            $table->string('customer_id')->nullable();
             $table->string('taxi_id')->nullable();
             $table->string('movement_type_id');
             $table->string('start_address')->nullable();
@@ -29,8 +29,8 @@ return new class extends Migration
             $table->boolean('is_completed')->default(false);
             $table->boolean('is_canceled')->default(false);
             $table->integer('request_state')->default(\App\Enums\MovementRequestStatus::Pending);
-            $table->foreign('driver_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('customer_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('driver_id')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('customer_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('taxi_id')->references('id')->on('taxis')->onDelete('cascade');
             $table->foreign('movement_type_id')->references('id')->on('taxi_movement_types')->onDelete('cascade');
             $table->timestamps();

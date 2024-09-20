@@ -36,6 +36,6 @@ Broadcast::channel('driver-channel.{driver_id}', function ($user, $driver_id) {
     return  $user->id ==  $driver_id;
 });
 
-Broadcast::channel('movemnt.{admin_id}', function ($user, $admin_id) {
+Broadcast::channel('found-customer.{admin_id}', function ($user, $admin_id) {
     return  $user->id ==  $admin_id;
 });

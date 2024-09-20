@@ -17,7 +17,7 @@ trait DriverTrait
      * @param string|null $message
      * @return \Illuminate\Http\JsonResponse|void
      */
-    public static function processMovementState(TaxiMovement $taxiMovement,  int $state, string $message = null, User $driver = null)
+    public static function processMovementState(TaxiMovement $taxiMovement, int $state, string $message = null, User $driver = null)
     {
         if ($taxiMovement->is_canceled) {
             return api_response(
@@ -141,4 +141,17 @@ trait DriverTrait
         ];
     }
 
+    /**
+     * Get drivers dont have taxis
+     * @return mixed
+     */
+    public static function getDriversDontHaveTaxi()
+    {
+        $drivers = User::where('user_type', 'driver')
+            ->where(['is_active' => true, 'user_type' => UserType::TaxiDriver])
+            ->whereDoesntHave('taxi')
+            ->with('profile:id,user_id,name,avatar')
+            ->get(['id']);
+        return $drivers;
+    }
 }

@@ -7,6 +7,8 @@ use App\Models\Traits\MovementTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
+
 class TaxiMovement extends Model
 {
     use HasFactory, HasUuid ,SoftDeletes, MovementTrait;
@@ -38,24 +40,36 @@ class TaxiMovement extends Model
 
     public function addPointToPath($latitude, $longitude)
     {
-        $newPoint = ['longitude' => $longitude, 'latitude' => $latitude];
+        // Wrap in transaction to ensure atomicity
+        DB::transaction(function () use ($latitude, $longitude) {
+            // New point to be added
+            $newPoint = ['longitude' => $longitude, 'latitude' => $latitude];
 
-        if ($this->path) {
-            // Decode the existing path from JSON
-            $path = json_decode($this->path, true);
+            // Initialize the path array
+            $path = [];
+
+            if ($this->path) {
+                // Decode the existing path
+                $decodedPath = json_decode($this->path, true);
+
+                // Handle potential JSON decoding error
+                if (json_last_error() === JSON_ERROR_NONE) {
+                    $path = $decodedPath;
+                } else {
+                    // Log an error or throw an exception if necessary
+                    throw new \Exception('Failed to decode path JSON: ' . json_last_error_msg());
+                }
+            }
 
             // Append the new point to the path
             $path[] = $newPoint;
 
-            // Encode the path back to JSON
+            // Save the updated path in JSON format
             $this->path = json_encode($path);
-        } else {
-            // No path exists, create a new path with the new point
-            $this->path = json_encode([$newPoint]);
-        }
 
-        // Save the updated model
-        $this->save();
+            // Save the updated model
+            $this->save();
+        });
     }
 
     public function customer()

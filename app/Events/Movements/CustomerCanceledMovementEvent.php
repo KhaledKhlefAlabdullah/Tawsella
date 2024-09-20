@@ -3,10 +3,8 @@
 namespace App\Events\Movements;
 
 
-use App\Models\User;
-use Illuminate\Broadcasting\Channel;
+use App\Models\TaxiMovement;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -16,14 +14,14 @@ class CustomerCanceledMovementEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    protected Movement $movement;
+    protected TaxiMovement $taxiMovement;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(Movement $movement)
+    public function __construct(TaxiMovement $taxiMovement)
     {
-        $this->movement = $movement;
+        $this->taxiMovement = $taxiMovement;
     }
 
     /**
@@ -35,14 +33,15 @@ class CustomerCanceledMovementEvent implements ShouldBroadcast
     {
         return [
             new PrivateChannel('user-canceled-movement-request.' . $this->movement->driver_id),
+            new PrivateChannel('user-canceled-movement-request.' . getAdminId()),
         ];
     }
 
     public function broadcastWith(): array
     {
-        $customer = getAndCheckModelById(User::class, $this->movement->customer_id);
+        $customer = $this->taxiMovement->customer;
         return [
-            'message' => $this->movement->state_message,
+            'message' => $this->taxiMovement->state_message,
             'customer' => [
                 'id' => $customer->id,
                 'name' => $customer->profile->name,

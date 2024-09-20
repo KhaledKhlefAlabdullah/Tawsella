@@ -120,8 +120,8 @@
     <script>
         setTimeout(() => {
             var userId = <?php echo json_encode(auth()->id()); ?>;
-            Echo.private(`movemnt.${userId}`)
-                .listen('.App\\Events\\MovementFindUnFindEvent', (event) => {
+            Echo.private(`found-customer.${userId}`)
+                .listen('.App\\Events\\DriverChangeMovementStateEvent', (event) => {
                     var driver = event.driver;
                     var customer = event.customer;
                     var message = event.message;

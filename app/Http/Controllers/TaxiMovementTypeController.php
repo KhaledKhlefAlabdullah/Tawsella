@@ -22,18 +22,19 @@ class TaxiMovementTypeController extends Controller
 
         if (request()->wantsJson())
             return api_response(data: $movementTypes, message: __('getting-movements-types-success'));
+        //todo must change to movementTypes
 
         return view('services', ['movementTypes' => $generalMovementTypes, 'movements' => $movementTypes]);
     }
 
     /**
      * Get Taxi movement type details
-     * @param TaxiMovementType $taxiMovementType
+     * @param TaxiMovementType $movement_type
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(TaxiMovementType $taxiMovementType)
+    public function show(TaxiMovementType $movement_type)
     {
-        return api_response(data: $taxiMovementType, message: __('getting-movements-type-details-success'));
+        return api_response(data: $movement_type, message: __('getting-movements-type-details-success'));
     }
 
     /**
@@ -42,6 +43,7 @@ class TaxiMovementTypeController extends Controller
      */
     public function create()
     {
+        //todo must change to movementTypes
         return view('service.create', ['paymentTypes' => PaymentTypesEnum::asArray()]);
     }
 
@@ -72,6 +74,7 @@ class TaxiMovementTypeController extends Controller
      */
     public function edit(TaxiMovementType $movementType)
     {
+        //todo must change to movementTypes
         return view('service.edit', ['movementType' => $movementType]);
     }
 

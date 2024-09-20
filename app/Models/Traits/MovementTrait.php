@@ -3,6 +3,7 @@
 namespace App\Models\Traits;
 
 use App\Enums\MovementRequestStatus;
+use App\Models\Calculation;
 use App\Models\TaxiMovement;
 use App\Models\User;
 use Carbon\Carbon;
@@ -70,16 +71,23 @@ trait MovementTrait
      * @param User $driver
      * @return float|int|mixed
      */
-    public static function calculateAmountPaid(TaxiMovement $movement, User $driver)
+    public static function calculateAmountPaid(TaxiMovement $taxiMovement, float $way)
     {
-        $amountPaid = 0;
-        if ($movement->is_onKM) {
-            $amountPaid = $movement->distance * $driver->KMPaid;
+        $movement_type = $taxiMovement->movement_type;
+        if ($movement_type->is_onKM) {
+            $totalPrice = $way * $movement_type->price;
         } else {
-            $amountPaid = $driver->movementPaid;
+            $totalPrice = $movement_type->price;
         }
 
-        return $amountPaid;
+        $calculation = $taxiMovement->calculations()->create([
+            'driver_id' => $taxiMovement->driver_id,
+            'totalPrice' => $totalPrice,
+            'way' => $way
+        ]);
+
+
+        return $calculation;
     }
 
     /**
@@ -94,7 +102,7 @@ trait MovementTrait
         $today = Carbon::today();
 
         // Filter movements for those that are canceled and created today
-        $todayCanceledMovements = $user->movements->filter(function ($movement) use ($today) {
+        $todayCanceledMovements = $user->customer_movements->filter(function ($movement) use ($today) {
             return $movement->is_canceled && $movement->created_at->isSameDay($today);
         })->count();
 
