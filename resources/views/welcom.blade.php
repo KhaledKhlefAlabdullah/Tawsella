@@ -9,8 +9,8 @@
     <meta content="" name="description">
     <meta content="" name="keywords">
 
-    <link href="{{ asset('img/logoo.png') }}" rel="icon">
-    <link href="{{ asset('img/logoo.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('assets/img/logoo.png') }}" rel="icon">
+    <link href="{{ asset('assets/img/logoo.png') }}" rel="apple-touch-icon">
 
     <link
         href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
@@ -383,72 +383,72 @@
 
                     <div class="col-lg-3 col-md-4">
                         <div class="gallery-item">
-                            <a href="assets/img/gallery/gallery-1.jpg" class="glightbox"
+                            <a href="{{asset('assets/img/gallery/gallery-1.jpg')}}" class="glightbox"
                                 data-gallery="images-gallery">
-                                <img src="assets/img/gallery/gallery-1.jpg" alt="" class="img-fluid">
+                                <img src="{{asset('assets/img/gallery/gallery-1.jpg')}}" alt="" class="img-fluid">
                             </a>
                         </div>
                     </div><!-- End Gallery Item -->
 
                     <div class="col-lg-3 col-md-4">
                         <div class="gallery-item">
-                            <a href="assets/img/gallery/gallery-2.jpg" class="glightbox"
+                            <a href="{{asset('assets/img/gallery/gallery-2.jpg')}}" class="glightbox"
                                 data-gallery="images-gallery">
-                                <img src="assets/img/gallery/gallery-2.jpg" alt="" class="img-fluid">
+                                <img src="{{asset('assets/img/gallery/gallery-2.jpg')}}" alt="" class="img-fluid">
                             </a>
                         </div>
                     </div><!-- End Gallery Item -->
 
                     <div class="col-lg-3 col-md-4">
                         <div class="gallery-item">
-                            <a href="assets/img/gallery/gallery-3.jpg" class="glightbox"
+                            <a href="{{asset('assets/img/gallery/gallery-3.jpg')}}" class="glightbox"
                                 data-gallery="images-gallery">
-                                <img src="assets/img/gallery/gallery-3.jpg" alt="" class="img-fluid">
+                                <img src="{{asset('assets/img/gallery/gallery-3.jpg')}}" alt="" class="img-fluid">
                             </a>
                         </div>
                     </div><!-- End Gallery Item -->
 
                     <div class="col-lg-3 col-md-4">
                         <div class="gallery-item">
-                            <a href="assets/img/gallery/gallery-4.jpg" class="glightbox"
+                            <a href="{{asset('assets/img/gallery/gallery-4.jpg')}}" class="glightbox"
                                 data-gallery="images-gallery">
-                                <img src="assets/img/gallery/gallery-4.jpg" alt="" class="img-fluid">
+                                <img src="{{asset('assets/img/gallery/gallery-4.jpg')}}" alt="" class="img-fluid">
                             </a>
                         </div>
                     </div><!-- End Gallery Item -->
 
                     <div class="col-lg-3 col-md-4">
                         <div class="gallery-item">
-                            <a href="assets/img/gallery/gallery-5.jpg" class="glightbox"
+                            <a href="{{asset('assets/img/gallery/gallery-5.jpg')}}" class="glightbox"
                                 data-gallery="images-gallery">
-                                <img src="assets/img/gallery/gallery-5.jpg" alt="" class="img-fluid">
+                                <img src="{{asset('assets/img/gallery/gallery-5.jpg')}}" alt="" class="img-fluid">
                             </a>
                         </div>
                     </div><!-- End Gallery Item -->
 
                     <div class="col-lg-3 col-md-4">
                         <div class="gallery-item">
-                            <a href="assets/img/gallery/gallery-6.jpg" class="glightbox"
+                            <a href="{{asset('assets/img/gallery/gallery-6.jpg')}}" class="glightbox"
                                 data-gallery="images-gallery">
-                                <img src="assets/img/gallery/gallery-6.jpg" alt="" class="img-fluid">
+                                <img src="{{asset('assets/img/gallery/gallery-6.jpg')}}" alt="" class="img-fluid">
                             </a>
                         </div>
                     </div><!-- End Gallery Item -->
 
                     <div class="col-lg-3 col-md-4">
                         <div class="gallery-item">
-                            <a href="assets/img/gallery/gallery-7.jpg" class="glightbox"
+                            <a href="{{asset('assets/img/gallery/gallery-7.jpg')}}" class="glightbox"
                                 data-gallery="images-gallery">
-                                <img src="assets/img/gallery/gallery-7.jpg" alt="" class="img-fluid">
+                                <img src="{{asset('assets/img/gallery/gallery-7.jpg')}}" alt="" class="img-fluid">
                             </a>
                         </div>
                     </div><!-- End Gallery Item -->
 
                     <div class="col-lg-3 col-md-4">
                         <div class="gallery-item">
-                            <a href="assets/img/gallery/gallery-8.jpg" class="glightbox"
+                            <a href="{{asset('assets/img/gallery/gallery-8.jpg')}}" class="glightbox"
                                 data-gallery="images-gallery">
-                                <img src="assets/img/gallery/gallery-8.jpg" alt="" class="img-fluid">
+                                <img src="{{asset('assets/img/gallery/gallery-8.jpg')}}" alt="" class="img-fluid">
                             </a>
                         </div>
                     </div><!-- End Gallery Item -->
@@ -462,7 +462,7 @@
         <!-- Testimonials Section -->
         <section id="testimonials" class="testimonials section dark-background">
 
-            <img src="assets/img/testimonials-bg.jpg" class="testimonials-bg" alt="">
+            <img src="{{asset('assets/img/testimonials-bg.jpg')}}" class="testimonials-bg" alt="">
 
             <div class="container" data-aos="fade-up" data-aos-delay="100">
 
@@ -486,36 +486,36 @@
 
                         <div class="swiper-slide">
                             <div class="testimonial-item">
-                                <img src="assets/img/testimonials/testimonials-1.jpg" alt="">
+                                <img src="{{asset('assets/img/testimonials/testimonials-1.jpg')}}" alt="">
                             </div>
                         </div>
 
                         <div class="swiper-slide">
                             <div class="testimonial-item">
-                                <img src="assets/img/testimonials/testimonials-1.jpg" alt="">
+                                <img src="{{asset('assets/img/testimonials/testimonials-1.jpg')}}" alt="">
                             </div>
                         </div>
 
                         <div class="swiper-slide">
                             <div class="testimonial-item">
-                                <img src="assets/img/testimonials/testimonials-1.jpg" alt="">
+                                <img src="{{asset('assets/img/testimonials/testimonials-1.jpg')}}" alt="">
                             </div>
                         </div>
 
                         <div class="swiper-slide">
                             <div class="testimonial-item">
-                                <img src="assets/img/testimonials/testimonials-1.jpg" alt="">
+                                <img src="{{asset('assets/img/testimonials/testimonials-1.jpg')}}" alt="">
                             </div>
                         </div>
 
                         <div class="swiper-slide">
                             <div class="testimonial-item">
-                                <img src="assets/img/testimonials/testimonials-1.jpg" alt="">
+                                <img src="{{asset('assets/img/testimonials/testimonials-1.jpg')}}" alt="">
                             </div>
                         </div>
                         <div class="swiper-slide">
                             <div class="testimonial-item">
-                                <img src="assets/img/testimonials/testimonials-1.jpg" alt="">
+                                <img src="{{asset('assets/img/testimonials/testimonials-1.jpg')}}" alt="">
                             </div>
                         </div>
                     </div>
