@@ -28,7 +28,7 @@
                                 </div>
                             @endif
 
-                            <form action="{{ route('store-driver') }}" method="POST">
+                            <form action="{{ route('drivers.store') }}" method="POST">
                                 @csrf
 
                                 <!-- Name -->

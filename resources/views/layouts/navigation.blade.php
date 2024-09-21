@@ -37,7 +37,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{{ route('create.driver') }}">
+                            <a class="nav-link text-white" href="{{ route('drivers.create') }}">
                                 <i class="material-icons opacity-10">person_add</i>
                                 <span class="nav-link-text ms-1">اضافة سائق</span>
                             </a>

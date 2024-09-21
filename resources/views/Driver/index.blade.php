@@ -2,8 +2,6 @@
 
 @section('content')
     <main id="main" class="main">
-
-
         <div class="col-12">
             <div class="card recent-sales overflow-auto">
                 <div class="filter">

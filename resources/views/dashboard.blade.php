@@ -1,4 +1,5 @@
 @extends('layouts.app')
+
 @section('content')
     @if (session('success'))
         <div class="alert alert-success">
@@ -15,15 +16,13 @@
         </div>
     @endif
 
-    <!-- تصميم لوحة القيادة الجديدة -->
-    {{-- <div class="container-fluid py-4">
+    <div class="container-fluid py-4">
         <div class="row">
             <!-- البطاقة الأولى -->
             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                 <div class="card">
                     <div class="card-header p-3 pt-2">
-                        <div
-                            class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
+                        <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
                             <i class="material-icons opacity-10">weekend</i>
                         </div>
                         <div class="text-end pt-1">
@@ -38,8 +37,7 @@
             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                 <div class="card">
                     <div class="card-header p-3 pt-2">
-                        <div
-                            class="icon icon-lg icon-shape bg-gradient-primary shadow-primary text-center border-radius-xl mt-n4 position-absolute">
+                        <div class="icon icon-lg icon-shape bg-gradient-primary shadow-primary text-center border-radius-xl mt-n4 position-absolute">
                             <i class="material-icons opacity-10">person</i>
                         </div>
                         <div class="text-end pt-1">
@@ -54,8 +52,7 @@
             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                 <div class="card">
                     <div class="card-header p-3 pt-2">
-                        <div
-                            class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
+                        <div class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
                             <i class="material-icons opacity-10">person</i>
                         </div>
                         <div class="text-end pt-1">
@@ -70,8 +67,7 @@
             <div class="col-xl-3 col-sm-6">
                 <div class="card">
                     <div class="card-header p-3 pt-2">
-                        <div
-                            class="icon icon-lg icon-shape bg-gradient-info shadow-info text-center border-radius-xl mt-n4 position-absolute">
+                        <div class="icon icon-lg icon-shape bg-gradient-info shadow-info text-center border-radius-xl mt-n4 position-absolute">
                             <i class="material-icons opacity-10">weekend</i>
                         </div>
                         <div class="text-end pt-1">
@@ -84,24 +80,19 @@
         </div>
 
         <!-- قسم عرض الطلبات والخرائط -->
-        <div class="row mt-4" style="height: 64vh">
-            <div class="col-lg-3 col-md-12 mt-3 mb-3">
-                <!-- Tabs navigation -->
+        <div class="row">
+            {{-- الطلبات القادمة --}}
+            <div class="col-lg-3 col-md-12 mt-3">
                 <ul class="nav nav-tabs w-100" id="myTab" role="tablist">
                     <li class="nav-item w-100" role="presentation">
                         <button class="nav-link active w-100 text-center" id="orders-tab" data-bs-toggle="tab"
                             data-bs-target="#orders" type="button" role="tab" aria-controls="orders"
-                            aria-selected="true">
-                            الطلبات القادمة
-                        </button>
+                            aria-selected="true">الطلبات القادمة</button>
                     </li>
                 </ul>
-
-                <!-- محتوى التبويبات مع التمرير -->
                 <div style="max-height: 62vh; overflow-y: auto; scroll-behavior: smooth;">
                     <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="orders" role="tabpanel" aria-labelledby="orders-tab">
-                            <!-- عرض الطلبات هنا -->
                             @foreach ($lifeTaxiMovements as $lifeTaxiMovement)
                                 <div class="card mt-3">
                                     <div class="card-body">
@@ -118,48 +109,76 @@
             </div>
 
             <!-- قسم خرائط جوجل -->
-            <div class="col-lg-9 col-md-12 mt-9 mb-9">
+            <div class="col-lg-9 col-md-12 mt-3">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Google Maps</title>
-                <style>
-                    #map {
-                        height: 500px;
-                        width: 100%;
-                    }
 
+                <!-- إضافة عنصر اللودينغ -->
+                <div id="map-container" style="position: relative;">
+                    <div id="loading-spinner" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading map...</span>
+                        </div>
+                        <p style="text-align: center;">جارٍ تحميل الخريطة...</p>
+                    </div>
+                    <div id="map" style="height: 425px; width: 100%;"></div>
+                </div>
+
+                <style>
                     @media (max-width: 768px) {
                         #map {
                             height: 300px;
                         }
                     }
+
+                    @media (min-width: 769px) and (max-width: 1024px) {
+                        #map {
+                            height: 400px;
+                        }
+                    }
                 </style>
 
-                <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}"></script>
+                <!-- خرائط جوجل -->
+                <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCz7MVXwh_VtjqnPh5auan0QCVwVce2JX0&callback=initMap"></script>
+
                 <script>
+                    function handleMapError() {
+                        var loadingSpinner = document.getElementById('loading-spinner');
+                        loadingSpinner.style.display = 'none';
+                        alert('فشل تحميل الخريطة. يرجى التحقق من اتصال الإنترنت أو صحة مفتاح API.');
+                    }
+
                     function initMap() {
+                        var loadingSpinner = document.getElementById('loading-spinner');
+                        loadingSpinner.style.display = 'block';
+
                         var mapElement = document.getElementById('map');
                         if (!mapElement) {
                             console.error('Map element not found');
                             return;
                         }
-                        var location = {
-                            lat: -34.397,
-                            lng: 150.644
-                        };
-                        var map = new google.maps.Map(mapElement, {
-                            zoom: 8,
-                            center: location
-                        });
 
-                        var marker = new google.maps.Marker({
-                            position: location,
-                            map: map
-                        });
+                        var location = { lat: -34.397, lng: 150.644 };
+
+                        try {
+                            var map = new google.maps.Map(mapElement, {
+                                zoom: 8,
+                                center: location
+                            });
+
+                            var marker = new google.maps.Marker({
+                                position: location,
+                                map: map
+                            });
+
+                            google.maps.event.addListenerOnce(map, 'tilesloaded', function () {
+                                loadingSpinner.style.display = 'none';
+                            });
+                        } catch (error) {
+                            handleMapError();
+                        }
                     }
                 </script>
-                <h1 class="text-center">Google Map Integration</h1>
-                <div id="map"></div>
             </div>
         </div>
-    </div> --}}
+    </div>
 @endsection

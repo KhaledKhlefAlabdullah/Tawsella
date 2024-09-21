@@ -18,10 +18,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('avatar')->default('/images/profile_images/man.png');
             $table->string('phone_number')->nullable();
-            $table->integer('gender')->default(UserGender::Male);
+            $table->integer('gender')->default(UserGender::male);
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
-            $table->SoftDeletes();        });
+            $table->SoftDeletes();
+         });
     }
 
     /**
