@@ -2,10 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Enums\UserEnums\UserGender;
 use App\Models\TaxiMovement;
 use Illuminate\Database\Seeder;
-use App\Models\TaxiMovementType;
 
 class TaxiMovementsSeeder extends Seeder
 {
@@ -16,20 +14,20 @@ class TaxiMovementsSeeder extends Seeder
     {
         TaxiMovement::create([
             'customer_id' => 'Asds-52664d66-aasd5566-C1',
-            'movement_type_id' => TaxiMovementType::where('is_general', true)->first()->id,
-            'start_address' => 'azaz moole',
-            'destination_address' => 'afrin',
-            'gender' => UserGender::male,
+            'movement_type_id' => 't-m-t-1',
+            'my_address' => 'azaz moole',
+            'destnation_address' => 'afrin',
+            'gender' => 'male',
             'start_latitude' => 35.6266,
             'start_longitude' => 24.8895
         ]);
 
         TaxiMovement::create([
             'customer_id' => 'Asds-52664d66-aasd5566-C2',
-            'movement_type_id' => TaxiMovementType::where('is_general', true)->first()->id,
-            'start_address' => 'azaz city',
-            'destination_address' => 'sarmada',
-            'gender' => UserGender::female,
+            'movement_type_id' => 't-m-t-3',
+            'my_address' => 'azaz city',
+            'destnation_address' => 'sarmada',
+            'gender' => 'female',
             'start_latitude' => 35.6266,
             'start_longitude' => 24.8895
         ]);

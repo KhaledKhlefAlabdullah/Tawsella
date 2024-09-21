@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -18,7 +19,7 @@ class DatabaseSeeder extends Seeder
             UsersSeeder::class,
             TaxiMovementsSeeder::class,
             OffersSeeder::class,
-            AboutUsSeeder::class,
+            AboutUsSeeder::class
         ]);
     }
 }
