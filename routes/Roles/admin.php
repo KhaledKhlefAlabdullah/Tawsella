@@ -49,15 +49,8 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     //*****************************End route services ******************************** */
     //******************************************************************************** */
 
-
-    //************************************ ROUTE **************************************** */
-    //************************************ ROUTE **************************************** */
-
-    Route::get('/profiles', function () {
-        return view('profile.profile');
-    });
-
     //***************************start route dashboard ******************************** */
+    //********************************************************************************* */
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
@@ -65,8 +58,10 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     //******************************************************************************* */
 
     //***************************start route profile ******************************** */
-    Route::resource('profile', UserProfileController::class)->only(['edit', 'update', 'destroy'])
+    //******************************************************************************* */
+    Route::resource('profile', UserProfileController::class)->except(['create', 'store'])
         ->names([
+            'index' => 'profile.profile',
             'edit' => 'profile.edit',
             'update' => 'profile.update',
             'destroy' => 'profile.destroy'

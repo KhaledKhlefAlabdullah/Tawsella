@@ -20,13 +20,17 @@ class UserProfileController extends Controller
 
     /**
      * Return Auth User Profile
-     * @return JsonResponse UserProfile data
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|JsonResponse UserProfile data
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-13
      */
     public function index()
     {
         try {
+
+            if (!request()->wantsJson()) {
+                return view('profile.profile');
+            }
 
             $use = Auth::user();
 
