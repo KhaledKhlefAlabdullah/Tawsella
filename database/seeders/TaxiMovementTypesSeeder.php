@@ -18,8 +18,8 @@ class TaxiMovementTypesSeeder extends Seeder
     {
         $movementTypes = [
             ['type' => 'طلب داخلي', 'price' => 50, 'payment' => 0, 'is_general' => true],
-            [ 'type' => 'طلب خارجي', 'is_onKM' => true, 'price' => 0.5, 'payment' => 1, 'is_general' => true],
-            [ 'type' => 'استأجار سيارة لمدة زمنية', 'description' => 'تواصل معنا على الرقم', 'price' => 1000, 'payment' => 1, 'is_general' => true],
+            ['type' => 'طلب خارجي', 'is_onKM' => true, 'price' => 0.5, 'payment' => 1, 'is_general' => true],
+            ['type' => 'استأجار سيارة لمدة زمنية', 'description' => 'تواصل معنا على الرقم', 'price' => 1000, 'payment' => 1, 'is_general' => true],
             ['type' => 'اعزاز', 'price' => 50],
             ['type' => 'سجو', 'price' => 75],
             ['type' => 'كفر كلبين', 'price' => 80],
