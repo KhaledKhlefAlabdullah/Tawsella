@@ -171,7 +171,7 @@ if (!function_exists('getAdminId')) {
      */
     function getAdminId()
     {
-        $admin_id = \App\Models\User::role(UserType::Admin()->key)->first()->id;
+        $admin_id = \App\Models\User::role(\App\Enums\UserEnums\UserType::Admin()->key)->first()->id;
         return $admin_id;
     }
 }
