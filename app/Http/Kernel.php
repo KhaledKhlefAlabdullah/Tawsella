@@ -4,7 +4,6 @@ namespace App\Http;
 
 use App\Http\Middleware\EnsureEmailIsVerifiedByCodeMiddleware;
 use App\Http\Middleware\RolesMiddlewares\AdminMiddleware;
-use App\Http\Middleware\RolesMiddlewares\AllAuthUsersExceptDriver;
 use App\Http\Middleware\RolesMiddlewares\CustomerMiddleware;
 use App\Http\Middleware\RolesMiddlewares\DriverMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -72,8 +71,12 @@ class Kernel extends HttpKernel
         'admin' => AdminMiddleware::class,
         'driver' => DriverMiddleware::class,
         'customer' => CustomerMiddleware::class,
-        'exceptDrivers' => AllAuthUsersExceptDriver::class,
         'AdminAndDriver' => AdminMiddleware::class,
+        'localize' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRoutes::class,
+        'localizationRedirect' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationRedirectFilter::class,
+        'localeSessionRedirect' => \Mcamara\LaravelLocalization\Middleware\LocaleSessionRedirect::class,
+        'localeCookieRedirect' => \Mcamara\LaravelLocalization\Middleware\LocaleCookieRedirect::class,
+        'localeViewPath' => \Mcamara\LaravelLocalization\Middleware\LaravelLocalizationViewPath::class
     ];
 
 }

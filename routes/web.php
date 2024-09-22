@@ -2,6 +2,7 @@
 
 
 use Illuminate\Support\Facades\Route;
+use \Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,17 +14,22 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::get('/', function () {
-    return view('welcom');
-});
+Route::group([
+    'prefix' => LaravelLocalization::setLocale(),
+    'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
+], function () {
+    Route::get('/', function () {
+        return view('welcom');
+    });
 
 //***************************start route AppPlatform ******************************** */
-Route::get('/AppPlatform', function () {
-    return view('ApplicationPlatform');
-});
+    Route::get('/AppPlatform', function () {
+        return view('ApplicationPlatform');
+    });
 //*****************************End route AppPlatform ******************************** */
 //*********************************************************************************** */
 
-require __DIR__.'/Roles/admin.php';
+    require __DIR__ . '/Roles/admin.php';
 
-require __DIR__ . '/auth.php';
+    require __DIR__ . '/auth.php';
+});
