@@ -14,7 +14,7 @@ trait TaxiTrait
 
         return $taxis->map(function($taxi){
             $driverProfile = $taxi->driver->profile;
-            return [
+            return (object)[
                 'driverName' => $driverProfile->name,
                 'driverAvatar' => $driverProfile->avatar,
                 'id' => $taxi->id,

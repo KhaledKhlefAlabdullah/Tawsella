@@ -9,14 +9,31 @@
     <title>
         Tawsella
     </title>
-    <link rel="stylesheet" type="text/css"
-        href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700" />
-    <link href="{{ asset('css/nucleo-icons.css" rel="stylesheet') }}" />
-    <link href="{{ asset('css/nucleo-svg.css" rel="stylesheet') }}" />
+    <link href="{{ asset('css/nucleo-icons.css') }}" rel="stylesheet" />
+    <link href="{{ asset('css/nucleo-svg.css') }}" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
     <link id="pagestyle" href="{{ asset('css/material-dashboard.css?v=3.1.0') }}" rel="stylesheet" />
     <script defer data-site="YOUR_DOMAIN_HERE" src="https://api.nepcha.com/js/nepcha-analytics.js"></script>
+    <!-- Bootstrap CSS (تأكد من أنه مضاف بالفعل) -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <!-- Bootstrap Table CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-table/dist/bootstrap-table.min.css">
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+
+    <!-- Bootstrap JS (تأكد من أنه مضاف بالفعل) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Bootstrap Table JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-table/dist/bootstrap-table.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-table/dist/extensions/export/bootstrap-table-export.min.js">
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tableexport.jquery.plugin/1.10.20/tableExport.min.js"></script>
 
 </head>
 
@@ -33,7 +50,8 @@
                                     href="javascript:;">Pages</a></li>
                             <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
                         </ol>
-                        <h6 class="font-weight-bolder mb-0">Dashboard</h6>
+                        <h6 class="font-weight-bolder mb-0">{{ Request::path() }}</h6>
+
                     </nav>
                     <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                         <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -113,7 +131,7 @@
     <script src="{{ asset('vendor/simple-datatables/simple-datatables.js') }}"></script>
     <script src="{{ asset('vendor/tinymce/tinymce.min.js') }}"></script>
     <script src="{{ asset('vendor/php-email-form/validate.js') }}"></script>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    
     <script src="{{ asset('js/darkmode.js') }}"></script>
     <script src="{{ asset('js/darkmode-config.js') }}"></script>
     <script src="path/to/darkmode.js"></script>
@@ -137,7 +155,6 @@
             return false; // Prevent default form submission
         }
     </script>
-
     <!-- Template Main JS File -->
     <script src="{{ asset('js/main.js') }}"></script>
 
@@ -357,6 +374,8 @@
     <script src="{{ asset('js/plugins/perfect-scrollbar.min.js') }}"></script>
     <script src="{{ asset('js/plugins/smooth-scrollbar.min.js') }}"></script>
     <script src="{{ asset('js/plugins/chartjs.min.js') }}"></script>
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+    <script src="{{ asset('js/material-dashboard.min.js?v=3.1.0') }}"></script>
     <script>
         function confirmDelete(deletedroute) {
             Swal.fire({
@@ -376,8 +395,6 @@
             return false; // Prevent default form submission
         }
     </script>
-    <!-- Reale time Scripts -->
-    @vite('resources/js/app.js')
     <script>
         setTimeout(() => {
             var userId = <?php echo json_encode(auth()->id()); ?>;
@@ -397,10 +414,8 @@
                 });
         }, 200);
     </script>
-
     <script>
         setTimeout(() => {
-
             var userId = <?php echo json_encode(auth()->id()); ?>;
             Echo.private(`Taxi-movement.${userId}`)
                 .listen('.App\\Events\\CreateTaxiMovementEvent', (event) => {
@@ -577,16 +592,10 @@
                                     document.getElementById('cancel' + index).style.display = 'none';
                                 }
                                 `;
-
-
-                    // Get the HTML element to append the script to
                     var item = document.getElementById(`item${index}`);
-
-                    // Append the script element to the HTML element
                     item.appendChild(script);
-
                 });
-        }, 1000); // Set a delay of 1 second (1000 milliseconds) to ensure proper rendering after the page load
+        }, 1000); 
     </script>
     <script>
         var ctx = document.getElementById("chart-bars").getContext("2d");
@@ -844,10 +853,6 @@
             Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
         }
     </script>
-    <!-- Github buttons -->
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-    <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src="{{ asset('js/material-dashboard.min.js?v=3.1.0') }}"></script>
 </body>
 
 </html>

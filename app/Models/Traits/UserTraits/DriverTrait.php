@@ -22,7 +22,8 @@ trait DriverTrait
         if ($taxiMovement->is_canceled) {
             return api_response(
                 message: 'The request has already been canceled by the customer. We apologize for any inconvenience caused.',
-                code: 410);
+                code: 410
+            );
         } else {
             // Update the request state
             $taxiMovement->update([
@@ -49,9 +50,9 @@ trait DriverTrait
             ->has('taxi') // Ensure the user has a related taxi
             ->get();
 
-//        if ($drivers->isEmpty()) {
-//            return abort(404, 'There are no drivers ready to work.');
-//        }
+        //        if ($drivers->isEmpty()) {
+        //            return abort(404, 'There are no drivers ready to work.');
+        //        }
 
         $mappedDrivers = $drivers->map(function ($driver) {
             return [
@@ -94,7 +95,7 @@ trait DriverTrait
         // Extract the items and map the driver data
         $mappedDrivers = $drivers->getCollection()->map(function ($driver) {
             $unBring = $driver->calculations()->where('is_bring', false)->sum('totalPrice');
-            return [
+            return (object)[
                 'driver_id' => $driver->id,
                 'name' => $driver->profile->name,
                 'email' => $driver->email,
@@ -103,8 +104,8 @@ trait DriverTrait
                 'is_active' => $driver->is_active,
                 'unBring' => $unBring,
                 'driver_state' => DriverState::getKey($driver->driver_state),
-                'plate_number' => $driver->taxi->plate_number,
-                'lamp_number' => $driver->taxi->lamp_number,
+                'plate_number' => $driver->taxi?->plate_number,
+                'lamp_number' => $driver->taxi?->lamp_number,
             ];
         });
 
@@ -127,7 +128,7 @@ trait DriverTrait
     {
         $unBring = $driver->calculations()->where('is_bring', false)->sum('totalPrice');
 
-        return [
+        return (object)[
             'driver_id' => $driver->id,
             'name' => $driver->profile->name,
             'email' => $driver->email,
@@ -136,8 +137,8 @@ trait DriverTrait
             'is_active' => $driver->is_active,
             'unBring' => $unBring,
             'driver_state' => DriverState::getKey($driver->driver_state),
-            'plate_number' => $driver->taxi->plate_number,
-            'lamp_number' => $driver->taxi->lamp_number,
+            'plate_number' => $driver->taxi?->plate_number,
+            'lamp_number' => $driver->taxi?->lamp_number,
         ];
     }
 
@@ -147,11 +148,10 @@ trait DriverTrait
      */
     public static function getDriversDontHaveTaxi()
     {
-        $drivers = User::where('user_type', 'driver')
-            ->where(['is_active' => true, 'user_type' => UserType::TaxiDriver])
+        $drivers = User::where(['is_active' => true, 'user_type' => UserType::TaxiDriver])
             ->whereDoesntHave('taxi')
             ->with('profile:id,user_id,name,avatar')
-            ->get(['id']);
+            ->get();
         return $drivers;
     }
 }

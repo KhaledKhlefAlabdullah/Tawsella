@@ -109,7 +109,7 @@
                 <div class="collapse" id="extrasMenu">
                     <ul class="nav ms-4 ps-3">
                         <li class="nav-item">
-                            <a class="nav-link text-white" href="{{ url('/services') }}">
+                            <a class="nav-link text-white" href="{{ url('/movement-types') }}">
                                 <i class="material-icons opacity-10">build</i>
                                 <span class="nav-link-text ms-1">الخدمات</span>
                             </a>

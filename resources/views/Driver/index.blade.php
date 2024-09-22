@@ -1,128 +1,106 @@
 @extends('layouts.app')
 
 @section('content')
-    <main id="main" class="main">
-        <div class="col-12">
-            <div class="card recent-sales overflow-auto">
-                <div class="filter">
-                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
-                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                        <li class="dropdown-header text-start">
-                            <h6>{{ __('فلترة') }}</h6>
-                        </li>
-                        <li><a class="dropdown-item" href="#">{{ __('كل السائقين') }}</a></li>
+<main id="main" class="main">
+    <div class="col-12">
+        <div class="card recent-sales overflow-auto">
+            <div class="filter">
+                <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                        <h6>{{ __('فلترة') }}</h6>
+                    </li>
+                    <li><a class="dropdown-item" href="#">{{ __('كل السائقين') }}</a></li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ __('السائقين') }} <span>| {{ __('سجل') }}</span></h5>
+                @if (session('success'))
+                <div class="alert alert-success">
+                    {{ session('success') }}
+                </div>
+                @endif
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
                     </ul>
                 </div>
-                <div class="card-body">
-                    <h5 class="card-title">{{ __('السائقين') }} <span>| {{ __('سجل') }}</span></h5>
-                    @if (session('success'))
-                        <div class="alert alert-success">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-                    @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
-                                @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
-                        </div>
-                    @endif
-                    <table class="table table-borderless datatable">
-                        <thead>
-                            <tr style="margin-left: 15px">
-                                <th scope="col">#</th>
-                                <th scope="col">
-                                    <p class="text-center">{{ __('السائق') }}</p>
-                                </th>
-                                <th scope="col">
-                                    <p class="text-center">{{ __('الايميل') }}</p>
-                                </th>
-                                <th scope="col">
-                                    <p class="text-center">{{ __('رقم الجوال') }}</p>
-                                </th>
-                                <th scope="col">
-                                    <p class="text-center">{{ __('رقم لوحة السيارة') }}</p>
-                                </th>
-                                <th scope="col">
-                                    <p class="text-center">{{ __('رقم فانوس السيارة') }}</p>
-                                </th>
-                                <th scope="col">
-                                    <p class="text-center">{{ __('حالة الحساب') }}</p>
-                                </th>
-                                <th scope="col">
-                                    <p class="text-center">{{ __('حالة السائق') }}</p>
-                                </th>
-                                <th scope="col">
-                                    <p class="text-center">{{ __('المبلغ غير المسلم') }}</p>
-                                </th>
-                                <th scope="col">
-                                    <p class="text-center">{{ __('ادارة') }}</p>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($drivers as $driver)
-                                <tr>
-                                    <th scope="row"><a href="#">{{ $loop->iteration }}</a></th>
-                                    <td>
-                                        <p class="text-center">{{ $driver->name }}</p>
-                                    </td>
-                                    <td><a href="#" class="text-primary">
-                                            <p class="text-center">{{ $driver->email }}</p>
-                                        </a></td>
-                                    <td>
-                                        <p class="text-center">{{ $driver->phoneNumber }}</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-center">{{ $driver->plate_number }}</p>
-                                    </td>
-                                    <td>
-                                        <p class="text-center">{{ $driver->lamp_number }}</p>
-                                    </td>
-                                    <td>
-                                        <span class="badge {{ $driver->is_active ? 'bg-success' : 'bg-danger' }} ">
-                                            <center>{{ $driver->is_active ? __('Active') : __('Inactive') }}</center>
-                                        </span>
-                                    </td>
-                                    <td>
-                                        @if ($driver->state == 'ready')
-                                            <span class="badge bg-success ">
-                                                <center>مستعد للعمل</center>
-                                            </span>
-                                        @elseif ($driver->state == 'in_break')
-                                            <span class="badge bg-primary">
-                                                <center>في استراحة</center>
-                                            </span>
-                                        @else
-                                            <span class="badge bg-danger ">
-                                                <center>مشغول</center>
-                                            </span>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <p class="text-center">{{ $driver->unBring }}</p>
-                                    </td>
-                                    <td>
-                                        @if ($driver->unBring > 0)
-                                            <a href="{{ route('calculations.bring', $driver->driver_id) }}"
-                                                class="btn btn-primary">استلام</a>
-                                        @endif
-
-                                    </td>
-                                    <td>
-                                        <x-buttons :delete-route="route('drivers.destroy', ['id' => $driver->driver_id])" :edit-route="route('drivers.edit', ['id' => $driver->driver_id])" :show-route="route('drivers.show', ['id' => $driver->driver_id])" :showDeleteButton="true"
-                                            :showEditButton="true" :showDetailsButton="true" />
-                                    </td>
-                                </tr>
-                            @endforeach
-
-                        </tbody>
-                    </table>
-                </div>
+                @endif
+                <style>
+                    .bootstrap-table .fixed-table-toolbar .search input {
+                        width: 100%;
+                        margin-bottom: 10px; /* تأكد من التباعد */
+                        border: 2px solid rgb(255, 149, 0); /* الحدود الحمراء كما في الصورة */
+                    }
+                    .bootstrap-table .fixed-table-toolbar {
+                        margin-bottom: 0; /* لإزالة التباعد الزائد إن وجد */
+                    }
+                    .bootstrap-table .fixed-table-container {
+                        border: none; /* لإزالة الحدود حول الجدول إن وجدت */
+                    }
+                </style>
+                <table class="table table-borderless datatable" data-toggle="table" data-pagination="true"
+                       data-search="true" data-search-align="left" data-show-columns="true" data-show-export="true">
+                    <thead>
+                        <tr style="margin-left: 15px">
+                            <th data-sortable="true" scope="col">#</th>
+                            <th data-sortable="true" scope="col">{{ __('السائق') }}</th>
+                            <th data-sortable="true" scope="col">{{ __('الايميل') }}</th>
+                            <th data-sortable="true" scope="col">{{ __('رقم الجوال') }}</th>
+                            <th data-sortable="true" scope="col">{{ __('رقم لوحة السيارة') }}</th>
+                            <th data-sortable="true" scope="col">{{ __('رقم فانوس السيارة') }}</th>
+                            <th data-sortable="true" scope="col">{{ __('حالة الحساب') }}</th>
+                            <th data-sortable="true" scope="col">{{ __('حالة السائق') }}</th>
+                            <th data-sortable="true" scope="col">{{ __('المبلغ غير المسلم') }}</th>
+                            <th scope="col">{{ __('ادارة') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($drivers as $driver)
+                        <tr>
+                            <th scope="row">{{ $loop->iteration }}</th>
+                            <td>{{ $driver->name }}</td>
+                            <td>{{ $driver->email }}</td>
+                            <td>{{ $driver->phone_number }}</td>
+                            <td>{{ $driver->plate_number }}</td>
+                            <td>{{ $driver->lamp_number }}</td>
+                            <td class="text-center">
+                                <span class="badge {{ $driver->is_active ? 'bg-success' : 'bg-danger' }}">
+                                    {{ $driver->is_active ? __('Active') : __('Inactive') }}
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                @if ($driver->driver_state == 'ready')
+                                <span class="badge bg-success">{{ __('مستعد للعمل') }}</span>
+                                @elseif ($driver->driver_state == 'in_break')
+                                <span class="badge bg-primary">{{ __('في استراحة') }}</span>
+                                @else
+                                <span class="badge bg-danger">{{ __('مشغول') }}</span>
+                                @endif
+                            </td>
+                            <td>{{ $driver->unBring }}</td>
+                            <td>
+                                <div class="d-flex gap-2">
+                                    @if ($driver->unBring > 0)
+                                    <a href="{{ route('calculations.bring', ['driver' => $driver->driver_id]) }}"
+                                        class="btn btn-sm btn-primary">
+                                        {{ __('استلام') }}
+                                    </a>
+                                    @endif
+                                    <x-buttons :delete-route="route('drivers.destroy', ['driver' => $driver->driver_id])" :edit-route="route('drivers.edit', ['driver' => $driver->driver_id])" :show-route="route('drivers.show', ['driver' => $driver->driver_id])" :showDeleteButton="true"
+                                        :showEditButton="true" :showDetailsButton="true" />
+                                </div>
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
-    </main>
+    </div>
+</main>
 
 @endsection
