@@ -4,7 +4,7 @@ namespace App\Models;
 
 use App\Interfaces\IMustVerifyEmailByCode;
 use App\Models\Traits\HasUuid;
-use App\Models\Traits\UserTraits\CustomerTait;
+use App\Models\Traits\UserTraits\CustomerTrait;
 use App\Models\Traits\UserTraits\DriverTrait;
 use App\Models\Traits\UserTraits\MustVerifyEmailByCode;
 use App\Models\Traits\UserTraits\UserTrait;
@@ -16,7 +16,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements IMustVerifyEmailByCode
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuid, HasRoles, UserTrait, DriverTrait, CustomerTait;
+    use HasApiTokens, HasFactory, Notifiable, HasUuid, HasRoles, UserTrait, DriverTrait, CustomerTrait;
 
     use MustVerifyEmailByCode;
 
@@ -34,7 +34,6 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
     protected $fillable = [
         'email',
         'password',
-        'user_type',
         'driver_state',
         'is_active',
         'mail_verify_code',

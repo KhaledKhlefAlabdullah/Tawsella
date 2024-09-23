@@ -41,7 +41,7 @@ Route::get('/offers', [OfferController::class, 'index']);
 Route::post('/contact-us', [ContactUsMessageController::class, 'store']);
 
 Route::get('/phone', function () {
-    $phone = \App\Models\User::where('user_type', \App\Enums\UserEnums\UserType::Admin)->first()->user_profile->phone_number ?? '+3520000000';
+    $phone = \App\Models\User::role(\App\Enums\UserEnums\UserType::Admin()->key)->first()->user_profile->phone_number ?? '+3520000000';
     return $phone;
 });
 

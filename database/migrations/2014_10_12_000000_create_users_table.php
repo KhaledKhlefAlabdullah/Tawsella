@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->integer('user_type')->default(UserType::Customer);
             $table->integer('driver_state')->default(DriverState::Ready);
             $table->boolean('is_active')->default(true);
             $table->timestamp('mail_code_verified_at')->nullable();

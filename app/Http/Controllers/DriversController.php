@@ -40,7 +40,7 @@ class DriversController extends Controller
     }
 
     public function store(UserRequest $request){
-        return User::registerUser($request, UserType::TaxiDriver);
+        return User::registerUser($request);
     }
 
     /**

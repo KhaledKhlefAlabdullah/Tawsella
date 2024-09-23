@@ -42,16 +42,12 @@ trait DriverTrait
     {
         $drivers = User::with(['taxi', 'profile'])
             ->where([
-                'user_type' => UserType::TaxiDriver,
                 'driver_state' => DriverState::Ready,
                 'is_active' => true
             ])
+            ->role(UserType::TaxiDriver()->key)
             ->has('taxi') // Ensure the user has a related taxi
             ->get();
-
-//        if ($drivers->isEmpty()) {
-//            return abort(404, 'There are no drivers ready to work.');
-//        }
 
         $mappedDrivers = $drivers->map(function ($driver) {
             return [
@@ -73,7 +69,7 @@ trait DriverTrait
     public static function getDrivers($perPage = 15)
     {
         $drivers = User::with(['taxi', 'profile'])
-            ->where('user_type', UserType::TaxiDriver)
+            ->role(UserType::TaxiDriver()->key)
             ->paginate($perPage); // Use paginate instead of get()
 
         // Map the drivers data using the mapping method
@@ -147,11 +143,12 @@ trait DriverTrait
      */
     public static function getDriversDontHaveTaxi()
     {
-        $drivers = User::where('user_type', 'driver')
-            ->where(['is_active' => true, 'user_type' => UserType::TaxiDriver])
+        $drivers = User::role(UserType::TaxiDriver()->key)
+            ->where('is_active', true)
             ->whereDoesntHave('taxi')
             ->with('profile:id,user_id,name,avatar')
-            ->get(['id']);
+            ->get();
+
         return $drivers;
     }
 }

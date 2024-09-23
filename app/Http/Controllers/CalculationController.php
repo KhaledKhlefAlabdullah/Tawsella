@@ -18,12 +18,12 @@ class CalculationController extends Controller
      * View list of calculations.
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-
-     * @return \Illuminate\Http\RedirectResponse to view page
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application to view page
      */
     public function index()
     {
         try {
-            $drivers = User::where('user_type', UserType::TaxiDriver)->paginate(10);
+            $drivers = User::role(UserType::TaxiDriver()->key)->paginate(10);
 
             return view('calculations.index', [
                 'calculations' => Calculation::mappingDriversCalculations($drivers),

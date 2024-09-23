@@ -58,7 +58,7 @@ class OfferController extends Controller
     public function create()
     {
         $movementTypes = TaxiMovementType::all();
-        $admins = User::where('user_type', 'admin')->get();
+        $admins = User::role(UserType::Admin()->key)->get();
 
         return view('offers.create', ['movementTypes' => $movementTypes, 'admins' => $admins]);
     }
@@ -106,7 +106,7 @@ class OfferController extends Controller
     public function edit(Offer $offer)
     {
         $movementTypes = TaxiMovementType::all();
-        $admins = User::where('user_type', UserType::Admin)->get();
+        $admins = User::role(UserType::Admin()->key)->get();
 
         return view('offers.edit', ['offer' => $offer, 'movementTypes' => $movementTypes, 'admins' => $admins]);
     }

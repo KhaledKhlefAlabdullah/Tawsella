@@ -6,6 +6,7 @@ use App\Enums\UserEnums\UserGender;
 use App\Enums\UserEnums\UserType;
 use App\Http\Requests\UserRequests\UserRequest;
 use App\Models\Rating;
+use App\Models\TaxiMovement;
 use App\Models\User;
 use App\Models\UserProfile;
 use Illuminate\Support\Facades\DB;
@@ -33,20 +34,20 @@ trait UserTrait
                 'phone_number' => $user->profile->phone_number ?? '',
                 'avatar' => $user->profile->avatar ?? '',
                 'is_active' => $user->is_active,
-                'user_type' => UserType::getKey($user->user_type),
+                'user_type' => $user->getRoleNames()[0],
                 'gender' => $user->profile->gender ?? '',
                 'created_at' => $user->created_at,
             ];
 
             // Movement counts (customer or driver)
             if ($user->relationLoaded('customer_movements') || $user->relationLoaded('driver_movements')) {
-                $canceledMovements = count_items(Movement::class, ['customer_id' => $user->id, 'is_canceled' => true]);
-                $completedMovements = count_items(Movement::class, ['customer_id' => $user->id, 'is_completed' => true]);
+                $canceledMovements = count_items(TaxiMovement::class, ['customer_id' => $user->id, 'is_canceled' => true]);
+                $completedMovements = count_items(TaxiMovement::class, ['customer_id' => $user->id, 'is_completed' => true]);
                 $mapping = array_merge($mapping, ['completed_movements' => $completedMovements, 'canceled_movements' => $canceledMovements]);
             }
 
             // Additional driver-related information
-            if (!in_array($user->user_type, [UserType::Customer, UserType::Admin])) {
+            if (!in_array($user->getRoleNames(), [UserType::Customer()->key, UserType::Admin()->key])) {
                 $ratingsNum = count_items(Rating::class, ['driver_id' => $user->id]);
                 $userRating = $user->rating;
                 $rating = $userRating ? $userRating->sum('rating') / $ratingsNum : null;
@@ -68,7 +69,7 @@ trait UserTrait
         });
     }
 
-    public static function registerUser(UserRequest $request, int $user_type = UserType::Customer){
+    public static function registerUser(UserRequest $request){
         try {
             DB::beginTransaction();
             $validatedData = $request->validated();
@@ -76,7 +77,6 @@ trait UserTrait
             $user = User::create([
                 'email' => $validatedData['email'],
                 'password' => Hash::make($validatedData['password']),
-                'user_type' => $user_type,
             ]);
 
             UserProfile::create([

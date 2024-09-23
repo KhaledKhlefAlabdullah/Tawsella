@@ -18,7 +18,6 @@ class AdminSeeder extends Seeder
         $user = User::create([
             'email'=>'admin@email.com',
             'password'=>$password,
-            'user_type' => UserType::Admin(),
             'mail_code_verified_at' => now(),
             'created_at' => now(),
             'updated_at' => now(),

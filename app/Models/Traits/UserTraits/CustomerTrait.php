@@ -8,7 +8,7 @@ use App\Models\TaxiMovement;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
-trait CustomerTait
+trait CustomerTrait
 {
     /**
      * Mapping movements
@@ -26,7 +26,7 @@ trait CustomerTait
                 'email' => $driver->email,
                 'phone_number' => $driver->profile->phone_number ?? '',
                 'avatar' => $driver->profile->avatar ?? '',
-                'user_type' => UserType::getKey($driver->user_type),
+                'user_type' => $driver->getRoleNames()[0],
                 'gender' => $driver->profile->gender ?? '',
                 'distance' => $driver->distance.' KM',
                 'latitude' => $driver->last_location_latitude,

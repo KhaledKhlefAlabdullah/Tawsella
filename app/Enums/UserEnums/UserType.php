@@ -22,7 +22,7 @@ final class UserType extends Enum
         $allKeys = UserType::getKeys();
 
         // Define the key to exclude
-        $keyToExclude = UserType::getKey(UserType::Admin);
+        $keyToExclude = UserType::Admin()->key;
 
         // Filter out the key
         $filteredKeys = array_filter($allKeys, function ($key) use ($keyToExclude) {

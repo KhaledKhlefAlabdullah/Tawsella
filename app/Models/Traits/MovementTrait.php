@@ -136,7 +136,7 @@ trait MovementTrait
         $currentDate = Carbon::now()->toDateString();
 
         // Query to get requests for the current day
-        return TaxiMovement::with(['customer.profile', 'movementType'])
+        return TaxiMovement::with(['customer.profile', 'movement_type'])
             ->whereDate('created_at', $currentDate)
             ->where([
                 'is_redirected' => false,
@@ -144,7 +144,7 @@ trait MovementTrait
             ])
             ->get()
             ->map(function ($taxiMovement) {
-                return [
+                return (object)[
                     'id' => $taxiMovement->id,
                     'from' => $taxiMovement->start_address,
                     'to' => $taxiMovement->destination_address,

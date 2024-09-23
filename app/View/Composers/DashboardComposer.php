@@ -17,8 +17,8 @@ class DashboardComposer
         $data = [];
 
         $user = Auth::user();
-        if ($user && $user->user_type == UserType::Admin) {
-            $data['totalDrivers'] = User::where('user_type', UserType::TaxiDriver)->count();
+        if ($user && in_array(UserType::Admin()->key, $user->getRoleNames()->toArray())) {
+            $data['totalDrivers'] = User::role(UserType::TaxiDriver()->key)->count();
         }
 
         // Query to get requests for the current day
