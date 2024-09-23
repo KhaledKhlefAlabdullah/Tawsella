@@ -11,10 +11,10 @@ Route::middleware([DriverMiddleware::class])->group(function() {
     /**
      * Movements Management
      */
-    Route::group(['controller' => TaxiMovementController::class], function () {
+    Route::group(['prefix' => 'movement','controller' => TaxiMovementController::class], function () {
         Route::post('/found-customer/{taxiMovement}', 'foundCustomer');
         Route::get('/driver-request/{id}', 'get_request_data');
-        Route::post('/make-is-completed/{taxiMovement}', 'makeMovementIsCompleted');
+        Route::post('/mark-completed/{taxiMovement}', 'makeMovementIsCompleted');
     });
     /**
      * End Movements Management
@@ -22,5 +22,5 @@ Route::middleware([DriverMiddleware::class])->group(function() {
 
     Route::post('/get-taxi-location/{driver}',[TaxiController::class,'getTaxiLocation']);
 
-    Route::post('/drivers/set-state', [DriversController::class, 'changeDriverState']);
+    Route::post('/driver/change-state', [DriversController::class, 'changeDriverState']);
 });

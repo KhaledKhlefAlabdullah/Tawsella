@@ -10,9 +10,9 @@ Route::middleware([CustomerMiddleware::class])->group(function () {
     /**
      * Movements Management
      */
-    Route::group(['controller' => TaxiMovementController::class], function () {
+    Route::group(['movement','controller' => TaxiMovementController::class], function () {
         // todo edit in create taxi movement in front
-        Route::post('/create-taxi-movement', 'store');
+        Route::post('/', 'store');
         // todo add it to front
         Route::post('cancel-taxi-movement', 'canceledMovement');
     });

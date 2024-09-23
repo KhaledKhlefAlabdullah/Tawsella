@@ -115,18 +115,18 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
         'destroy' => 'offers.destroy'
     ]);
     //*************************** End route offers *********************************** */
-    //**************************************************************************** */
-
-
-    Route::post('/accept-request/{taxiMovement}', [TaxiMovementController::class, 'acceptRequest'])->name('taxiMovement.accept.request');
-    Route::post('/reject-request/{taxiMovement}', [TaxiMovementController::class, 'rejectMovement'])->name('taxiMovement.reject.request');
+    //******************************************************************************** */
 
     //*************************** START route taxi-movement *********************************** */
-
+    //***************************************************************************************** */
     // todo need refactoring
     Route::get('/current-taxi-movement', [TaxiMovementController::class, 'LifeTaxiMovements'])->name('current.taxi.movement');
 
     Route::get('/completed-requests', [TaxiMovementController::class, 'completedTaxiMovements'])->name('completed.requests');
+
+    Route::post('/accept-request/{taxiMovement}', [TaxiMovementController::class, 'acceptRequest'])->name('taxiMovement.accept.request');
+
+    Route::post('/reject-request/{taxiMovement}', [TaxiMovementController::class, 'rejectMovement'])->name('taxiMovement.reject.request');
 
     //*************************** End route taxi-movement *********************************** */
     //**************************************************************************** */

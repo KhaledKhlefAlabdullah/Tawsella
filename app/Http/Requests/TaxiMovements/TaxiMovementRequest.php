@@ -2,7 +2,10 @@
 
 namespace App\Http\Requests\TaxiMovements;
 
+use App\Enums\UserEnums\UserGender;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class TaxiMovementRequest extends FormRequest
 {
@@ -17,7 +20,7 @@ class TaxiMovementRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'customer_id' => auth()->id(),
+            'customer_id' => Auth::id(),
         ]);
     }
     /**
@@ -34,13 +37,11 @@ class TaxiMovementRequest extends FormRequest
             'movement_type_id' => ['sometimes', 'required', 'string', 'exists:taxi_movement_types,id'],
             'start_address' => ['nullable', 'sometimes', 'string'],
             'destination_address' => ['nullable', 'sometimes', 'string'],
-            'gender' => ['required', 'sometimes', 'string'],
+            'gender' => ['required', 'sometimes', 'string', Rule::in(UserGender::getKeys())],
             'start_latitude' => ['sometimes', 'required', 'numeric'],
             'start_longitude' => ['sometimes', 'required', 'numeric'],
             'end_latitude' => ['sometimes', 'required', 'numeric'],
             'end_longitude' => ['sometimes', 'required', 'numeric'],
-            'is_completed' => ['sometimes', 'required', 'boolean'],
-            'is_canceled' => ['sometimes', 'required', 'boolean'],
         ];
     }
 }

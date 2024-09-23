@@ -13,11 +13,8 @@ use App\Http\Requests\TaxiMovements\MarkMovementAsCompletedRequest;
 use App\Http\Requests\TaxiMovements\AcceptOrRejectMovementRequest;
 use App\Http\Requests\TaxiMovements\FoundCustomerRequest;
 use App\Http\Requests\TaxiMovements\TaxiMovementRequest;
-use App\Models\Calculation;
 use App\Models\TaxiMovement;
-use App\Models\TaxiMovementType;
 use App\Models\User;
-use App\Models\UserProfile;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -132,7 +129,7 @@ class TaxiMovementController extends Controller
             // Update the driver state
             $driver->driver_state = DriverState::Reserved;
             $driver->save();
-            $message = 'Request Accepted Successfully';
+            $message = __('accepted-movement-success');
             DB::commit();
             AcceptTransportationServiceRequestEvent::dispatch($taxiMovement);
 
@@ -140,7 +137,7 @@ class TaxiMovementController extends Controller
         } catch (ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.' . "\n errors:" . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors(__('accepted-movement-error') . "\n errors:" . $e->getMessage())->withInput();
         }
     }
 
@@ -169,7 +166,7 @@ class TaxiMovementController extends Controller
         } catch (ValidationException $e) {
             return redirect()->back()->withErrors($e->errors())->withInput();
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.' . "\n errors:" . $e->getMessage())->withInput();
+            return redirect()->back()->withErrors(__('error-reject-movement') . "\n errors:" . $e->getMessage())->withInput();
         }
     }
 
@@ -188,8 +185,11 @@ class TaxiMovementController extends Controller
                 $taxiMovement, $validatedData['state']
             );
 
-            if (!$validatedData['state']) {
-                $taxiMovement->delete();
+            if ($validatedData['state']) {
+                $taxiMovement->state_message = __('customer-was-found');
+
+            } else {
+                $taxiMovement->state_message = __('customer-was-not-found');
             }
 
             return api_response(message: 'Successfully found customer');
@@ -214,11 +214,11 @@ class TaxiMovementController extends Controller
 
             $taxiMovement->update([
                 'is_completed' => true,
-                'end_latitude' => $validatedData['end_lat'],
-                'end_longitude' => $validatedData['end_lon']
+                'end_latitude' => $validatedData['end_latitude'],
+                'end_longitude' => $validatedData['end_longitude']
             ]);
 
-            $calculation = TaxiMovement::calculateAmountPaid($taxiMovement, $validatedData['way']);
+            $calculation = TaxiMovement::calculateAmountPaid($taxiMovement, $validatedData['distance']);
 
             $taxiMovement->driver()->update([
                 'driver_state' => DriverState::Ready
@@ -252,9 +252,9 @@ class TaxiMovementController extends Controller
                 'is_canceled' => true
             ]);
 
-            TaxiMovement::calculateCanceledMovements(Auth::user());
-
             CustomerCanceledMovementEvent::dispatch($taxiMovement);
+
+            TaxiMovement::calculateCanceledMovements(Auth::user());
 
             return api_response(message: 'Movement Canceled Successfully');
         } catch (Exception $e) {
@@ -263,6 +263,7 @@ class TaxiMovementController extends Controller
     }
 
     //todo need to remove and use realtime
+
     /**
      * Send Taxi movemnt request details
      */

@@ -61,7 +61,7 @@
                         </div>
                     </div><!-- End Customers Card -->
 
-                    <!-- Total Way Card -->
+                    <!-- Total distance Card -->
                     <div class="col-xxl-6 col-xl-6">
                         <div class="card info-card customers-card">
                             <div class="card-body m-2">
@@ -73,13 +73,13 @@
                                         <i class="bi bi-people text-white"></i>
                                     </div>
                                     <div class="ps-3">
-                                        <h6>{{ $details['totalWay'] }}</h6>
+                                        <h6>{{ $details['totaldistance'] }}</h6>
                                         <hr>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div><!-- End Total Way Card -->
+                    </div><!-- End Total distance Card -->
 
                 </div>
 
@@ -107,7 +107,7 @@
                                     elong
                                     date
                                     totalPrice
-                                    way --}}
+                                    distance --}}
                                 <tr>
                                     <th scope="row">{{ $index + 1 }}</th>
 
@@ -117,7 +117,7 @@
                                         {{ $movement->totalPrice }}
                                     </td>
                                     <td>
-                                        {{ $movement->way }} KM
+                                        {{ $movement->distance }} KM
                                     </td>
                                     <td>
                                         {{ date('Y-m-d', strtotime($movement->date)) }}

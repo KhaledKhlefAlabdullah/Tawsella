@@ -40,5 +40,8 @@
   "service-created-error": "Error in creating services",    "service-edited-success": "Successfully updated service",
   "service-edited-error": "Error in updated service",
   "service-deleted-success": "Successfully deleted service",
-  "service-deleted-error": "Error in deleted service"
+  "service-deleted-error": "Error in deleted service",
+  "customer-was-found": "the customer was found",
+  "customer-was-not-found": "the customer was not found",
+  "error-reject-movement":"Error in reject movement"
 }

@@ -91,7 +91,7 @@ trait CalculationTrait
                 'elong' => $movement->end_longitude,
                 'date' => $movement->created_at,
                 'totalPrice' => $calculation ? $calculation->totalPrice : 0,
-                'way' => $calculation ? $calculation->way : null,
+                'distance' => $calculation ? $calculation->distance : null,
             ];
         });
     }

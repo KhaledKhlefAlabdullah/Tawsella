@@ -71,11 +71,11 @@ trait MovementTrait
      * @param User $driver
      * @return float|int|mixed
      */
-    public static function calculateAmountPaid(TaxiMovement $taxiMovement, float $way)
+    public static function calculateAmountPaid(TaxiMovement $taxiMovement, float $distance)
     {
         $movement_type = $taxiMovement->movement_type;
         if ($movement_type->is_onKM) {
-            $totalPrice = $way * $movement_type->price;
+            $totalPrice = $distance * $movement_type->price;
         } else {
             $totalPrice = $movement_type->price;
         }
@@ -83,7 +83,7 @@ trait MovementTrait
         $calculation = $taxiMovement->calculations()->create([
             'driver_id' => $taxiMovement->driver_id,
             'totalPrice' => $totalPrice,
-            'way' => $way
+            'distance' => $distance
         ]);
 
 

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('driver_id')->nullable();
             $table->string('taxi_movement_id');
             $table->float('totalPrice');
-            $table->float('way')->nullable();
+            $table->float('distance')->nullable();
             $table->boolean('is_bring')->default(false);
             $table->foreign('driver_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('taxi_movement_id')->references('id')->on('taxi_movements')->onDelete('cascade');

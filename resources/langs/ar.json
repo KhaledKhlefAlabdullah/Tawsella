@@ -41,5 +41,10 @@
     "service-edited-success": "تم تعديل الخدمة بنجاح",
     "service-edited-error": "هناك مشكلة في تعديل الخدمة",
     "service-deleted-success": "تم خذف الخدمة بنجاح",
-    "service-deleted-error": "هناك مشكلة في حذف الخدمة"
+    "service-deleted-error": "هناك مشكلة في حذف الخدمة",
+    "customer-was-found": "تم إيجاد العميل",
+    "customer-was-not-found": "لم يتم إيجاد العمبل",
+    "error-reject-movement": "هناك خطأ في رفض الطلب",
+    "accepted-movement-success": "ٍتم قبلو الطلب بنجاح",
+    "accepted-movement-error": "هناك خطأ في قبول الطلب"
 }

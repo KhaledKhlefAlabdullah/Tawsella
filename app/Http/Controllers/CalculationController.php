@@ -77,12 +77,12 @@ class CalculationController extends Controller
         try {
             $driverMovements = count_items(TaxiMovement::class,['driver_id' => $driver->id, 'is_completed' => true]);
             $totalMount = Calculation::totalAccounts($driver->id);
-            $totalWay = Calculation::where('driver_id', $driver->id)->sum('way');
+            $totaldistance = Calculation::where('driver_id', $driver->id)->sum('distance');
             $movements = Calculation::driverMovementsCalculations($driver->id);
             $details = [
                 'driverMovements' => $driverMovements,
                 'totalMount' => $totalMount,
-                'totalWay' => $totalWay
+                'totaldistance' => $totaldistance
             ];
 
             return view('calculations.show', ['details' => $details, 'movements' => $movements]);
