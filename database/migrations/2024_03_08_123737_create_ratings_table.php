@@ -21,7 +21,8 @@ return new class extends Migration
             $table->foreign('customer_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('driver_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
-            $table->SoftDeletes();        });
+            $table->SoftDeletes();
+        });
          // Add a constraint to the 'rating' column to accept values between 1 and 5
          DB::statement("ALTER TABLE ratings ADD CONSTRAINT rating_constraint CHECK (rating BETWEEN 1 AND 5)");
     }
