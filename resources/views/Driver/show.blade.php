@@ -34,7 +34,7 @@
                     <div class="card">
                         <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
                             <div class="social-links mt-2">
-                                <img src="{{ asset('assets/' . $driver->avatar) }}"
+                                <img src="{{ asset($driver->avatar) }}"
                                     style="width: 150px;height: 130px;border-radius: 50%" alt="">
                             </div>
 
@@ -98,7 +98,7 @@
                                     <div class="row">
                                         <div class="col-lg-3 col-md-4 label">الهاتف</div>
                                         <div class="col-lg-9 col-md-8"><a
-                                                href="https://wa.me/{{ $driver->phoneNumber }}">{{ $driver->phoneNumber }}</a>
+                                                href="https://wa.me/{{ $driver->phone_number }}">{{ $driver->phone_number }}</a>
                                         </div>
                                     </div>
 
@@ -116,7 +116,7 @@
                                         </h2>
 
                                         <p class="mt-1 text-sm text-gray-600">
-                                            {{ __("قم بتحديث معلومات الملف الشخصي لحسابك وعنوان البريد الإلكتروني.") }}
+                                            {{ __('قم بتحديث معلومات الملف الشخصي لحسابك وعنوان البريد الإلكتروني.') }}
                                         </p>
                                     </header>
 
@@ -124,7 +124,7 @@
                                         @csrf
                                     </form>
 
-                                    <form method="post" action="{{ route('drivers.update', $driver->id) }}"
+                                    <form method="post" action="{{ route('drivers.update', $driver->driver_id) }}"
                                         class="mt-6 space-y-6">
                                         @csrf
                                         @method('put')
@@ -148,11 +148,11 @@
                                             <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
                                         </div> --}}
                                         <div class="mb-3">
-                                            <x-input-label for="phoneNumber" :value="__('رقم الجوال')" />
-                                            <x-text-input id="phoneNumber" name="phoneNumber" type="tel"
-                                                class="form-control" :value="old('phoneNumber', $driver->phoneNumber)" required
-                                                autocomplete="phoneNumber" />
-                                            <x-input-error class="mt-2" :messages="$errors->get('phoneNumber')" />
+                                            <x-input-label for="phone_number" :value="__('رقم الجوال')" />
+                                            <x-text-input id="phone_number" name="phone_number" type="tel"
+                                                class="form-control" :value="old('phone_number', $driver->phone_number)" required
+                                                autocomplete="phone_number" />
+                                            <x-input-error class="mt-2" :messages="$errors->get('phone_number')" />
                                         </div>
                                         <div class="d-flex align-items-center gap-4">
                                             <x-primary-button class="btn btn-success">
@@ -167,28 +167,22 @@
                                             @endif
                                         </div>
                                     </form>
-
-
                                 </div>
-
-
                                 <div class="tab-pane fade setting pt-3" id="profile-settings">
-
                                 </div>
-
                                 <div class="tab-pane fade pt-3" id="profile-change-password">
                                     <section>
                                         <header>
                                             <h2 class="text-lg font-medium text-gray-900">
                                                 {{ __('تحديث كلمة السر') }}
                                             </h2>
-
                                             <p class="mt-1 text-sm text-gray-600">
                                                 {{ __('تأكد من أن حسابك يستخدم كلمة مرور طويلة وعشوائية ليظل آمنًا.') }}
                                             </p>
                                         </header>
 
-                                        <form method="post" action="{{ route('password.driver.update', $driver->id) }}"
+                                        <form method="post"
+                                            action="{{ route('password.driver.update', $driver->driver_id) }}"
                                             class="mt-6 space-y-6">
                                             @csrf
                                             @method('put')
@@ -239,7 +233,9 @@
                                             x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')">{{ __('Delete Account') }}</x-danger-button>
 
                                         <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
-                                            <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
+                                            <form method="post"
+                                                action="{{ route('profile.destroy', ['profile' => Auth::user()->profile]) }}"
+                                                class="p-6">
                                                 @csrf
                                                 @method('delete')
 

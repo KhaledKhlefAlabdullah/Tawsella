@@ -1,101 +1,90 @@
 <x-guest-layout>
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
-    <main>
-
-            <section
-                class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
-
-                            <div class="d-flex justify-content-center py-4">
-                                <a href="/" class="logo d-flex align-items-center w-auto">
-                                    <img src="img/logoo.png" alt="">
-                                </a>
-                            </div><!-- End Logo -->
-
-                            <div class="card mb-3">
-
-                                <div class="card-body">
-
-                                    <div class="pt-4 pb-2">
-                                        <h5 class="card-title text-center pb-0 fs-4"> مرحبا بكم في لوحة التحكم </h5>
-                                        <p class="text-center small"> ادخل الايميل و كلمة المرور للدخول الى لوحة التحكم
-                                        </p>
+    <div class="page-header align-items-start min-vh-100"
+        style="background-image: url('https://images.unsplash.com/photo-1497294815431-9365093b7331?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1950&q=80');">
+        <span class="mask bg-gradient-dark opacity-6"></span>
+        <div class="container my-auto">
+            <div class="row">
+                <div class="col-lg-4 col-md-8 col-12 mx-auto">
+                    <div class="card z-index-0 fadeIn3 fadeInBottom">
+                        <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                            <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
+                                <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">تسجيل الدخول</h4>
+                                <div class="row mt-3">
+                                    <div class="col-12 text-center ms-auto">
+                                        <h2 style="color: #ffffff;font-size: 18px">Tawsella</h2>
                                     </div>
-
-                                    <form method="POST" action="{{ route('login') }}" class="row g-3 needs-validation"
-                                        novalidate id="login-form">
-                                        @csrf
-
-                                        <!-- Email Address -->
-                                        <div class="col-12">
-                                            <x-input-label for="email" class="form-label" :value="__('الايميل')" />
-                                            <x-text-input id="email" class="block mt-1 w-full form-control"
-                                                type="email" name="email" :value="old('email')" required autofocus
-                                                autocomplete="username" />
-                                            <div class="invalid-feedback">رجاءا ادخل الايميل </div>
-                                            <x-input-error :messages="$errors->get('email')" class="mt-2" />
-                                        </div>
-                                        <!-- Password -->
-                                        <div class="mt-4 col-12">
-                                            <x-input-label for="password" class="form-label" :value="__('كلمة المرور ')" />
-
-                                            <x-text-input id="password" class="block mt-1 w-full form-control" type="password"
-                                                name="password" required autocomplete="current-password" />
-                                                <div class="invalid-feedback"> رجاء ادخل كلمة المرور  </div>
-                                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                                        </div>
-
-                                        <!-- Remember Me -->
-                                        <div class="block mt-4">
-                                            <label for="remember_me" class="inline-flex items-center form-check-label">
-                                                <input id="remember_me" type="checkbox"
-                                                    class="form-check-input rounded dark:bg-gray-900 border-gray-300 dark:border-gray-700 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:focus:ring-offset-gray-800"
-                                                    name="remember">
-                                                <span
-                                                    class="ms-2 text-sm text-gray-600 dark:text-gray-400">{{ __('تذكرني') }}</span>
-                                            </label>
-                                        </div>
-
-                                        <div class="flex items-center justify-end mt-4">
-                                            @if (Route::has('password.request'))
-                                                <a class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-gray-800"
-                                                    href="{{ route('password.request') }}">
-                                                    {{ __('هل نسيت كلمة المرور?') }}
-                                                </a>
-                                            @endif
-
-                                            <div class="col-4">
-                                                <button class="btn btn-primary w-100" type="submit"> تسجيل الدخول  </button>
-                                            </div>
-                                        </div>
-                                    </form>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="card-body">
+                            <form method="POST" action="{{ route('login') }}" class="text-start" id="login-form">
+                                @csrf
+
+                                <!-- Email Address -->
+                                <div class="input-group input-group-outline my-3">
+                                    <x-input-label for="email" class="form-label" :value="__('الايميل')" />
+                                    <x-text-input id="email" class="form-control" type="email" name="email"
+                                        :value="old('email')" required autofocus autocomplete="username" />
+                                    <div class="invalid-feedback">رجاءً أدخل الإيميل</div>
+                                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                                </div>
+
+                                <!-- Password -->
+                                <div class="input-group input-group-outline mb-3">
+                                    <x-input-label for="password" class="form-label" :value="__('كلمة المرور')" />
+                                    <x-text-input id="password" class="form-control" type="password" name="password"
+                                        required autocomplete="current-password" />
+                                    <div class="invalid-feedback">رجاءً أدخل كلمة المرور</div>
+                                    <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                                </div>
+
+                                <!-- Remember Me -->
+                                <div class="form-check form-switch d-flex align-items-center mb-3">
+                                    <input class="form-check-input" type="checkbox" id="rememberMe" name="remember">
+                                    <label class="form-check-label mb-0 ms-3" for="rememberMe">تذكرني</label>
+                                </div>
+
+                                <div class="text-center">
+                                    <button type="submit" class="btn bg-gradient-primary w-100 my-4 mb-2">تسجيل
+                                        الدخول</button>
+                                </div>
+                                @if (Route::has('password.request'))
+                                    <div class="text-center">
+                                        <a class="text-sm text-gray-600 dark:text-gray-400"
+                                            href="{{ route('password.request') }}">
+                                            {{ __('هل نسيت كلمة المرور؟') }}
+                                        </a>
+                                    </div>
+                                @endif
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </section>
-
-    </main><!-- End #main -->
-
+            </div>
+        </div>
+    </div>
 </x-guest-layout>
 
+<!-- jQuery and Loading Spinner Script -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $('#login-form').submit(function (event) {
+    $(document).ready(function() {
+        $('#login-form').submit(function(event) {
             event.preventDefault(); // Prevent form submission
 
             // Simulate loading animation
-            $('.btn-primary').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...').attr('disabled', 'disabled');
+            var submitButton = $('.btn-primary');
+            submitButton.html(
+                '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> جاري التحميل...'
+            );
+            submitButton.prop('disabled', true);
 
             // Simulate AJAX request
-            setTimeout(function () {
-                // Perform form submission after 1.5 seconds (for demonstration)
-                $('#login-form').unbind('submit').submit();
+            setTimeout(function() {
+                $('#login-form').unbind('submit').submit(); // Submit the form
             }, 1500);
         });
     });

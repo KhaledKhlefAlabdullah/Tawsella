@@ -102,7 +102,7 @@
                                         @csrf
                                     </form>
 
-                                    <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
+                                    <form method="post" action="{{ route('profile.update',['profile'=> Auth::user()->profile]) }}" class="mt-6 space-y-6">
                                         @csrf
                                         @method('patch')
 
@@ -228,7 +228,7 @@
                                             x-on:click.prevent="$dispatch('open-modal', 'confirm-user-deletion')">{{ __('حذف الحساب') }}</x-danger-button>
 
                                         <x-modal name="confirm-user-deletion" :show="$errors->userDeletion->isNotEmpty()" focusable>
-                                            <form method="post" action="{{ route('profile.destroy') }}" class="p-6">
+                                            <form method="post" action="{{ route('profile.destroy',['profile'=> Auth::user()->profile]) }}" class="p-6">
                                                 @csrf
                                                 @method('delete')
 

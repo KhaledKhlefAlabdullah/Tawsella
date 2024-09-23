@@ -9,8 +9,8 @@
     <meta content="" name="description">
     <meta content="" name="keywords">
 
-    <link href="{{ asset('img/logoo.png') }}" rel="icon">
-    <link href="{{ asset('img/logoo.png') }}" rel="apple-touch-icon">
+    <link href="{{ asset('assets/img/logoo.png') }}" rel="icon">
+    <link href="{{ asset('assets/img/logoo.png') }}" rel="apple-touch-icon">
 
     <link
         href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
@@ -36,7 +36,7 @@
         <div class="container d-flex align-items-center justify-content-between">
 
             <div class="logo">
-                <h1><a href="/"><span>StarTaxi</span></a></h1>
+                <h1><a href="/"><span>Tawsella</span></a></h1>
                 <!-- Uncomment below if you prefer to use an image logo -->
                 <!-- <a href="index.html"><img src="assets/img/logo.png" alt="" class="img-fluid"></a>-->
             </div>
@@ -64,7 +64,7 @@
             <div class="row justify-content-between">
                 <div class="col-lg-7 pt-5 pt-lg-0 order-2 order-lg-1 d-flex align-items-center">
                     <div data-aos="zoom-out">
-                        <h1>اكبر شركة للنقل الداخلي الخاص هي شركة <span>StarTaxi</span></h1><br><br><br>
+                        <h1>اكبر شركة للنقل الداخلي الخاص هي شركة <span>Tawsella</span></h1><br><br><br>
                         <h2> نحن في شركة ستارتكسي نقدم خدمات التنقل الخاص داخل المناطق المحررة على مدار الساعة بلا توقف
                         </h2>
                         <div class="text-center text-lg-start">
@@ -73,7 +73,7 @@
                     </div>
                 </div>
                 <div class="col-lg-4 order-1 order-lg-2 hero-img" data-aos="zoom-out" data-aos-delay="300">
-                    <img src="{{ asset('assets/img/hero-img.png')}}" class="img-fluid animated" alt="">
+                    <img src="{{ asset('assets/img/hero-img.png') }}" class="img-fluid animated" alt="">
                 </div>
             </div>
         </div>
@@ -216,7 +216,7 @@
 
                 <div class="row content">
                     <div class="col-md-4" data-aos="fade-right">
-                        <img src="{{ asset('assets/img/details-11.png')}}" class="img-fluid" alt="">
+                        <img src="{{ asset('assets/img/details-11.png') }}" class="img-fluid" alt="">
                     </div>
                     <div class="col-md-8 pt-4" data-aos="fade-up">
                         <h3>عندما تقوم بطلب سيارة</h3>
@@ -241,7 +241,7 @@
 
                 <div class="row content">
                     <div class="col-md-4 order-1 order-md-2" data-aos="fade-left">
-                        <img src="{{ asset('assets/img/details-22.png')}}" class="img-fluid" alt="">
+                        <img src="{{ asset('assets/img/details-22.png') }}" class="img-fluid" alt="">
                     </div>
                     <div class="col-md-8 pt-5 order-2 order-md-1" data-aos="fade-up">
                         <h3>معالجة طلبك</h3>
@@ -275,7 +275,8 @@
                     <div class="col-lg-3 col-md-6"></div>
                     <div class="col-lg-3 col-md-6">
                         <div class="member" data-aos="zoom-in" data-aos-delay="100">
-                            <div class="pic"><img src="{{ asset('assets/img/driver.png')}}" class="img-fluid" alt="">
+                            <div class="pic"><img src="{{ asset('assets/img/driver.png') }}" class="img-fluid"
+                                    alt="">
                             </div>
                             <div class="member-info">
                                 <h4>سائقين رجال</h4>
@@ -286,7 +287,8 @@
 
                     <div class="col-lg-3 col-md-6 mt-5 mt-md-0">
                         <div class="member" data-aos="zoom-in" data-aos-delay="200">
-                            <div class="pic"><img src="{{ asset('assets/img/driver.png')}}" class="img-fluid" alt="">
+                            <div class="pic"><img src="{{ asset('assets/img/driver.png') }}" class="img-fluid"
+                                    alt="">
                             </div>
                             <div class="member-info">
                                 <h4>سائقات نساء</h4>
@@ -366,6 +368,164 @@
             </div>
         </section><!-- End Pricing Section -->
 
+        <!-- Gallery Section -->
+        <section id="gallery" class="gallery section">
+
+            <!-- Section Title -->
+            <div class="container section-title" data-aos="fade-up">
+                <h2>Gallery</h2>
+                <div><span>Check Our</span> <span class="description-title">Gallery</span></div>
+            </div><!-- End Section Title -->
+
+            <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+                <div class="row g-0">
+
+                    <div class="col-lg-3 col-md-4">
+                        <div class="gallery-item">
+                            <a href="{{asset('assets/img/gallery/gallery-1.jpg')}}" class="glightbox"
+                                data-gallery="images-gallery">
+                                <img src="{{asset('assets/img/gallery/gallery-1.jpg')}}" alt="" class="img-fluid">
+                            </a>
+                        </div>
+                    </div><!-- End Gallery Item -->
+
+                    <div class="col-lg-3 col-md-4">
+                        <div class="gallery-item">
+                            <a href="{{asset('assets/img/gallery/gallery-2.jpg')}}" class="glightbox"
+                                data-gallery="images-gallery">
+                                <img src="{{asset('assets/img/gallery/gallery-2.jpg')}}" alt="" class="img-fluid">
+                            </a>
+                        </div>
+                    </div><!-- End Gallery Item -->
+
+                    <div class="col-lg-3 col-md-4">
+                        <div class="gallery-item">
+                            <a href="{{asset('assets/img/gallery/gallery-3.jpg')}}" class="glightbox"
+                                data-gallery="images-gallery">
+                                <img src="{{asset('assets/img/gallery/gallery-3.jpg')}}" alt="" class="img-fluid">
+                            </a>
+                        </div>
+                    </div><!-- End Gallery Item -->
+
+                    <div class="col-lg-3 col-md-4">
+                        <div class="gallery-item">
+                            <a href="{{asset('assets/img/gallery/gallery-4.jpg')}}" class="glightbox"
+                                data-gallery="images-gallery">
+                                <img src="{{asset('assets/img/gallery/gallery-4.jpg')}}" alt="" class="img-fluid">
+                            </a>
+                        </div>
+                    </div><!-- End Gallery Item -->
+
+                    <div class="col-lg-3 col-md-4">
+                        <div class="gallery-item">
+                            <a href="{{asset('assets/img/gallery/gallery-5.jpg')}}" class="glightbox"
+                                data-gallery="images-gallery">
+                                <img src="{{asset('assets/img/gallery/gallery-5.jpg')}}" alt="" class="img-fluid">
+                            </a>
+                        </div>
+                    </div><!-- End Gallery Item -->
+
+                    <div class="col-lg-3 col-md-4">
+                        <div class="gallery-item">
+                            <a href="{{asset('assets/img/gallery/gallery-6.jpg')}}" class="glightbox"
+                                data-gallery="images-gallery">
+                                <img src="{{asset('assets/img/gallery/gallery-6.jpg')}}" alt="" class="img-fluid">
+                            </a>
+                        </div>
+                    </div><!-- End Gallery Item -->
+
+                    <div class="col-lg-3 col-md-4">
+                        <div class="gallery-item">
+                            <a href="{{asset('assets/img/gallery/gallery-7.jpg')}}" class="glightbox"
+                                data-gallery="images-gallery">
+                                <img src="{{asset('assets/img/gallery/gallery-7.jpg')}}" alt="" class="img-fluid">
+                            </a>
+                        </div>
+                    </div><!-- End Gallery Item -->
+
+                    <div class="col-lg-3 col-md-4">
+                        <div class="gallery-item">
+                            <a href="{{asset('assets/img/gallery/gallery-8.jpg')}}" class="glightbox"
+                                data-gallery="images-gallery">
+                                <img src="{{asset('assets/img/gallery/gallery-8.jpg')}}" alt="" class="img-fluid">
+                            </a>
+                        </div>
+                    </div><!-- End Gallery Item -->
+
+                </div>
+
+            </div>
+
+        </section><!-- /Gallery Section -->
+
+        <!-- Testimonials Section -->
+        <section id="testimonials" class="testimonials section dark-background">
+
+            <img src="{{asset('assets/img/testimonials-bg.jpg')}}" class="testimonials-bg" alt="">
+
+            <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+                <div class="swiper init-swiper">
+                    <script type="application/json" class="swiper-config">
+              {
+                "loop": true,
+                "speed": 600,
+                "autoplay": {
+                  "delay": 5000
+                },
+                "slidesPerView": "auto",
+                "pagination": {
+                  "el": ".swiper-pagination",
+                  "type": "bullets",
+                  "clickable": true
+                }
+              }
+            </script>
+                    <div class="swiper-wrapper">
+
+                        <div class="swiper-slide">
+                            <div class="testimonial-item">
+                                <img src="{{asset('assets/img/testimonials/testimonials-1.jpg')}}" alt="">
+                            </div>
+                        </div>
+
+                        <div class="swiper-slide">
+                            <div class="testimonial-item">
+                                <img src="{{asset('assets/img/testimonials/testimonials-1.jpg')}}" alt="">
+                            </div>
+                        </div>
+
+                        <div class="swiper-slide">
+                            <div class="testimonial-item">
+                                <img src="{{asset('assets/img/testimonials/testimonials-1.jpg')}}" alt="">
+                            </div>
+                        </div>
+
+                        <div class="swiper-slide">
+                            <div class="testimonial-item">
+                                <img src="{{asset('assets/img/testimonials/testimonials-1.jpg')}}" alt="">
+                            </div>
+                        </div>
+
+                        <div class="swiper-slide">
+                            <div class="testimonial-item">
+                                <img src="{{asset('assets/img/testimonials/testimonials-1.jpg')}}" alt="">
+                            </div>
+                        </div>
+                        <div class="swiper-slide">
+                            <div class="testimonial-item">
+                                <img src="{{asset('assets/img/testimonials/testimonials-1.jpg')}}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+
+            </div>
+
+        </section><!-- /Testimonials Section -->
+        
         <!-- ======= F.A.Q Section ======= -->
         <section id="faq" class="faq section-bg">
             <div class="container">
@@ -444,7 +604,7 @@
                             <div class="email">
                                 <i class="bi bi-envelope"></i>
                                 <h4>Email:</h4>
-                                <p>Startaxi1@gmail.com</p>
+                                <p>Tawsella1@gmail.com</p>
                             </div>
 
                             <div class="phone">
@@ -510,7 +670,7 @@
 
         <div class="container">
             <div class="copyright">
-                &copy; شركة <strong><span> StarTaxi </span></strong>بخدمتكم
+                &copy; شركة <strong><span> Tawsella </span></strong>بخدمتكم
             </div>
             <div class="credits">
                 مصمم الموقع <a href="https://www.facebook.com/qadoor98/">شركة Smart Code</a>

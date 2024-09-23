@@ -42,10 +42,10 @@ trait DriverTrait
     {
         $drivers = User::with(['taxi', 'profile'])
             ->where([
+                'user_type' => UserType::TaxiDriver,
                 'driver_state' => DriverState::Ready,
                 'is_active' => true
             ])
-            ->role(UserType::TaxiDriver()->key)
             ->has('taxi') // Ensure the user has a related taxi
             ->get();
 
@@ -90,7 +90,7 @@ trait DriverTrait
         // Extract the items and map the driver data
         $mappedDrivers = $drivers->getCollection()->map(function ($driver) {
             $unBring = $driver->calculations()->where('is_bring', false)->sum('totalPrice');
-            return [
+            return (object)[
                 'driver_id' => $driver->id,
                 'name' => $driver->profile->name,
                 'email' => $driver->email,
@@ -99,8 +99,8 @@ trait DriverTrait
                 'is_active' => $driver->is_active,
                 'unBring' => $unBring,
                 'driver_state' => DriverState::getKey($driver->driver_state),
-                'plate_number' => $driver->taxi->plate_number,
-                'lamp_number' => $driver->taxi->lamp_number,
+                'plate_number' => $driver->taxi?->plate_number,
+                'lamp_number' => $driver->taxi?->lamp_number,
             ];
         });
 
@@ -117,13 +117,13 @@ trait DriverTrait
     /**
      * Mapping a single driver
      * @param User $driver
-     * @return array
+     * @return mixed
      */
     public static function mappingSingleDriver(User $driver)
     {
         $unBring = $driver->calculations()->where('is_bring', false)->sum('totalPrice');
 
-        return [
+        return (object)[
             'driver_id' => $driver->id,
             'name' => $driver->profile->name,
             'email' => $driver->email,
@@ -132,8 +132,8 @@ trait DriverTrait
             'is_active' => $driver->is_active,
             'unBring' => $unBring,
             'driver_state' => DriverState::getKey($driver->driver_state),
-            'plate_number' => $driver->taxi->plate_number,
-            'lamp_number' => $driver->taxi->lamp_number,
+            'plate_number' => $driver->taxi?->plate_number,
+            'lamp_number' => $driver->taxi?->lamp_number,
         ];
     }
 

@@ -1,236 +1,172 @@
-<header id="header" class="header fixed-top  align-items-center">
-    <div class="container-fluid">
-        <div class="row ">
-            <div class="col-4">
-                <nav class="header-nav ms-auto">
-                    <ul class="d-flex align-items-center">
-                        <li class="nav-item dropdown pe-3">
-
-                            <a class="nav-link nav-profile d-flex align-items-center pe-0" href="#"
-                                data-bs-toggle="dropdown">
-                                <span
-                                    class="d-none d-md-block dropdown-toggle ps-2">{{ Auth::user()->user_type }}</span>
-                            </a><!-- End Profile Image Icon -->
-
-                            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
-                                <li class="dropdown-header">
-                                    @auth
-                                        <h6>{{ Auth::user()->user_type }}</h6>
-                                        <span>({{ Auth::user()->user_type ?? 'Default Role' }})</span>
-                                    @endauth
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="/profiles">
-                                        <i class="bi bi-person"></i>
-                                        <span>{{ __('ملفي الشخصي') }}</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="/profiles">
-                                        <i class="bi bi-gear"></i>
-                                        <span>{{ __('اعدادات الحساب') }}</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" href="{{ url('/Contact') }}">
-                                        <i class="bi bi-question-circle"></i>
-                                        <span>{{ __('مساعدة') }}</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-
-                                <li>
-                                    <!-- Authentication -->
-                                    <form method="POST" action="{{ route('logout') }}">
-                                        @csrf
-
-                                        <a href="{{ route('logout') }}"
-                                            onclick="event.preventDefault(); this.closest('form').submit();"
-                                            class="dropdown-item d-flex align-items-center">
-                                            <i class="bi bi-box-arrow-right"></i>
-                                            <span>{{ __('تسجيل الخروج') }}</span>
-                                        </a>
-                                    </form>
-                                </li>
-
-                            </ul><!-- End Profile Dropdown Items -->
-                        </li><!-- End Profile Nav -->
-                    </ul>
-                </nav><!-- End Icons Navigation -->
-            </div>
-            <div class="col-5"></div>
-            <div class="col-3">
-                <div class="row">
-                    <div class="d-flex align-items-center justify-content-between">
-                        <div class="col-4" style="justify-content:end;margin-right: 17px">
-                            <i class="bi bi-list toggle-sidebar-btn"></i>
-                        </div>
-                        <a class="logo d-flex align-items-center">
-                            <img src="{{ asset('/img/logoo.png') }}" style="width: 60px;height: 40px;margin: 10px"
-                                alt="">
-                            <span class="d-none d-lg-block"
-                                style="font-family: 'Cairo', sans-serif ;color: white; ">{{ __('الشهباء') }}</span>
-                        </a>
-                    </div><!-- End Logo -->
-                </div>
-            </div>
-
-        </div>
+<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 bg-gradient-dark" id="sidenav-main">
+    <div class="sidenav-header">
+        <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-xl-none" id="iconSidenav"></i>
+        <a class="navbar-brand m-0" href="https://demos.creative-tim.com/material-dashboard/pages/dashboard" target="_blank">
+            <img src="{{ asset('img/logo-ct.png') }}" class="navbar-brand-img h-100" alt="main_logo">
+            <span class="ms-1 font-weight-bold text-white">Material Dashboard 2</span>
+        </a>
     </div>
-</header><!-- End Header -->
-
-<!-- ======= Sidebar ======= -->
-<aside id="sidebar" class="sidebar ">
-
-    <ul class="sidebar-nav" id="sidebar-nav">
-
-        <li class="nav-item">
-            <a class="nav-link " href="{{ url('/dashboard') }}">
-                <span class="ms-auto">لوحة التحكم</span>
-                <i class="bi bi-grid " style="margin-left: 10px"></i>
-            </a>
-        </li><!-- End Dashboard Nav -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#components-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-chevron-down"></i><span class="ms-auto">السائقين</span><i
-                    class="bi bi-menu-button-wide " style="margin-left: 10px"></i>
-            </a>
-        <li style="margin-left: 80px">
-            <a href="{{ route('drivers.index') }}">
-                <div class="ms-auto" style="margin-right: 30px">
-                    <span>عرض السائقين</span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                </div>
-            </a>
-        </li>
-        <li style="margin-left: 94px">
-            <a href="{{ route('create.driver') }}">
-                <div class="ms-auto" style="margin-right: 30px">
-                    <span>اضافة سائق</span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                </div>
-            </a>
-        </li>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#forms-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-chevron-down "></i><span class="ms-auto">السيارات</span><i class="bi bi-taxi-front-fill"
-                    style="margin-left: 10px"></i>
-            </a>
-        <li style="margin-left: 80px">
-            <a href="{{ route('taxis.index') }}">
-                <div class="ms-auto" style="margin-right: 30px">
-                    <span> عرض السيارات </span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                </div>
-            </a>
-        </li>
-        <li style="margin-left: 90px">
-            <a href="{{ route('taxis.create') }}">
-                <div class="ms-auto" style="margin-right: 30px">
-                    <span> اضافة سيارة </span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                </div>
-            </a>
-        </li>
-        </li><!-- End Forms Nav -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#taxi-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-chevron-down "></i><span class="ms-auto">الطلبات</span><i class="bi bi-hourglass"
-                    style="margin-left: 10px"></i>
-            </a>
-        <li style="margin-left: 80px">
-            <a href="{{ route('current.taxi.movement') }}">
-                <div class="ms-auto" style="margin-right: 30px">
-                    <span> الطلبات الحالية </span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                </div>
-            </a>
-        </li>
-        <li style="margin-left: 61px">
-            <a href="{{ route('completed.requests') }}">
-                <div class="ms-auto" style="margin-right: 30px">
-                    <span> الطلبات المكتملة </span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                </div>
-            </a>
-        </li>
-        </li><!-- End Forms Nav -->
-
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-chevron-down "></i><span class=" ms-auto">الاضافات</span>
-                <i class="bi bi-layout-text-window-reverse" style="margin-left: 10px"></i>
-            </a>
-        <li style="margin-left: 120px">
-            <a href="{{ url('/movement-types') }}">
-                <div class="ms-auto" style="margin-right: 30px">
-                    <span>الخدمات</span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                </div>
-            </a>
-        </li>
-        <li style="margin-left: 123px">
-            <a href="{{ route('offers.index') }}">
-                <div class="ms-auto" style="margin-right: 30px">
-                    <span>العروض</span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                </div>
-            </a>
-        </li>
-        </li><!-- End Tables Nav -->
-
-        <li class="nav-item">
-            <a class="nav-link collapsed" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
-                <i class="bi bi-chevron-down "></i> <span class="ms-auto">الرصيد والحسابات</span><i
-                    class="bi bi-gem "style="margin-left: 10px"></i>
-            </a>
-        <li style="margin-left: 75px">
-            <a href="{{ route('calculations.index') }}">
-                <div class="ms-auto" style="margin-right: 30px">
-                    <span> رصيد السائقين </span><i class="bi bi-circle" style="margin-left: 10px"></i>
-                </div>
-            </a>
-        </li>
-        </li><!-- End Icons Nav -->
-
-        <center>
-            <li
-                style="font-size: 11px;
-                            text-transform: uppercase;
-                            color: #899bbd;
-                            font-weight: 600;">
-                صفحات</li>
-        </center>
-
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="{{ url('/profiles') }}">
-                <span class="ms-auto">الملف الشخصي</span><i class="bi bi-person " style="margin-left: 10px"></i>
-
-            </a>
-        </li><!-- End Profile Page Nav -->
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="{{ url('/profiles') }}">
-                <span class="ms-auto">الاعدادات</span>
-                <i class="bi bi-gear " style="margin-left: 10px"></i>
-            </a>
-        </li><!-- End Blank Page Nav -->
-        <li class="nav-item">
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <a class="nav-link collapsed" href="{{ route('logout') }}"
-                    onclick="event.preventDefault(); this.closest('form').submit();">
-                    <span class="ms-auto">تسجيل الخروج</span>
-                    <i class="bi bi-box-arrow-right" style="margin-left: 10px"></i>
+    <hr class="horizontal light mt-0 mb-2">
+    <div class="collapse navbar-collapse w-auto" id="sidenav-collapse-main">
+        <ul class="navbar-nav">
+            
+            <!-- لوحة التحكم -->
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{{ url('/dashboard') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">dashboard</i>
+                    </div>
+                    <span class="nav-link-text ms-1">لوحة التحكم</span>
                 </a>
-            </form>
-        </li><!-- End Blank Page Nav -->
-    </ul>
+            </li>
 
-</aside><!-- End Sidebar-->
+            <!-- السائقين -->
+            <li class="nav-item">
+                <a class="nav-link text-white" data-bs-toggle="collapse" href="#driversMenu" aria-expanded="false">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">directions_car</i>
+                    </div>
+                    <span class="nav-link-text ms-1">السائقين</span>
+                </a>
+                <div class="collapse" id="driversMenu">
+                    <ul class="nav ms-4 ps-3">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('drivers.index') }}">
+                                <i class="material-icons opacity-10">visibility</i>
+                                <span class="nav-link-text ms-1">عرض السائقين</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('drivers.create') }}">
+                                <i class="material-icons opacity-10">person_add</i>
+                                <span class="nav-link-text ms-1">اضافة سائق</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- السيارات -->
+            <li class="nav-item">
+                <a class="nav-link text-white" data-bs-toggle="collapse" href="#taxisMenu" aria-expanded="false">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">taxi_alert</i>
+                    </div>
+                    <span class="nav-link-text ms-1">السيارات</span>
+                </a>
+                <div class="collapse" id="taxisMenu">
+                    <ul class="nav ms-4 ps-3">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('taxis.index') }}">
+                                <i class="material-icons opacity-10">visibility</i>
+                                <span class="nav-link-text ms-1">عرض السيارات</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('taxis.create') }}">
+                                <i class="material-icons opacity-10">add_circle_outline</i>
+                                <span class="nav-link-text ms-1">اضافة سيارة</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- الطلبات -->
+            <li class="nav-item">
+                <a class="nav-link text-white" data-bs-toggle="collapse" href="#ordersMenu" aria-expanded="false">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">hourglass_empty</i>
+                    </div>
+                    <span class="nav-link-text ms-1">الطلبات</span>
+                </a>
+                <div class="collapse" id="ordersMenu">
+                    <ul class="nav ms-4 ps-3">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('current.taxi.movement') }}">
+                                <i class="material-icons opacity-10">schedule</i>
+                                <span class="nav-link-text ms-1">الطلبات الحالية</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('completed.requests') }}">
+                                <i class="material-icons opacity-10">check_circle_outline</i>
+                                <span class="nav-link-text ms-1">الطلبات المكتملة</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- الاضافات -->
+            <li class="nav-item">
+                <a class="nav-link text-white" data-bs-toggle="collapse" href="#extrasMenu" aria-expanded="false">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">add_box</i>
+                    </div>
+                    <span class="nav-link-text ms-1">الاضافات</span>
+                </a>
+                <div class="collapse" id="extrasMenu">
+                    <ul class="nav ms-4 ps-3">
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ url('/movement-types') }}">
+                                <i class="material-icons opacity-10">build</i>
+                                <span class="nav-link-text ms-1">الخدمات</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('offers.index') }}">
+                                <i class="material-icons opacity-10">local_offer</i>
+                                <span class="nav-link-text ms-1">العروض</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <!-- الرصيد والحسابات -->
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{{ route('calculations.index') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">account_balance_wallet</i>
+                    </div>
+                    <span class="nav-link-text ms-1">رصيد السائقين</span>
+                </a>
+            </li>
+
+            <!-- الملف الشخصي -->
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{{ url('/profiles') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">person</i>
+                    </div>
+                    <span class="nav-link-text ms-1">الملف الشخصي</span>
+                </a>
+            </li>
+
+            <!-- الاعدادات -->
+            <li class="nav-item">
+                <a class="nav-link text-white" href="{{ url('/profiles') }}">
+                    <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="material-icons opacity-10">settings</i>
+                    </div>
+                    <span class="nav-link-text ms-1">الاعدادات</span>
+                </a>
+            </li>
+
+            <!-- تسجيل الخروج -->
+            <li class="nav-item">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <a class="nav-link text-white" href="{{ route('logout') }}" onclick="event.preventDefault(); this.closest('form').submit();">
+                        <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <i class="material-icons opacity-10">logout</i>
+                        </div>
+                        <span class="nav-link-text ms-1">تسجيل الخروج</span>
+                    </a>
+                </form>
+            </li>
+        </ul>
+    </div>
+
+</aside>
