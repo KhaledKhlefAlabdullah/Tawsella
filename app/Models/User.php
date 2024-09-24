@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Interfaces\IMustVerifyEmailByCode;
 use App\Models\Traits\HasUuid;
+use App\Models\Traits\UserTraits\AdminTrait;
 use App\Models\Traits\UserTraits\CustomerTrait;
 use App\Models\Traits\UserTraits\DriverTrait;
 use App\Models\Traits\UserTraits\MustVerifyEmailByCode;
@@ -16,7 +17,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements IMustVerifyEmailByCode
 {
-    use HasApiTokens, HasFactory, Notifiable, HasUuid, HasRoles, UserTrait, DriverTrait, CustomerTrait;
+    use HasApiTokens, HasFactory, Notifiable, HasUuid, HasRoles, UserTrait, DriverTrait, CustomerTrait, AdminTrait;
 
     use MustVerifyEmailByCode;
 

@@ -1,0 +1,88 @@
+<?php
+
+namespace App\Models\Traits\UserTraits;
+
+use App\Enums\MovementRequestStatus;
+use App\Models\Calculation;
+use App\Models\TaxiMovement;
+use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Carbon;
+
+trait AdminTrait
+{
+    /**
+     * @return array
+     */
+    public static function getReportData(Carbon $startDate, Carbon $endDate)
+    {
+        // Movements within the date range
+        $numberOfMovements = TaxiMovement::whereBetween('created_at', [$startDate, $endDate])->count() ?? 0;
+
+        // Completed movements within the date range
+        $numberOfCompletedMovements = TaxiMovement::whereBetween('created_at', [$startDate, $endDate])
+            ->where('is_completed', true)
+            ->count() ?? 0;
+
+        // Rejected movements within the date range
+        $numberOfRejectedMovements = TaxiMovement::whereBetween('created_at', [$startDate, $endDate])
+            ->where('request_state', MovementRequestStatus::Rejected)
+            ->count() ?? 0;
+
+        // Canceled movements within the date range
+        $numberOfCanceledMovements = TaxiMovement::whereBetween('created_at', [$startDate, $endDate])
+            ->where('is_canceled', true)
+            ->count() ?? 0;
+
+        // Total amount of movements within the date range
+        $totalAmount = Calculation::whereBetween('created_at', [$startDate, $endDate])
+            ->sum('totalPrice') ?? 0;
+
+        // Get movements with related data within the date range
+        $movements = TaxiMovement::with(['calculations', 'driver', 'movement_type'])
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->get() ?? 0;
+
+        // Get driver movements with related data within the date range
+        $driversMovements = User::with(['driver_movements.calculations', 'driver_movements.movement_type', 'driver_ratings'])
+            ->whereHas('driver_movements', function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('created_at', [$startDate, $endDate]);
+            })
+            ->get() ?? 0;
+
+        return [
+            'numberOfMovements' => $numberOfMovements,
+            'numberOfCompletedMovements' => $numberOfCompletedMovements,
+            'numberOfRejectedMovements' => $numberOfRejectedMovements,
+            'numberOfCanceledMovements' => $numberOfCanceledMovements,
+            'totalAmount' => $totalAmount,
+            'movements' => $movements,
+            'driversMovements' => $driversMovements,
+        ];
+    }
+
+
+    /**
+     * Download the report
+     * @param Carbon $startDate
+     * @param Carbon $endDate
+     * @param string $message
+     * @throws \Exception
+     */
+    public static function downloadReport(Carbon $startDate, Carbon $endDate, string $message)
+    {
+        // Fetch the report data for the week
+        $data = User::getReportData($startDate, $endDate);
+
+        // Load the view and pass the data to generate a PDF
+        $pdf = Pdf::loadView('Report.report', $data);
+
+        // Define the path where the PDF will be saved
+        $fileName = 'weekly_report_' . Carbon::now()->format('Y_m_d') . '.pdf';
+
+        $admin = getAndCheckModelById(User::class, getAdminId());
+        send_notifications($admin, __($message));
+
+        return $pdf->download($fileName);
+    }
+}

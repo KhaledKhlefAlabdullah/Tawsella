@@ -43,5 +43,8 @@
   "service-deleted-error": "Error in deleted service",
   "customer-was-found": "the customer was found",
   "customer-was-not-found": "the customer was not found",
-  "error-reject-movement":"Error in reject movement"
+  "error-reject-movement":"Error in reject movement",
+    "report.weekly-report": "The weekly report generated and ready to view.",
+    "report.monthly-report": "The monthly report generated and ready to view.",
+    "report.yearly-report": "The yearly report generated and ready to view."
 }
