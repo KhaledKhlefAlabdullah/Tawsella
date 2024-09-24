@@ -32,18 +32,18 @@
                 <style>
                     .bootstrap-table .fixed-table-toolbar .search input {
                         width: 100%;
-                        margin-bottom: 10px; /* تأكد من التباعد */
-                        border: 2px solid rgb(255, 149, 0); /* الحدود الحمراء كما في الصورة */
+                        margin-bottom: 10px; 
+                        border: 2px solid rgb(255, 149, 0);
                     }
                     .bootstrap-table .fixed-table-toolbar {
-                        margin-bottom: 0; /* لإزالة التباعد الزائد إن وجد */
+                        margin-bottom: 0;
                     }
                     .bootstrap-table .fixed-table-container {
-                        border: none; /* لإزالة الحدود حول الجدول إن وجدت */
+                        border: none;
                     }
                 </style>
                 <table class="table table-borderless datatable" data-toggle="table" data-pagination="true"
-                       data-search="true" data-search-align="left" data-show-columns="true" data-show-export="true">
+                       data-search="true" data-search-align="left">
                     <thead>
                         <tr style="margin-left: 15px">
                             <th data-sortable="true" scope="col">#</th>

@@ -34,42 +34,31 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-table/dist/extensions/export/bootstrap-table-export.min.js">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tableexport.jquery.plugin/1.10.20/tableExport.min.js"></script>
+    @vite('public/scss/material-dashboard.scss', 'resources/css/app.css', 'resources/js/app.js')
 
 </head>
 
-<body class="g-sidenav-show  bg-gray-200">
+<body class="g-sidenav-show  bg-gray-200" >
     <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
         @include('layouts.navigation')
         <main class="main-content position-relative border-radius-lg">
-            <nav class="navbar navbar-main navbar-expand-lg px-0 mx-4 shadow-none border-radius-xl" id="navbarBlur"
-                data-scroll="true">
-                <div class="container-fluid py-1 px-3">
-                    <nav aria-label="breadcrumb">
-                        <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-                            <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark"
-                                    href="javascript:;">Pages</a></li>
-                            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
-                        </ol>
-                        <h6 class="font-weight-bolder mb-0">{{ Request::path() }}</h6>
-
-                    </nav>
-                    <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-                        <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-                            <div class="input-group input-group-outline">
-                                <label class="form-label">Type here...</label>
-                                <input type="text" class="form-control">
-                            </div>
+            <div class="container mt-3" style="border-radius: 25px; background-color: #f8f9fa; padding: 10px;">
+                <div class="row align-items-center">
+                    <div class="col-4 text-start">
+                        <h4>Tawsella</h4>
+                    </div>
+                    <div class="col-4 d-flex justify-content-center">
+                        <div class="input-group" style="border: 1px solid #afafaf;padding: 3px;border-radius: 15px;">
+                            <input type="text" class="form-control" placeholder="أكتب هنا...">
                         </div>
-                        <ul class="navbar-nav  justify-content-end">
-                            <li class="nav-item px-3 d-flex align-items-center">
-                                <a href="javascript:;" class="nav-link text-body p-0">
-                                    <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
-                                </a>
-                            </li>
-                        </ul>
+                    </div>
+                    <div class="col-2 text-center"></div>
+                    <div class="col-2 text-center">
+                        <i class="bi bi-gear-fill" style="font-size: 24px;"></i>
                     </div>
                 </div>
-            </nav>
+            </div>
+
             @if (isset($header))
                 <header class="bg-white shadow">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -119,8 +108,6 @@
         </main>
 
     </div>
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
-            class="bi bi-arrow-up-short"></i></a>
 
     <!-- Vendor JS Files -->
     <script src="{{ asset('vendor/apexcharts/apexcharts.min.js') }}"></script>
@@ -131,7 +118,7 @@
     <script src="{{ asset('vendor/simple-datatables/simple-datatables.js') }}"></script>
     <script src="{{ asset('vendor/tinymce/tinymce.min.js') }}"></script>
     <script src="{{ asset('vendor/php-email-form/validate.js') }}"></script>
-    
+
     <script src="{{ asset('js/darkmode.js') }}"></script>
     <script src="{{ asset('js/darkmode-config.js') }}"></script>
     <script src="path/to/darkmode.js"></script>
@@ -159,7 +146,7 @@
     <script src="{{ asset('js/main.js') }}"></script>
 
     <!-- Reale time Scripts -->
-    @vite('resources/js/app.js')
+
     <script>
         setTimeout(() => {
             var userId = <?php echo json_encode(auth()->id()); ?>;
@@ -595,7 +582,7 @@
                     var item = document.getElementById(`item${index}`);
                     item.appendChild(script);
                 });
-        }, 1000); 
+        }, 1000);
     </script>
     <script>
         var ctx = document.getElementById("chart-bars").getContext("2d");

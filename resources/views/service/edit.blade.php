@@ -9,7 +9,7 @@
                         <div class="card-header">تعديل نوع حركة تاكسي</div>
 
                         <div class="card-body">
-                            <form method="POST" action="{{ route('service.update', ['movementType' => $movementType->id]) }}">
+                            <form method="POST" action="{{ route('movement-types.update', ['movement_type' => $movementType->id]) }}">
                                 @csrf
                                 @method('PUT')
 

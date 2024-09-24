@@ -22,12 +22,13 @@
             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                 <div class="card">
                     <div class="card-header p-3 pt-2">
-                        <div class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
+                        <div
+                            class="icon icon-lg icon-shape bg-gradient-dark shadow-dark text-center border-radius-xl mt-n4 position-absolute">
                             <i class="material-icons opacity-10">weekend</i>
                         </div>
                         <div class="text-end pt-1">
                             <p class="text-sm mb-0 text-capitalize">مبالغ الطلبات</p>
-                            <h4 class="mb-0">$53k</h4>
+                            <h4 class="mb-0"> {{ $calculations }} LT</h4>
                         </div>
                     </div>
                 </div>
@@ -37,12 +38,13 @@
             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                 <div class="card">
                     <div class="card-header p-3 pt-2">
-                        <div class="icon icon-lg icon-shape bg-gradient-primary shadow-primary text-center border-radius-xl mt-n4 position-absolute">
+                        <div
+                            class="icon icon-lg icon-shape bg-gradient-primary shadow-primary text-center border-radius-xl mt-n4 position-absolute">
                             <i class="material-icons opacity-10">person</i>
                         </div>
                         <div class="text-end pt-1">
                             <p class="text-sm mb-0 text-capitalize">الطلبات المكتملة</p>
-                            <h4 class="mb-0">2300</h4>
+                            <h4 class="mb-0">{{ $requests }}</h4>
                         </div>
                     </div>
                 </div>
@@ -52,12 +54,13 @@
             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                 <div class="card">
                     <div class="card-header p-3 pt-2">
-                        <div class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
+                        <div
+                            class="icon icon-lg icon-shape bg-gradient-success shadow-success text-center border-radius-xl mt-n4 position-absolute">
                             <i class="material-icons opacity-10">person</i>
                         </div>
                         <div class="text-end pt-1">
                             <p class="text-sm mb-0 text-capitalize">عدد السائقين</p>
-                            <h4 class="mb-0">3462</h4>
+                            <h4 class="mb-0">{{ $totalDrivers }}</h4>
                         </div>
                     </div>
                 </div>
@@ -67,12 +70,13 @@
             <div class="col-xl-3 col-sm-6">
                 <div class="card">
                     <div class="card-header p-3 pt-2">
-                        <div class="icon icon-lg icon-shape bg-gradient-info shadow-info text-center border-radius-xl mt-n4 position-absolute">
+                        <div
+                            class="icon icon-lg icon-shape bg-gradient-info shadow-info text-center border-radius-xl mt-n4 position-absolute">
                             <i class="material-icons opacity-10">weekend</i>
                         </div>
                         <div class="text-end pt-1">
                             <p class="text-sm mb-0 text-capitalize">عدد السيارات</p>
-                            <h4 class="mb-0">103,430</h4>
+                            <h4 class="mb-0">{{ $totalTaxi }}</h4>
                         </div>
                     </div>
                 </div>
@@ -107,14 +111,14 @@
                     </div>
                 </div>
             </div>
-
             <!-- قسم خرائط جوجل -->
             <div class="col-lg-9 col-md-12 mt-3">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
                 <!-- إضافة عنصر اللودينغ -->
                 <div id="map-container" style="position: relative;">
-                    <div id="loading-spinner" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1;">
+                    <div id="loading-spinner"
+                        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1;">
                         <div class="spinner-border text-primary" role="status">
                             <span class="visually-hidden">Loading map...</span>
                         </div>
@@ -138,7 +142,8 @@
                 </style>
 
                 <!-- خرائط جوجل -->
-                <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCz7MVXwh_VtjqnPh5auan0QCVwVce2JX0&callback=initMap"></script>
+                <script async defer
+                    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCz7MVXwh_VtjqnPh5auan0QCVwVce2JX0&callback=initMap"></script>
 
                 <script>
                     function handleMapError() {
@@ -157,7 +162,10 @@
                             return;
                         }
 
-                        var location = { lat: -34.397, lng: 150.644 };
+                        var location = {
+                            lat: -34.397,
+                            lng: 150.644
+                        };
 
                         try {
                             var map = new google.maps.Map(mapElement, {
@@ -170,7 +178,7 @@
                                 map: map
                             });
 
-                            google.maps.event.addListenerOnce(map, 'tilesloaded', function () {
+                            google.maps.event.addListenerOnce(map, 'tilesloaded', function() {
                                 loadingSpinner.style.display = 'none';
                             });
                         } catch (error) {
