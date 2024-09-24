@@ -6,6 +6,7 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/css/app.css',
+                'public/scss/material-dashboard.scss',
                 'resources/js/app.js',
             ],
             refresh: true,

@@ -5,14 +5,14 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-6 col-md-8 col-12 mx-auto">
-                    <div class="card z-index-0 fadeIn3 fadeInBottom">
+                    <div class="card z-index-0 fadeIn3 fadeInBottom" style="background-color: #22272B">
                         <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                            <div class="bg-gradient-primary shadow-primary border-radius-lg py-3 pe-1">
+                            <div class="shadow-primary border-radius-lg py-3 pe-1"  style="background-color: #FFBC07">
                                 <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">إنشاء حساب سائق جديد</h4>
                             </div>
                         </div>
 
-                        <div class="card-body">
+                        <div class="card-body-auth">
                             @if (session('success'))
                                 <div class="alert alert-success" role="alert">
                                     {{ session('success') }}

@@ -19,10 +19,7 @@
         <div class="container">
             <!-- Main Content -->
             <h1 class="my-4">عروض اليوم</h1>
-                <a class="btn btn-success" href="{{ route('offers.create') }}"><i class="bi bi-plus"></i> إضافة
-                    عرض
-                    جديد</a>
-
+                <a class="btn btn-success" href="{{ route('offers.create') }}"><i class="bi bi-plus"></i> إضافة عرض جديد</a>
             <div class="row">
                 @foreach ($offers as $index => $offer)
                     <div class="col-12">
@@ -40,7 +37,6 @@
                                         <p class="card-text">{{ $offer->value_of_discount }}%</p>
                                         <p class="card-text"><small class="text-body-secondary">تاريخ انتهاء العرض:
                                                 {{ $offer->valide_date }}</small></p>
-
                                         <!-- زر تعديل العرض -->
                                         <div class="row">
                                             <div class="col-12">
@@ -66,6 +62,5 @@
                 @endforeach
             </div>
         </div>
-
     </main>
 @endsection

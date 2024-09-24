@@ -39,7 +39,7 @@ class TaxiMovementController extends Controller
         $taxiMovement = TaxiMovement::where(['is_completed' => false, 'is_canceled' => false, 'request_state' => MovementRequestStatus::Accepted])
             ->whereDate('created_at', $currentDate)->get();
 
-        return view('taxi_movement.LifeTaxiMovements', ['taxiMovement' => TaxiMovement::mappingMovements($taxiMovement)]);
+        return view('taxi_movement.currentTaxiMovement', ['taxiMovement' => TaxiMovement::mappingMovements($taxiMovement)]);
     }
 
 
