@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use \Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
@@ -18,17 +19,11 @@ Route::group([
     'prefix' => LaravelLocalization::setLocale(),
     'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
 ], function () {
-    Route::get('/', function () {
-        return view('welcom');
-    });
+    Route::group(['controller' => DashboardController::class], function () {
+        Route::get('/', 'index')->name('welcome');
 
-//***************************start route AppPlatform ******************************** */
-    Route::get('/AppPlatform', function () {
-        return view('ApplicationPlatform');
+        Route::get('/AppPlatform', 'appPlatform')->name('AppPlatform');
     });
-//*****************************End route AppPlatform ******************************** */
-//*********************************************************************************** */
-
     require __DIR__ . '/Roles/admin.php';
 
     require __DIR__ . '/auth.php';

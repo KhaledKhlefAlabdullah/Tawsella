@@ -42,7 +42,6 @@ trait DriverTrait
     {
         $drivers = User::with(['taxi', 'profile'])
             ->where([
-                'user_type' => UserType::TaxiDriver,
                 'driver_state' => DriverState::Ready,
                 'is_active' => true
             ])

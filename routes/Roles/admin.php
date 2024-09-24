@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Middleware\RolesMiddlewares\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CalculationController;
@@ -148,11 +149,23 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     });
 
     //*************************** End route calculations *********************************** */
-    //**************************************************************************** */
+    //************************************************************************************** */
 
     //*************************** Start route view maps *********************************** */
+    //************************************************************************************* */
     Route::get('/view-completed-movement-map/{taxiMovement}', [TaxiMovementController::class, 'view_map'])->name('movement.completed.map');
     Route::get('/view-life-movement-map/{taxi}', [TaxiController::class, 'viewLifeMap'])->name('movement.life.map');
+    //*************************** End route view maps ************************************** */
+    //************************************************************************************** */
 
+    //*************************** Start route report ************************************** */
+    //************************************************************************************* */
+    Route::group(['prefix' => 'report', 'controller' => DashboardController::class], function () {
+        Route::get('/', 'viewReport');
+
+        Route::get('/download', 'downloadReport');
+    });
+    //*************************** End route report **************************************** */
+    //************************************************************************************* */
 });
 
