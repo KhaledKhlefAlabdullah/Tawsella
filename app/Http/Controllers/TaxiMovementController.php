@@ -218,6 +218,8 @@ class TaxiMovementController extends Controller
                 'end_longitude' => $validatedData['end_longitude']
             ]);
 
+            $taxiMovement->incrementMovementCount();
+
             $calculation = TaxiMovement::calculateAmountPaid($taxiMovement, $validatedData['distance']);
 
             $taxiMovement->driver()->update([

@@ -36,7 +36,7 @@ trait MovementTrait
                 return $state;
             };
 
-            return   [
+            return [
                 'movement_id' => $movement->id,
                 'start_address' => $movement->start_address,
                 'destination_address' => $movement->destination_address,
@@ -108,7 +108,7 @@ trait MovementTrait
 
         if ($todayCanceledMovements >= 10) {
             $message = 'You have exceeded the allowed number of canceled movements for today.';
-            send_notifications($user, $message, ['database','mail']);
+            send_notifications($user, $message, ['database', 'mail']);
             return api_response(message: $message, code: 429);
         }
 
@@ -160,4 +160,22 @@ trait MovementTrait
             });
     }
 
+
+    /**
+     * Increment customer movements numbers or create new record
+     * @return void
+     */
+    public function incrementMovementCount()
+    {
+        $customer = $this->customer();
+        if ($customer) {
+            if ($customer->has('movementsCount')) {
+                $customer->movementsCount->increment('movements_count');
+            } else {
+                $customer->movementsCount->create([
+                    'movements_count' => 1,
+                ]);
+            }
+        }
+    }
 }
