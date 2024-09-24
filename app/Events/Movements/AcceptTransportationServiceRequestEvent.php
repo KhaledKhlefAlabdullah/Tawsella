@@ -53,7 +53,7 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
 
     public function broadcastWithDriver(): array
     {
-        $customer_profile = $this->taxiMovement->customer->profile;
+        $customer_profile = $this->taxiMovement->customer()->profile;
 
         return [
             'request_id' => $this->taxiMovement->id,
@@ -64,7 +64,7 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
 
     public function broadcastWithCustomer(): array
     {
-        $driver_profile = $this->taxiMovement->driver->profile;
+        $driver_profile = $this->taxiMovement->driver()->profile;
         return [
             'message' => 'accepted',
             'driver' => $driver_profile

@@ -43,8 +43,8 @@ class GetCustomerLocationEvent implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'driver_name' => $this->customer->profile->name,
-            'driver_avatar' => $this->customer->profile->avatar,
+            'driver_name' => $this->customer()->profile->name,
+            'driver_avatar' => $this->customer()->profile->avatar,
             'latitude' => $this->customer->last_location_latitude,
             'longitude' => $this->customer->last_location_longitude
         ];

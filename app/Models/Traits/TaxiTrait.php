@@ -13,7 +13,7 @@ trait TaxiTrait
     public static function mappingTaxis($taxis){
 
         return $taxis->map(function($taxi){
-            $driverProfile = $taxi->driver->profile;
+            $driverProfile = $taxi->driver()->profile;
             return (object)[
                 'driverName' => $driverProfile->name,
                 'driverAvatar' => $driverProfile->avatar,

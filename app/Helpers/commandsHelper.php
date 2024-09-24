@@ -25,7 +25,7 @@ if(!function_exists('driverExpiredNotification')){
 
                 // Compose the error message to notify the admin
                 $adminMessage = "Failed to send activation notification to: \n" .
-                    "User: " . $driver->profile()->name . "\n" .
+                    "User: " . $driver->profile->name . "\n" .
                     "Email: " . $driver->email;
 
                 // Send error notification to the admin

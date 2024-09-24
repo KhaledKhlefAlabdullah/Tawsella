@@ -68,7 +68,7 @@ class TaxiController extends Controller
             'lat' => $taxi->last_location_latitude,
             'driver_id' => $taxi->driver_id,
             'long' => $taxi->last_location_longitude,
-            'name' => $taxi->driver->profile->name,
+            'name' => $taxi->driver()->profile->name,
         ];
         return view('taxi_movement.map', ['data' => $data])->with('success', __('success-view-map'));
     }
