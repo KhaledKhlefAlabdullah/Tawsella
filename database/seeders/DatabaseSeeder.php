@@ -17,7 +17,6 @@ class DatabaseSeeder extends Seeder
             AdminSeeder::class,
             TaxiMovementTypesSeeder::class,
             UsersSeeder::class,
-            TaxiMovementsSeeder::class,
             OffersSeeder::class,
             AboutUsSeeder::class
         ]);
