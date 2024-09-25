@@ -24,21 +24,13 @@ class OfferController extends Controller
      */
     public function index()
     {
-        try {
-
-            $validOffers = Offer::getOffers();
-
-            $authUser = Auth::user();
-            if (!$authUser->hasRole(UserType::Admin()->key))
-                return api_response(data: $validOffers, message: 'Successfully getting offers');
-
-            $endedOffers = Offer::getOffers('<');
-            $response = ['validOffers' => $validOffers, 'endedOffers' => $endedOffers];
-
-            return api_response(data: $response, message: 'Successfully getting offers');
-        } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Faild to get offers', code: 500);
-        }
+        $validOffers = Offer::getOffers();
+        $authUser = Auth::user();
+        if (!$authUser || $authUser && !$authUser->hasRole(UserType::Admin()->key))
+            return api_response(data: $validOffers, message: 'Successfully getting offers');
+        $endedOffers = Offer::getOffers('<');
+        $response = ['validOffers' => $validOffers, 'endedOffers' => $endedOffers];
+        return api_response(data: $response, message: 'Successfully getting offers');
     }
 
     /**
@@ -59,7 +51,7 @@ class OfferController extends Controller
 
             return api_response(data: $offer, message: 'Successfully created offer.');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()],message: 'Error in creating offer.', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Error in creating offer.', code: 500);
         }
     }
 
@@ -110,7 +102,7 @@ class OfferController extends Controller
 
             return api_response(message: 'Successfully deleted offer.');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()],message: 'Error in deleting error.', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Error in deleting error.', code: 500);
         }
     }
 }
