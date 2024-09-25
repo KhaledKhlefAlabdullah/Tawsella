@@ -8,10 +8,11 @@ use App\Http\Controllers\TaxiMovementController;
 
 
 Route::middleware([DriverMiddleware::class])->group(function() {
+    // todo need edit in front
     /**
      * Movements Management
      */
-    Route::group(['prefix' => 'movement','controller' => TaxiMovementController::class], function () {
+    Route::group(['prefix' => 'movements','controller' => TaxiMovementController::class], function () {
         Route::post('/found-customer/{taxiMovement}', 'foundCustomer');
         Route::get('/driver-request/{id}', 'get_request_data');
         Route::post('/mark-completed/{taxiMovement}', 'makeMovementIsCompleted');
