@@ -143,18 +143,21 @@ trait UserTrait
                 'password' => Hash::make($validatedData['password']),
             ]);
 
-        $userProfile = $user->profile;
+        $userProfile = UserProfile::where('user_id', $user->id)->first();
         $userProfile->update([
             'name' => $validatedData['name'],
             'phone_number' => $validatedData['phone_number']
         ]);
+
         if (isset($validatedData['avatar'])) {
             $avatar = $validatedData['avatar'];
-            $path = 'images/profiles';
+            $path = 'images/profile';
             $avatar_path = editFile($userProfile->avatar, $path, $avatar);
             $userProfile->update([
                 'avatar' => $avatar_path
             ]);
         }
+
+        return $userProfile;
     }
 }

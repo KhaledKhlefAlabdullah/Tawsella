@@ -132,7 +132,7 @@ if (!function_exists('editFile')) {
     {
         // Delete the old file from storage
         if (file_exists($old_path)) {
-            if (!in_array($old_path, ['/images/profile_images/man', '/images/profile_images/woman']))
+            if (!in_array($old_path, ['/images/profile/man', '/images/profile/woman']))
                 unlink(public_path($old_path));
         }
 
@@ -153,7 +153,7 @@ if (!function_exists('removeFile')) {
     function removeFile($path): string
     {
         // Delete the old file from storage
-        if (file_exists(public_path($path)) && !in_array($path, ['/images/profile_images/man', '/images/profile_images/woman'])) {
+        if (file_exists(public_path($path)) && !in_array($path, ['/images/profile/man', '/images/profile/woman'])) {
             unlink(public_path($path));
             return 'success';
         }
@@ -245,7 +245,7 @@ if (!function_exists('send_notifications')) {
             : (object)[
                 'email' => 'default@example.com',
                 'name' => 'Anonymous',
-                'avatar_url' => 'images/profile_images/default_user_avatar.png'
+                'avatar_url' => 'images/profile/default_user_avatar.png'
             ];
 
         if ($receivers instanceof \Illuminate\Support\Collection) {

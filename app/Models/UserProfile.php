@@ -37,8 +37,8 @@ class UserProfile extends Model
         static::creating(function ($profile) {
             if (empty($profile->avatar)) {
                 $profile->avatar = $profile->gender == UserGender::male
-                    ? '/images/profile_images/man.png'
-                    : '/images/profile_images/woman.png';
+                    ? '/images/profile/man.png'
+                    : '/images/profile/woman.png';
             }
         });
     }
