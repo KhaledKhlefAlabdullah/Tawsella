@@ -26,7 +26,7 @@ class UserProfile extends Model
         'user_id',
         'name',
         'avatar',
-        'phoneNumber',
+        'phone_number',
         'gender'
     ];
 
