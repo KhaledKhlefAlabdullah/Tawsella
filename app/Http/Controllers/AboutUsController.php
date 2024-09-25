@@ -21,7 +21,7 @@ class AboutUsController extends Controller
      */
     public function index()
     {
-        $aboutUsRecords = AboutUs::select('id', 'title', 'description', 'complaints_number', 'image');
+        $aboutUsRecords = AboutUs::select('id', 'title', 'description', 'complaints_number', 'image')->where('is_general', true)->get();
         $additional_info = AboutUs::select('id', 'title', 'description', 'image')->where('is_general', false)->get();
         return api_response(data: ['aboutUsRecords' => $aboutUsRecords, 'additional_info' => $additional_info], message: 'Successfully retrieved about us.');
     }

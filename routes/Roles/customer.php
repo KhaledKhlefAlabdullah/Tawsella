@@ -8,11 +8,11 @@ Route::middleware([CustomerMiddleware::class])->group(function () {
     /**
      * Movements Management
      */
-    Route::group(['movement','controller' => TaxiMovementController::class], function () {
+    Route::group(['prefix' => 'movements','movement','controller' => TaxiMovementController::class], function () {
         // todo edit in create taxi movement in front
         Route::post('/', 'store');
         // todo add it to front
-        Route::post('cancel-taxi-movement', 'canceledMovement');
+        Route::post('/cancel', 'canceledMovement');
     });
     /**
      * End Movements Management

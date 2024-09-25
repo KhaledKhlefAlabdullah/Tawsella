@@ -20,8 +20,9 @@ Broadcast::routes(['middleware' => ['auth:sanctum']]);
 Route::middleware(['auth:sanctum', EnsureEmailIsVerifiedByCodeMiddleware::class])->group(function () {
     require __DIR__.'/Roles/driver.php';
     require __DIR__.'/Roles/customer.php';
-    require __DIR__.'/Roles/publicApis.php';
     require __DIR__ . '/Roles/admin.php';
+    require __DIR__.'/Roles/allAuthUsers.php';
 });
+require __DIR__.'/Roles/publicApis.php';
 require __DIR__ . '/auth.php';
 
