@@ -28,9 +28,12 @@ return new class extends Migration
             $table->tinyInteger('mail_code_attempts_left')->default(0);
             $table->timestamp('mail_code_last_attempt_date')->nullable();
             $table->timestamp('mail_verify_code_sent_at')->nullable();
+            $table->float('rating')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });
+        DB::statement("ALTER TABLE users ADD CONSTRAINT rating_constraint CHECK (rating BETWEEN 1 AND 5)");
+
     }
 
     /**

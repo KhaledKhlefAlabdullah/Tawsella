@@ -39,7 +39,7 @@ class GetWeeklyReport extends Command
 
         } catch (\Exception $e) {
             // Log any errors encountered during execution
-            Log::error('Error generating weekly report: ' . $e->getMessage());
+            Log::error('Error generating weekly report: ' . [$e->getMessage()]);
             $this->error('Failed to generate the weekly report. Check logs for details.');
         }
     }

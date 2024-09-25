@@ -14,7 +14,6 @@
         "laravel/reverb": "^1.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "mcamara/laravel-localization": "^2.0",
         "pusher/pusher-php-server": "^7.2",
         "spatie/laravel-medialibrary": "^11.9",
         "spatie/laravel-permission": "^6.9",

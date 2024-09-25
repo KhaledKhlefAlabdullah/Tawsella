@@ -3,7 +3,6 @@
 
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
-use \Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,16 +14,12 @@ use \Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-Route::group([
-    'prefix' => LaravelLocalization::setLocale(),
-    'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']
-], function () {
-    Route::group(['controller' => DashboardController::class], function () {
-        Route::get('/', 'index')->name('welcome');
 
-        Route::get('/AppPlatform', 'appPlatform')->name('AppPlatform');
-    });
-    require __DIR__ . '/Roles/admin.php';
+Route::group(['controller' => DashboardController::class], function () {
+    Route::get('/', function (){
+        return view('welcome');
+    })->name('welcome');
 
-    require __DIR__ . '/auth.php';
+    Route::get('/AppPlatform', 'appPlatform')->name('AppPlatform');
 });
+

@@ -21,7 +21,7 @@ class AuthenticatedSessionController extends Controller
      */
     public function create(): View
     {
-        return view('auth.login');
+        return api_response(data'auth.login');
     }
 
     /**
@@ -35,40 +35,26 @@ class AuthenticatedSessionController extends Controller
 
             $request->authenticate();
 
-            // Return a JSON response with the token and user details
-            if ($request->wantsJson()) {
+            // Delete all existing tokens for the authenticated user
+            $request->user()->tokens()->delete();
 
-                // Delete all existing tokens for the authenticated user
-                $request->user()->tokens()->delete();
+            // Get user details
+            $user = $request->user();
 
-                // Get user details
-                $user = $request->user();
+            // Create a new token for the user
+            $token = createUserToken($user, 'login-token');
 
-                // Create a new token for the user
-                $token = createUserToken($user, 'login-token');
+            return api_response(data: ['token' => $token, 'user' => $user, 'mail_code_verified_at' => $user->mail_code_verified_at], message: 'Successfully logged in');
 
-                return api_response(data: ['token' => $token, 'user' => $user, 'mail_code_verified_at' => $user->mail_code_verified_at], message: 'Successfully logged in');
-            }
-
-            $request->session()->regenerate();
-
-            return redirect()->intended(RouteServiceProvider::HOME);
         } catch (AuthenticationException $e) {
             // Catch AuthenticationException and return an unauthorized response
-            if ($request->wantsJson())
-                return api_response(errors: [$e->getMessage(), 'Unauthorized access'], message: 'Invalid credentials', code: 401);
-            return redirect()->back()->withErrors('There was an error retrieving the data, please try again. '."\n errors:".$e->getMessage())->withInput();
+            return api_response(errors: [[$e->getMessage()], 'Unauthorized access'], message: 'Invalid credentials', code: 401);
         } catch (ValidationException $e) {
             // Catch ValidationException and return a validation error response
-            if ($request->wantsJson())
-                return api_response(errors: [$e->errors()], message: 'Validation error', code: 422);
-            return redirect()->back()->withErrors('There was an error retrieving the data, please try again. '."\n errors:".$e->getMessage())->withInput();
+            return api_response(errors: [$e->errors()], message: 'Validation error', code: 422);
         } catch (Exception $e) {
-            if ($request->wantsJson())
-                return api_response(errors: [$e->getMessage()], message: 'Login error', code: 500);
-            return redirect()->back()->withErrors('There was an error retrieving the data, please try again. '."\n errors:".$e->getMessage())->withInput();
+            return api_response(errors: [$e->getMessage()], message: 'Login error', code: 500);
         }
-
     }
 
     /**
@@ -79,27 +65,13 @@ class AuthenticatedSessionController extends Controller
     public function destroy(Request $request)
     {
         try {
-            if (request()->wantsJson()) {
-                $request->user()->currentAccessToken()->delete();
+            $request->user()->currentAccessToken()->delete();
 
-                return api_response(message: 'Successfully logged out');
-            }
+            return api_response(message: 'Successfully logged out');
 
-            Auth::guard('web')->logout();
-
-            $request->session()->invalidate();
-
-            $request->session()->regenerateToken();
-
-            return redirect('/');
         } catch (\Exception $e) {
-            if (request()->wantsJson()) {
-
-                // Handle any exceptions that might occur during logout
-                return api_response(errors: [$e->getMessage()], message: 'Logged out error');
-            }
+            // Handle any exceptions that might occur during logout
+            return api_response(errors: [$e->getMessage()], message: 'Logged out error');
         }
-
-        return abort(500, 'Logged out error');
     }
 }

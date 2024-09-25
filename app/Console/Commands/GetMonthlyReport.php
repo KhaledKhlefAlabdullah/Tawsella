@@ -39,7 +39,7 @@ class GetMonthlyReport extends Command
 
         } catch (\Exception $e) {
             // Log any errors encountered during execution
-            Log::error('Error generating monthly report: ' . $e->getMessage());
+            Log::error('Error generating monthly report: ' . [$e->getMessage()]);
             $this->error('Failed to generate the monthly report. Check logs for details.');
         }
     }

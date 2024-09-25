@@ -8,6 +8,7 @@ use App\Models\Calculation;
 use App\Models\TaxiMovement;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -18,50 +19,19 @@ class CalculationController extends Controller
      * View list of calculations.
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application to view page
+     * @return JsonResponse to view page
      */
     public function index()
     {
         try {
             $drivers = User::role(UserType::TaxiDriver()->key)->paginate(10);
 
-            return view('calculations.index', [
+            return api_response(data: [
                 'calculations' => Calculation::mappingDriversCalculations($drivers),
                 'drivers' => $drivers
-            ]);
+            ], message: 'Successfully getting drivers and calculations');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error in getting drivers with calculations'."\n errors:" . $e->getMessage())->withInput();
-        }
-    }
-
-
-    /**
-     * Show the form for creating a new resource.
-     * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-
-     * @return \Illuminate\Http\RedirectResponse to view page
-     */
-    public function create()
-    {
-        return view('calculations.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-
-     * @return \Illuminate\Http\RedirectResponse to view page
-     */
-    public function store(CalculationRequest $request)
-    {
-        try {
-            $validatedData = $request->validated();
-
-            Calculation::create($validatedData);
-
-            return redirect()->route('calculations.index')->with('success', 'تم إنشاء الحساب بنجاح');
-        } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.'."\n errors:".$e->getMessage())->withInput();
+            return api_response(errors: [$e->getMessage()], message: 'Error in getting drivers with calculations', code: 500);
         }
     }
 
@@ -70,57 +40,24 @@ class CalculationController extends Controller
      * Display the specified resource.
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-
-     * @return \Illuminate\Http\RedirectResponse to view page
+     * @return JsonResponse to view page
      */
     public function show(User $driver)
     {
         try {
             $driverMovements = count_items(TaxiMovement::class,['driver_id' => $driver->id, 'is_completed' => true]);
             $totalMount = Calculation::totalAccounts($driver->id);
-            $totaldistance = Calculation::where('driver_id', $driver->id)->sum('distance');
+            $totalDistance = Calculation::where('driver_id', $driver->id)->sum('distance');
             $movements = Calculation::driverMovementsCalculations($driver->id);
             $details = [
                 'driverMovements' => $driverMovements,
                 'totalMount' => $totalMount,
-                'totaldistance' => $totaldistance
+                'totalDistance' => $totalDistance
             ];
 
-            return view('calculations.show', ['details' => $details, 'movements' => $movements]);
+            return api_response(data: ['details' => $details, 'movements' => $movements], message: 'Successfully getting driver movements');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.'."\n errors:".$e->getMessage())->withInput();
-        }
-    }
-
-
-
-    /**
-     * Show the form for editing the specified resource.
-     * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application to view page
-     */
-    public function edit(Calculation $calculations)
-    {
-        return view('calculations.edit', ['calculations' => $calculations]);
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-
-     * @return \Illuminate\Http\RedirectResponse to view page
-     */
-    public function update(CalculationRequest $request, Calculation $calculation)
-    {
-        try {
-            $validatedData = $request->validated();
-
-            $calculation->update($validatedData);
-
-            return redirect()->route('calculations.index')->with('success', 'Successfully editing calculation.');
-        } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error in editing calculation.\n errors::' . $e->getMessage())->withInput();
+            return api_response(errors: [$e->getMessage()],message: 'هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.', code: 500);
         }
     }
 
@@ -128,7 +65,7 @@ class CalculationController extends Controller
      * Bring The mounts
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-
-     * @return \Illuminate\Http\RedirectResponse to view page
+     * @return JsonResponse to view page
      */
     public function bring(User $driver)
     {
@@ -136,15 +73,15 @@ class CalculationController extends Controller
             $bringCount = $driver->calculations()->where('is_bring', false)->count();
 
             if($bringCount == 0) {
-                return redirect()->route('drivers.index')->with('success', 'The driver has no outstanding payments to bring.');
+                return api_response('drivers.index')->with('success', 'The driver has no outstanding payments to bring.');
             }
 
             $driver->calculations()->where('is_bring', false)
                 ->update(['is_bring' => true]);
 
-            return redirect()->route('drivers.index')->with('success', 'The outstanding payments have been successfully marked as brought.');
+            return api_response(message: 'The outstanding payments have been successfully marked as brought.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error bringing payments. Please try again. Error details: ' . $e->getMessage())->withInput();
+            return api_response(errors: [$e->getMessage()],message: 'Error bringing payments. Please try again.', code: 500);
         }
     }
 
@@ -154,16 +91,16 @@ class CalculationController extends Controller
      * Remove the specified resource from storage.
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-
-     * @return \Illuminate\Http\RedirectResponse to view page
+     * @return JsonResponse to view page
      */
     public function destroy(Calculation $calculation)
     {
         try {
             $calculation->delete();
 
-            return redirect()->route('calculations.index')->with('success', 'Successfully calculation deleted.');
+            return api_response(message: 'Successfully calculation deleted.');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error in deleted calculation.'."\n errors:".$e->getMessage())->withInput();
+            return api_response(errors: [$e->getMessage()],message: 'Error in deleted calculation.', code: 500);
         }
     }
 }

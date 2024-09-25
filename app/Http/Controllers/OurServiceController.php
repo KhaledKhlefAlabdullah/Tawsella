@@ -4,47 +4,41 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ServicesRequest;
 use App\Models\OurService;
+use App\Services\PaginationService;
 use Exception;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use function PHPUnit\Framework\isJson;
+use function Laravel\Prompts\error;
 
 class OurServiceController extends Controller
 {
+    protected $paginationService;
+
+    public function __construct(PaginationService $paginationService)
+    {
+        $this->paginationService = $paginationService;
+    }
+
     /**
      * Display all services.
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application response containing all services data
+     * @return JsonResponse response containing all services data
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-15
      */
-    public function index()
+    public function index(Request $request)
     {
         // Fetch all records from OurService model
-        $services = OurService::select('id', 'name', 'description', 'image', 'logo', 'created_at')->get();
-
-        if(request()->wantsJson()) {
-            api_response(data: $services, message: 'Successfully getting messages');
-        }
-
-        return view('services', $services);
+        $query = OurService::query();
+        $query = $this->paginationService->applyFilters($query, $request);
+        $query = $this->paginationService->applySorting($query, $request);
+        $services = $this->paginationService->paginate($query, $request);
+        return api_response(data: $services, message: 'Successfully getting messages');
     }
 
     /**
      * Store a new service in the database.
      * @param ServicesRequest $request Service data from request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application redirect to create view
-     * @author Khaled <khaledabdullah2001104@gmail.com>
-     * @Target T-16
-     */
-    public function create()
-    {
-        return view('service.create');
-    }
-
-    /**
-     * Store a new service in the database.
-     * @param ServicesRequest $request Service data from request
-     * @return \Illuminate\Http\RedirectResponse response indicating success or failure
+     * @return JsonResponse response indicating success or failure
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-16
      */
@@ -57,7 +51,7 @@ class OurServiceController extends Controller
 
             $logoPath = $validatedData['logo'] ? storeFile($validatedData['logo'], '/images/logos') : '/images/services/logos/logo.jpg';
 
-            OurService::create([
+            $ourService = OurService::create([
                 'admin_id' => $validatedData['admin_id'],
                 'name' => $validatedData['name'],
                 'description' => $validatedData['description'],
@@ -65,29 +59,17 @@ class OurServiceController extends Controller
                 'logo' => $logoPath
             ]);
 
-            return redirect()->route('services')->with('success', __('service-created-success'));
-        } catch (ValidationException $e) {
-            return redirect()->back()->withErrors($e->errors())->withInput();
+            return api_response(data: $ourService,message: 'Successfully created our services');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(__('service-created-error')."\n errors:" . $e->getMessage())->withInput();
+            return api_response(errors: [$e->getMessage()], message: 'Error in creating our services', code: 500);
         }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     * @param OurService $service
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
-     */
-    public function edit(OurService $service)
-    {
-        return view('service.edit', ['service' => $service]);
     }
 
     /**
      * Update an existing service.
      * @param ServicesRequest $request Updated service data
      * @param OurService $service Service to update
-     * @return \Illuminate\Http\RedirectResponse redirect back response
+     * @return JsonResponse redirect back response
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-17
      */
@@ -107,16 +89,16 @@ class OurServiceController extends Controller
                 'logo' => $logoPath
             ]);
 
-            return redirect()->route('services')->with('success', __('service-edited-success'));
+            return api_response(data: $service,message: 'Successfully updated our services');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(__('service-edited-error') . "\n errors:" . $e->getMessage())->withInput();
+            return api_response(errors: [$e->getMessage()], message: 'Error in updated our services', code: 500);
         }
     }
 
     /**
      * Delete a service from the database.
      * @param OurService $service Service to delete
-     * @return \Illuminate\Http\RedirectResponse API response indicating success or failure
+     * @return JsonResponse API response indicating success or failure
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-18
      */
@@ -128,9 +110,9 @@ class OurServiceController extends Controller
             removeFile($service->image);
             $service->delete();
 
-            return redirect()->route('services')->with('success', __('movement-type-delete-success'));
+            return api_response(message: 'Successfully deleted our services');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(__('movement-type-delete-error') . "\n errors:" . $e->getMessage());
+            return api_response(errors: [$e->getMessage()],message: 'Error in deleted our services', code: 500);
         }
     }
 }

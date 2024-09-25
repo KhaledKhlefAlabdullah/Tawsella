@@ -9,12 +9,9 @@ use App\Http\Requests\Messages\SendMessageRequest;
 use App\Models\Chat;
 use App\Models\Message;
 use App\Models\User;
-use App\Notifications\TawsellaNotification;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\Mailer\Event\MessageEvent;
 
 class MessageController extends Controller
 {
@@ -131,7 +128,7 @@ class MessageController extends Controller
      * Set message as starred
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-32
-     * @param Message $message is message i want to starred
+     * @param Message $message is message I want to starred
      * @return JsonResponse with success message and status code 200 if success or with errors in failed
      */
     public function setMessageStarred(Message $message)
@@ -162,7 +159,7 @@ class MessageController extends Controller
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-33
      * @param EditMessageRequest $request is the new message data that i want to edit
-     * @param string $id is message i want to update
+     * @param Message $message is message i want to update
      * @return JsonResponse with success message and status code 200 if success or with errors in failed
      */
     public function update(EditMessageRequest $request, Message $message)

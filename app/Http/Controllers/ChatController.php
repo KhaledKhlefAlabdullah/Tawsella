@@ -18,11 +18,11 @@ class ChatController extends Controller
     public function index()
     {
         try {
-// Get chat IDs for the current user
+            // Get chat IDs for the current user
             $chatIds = ChatMember::where('member_id', getMyId())
                 ->pluck('chat_id');
 
-// Retrieve chats where the user is a member
+            // Retrieve chats where the user is a member
             $chats = Chat::whereIn('id', $chatIds)
                 ->get()
                 ->map(function ($chat) {
@@ -47,29 +47,29 @@ class ChatController extends Controller
                 });
 
             // Return response with formatted chat data
-            return api_response(data: $chats, message: 'تم جلب بيانات المحادثات بنجاح');
+            return api_response(data: $chats, message: 'Successfully getting chats');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'هناك مشكلة في جلب بيانات المحادثات', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Error in getting chats', code: 500);
         }
     }
 
     /**
-     * Store a newly chat to database
-     * @param User $receiver is user i want to send message to
-     * @return JsonResponse response with success or faild message
+     * Store a new chat to database
+     * @param User $receiver is user I want to send message to
+     * @return JsonResponse response with success or failed message
      */
     public function store(User $receiver)
     {
         try {
 
             if (!$receiver) {
-                return api_response(message: 'هذا المستخدم غير موجود لدينا أو يوجد مشكلة في معرفه', code: 404);
+                return api_response(message: 'This user not found or there problem in his id', code: 404);
             }
 
             $userName = User::where('user_id', getMyId())->value('name');
             $receiverName = $receiver->profile->name;
 
-            // Generate chat names based on user names
+            // Generate chat names based on username
             $chatName = 'chat-between-' . $userName . '-and-' . $receiverName;
             $chatNameR = 'chat-between-' . $receiverName . '-and-' . $userName;
 
@@ -82,28 +82,24 @@ class ChatController extends Controller
 
                 $chat->members()->attach([$receiver->id, getMyId()]);
             }
-            return api_response(message: 'تم إنشاء محادثة بنجاح');
+            return api_response(message: 'Successfully creating chat');
         } catch (Exception $e) {
-            return api_response(message: 'هناك مشكلة في إنشاء محادثة', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Error in creating chat', code: 500);
         }
     }
 
     /**
      * Remove chat from database
-     * @param Chat $chat is chat i wnat to delete it
-     * @return JsonResponse response with success or faild message
+     * @param Chat $chat is chat i want to delete it
+     * @return JsonResponse response with success or failed message
      */
     public function destroy(Chat $chat)
     {
         try {
-            if (!$chat) {
-                return api_response(message: 'لم يتم إيجاد الكائن', code: 404);
-            }
             $chat->delete();
-
-            return api_response(message: 'تم حذف المحادثة بنجاح');
+            return api_response(message: 'Successfully deleting chat');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'هناك خطأ في حذف المحادثة', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Error in deleting chat', code: 500);
         }
     }
 }

@@ -26,10 +26,7 @@ Route::group(['prefix' => 'profile', 'controller' => UserProfileController::clas
 /**
  * Info Management
  */
-Route::group(['prefix' => 'info', 'controller' => AboutUsController::class], function () {
-    Route::get('/about-us', 'index');
-    Route::get('/addition', 'getAdditionInformation');
-});
+Route::get('/about-us', [AboutUsController::class, 'index']);
 /**
  * End info Management
  */
@@ -50,7 +47,7 @@ Route::get('/services', [OurServiceController::class, 'index']);
  * Chats Management
  */
 Route::apiResource('chats', ChatController::class)->except(['show', 'update']);
-Route::post('chats/new/{receiver}', [ChatController::class,'store']);
+Route::post('chats/new/{receiver}', [ChatController::class, 'store']);
 /**
  * End Chats Management
  */
@@ -59,7 +56,7 @@ Route::post('chats/new/{receiver}', [ChatController::class,'store']);
  * Messages Management
  */
 Route::get('messages/{chat}', [MessageController::class, 'index']);
-Route::apiResource('messages', MessageController::class)->except(['index','show']);
+Route::apiResource('messages', MessageController::class)->except(['index', 'show']);
 
 // T-28
 Route::get('/starred-messages', [MessageController::class, 'getAllStarredMessages']);

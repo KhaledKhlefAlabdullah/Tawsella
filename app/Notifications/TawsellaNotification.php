@@ -68,7 +68,7 @@ class TawsellaNotification extends Notification implements ShouldQueue
                 throw new \Exception('No valid email addresses found');
             }
         } catch (\Exception $e) {
-            Log::error('Email sending error: ' . $e->getMessage());
+            Log::error('Email sending error: ' . [$e->getMessage()]);
 
             return api_response(errors: [$e->getMessage()], message: 'Could not send the email');
         }

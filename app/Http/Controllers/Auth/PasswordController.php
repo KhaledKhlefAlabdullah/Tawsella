@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -29,16 +30,10 @@ class PasswordController extends Controller
                 'password' => Hash::make($validated['new_password']),
             ]);
 
-            if (request()->wantsJson()) {
-                return api_response(message: 'Successfully change password');
-            }
+            return api_response(message: 'Successfully change password');
 
-            return redirect()->back()->with('success', __('password-change-success'));
         } catch (Exception $e) {
-            if (request()->wantsJson()) {
-                return api_response(errors: $e->getMessage(), message: 'Error change password', code: 500);
-            }
-            return redirect()->back()->withErrors(__('password-change-error') . $e->getMessage());
+            return api_response(errors: [$e->getMessage()], message: 'Error change password', code: 500);
         }
     }
 
@@ -46,7 +41,7 @@ class PasswordController extends Controller
      * Change driver password
      * @param Request $request
      * @param User $driver
-     * @return RedirectResponse
+     * @return JsonResponse
      */
     public function updateDriverPassword(Request $request, User $driver)
     {
@@ -58,10 +53,9 @@ class PasswordController extends Controller
             $driver->update([
                 'password' => Hash::make($validated['password']),
             ]);
-
-            return redirect()->back()->with('success', __('password-change-success'));
+            return api_response(message: 'Successfully change password');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(__('password-change-error') . $e->getMessage());
+            return api_response(errors: [$e->getMessage()], message: 'Error change password', code: 500);
         }
     }
 }

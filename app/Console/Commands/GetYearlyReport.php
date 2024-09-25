@@ -39,7 +39,7 @@ class GetYearlyReport extends Command
 
         } catch (\Exception $e) {
             // Log any errors encountered during execution
-            Log::error('Error generating yearly report: ' . $e->getMessage());
+            Log::error('Error generating yearly report: ' . [$e->getMessage()]);
             $this->error('Failed to generate the yearly report. Check logs for details.');
         }
     }

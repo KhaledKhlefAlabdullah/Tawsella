@@ -17,7 +17,7 @@ if(!function_exists('driverExpiredNotification')){
             send_notifications($driver, $message, $channels);
         } catch (\Exception $e) {
             // Log the error for debugging purposes
-            Log::error('Notification error for user ' . $driver->id . ': ' . $e->getMessage());
+            Log::error('Notification error for user ' . $driver->id . ': ' . [$e->getMessage()]);
 
             try {
                 // Attempt to get the admin user

@@ -2,64 +2,70 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RatingRequest;
 use App\Models\Rating;
+use App\Models\User;
+use App\Services\PaginationService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class RatingController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    protected $paginationService;
+
+    public function __construct(PaginationService $paginationService)
     {
-        //
+        $this->paginationService = $paginationService;
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Display a listing of the ratings.
+     * @return JsonResponse
+     * @author Khaled <khaledabdullah2001104@gmail.com>
      */
-    public function create()
+    public function index(Request $request)
     {
-        //
+        $query = User::query()->with('driver_ratings');
+        $query = $this->paginationService->applyFilters($query, $request);
+        $query = $this->paginationService->applySorting($query, $request);
+        $driversRatings = $this->paginationService->paginate($query, $request);
+        return api_response(data: $driversRatings, pagination: get_pagination($driversRatings, $request), message: 'Successfully getting drivers ratings.');
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly ratings for driver
+     * @param RatingRequest $request
+     * @return JsonResponse
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     *
      */
-    public function store(Request $request)
+    public function store(RatingRequest $request)
     {
-        //
+        try {
+
+            $validatedData = $request->validated();
+
+            $rating = Rating::create($validatedData);
+            $driver = getAndCheckModelById(User::class, $rating->driver_id);
+            $this->updateDriverRating($driver);
+            return api_response(message: 'Successfully getting ratings.');
+        } catch (\Exception $e) {
+            return api_response(errors: [$e->getMessage()], message: 'Something went wrong, please try again later.', code: 500);
+        }
     }
 
     /**
-     * Display the specified resource.
+     * Update driver rating
+     * @param User $driver
+     * @return void
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     *
      */
-    public function show(Rating $rating)
+    protected function updateDriverRating(User $driver)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Rating $rating)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Rating $rating)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Rating $rating)
-    {
-        //
+        $totalRatings = $driver->driver_ratings()->sum('rating');
+        $countRatings = $driver->driver_ratings()->count();
+        $driver->rating = $totalRatings / $countRatings;
+        $driver->save();
     }
 }

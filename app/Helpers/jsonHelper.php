@@ -18,7 +18,7 @@ if (!function_exists('api_response')) {
      *
      * @throws \InvalidArgumentException if an invalid HTTP status code is provided.
      */
-    function api_response($data = null, $message = "", $code = 200, $pagination = null, $meta = [], $errors = []): JsonResponse
+    function api_response($data = null, $message = "", $code = 200, $pagination = [], $meta = [], $errors = []): JsonResponse
     {
         $response = [
             'message' => __($message),
@@ -29,7 +29,7 @@ if (!function_exists('api_response')) {
         }
 
         if ($pagination !== null) {
-            $response['pagination'] = get_pagination($pagination);
+            $response['pagination'] = $pagination;
         }
 
         if (!empty($meta)) {
@@ -51,8 +51,16 @@ if (!function_exists('get_pagination')) {
      * @param \Illuminate\Pagination\LengthAwarePaginator $paginator
      * @return array
      */
-    function get_pagination($paginator)
+    function get_pagination($paginator, $request)
     {
+        // Get filters from request (assuming they are sent as JSON)
+        $filters = json_decode($request->query('Filter.Conditions', '[]'), true);
+
+        // If filters are not provided, default to an empty array
+        if (!is_array($filters)) {
+            $filters = [];
+        }
+
         return [
             'totalCount' => $paginator->total(),
             'next_page_url' => $paginator->nextPageUrl(),
@@ -60,10 +68,25 @@ if (!function_exists('get_pagination')) {
             'queryPayload' => [
                 'pageNumber' => $paginator->currentPage(),
                 'pageSize' => $paginator->perPage(),
-                'totalCount' => $paginator->total()
-            ],
+                'totalCount' => $paginator->total(),
+                'sort' => [
+                    'sortBy' => $request->query('Sort.SortBy', 'Id'), // Default sort field
+                    'ascending' => $request->query('Sort.Ascending', 'true') === 'true' // Boolean check
+                ],
+                'filter' => [
+                    'logic' => $request->query('Filter.Logic', 'AND'), // Default logic for filters
+                    'conditions' => array_map(function ($filter) {
+                        return [
+                            'field' => $filter['field'], // Field to filter on
+                            'operator' => $filter['operator'], // Comparison operator
+                            'value' => $filter['value'] // Value to compare against
+                        ];
+                    }, $filters)
+                ]
+            ]
         ];
     }
+
 }
 
 if (!function_exists('createUserToken')) {

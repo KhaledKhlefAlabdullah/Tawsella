@@ -17,27 +17,21 @@ class ContactUsMessageController extends Controller
 {
     /**
      * Display a listing of the contact-us messages.
+     * @return JsonResponse with contact-us-messages, success message and status code 200 if success or with errors in failed
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-35
-     * @return \Illuminate\Http\RedirectResponse with contact-us-messages, success message and status code 200 if success or with errors in failed
      */
     public function index()
     {
-        try {
-
-            $contact_us = Auth::user()->contact_us_messages()->where('is_answered', false)->get();
-
-            return view('contctus', [$contact_us]);
-        } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error in getting contact us messages.'."\n errors:".$e->getMessage())->withInput();
-        }
+        $contact_us = Auth::user()->contact_us_messages()->where('is_answered', false)->get();
+        return api_response(data: $contact_us, message: 'Successfully getting contact us messages.');
     }
 
     /**
      * Store a newly created conatct-us message in storage.
+     * @return JsonResponse with success message and status code 200 if success or with errors in failed
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-37
-     * @return JsonResponse with success message and status code 200 if success or with errors in failed
      */
     public function store(ContactUsMessagesRequest $request)
     {
@@ -48,9 +42,9 @@ class ContactUsMessageController extends Controller
             ContactUsMessage::create($validatedData);
 
             $admin = getAndCheckModelById(User::class, getAdminId());
-            send_notifications($admin, 'The user: '.$validatedData['sender_name'].' send new contact-us message');
+            send_notifications($admin, 'The user: ' . $validatedData['sender_name'] . ' send new contact-us message');
 
-            return api_response(message: 'contact us message send successfuly');
+            return api_response(message: 'contact us message send successfully');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'contact us message sending error', code: 500);
         }
@@ -58,7 +52,7 @@ class ContactUsMessageController extends Controller
 
     /**
      * Answer the contact us message
-     * @return \Illuminate\Http\RedirectResponse with contact-us-messages, success message and status code 200 if success or with errors in failed
+     * @return JsonResponse with contact-us-messages, success message and status code 200 if success or with errors in failed
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-37
      */
@@ -73,46 +67,38 @@ class ContactUsMessageController extends Controller
             ]);
 
             // this to send request by the email to the cutomer
-            Mail::to($contactUsMessage->email)->send(new ContactUsMails( $validatedData['message']));
+            Mail::to($contactUsMessage->email)->send(new ContactUsMails($validatedData['message']));
 
-            return view();
+            return api_response(message: 'contact us message answered successfully');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.'."\n errors:".$e->getMessage())->withInput();
+            return api_response(errors: [$e->getMessage()], message: 'Error in answering contact us message.', code: 500);
         }
     }
 
     /**
      * Display the specified resource.
-     * @return \Illuminate\Http\RedirectResponse with contact-us-messages, success message and status code 200 if success or with errors in failed
+     * @return JsonResponse with contact-us-messages, success message and status code 200 if success or with errors in failed
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-37
      */
     public function show(ContactUsMessage $contactUsMessage)
     {
-        try {
-
-            return view('contact_us.show', ['contactDetails' => $contactUsMessage]);
-        } catch (Exception $e) {
-            return redirect()->back()->withErrors('Error in getting contact us message details.'."\n errors:".$e->getMessage())->withInput();
-        }
+        return api_response(data: $contactUsMessage);
     }
 
     /**
      * Remove the specified resource from storage.
-     * @return \Illuminate\Http\RedirectResponse with contact-us-messages, success message and status code 200 if success or with errors in failed
+     * @return JsonResponse with contact-us-messages, success message and status code 200 if success or with errors in failed
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-37
      */
     public function destroy(ContactUsMessage $contactUsMessage)
     {
-        try{
-
+        try {
             $contactUsMessage->delete();
-
-            return redirect()->back()->with('message', 'Contact us message deleted successfully');
-        }
-        catch(Exception $e){
-            return redirect()->back()->withErrors('Error in deleting contact us message.'."\n errors:".$e->getMessage())->withInput();
+            return api_response(message: 'Contact us message deleted successfully');
+        } catch (Exception $e) {
+            return api_response(errors: [$e->getMessage()],message: 'Error in deleting contact us message.', code: 500);
         }
     }
 }

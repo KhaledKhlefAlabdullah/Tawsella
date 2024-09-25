@@ -54,8 +54,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('confirm-password', [ConfirmablePasswordController::class, 'store']);
 
     Route::put('password', [PasswordController::class, 'update'])->name('password.update');
-    Route::put('password-driver/{driver}', [PasswordController::class, 'updateDriverPassword'])->name('password.driver.update');
-
 
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');

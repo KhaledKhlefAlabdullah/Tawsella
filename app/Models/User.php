@@ -41,7 +41,8 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
         'mail_code_verified_at',
         'mail_code_attempts_left',
         'mail_code_last_attempt_date',
-        'mail_verify_code_sent_at'
+        'mail_verify_code_sent_at',
+        'rating'
     ];
 
     /**

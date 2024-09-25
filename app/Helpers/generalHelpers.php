@@ -153,8 +153,7 @@ if (!function_exists('removeFile')) {
     function removeFile($path): string
     {
         // Delete the old file from storage
-        if (file_exists(public_path($path))) {
-
+        if (file_exists(public_path($path)) && !in_array($path, ['/images/profile_images/man', '/images/profile_images/woman'])) {
             unlink(public_path($path));
             return 'success';
         }
@@ -218,14 +217,9 @@ if (!function_exists('count_items')) {
      */
     function count_items($model, array $validations)
     {
-        try {
-            // withTrashed to count the deleted items to
-            $item_count = $model::withTrashed()->where($validations)->get()->count();
-
-            return $item_count;
-        } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'get-count-error', code: 500);
-        }
+        // withTrashed to count the deleted items to
+        $item_count = $model::withTrashed()->where($validations)->get()->count();
+        return $item_count;
     }
 }
 

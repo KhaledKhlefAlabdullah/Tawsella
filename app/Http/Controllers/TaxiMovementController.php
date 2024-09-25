@@ -20,56 +20,51 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
 
 class TaxiMovementController extends Controller
 {
 
     /**
      * Show the form for creating a new resource.
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
+     * @return JsonResponse
+     * @author Khaled <khaledabdullah2001104@gmail.com>
      */
     public function LifeTaxiMovements()
     {
         $currentDate = Carbon::now()->format('Y-m-d');
-
         $taxiMovement = TaxiMovement::where(['is_completed' => false, 'is_canceled' => false, 'request_state' => MovementRequestStatus::Accepted])
             ->whereDate('created_at', $currentDate)->get();
-
-        return view('taxi_movement.currentTaxiMovement', ['taxiMovement' => TaxiMovement::mappingMovements($taxiMovement)]);
+        return api_response(data: TaxiMovement::mappingMovements($taxiMovement), message: 'Successfully getting life taxiMovements.');
     }
 
 
     /**
      * Get Completed taxi movements requests
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
+     * @return JsonResponse
+     * @author Khaled <khaledabdullah2001104@gmail.com>
      */
     public function completedTaxiMovements()
     {
-
         $completedRequests = TaxiMovement::where('is_completed', true)
             ->get();
-
-        return view('taxi_movement.completedRequests', ['completedRequests' => TaxiMovement::mappingMovements($completedRequests)]);
+        return api_response(data: TaxiMovement::mappingMovements($completedRequests));
     }
 
     /**
      * For View map for taxi location
      * @param TaxiMovement $taxiMovement
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
+     * @return JsonResponse
+     * @author Khaled <khaledabdullah2001104@gmail.com>
      */
     public function view_map(TaxiMovement $taxiMovement)
     {
-
         $data = [
             'driver_id' => $taxiMovement->driver_id,
             'lat' => $taxiMovement->end_latitude,
             'long' => $taxiMovement->end_longitude,
-            'name' => $taxiMovement->driver->profile->name,
+            'name' => $taxiMovement->driver()->profile->name,
         ];
-
-        return view('taxi_movement.map_completed', ['data' => $data])->with('success', __('success-view-map'));
-
+        return api_response(data: $data, message: 'Successfully getting map taxiMovement.');
     }
 
     /**
@@ -83,9 +78,7 @@ class TaxiMovementController extends Controller
     {
         try {
             TaxiMovement::calculateCanceledMovements(Auth::user());
-
             $validatedData = $request->validated();
-
             $driver = getAndCheckModelById(User::class, $validatedData['driver_id']);
             if ($driver->driver_stet != DriverState::Ready) {
                 return api_response(
@@ -93,17 +86,12 @@ class TaxiMovementController extends Controller
                     code: 409
                 );
             }
-
             User::checkExistingCustomerMovements($validatedData['customer_id']);
-
             $taxiMovement = TaxiMovement::create($validatedData);
-
             event(new RequestingTransportationServiceEvent($taxiMovement));
-
             return api_response(message: 'Successfully creating movement');
-
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'حدث خطأ اثناء انشاء الطلب', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Error in creatting taxi movement', code: 500);
         }
     }
 
@@ -112,7 +100,7 @@ class TaxiMovementController extends Controller
      * Accept Taxi movement request
      * @param AcceptOrRejectMovementRequest $request
      * @param TaxiMovement $movement is the request who will be accepted
-     * @return  \Illuminate\Http\RedirectResponse message and code
+     * @return  JsonResponse message and code
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-47
      */
@@ -133,11 +121,9 @@ class TaxiMovementController extends Controller
             DB::commit();
             AcceptTransportationServiceRequestEvent::dispatch($taxiMovement);
 
-            return redirect()->back()->with('success', $message);
-        } catch (ValidationException $e) {
-            return redirect()->back()->withErrors($e->errors())->withInput();
+            return api_response(message: $message);
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(__('accepted-movement-error') . "\n errors:" . $e->getMessage())->withInput();
+            return api_response(errors: [$e->getMessage()], message: 'Error in accept movement', code: 500);
         }
     }
 
@@ -145,7 +131,7 @@ class TaxiMovementController extends Controller
      * Reject Taxi movement request
      * @param AcceptOrRejectMovementRequest $request contains the request details
      * @param TaxiMovement $taxiMovement is the request who will be rejected
-     * @return \Illuminate\Http\RedirectResponse status message and code
+     * @return JsonResponse status message and code
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-48
      */
@@ -162,11 +148,9 @@ class TaxiMovementController extends Controller
             DB::commit();
             RejectTransportationServiceRequestEvent::dispatch($taxiMovement);
 
-            return redirect()->back()->with('success', __('success-reject-movement'));
-        } catch (ValidationException $e) {
-            return redirect()->back()->withErrors($e->errors())->withInput();
+            return api_response(message: 'Successfully rejecting movement');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors(__('error-reject-movement') . "\n errors:" . $e->getMessage())->withInput();
+            return api_response(errors: [$e->getMessage()], message: 'Error in rejecet movement', code: 500);
         }
     }
 
@@ -194,7 +178,7 @@ class TaxiMovementController extends Controller
 
             return api_response(message: 'Successfully found customer');
         } catch (Exception $e) {
-            return api_response(errors: $e->getMessage(), message: 'حدث خطأ في ايجاد او عدم ايجاد الزبون', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Error in find customer', code: 500);
         }
     }
 
@@ -235,7 +219,7 @@ class TaxiMovementController extends Controller
             return api_response(data: $calculation->totalPrice, message: 'Successfully completed movement request');
         } catch (Exception $e) {
             DB::rollBack();
-            return api_response(errors: $e->getMessage(), message: 'error', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Error in make movement completed', code: 500);
         }
     }
 
@@ -264,7 +248,6 @@ class TaxiMovementController extends Controller
         }
     }
 
-    //todo need to remove and use realtime
 
     /**
      * Send Taxi movemnt request details
@@ -272,7 +255,7 @@ class TaxiMovementController extends Controller
     public function get_request_data(string $driver_id)
     {
         try {
-
+            //todo need to remove and use realtime
             $request = TaxiMovement::select(
                 'taxi_movements.id as request_id',
                 'up.name',
@@ -295,24 +278,22 @@ class TaxiMovementController extends Controller
                 return api_response(data: $request, message: 'نجح في الحول على بيانات');
             return api_response(message: 'there now data');
         } catch (Exception $e) {
-            return api_response(errors: $e->getMessage(), message: 'حدث خطأ في الحصول على بيانات', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'حدث خطأ في الحصول على بيانات', code: 500);
         }
     }
 
     /**
      * Remove the specified resource from storage.
      * @param TaxiMovement $taxiMovement
-     * @return \Illuminate\Http\RedirectResponse
+     * @return JsonResponse
      */
     public function destroy(TaxiMovement $taxiMovement)
     {
         try {
-
             $taxiMovement->delete();
-
-            return redirect()->back()->with('success', 'تم حذف الطلب بنجاح');
+            return api_response(message: 'Successfully deleted taxi movement');
         } catch (Exception $e) {
-            return redirect()->back()->withErrors('هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.' . "\n errors:" . $e->getMessage())->withInput();
+            return api_response(errors: [$e->getMessage()],message: 'Error in deleted taxi movement', code: 500);
         }
     }
 }

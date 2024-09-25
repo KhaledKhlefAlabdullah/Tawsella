@@ -9,6 +9,7 @@ use App\Models\Rating;
 use App\Models\TaxiMovement;
 use App\Models\User;
 use App\Models\UserProfile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Exception;
@@ -69,7 +70,8 @@ trait UserTrait
         });
     }
 
-    public static function registerUser(UserRequest $request){
+    public static function registerUser(UserRequest $request)
+    {
         try {
             DB::beginTransaction();
             $validatedData = $request->validated();
@@ -86,32 +88,24 @@ trait UserTrait
                 'phone_number' => $validatedData['phone_number'],
             ]);
 
-            if ($request->wantsJson()) {
-                $user->assignRole(UserType::Customer()->key);
-
-                $user->sendEmailVerificationNotification(true);
-
-                $token = createUserToken($user, 'register-token');
-                DB::commit();
-                return api_response(data: ['token' => $token, 'user_id' => $user->id, 'mail_code_verified_at' => $user->mail_code_verified_at], message: __('register-success'));
+            $authUser = Auth::user();
+            if ($authUser && $authUser->hasRole(UserType::Admin()->key)) {
+                $user->assignRole(UserType::TaxiDriver()->key);
+                $user->mail_code_verified_at = now();
+                $user->save();
+                return api_response(data: ['user' => $user, 'profile' => $user->profile], message: 'Register success');
             }
 
-            $user->assignRole(UserType::TaxiDriver()->key);
+            $user->assignRole(UserType::Customer()->key);
+            $user->sendEmailVerificationNotification(true);
 
-            $user->mail_code_verified_at = now();
-            $user->save();
-            Session::flash('success', __('register-success'));
+            $token = createUserToken($user, 'register-token');
             DB::commit();
-
-            // Redirect back or to any other page
-            return redirect()->back();
+            return api_response(data: ['token' => $token, 'user_id' => $user->id, 'mail_code_verified_at' => $user->mail_code_verified_at], message: 'Register success');
 
         } catch (Exception $e) {
             DB::rollBack();
-            if (request()->wantsJson()) {
-                return api_response(errors: $e->getMessage(), message: __('register-error'), code: 500);
-            }
-            return redirect()->back()->withErrors(__('register-error')."\n errors:" . $e->getMessage())->withInput();
+            return api_response(errors: [$e->getMessage()], message: 'Register failed', code: 500);
         }
     }
 }
