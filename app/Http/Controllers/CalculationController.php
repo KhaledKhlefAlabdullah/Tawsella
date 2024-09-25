@@ -32,10 +32,8 @@ class CalculationController extends Controller
     {
         $query = User::query()->role(UserType::TaxiDriver()->key);
         $drivers = $this->paginationService->applyPagination($query, $request);
-        return api_response(data: [
-            'calculations' => Calculation::mappingDriversCalculations($drivers->items()),
-            'drivers' => $drivers->items()
-            ],
+        return api_response(
+            data: Calculation::mappingDriversCalculations($drivers->items()),
             message: 'Successfully getting drivers and calculations',
             pagination: get_pagination($drivers, $request));
     }

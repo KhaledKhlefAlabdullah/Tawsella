@@ -30,8 +30,17 @@ class OurServiceController extends Controller
         // Fetch all records from OurService model
         $query = OurService::query();
 
-        $services = $this->paginationService->applyPagination($query, $request);
-        return api_response(data: $services->items(), message: 'Successfully getting messages', pagination: get_pagination($services, $request));
+        $our_services = $this->paginationService->applyPagination($query, $request);
+        return api_response(data: $our_services->items(), message: 'Successfully getting messages', pagination: get_pagination($our_services, $request));
+    }
+
+    /**
+     * Get our service details
+     * @param OurService $our_service
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function show(OurService $our_service){
+        return api_response(data: $our_service, message: 'Successfully getting our service details');
     }
 
     /**
@@ -67,20 +76,20 @@ class OurServiceController extends Controller
     /**
      * Update an existing service.
      * @param ServicesRequest $request Updated service data
-     * @param OurService $service Service to update
+     * @param OurService $our_service Service to update
      * @return JsonResponse redirect back response
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-17
      */
-    public function update(ServicesRequest $request, OurService $service)
+    public function update(ServicesRequest $request, OurService $our_service)
     {
         try {
             $validatedData = $request->validated();
 
-            $imagePath = !is_null($validatedData['image']) ? editFile($service->image, $validatedData['image'], '/images/services/images') : $service->image;
-            $logoPath = !is_null($validatedData['logo']) ? editFile($service->logo, $validatedData['logo'], '/images/services/logos') : $service->logo;
+            $imagePath = $validatedData['image'] ? editFile($our_service->image, '/images/services/images', $validatedData['image']) : $our_service->image;
+            $logoPath = $validatedData['logo'] ? editFile($our_service->logo, '/images/services/logos', $validatedData['logo']) : $our_service->logo;
 
-            $service->update([
+            $our_service->update([
                 'admin_id' => $validatedData['admin_id'],
                 'name' => $validatedData['name'],
                 'description' => $validatedData['description'],
@@ -88,7 +97,7 @@ class OurServiceController extends Controller
                 'logo' => $logoPath
             ]);
 
-            return api_response(data: $service, message: 'Successfully updated our services');
+            return api_response(data: $our_service, message: 'Successfully updated our services');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'Error in updated our services', code: 500);
         }
@@ -96,18 +105,18 @@ class OurServiceController extends Controller
 
     /**
      * Delete a service from the database.
-     * @param OurService $service Service to delete
+     * @param OurService $our_service Service to delete
      * @return JsonResponse API response indicating success or failure
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-18
      */
-    public function destroy(OurService $service)
+    public function destroy(OurService $our_service)
     {
         try {
 
-            removeFile($service->logo);
-            removeFile($service->image);
-            $service->delete();
+            removeFile($our_service->logo);
+            removeFile($our_service->image);
+            $our_service->delete();
 
             return api_response(message: 'Successfully deleted our services');
         } catch (Exception $e) {

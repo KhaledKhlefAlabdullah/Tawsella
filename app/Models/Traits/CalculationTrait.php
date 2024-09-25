@@ -12,7 +12,7 @@ trait CalculationTrait
 {
     public static function mappingDriversCalculations($drivers)
     {
-        return $drivers->map(function ($driver) {
+        return collect($drivers)->map(function ($driver) {
             $combinedAccounts = [];
 
             $driver_id = $driver->id;
@@ -21,8 +21,8 @@ trait CalculationTrait
 
             $combinedAccounts[] = (object)[
                 'driver_id' => $driver_id,
-                'name' => $driver->profile->name,
-                'avatar' => $driver->profile->avatar,
+                'name' => $driver->profile?->name,
+                'avatar' => $driver->profile?->avatar,
                 'plate_number' => $driver->plate_number,
                 'today_account' => $total_today,
                 'all_account' => $total_previous

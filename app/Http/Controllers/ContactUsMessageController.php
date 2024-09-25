@@ -11,7 +11,6 @@ use App\Services\PaginationService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class ContactUsMessageController extends Controller
@@ -66,19 +65,22 @@ class ContactUsMessageController extends Controller
      * @return JsonResponse with contact-us-messages, success message and status code 200 if success or with errors in failed
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-37
+     * @param AnswereContactUsMessagesRequest $request
+     * @param ContactUsMessage $contact_us
+     * @return JsonResponse
      */
-    public function answer(AnswereContactUsMessagesRequest $request, ContactUsMessage $contactUsMessage)
+    public function answer(AnswereContactUsMessagesRequest $request, ContactUsMessage $contact_us)
     {
         try {
 
             $validatedData = $request->validated();
 
-            $contactUsMessage->update([
+            $contact_us->update([
                 'is_answered' => true
             ]);
 
-            // this to send request by the email to the cutomer
-            Mail::to($contactUsMessage->email)->send(new ContactUsMails($validatedData['message']));
+            // this to send request by the email to the customer
+            Mail::to($contact_us->email)->send(new ContactUsMails($validatedData['message']));
 
             return api_response(message: 'contact us message answered successfully');
         } catch (Exception $e) {
@@ -92,9 +94,9 @@ class ContactUsMessageController extends Controller
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-37
      */
-    public function show(ContactUsMessage $contactUsMessage)
+    public function show(ContactUsMessage $contact_us)
     {
-        return api_response(data: $contactUsMessage);
+        return api_response(data: $contact_us, message: 'Successfully getting contact us message.');
     }
 
     /**
@@ -103,10 +105,10 @@ class ContactUsMessageController extends Controller
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-37
      */
-    public function destroy(ContactUsMessage $contactUsMessage)
+    public function destroy(ContactUsMessage $contact_us)
     {
         try {
-            $contactUsMessage->delete();
+            $contact_us->delete();
             return api_response(message: 'Contact us message deleted successfully');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'Error in deleting contact us message.', code: 500);

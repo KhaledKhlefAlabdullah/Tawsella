@@ -33,16 +33,18 @@ Route::get('/about-us', [AboutUsController::class, 'index']);
 
 Route::apiResource('movement-types', TaxiMovementTypeController::class)->only(['index', 'show']);
 
-Route::get('/offers', [OfferController::class, 'index']);
+Route::apiResource('offers', OfferController::class)->only(['index', 'show']);
 
-Route::post('/contact-us', [ContactUsMessageController::class, 'store']);
+Route::post('contact-us', [ContactUsMessageController::class, 'store']);
 
 Route::get('/phone', function () {
     $phone = \App\Models\User::role(\App\Enums\UserEnums\UserType::Admin()->key)->first()->user_profile->phone_number ?? '+3520000000';
     return $phone;
 });
 
-Route::get('/services', [OurServiceController::class, 'index']);
+
+Route::apiResource('our-services', OurServiceController::class)->only(['index', 'show']);
+
 /**
  * Chats Management
  */

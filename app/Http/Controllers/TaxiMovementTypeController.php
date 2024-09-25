@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\PaymentTypesEnum;
 use App\Http\Requests\TaxiMovements\TaxiMovementsTypesRequest;
 use App\Models\TaxiMovementType;
 use App\Services\PaginationService;
@@ -34,7 +35,10 @@ class TaxiMovementTypeController extends Controller
 
         $message = 'Successfully getting movements types';
         return api_response(
-            data: ['movementTypes' => $generalMovementTypes, 'movements' => $movementTypes->items()],
+            data: [
+                'movementTypes' => TaxiMovementType::mappingMovementTypes($generalMovementTypes),
+                'movements' => TaxiMovementType::mappingMovementTypes($movementTypes->items())
+            ],
             message: $message,
             pagination: get_pagination($movementTypes, $request));
     }
@@ -46,7 +50,7 @@ class TaxiMovementTypeController extends Controller
      */
     public function show(TaxiMovementType $movement_type)
     {
-        return api_response(data: $movement_type, message: 'Successfully getting movements types details.');
+        return api_response(data: TaxiMovementType::mappingSingleMovementType($movement_type), message: 'Successfully getting movements types details.');
     }
 
     /**
@@ -58,8 +62,9 @@ class TaxiMovementTypeController extends Controller
     {
         try {
             $validatedData = $request->validated();
-            $taxiMovementType = TaxiMovementType::create($validatedData);
-            return api_response(data: $taxiMovementType, message: 'Successfully creating movements type');
+            $validatedData['payment'] = PaymentTypesEnum::getValue($validatedData['payment']);
+            $movement_type = TaxiMovementType::create($validatedData);
+            return api_response(data: TaxiMovementType::mappingSingleMovementType($movement_type), message: 'Successfully creating movements type');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'Error in creating movements type', code: 500);
         }
@@ -68,15 +73,17 @@ class TaxiMovementTypeController extends Controller
     /**
      * Update taxi movement type details
      * @param TaxiMovementsTypesRequest $request
-     * @param TaxiMovementType $movementType
+     * @param TaxiMovementType $movement_type
      * @return JsonResponse
      */
-    public function update(TaxiMovementsTypesRequest $request, TaxiMovementType $movementType)
+    public function update(TaxiMovementsTypesRequest $request, TaxiMovementType $movement_type)
     {
         try {
-            $data = $request->validated();
-            $movementType->update($data);
-            return api_response(data: $movementType, message: 'Successfully updating movements type');
+            $validatedData = $request->validated();
+            if (isset($validatedData['payment']))
+                    $validatedData['payment'] ?? PaymentTypesEnum::getValue($validatedData['payment']);
+            $movement_type->update($validatedData);
+            return api_response(data: TaxiMovementType::mappingSingleMovementType($movement_type), message: 'Successfully updating movements type');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'Error in updating movements type', code: 500);
         }
@@ -84,13 +91,13 @@ class TaxiMovementTypeController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     * @param TaxiMovementType $movementType
+     * @param TaxiMovementType $movement_type
      * @return JsonResponse
      */
-    public function destroy(TaxiMovementType $movementType)
+    public function destroy(TaxiMovementType $movement_type)
     {
         try {
-            $movementType->delete();
+            $movement_type->delete();
             return api_response(message: 'Successfully deleting movements type');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'Error in deleting movements type', code: 500);

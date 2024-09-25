@@ -36,26 +36,4 @@ class PasswordController extends Controller
             return api_response(errors: [$e->getMessage()], message: 'Error change password', code: 500);
         }
     }
-
-    /**
-     * Change driver password
-     * @param Request $request
-     * @param User $driver
-     * @return JsonResponse
-     */
-    public function updateDriverPassword(Request $request, User $driver)
-    {
-        try {
-            $validated = $request->validate([
-                'password' => ['required', Password::defaults(), 'confirmed'],
-            ]);
-
-            $driver->update([
-                'password' => Hash::make($validated['password']),
-            ]);
-            return api_response(message: 'Successfully change password');
-        } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error change password', code: 500);
-        }
-    }
 }

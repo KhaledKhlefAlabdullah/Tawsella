@@ -3,6 +3,7 @@
 namespace App\Models\Traits\UserTraits;
 
 use App\Enums\UserEnums\DriverState;
+use App\Enums\UserEnums\UserGender;
 use App\Enums\UserEnums\UserType;
 use App\Models\TaxiMovement;
 use App\Models\User;
@@ -42,6 +43,7 @@ trait DriverTrait
     public static function getReadyDrivers()
     {
         $drivers = User::with(['taxi', 'profile'])
+            ->role(UserType::TaxiDriver()->key)
             ->where([
                 'driver_state' => DriverState::Ready,
                 'is_active' => true
@@ -49,22 +51,21 @@ trait DriverTrait
             ->has('taxi') // Ensure the user has a related taxi
             ->get();
 
-        $mappedDrivers = $drivers->map(function ($driver) {
+        return $drivers->map(function ($driver) {
             return [
                 'id' => $driver->id,
-                'name' => $driver->profile->name,
-                'gender' => $driver->profile->gender,
-                'avatar' => $driver->profile->avatar
+                'name' => $driver->profile?->name,
+                'gender' => $driver->profile?->gender,
+                'avatar' => $driver->profile?->avatar
             ];
         });
-
-        return $mappedDrivers;
     }
+
 
     /**
      * Get all drivers in the database with pagination.
      * @param int $perPage
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return \Illuminate\Support\Collection
      */
     public static function getDrivers($perPage = 15)
     {
@@ -88,18 +89,10 @@ trait DriverTrait
     public static function mappingDrivers($drivers)
     {
         // Extract the items and map the driver data
-        $mappedDrivers = $drivers->getCollection()->map(function ($driver) {
+        $mappedDrivers = collect($drivers)->map(function ($driver) {
             return self::extracted($driver);
         });
-
-        // Replace the items in the paginator with the mapped items
-        return new \Illuminate\Pagination\LengthAwarePaginator(
-            $mappedDrivers, // Mapped items
-            $drivers->total(), // Total items
-            $drivers->perPage(), // Items per page
-            $drivers->currentPage(), // Current page
-            ['path' => request()->url()] // Path for pagination links
-        );
+        return $mappedDrivers;
     }
 
     /**
@@ -137,10 +130,11 @@ trait DriverTrait
         $unBring = $driver->calculations()->where('is_bring', false)->sum('totalPrice');
         return (object)[
             'driver_id' => $driver->id,
-            'name' => $driver->profile->name,
+            'name' => $driver->profile?->name,
+            'gender' => UserGender::getKey($driver->profile?->gender ?? 0),
             'email' => $driver->email,
-            'phone_number' => $driver->profile->phone_number,
-            'avatar' => $driver->profile->avatar,
+            'phone_number' => $driver->profile?->phone_number,
+            'avatar' => $driver->profile?->avatar,
             'is_active' => $driver->is_active,
             'unBring' => $unBring,
             'driver_state' => DriverState::getKey($driver->driver_state),

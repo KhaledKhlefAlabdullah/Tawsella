@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequests\UserRequest;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -23,13 +24,13 @@ class UserProfileController extends Controller
     public function index()
     {
         try {
-            $use = Auth::user();
+            $user = Auth::user();
             $profile = [
-                'id' => $use->id,
-                'name' => $use->profile->name,
-                'avatar' => $use->profile->avatar,
-                'phone_number' => $use->profile->phone_number,
-                'email' => $use->email
+                'id' => $user->id,
+                'name' => $user->profile->name,
+                'avatar' => $user->profile->avatar,
+                'phone_number' => $user->profile->phone_number,
+                'email' => $user->email
             ];
             return api_response(data: $profile, message: 'Profile retrieved successfully.');
         } catch (Exception $e) {
@@ -49,36 +50,19 @@ class UserProfileController extends Controller
         try {
             DB::beginTransaction();
             $validatedData = $request->validated();
-            $user = Auth::user();
-            if ($request->has('email'))
-                $user->update([
-                    'email' => $validatedData['email']
-                ]);
-            if ($request->has('password'))
-                $user->update([
-                    'password' => Hash::make($request->password),
-                ]);
-            $userProfile = $user->profile();
-            $userProfile->update([
-                'name' => $validatedData['name'],
-                'phone_number' => $validatedData['phone_number']
-            ]);
-            if ($request->hasFile('avatar')) {
-                if (!empty($validatedData['avatar'])) {
-                    $avatar = $request->avatar;
-                    $path = 'images/profiles';
-                    if ($userProfile->avatar == '/images/profile_images/user_profile.png') {
-                        $avatar_path = storeFile($avatar, $path);
-                    } else {
-                        $avatar_path = editFile($userProfile->avatar, $path, $avatar);
-                    }
-                    $userProfile->update([
-                        'avatar' => $avatar_path
-                    ]);
-                }
-            }
+            $user = User::where('id',Auth::id())->first();
+            User::handelUpdateDetails($user, $validatedData);
+
+            $profile = [
+                'id' => $user->id,
+                'name' => $user->profile->name,
+                'avatar' => $user->profile->avatar,
+                'phone_number' => $user->profile->phone_number,
+                'email' => $user->email
+            ];
+
             DB::commit();
-            return api_response(message: 'Profile updated successfully.');
+            return api_response(data: $profile,message: 'Profile updated successfully.');
         } catch (Exception $e) {
             DB::rollBack();
             return api_response(errors: [$e->getMessage()], message: 'Profile updated error.', code: 500);

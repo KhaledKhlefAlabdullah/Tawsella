@@ -77,6 +77,7 @@ class TaxiMovementController extends Controller
             'lat' => $taxiMovement->end_latitude,
             'long' => $taxiMovement->end_longitude,
             'name' => $taxiMovement->driver()->profile->name,
+            'path' => $taxiMovement->path
         ];
         return api_response(data: $data, message: 'Successfully getting map taxiMovement.');
     }
@@ -124,6 +125,9 @@ class TaxiMovementController extends Controller
             DB::beginTransaction();
             $validatedData = $request->validated();
             $driver = getAndCheckModelById(User::class, $validatedData['driver_id']);
+            if ($driver->driver_state != DriverState::Ready) {
+                return api_response(message: 'This driver is currently unavailable. Please try another driver.', code: 409);
+            }
             $state = MovementRequestStatus::Accepted;
 
             User::processMovementState($taxiMovement, $state, null, $driver);

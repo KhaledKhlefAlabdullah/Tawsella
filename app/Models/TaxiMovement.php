@@ -38,6 +38,7 @@ class TaxiMovement extends Model
         'total_price_for_this_movement'
     ];
 
+    // todo must to use it in update driver location
     public function addPointToPath($latitude, $longitude)
     {
         // Wrap in transaction to ensure atomicity

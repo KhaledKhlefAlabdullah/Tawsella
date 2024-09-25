@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Requests\UserRequests;
 
 use App\Enums\UserEnums\UserGender;
@@ -6,7 +7,9 @@ use App\Models\User;
 use App\Models\UserProfile;
 use App\Rules\PhoneNumber;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules\Password;
 
 class UserRequest extends FormRequest
 {
@@ -25,13 +28,14 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
-        $id = $this->route('id');
+        $user = Auth::user();
         return [
             'name' => ['sometimes', 'string', 'max:255'],
-            'email' => ['sometimes', 'string', 'lowercase', 'email', 'max:255', is_null($id) ? 'unique:' . User::class : Rule::unique('users')->ignore($id)],
-            'phone_number' => ['sometimes', 'nullable', 'string', new PhoneNumber, is_null($id) ? 'unique:' . UserProfile::class : Rule::unique('user_profiles')->ignore($id)],
+            'email' => ['sometimes', 'string', 'lowercase', 'email', 'max:255', is_null($user) ? 'unique:' . User::class : Rule::unique('users')->ignore($user->id)],
+            'phone_number' => ['sometimes', 'nullable', 'string', new PhoneNumber, is_null($user) ? 'unique:' . UserProfile::class : Rule::unique('user_profiles')->ignore($user->profile->id)],
+            'avatar' => ['sometimes','mimes:jpeg,jpg,png', 'max:10048'],
             'gender' => ['sometimes', 'string', Rule::in(UserGender::getKeys())],
-            'password' => ['sometimes',],
+            'password' => ['sometimes', Password::defaults()],
         ];
     }
 
@@ -43,21 +47,22 @@ class UserRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'حقل الاسم مطلوب.',
-            'name.string' => 'حقل الاسم يجب أن يكون نصًا.',
-            'name.max' => 'حقل الاسم يجب ألا يتجاوز 255 حرفًا.',
-            'name.min' => 'حقل الاسم يجب أن لا يقل عن 3 محارف.',
-            'email.required' => 'حقل البريد الإلكتروني مطلوب.',
-            'email.string' => 'حقل البريد الإلكتروني يجب أن يكون نصًا.',
-            'email.email' => 'البريد الإلكتروني غير صحيح.',
-            'email.max' => 'حقل البريد الإلكتروني يجب ألا يتجاوز 255 حرفًا.',
-            'email.unique' => 'البريد الإلكتروني موجود من قبل في قاعدة البيانات.',
-            'phone_number.required' => 'حقل رقم الهاتف مطلوب.',
-            'phone_number.string' => 'حقل رقم الهاتف يجب أن يكون نصًا.',
-            'phone_number.regex' => 'رقم الهاتف غير صحيح.',
-            'password.required' => 'حقل كلمة المرور مطلوب.',
-            'password.confirmed' => 'تأكيد كلمة المرور غير متطابق.',
-            'gender.required' => 'حقل الجنس مطلوب'
+            'name.required' => 'The name field is required.',
+            'name.string' => 'The name field must be a string.',
+            'name.max' => 'The name field must not exceed 255 characters.',
+            'name.min' => 'The name field must be at least 3 characters.',
+            'email.required' => 'The email field is required.',
+            'email.string' => 'The email field must be a string.',
+            'email.email' => 'The email is invalid.',
+            'email.max' => 'The email field must not exceed 255 characters.',
+            'email.unique' => 'The email has already been taken.',
+            'phone_number.unique' => 'The phone number has already been taken.',
+            'phone_number.required' => 'The phone number field is required.',
+            'phone_number.string' => 'The phone number field must be a string.',
+            'phone_number.regex' => 'The phone number is invalid.',
+            'password.required' => 'The password field is required.',
+            'password.confirmed' => 'The password confirmation does not match.',
+            'gender.required' => 'The gender field is required.'
         ];
     }
 }

@@ -25,7 +25,6 @@ class DashboardController extends Controller
         $calculations = Calculation::where('is_bring', true)->sum('totalPrice');
         $requests = TaxiMovement::where('is_completed', true)->count();
         $lifeTaxiMovements = TaxiMovement::getLifeTaxiMovements() ?? null;
-        $readyDrivers = User::getReadyDrivers() ?? null;
 
         $data = [
             'totalDrivers' => $totalDrivers,
@@ -33,7 +32,6 @@ class DashboardController extends Controller
             'calculations' => $calculations,
             'requests' => $requests,
             'lifeTaxiMovements' => $lifeTaxiMovements,
-            'readyDrivers' => $readyDrivers
         ];
 
         return api_response(data: $data, message: 'Successfully get data');

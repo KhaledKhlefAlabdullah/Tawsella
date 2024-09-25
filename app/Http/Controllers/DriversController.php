@@ -6,6 +6,7 @@ use App\Enums\UserEnums\DriverState;
 use App\Enums\UserEnums\UserType;
 use App\Events\Movements\DriverChangeStateEvent;
 use App\Http\Requests\DriverStateRequest;
+use App\Http\Requests\UserRequests\UpdateDriverRequest;
 use App\Http\Requests\UserRequests\UserRequest;
 use App\Models\User;
 use App\Services\PaginationService;
@@ -13,6 +14,8 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class DriversController extends Controller
 {
@@ -40,6 +43,16 @@ class DriversController extends Controller
     }
 
     /**
+     * Get ready drivers
+     * @return JsonResponse
+     */
+    public function getReadiesDrivers(){
+            $readyDrivers = User::getReadyDrivers();
+
+            return api_response(data: $readyDrivers, message: 'Successfully getting ready drivers.');
+    }
+
+    /**
      * Create new driver
      * @param UserRequest $request
      * @return JsonResponse
@@ -59,12 +72,32 @@ class DriversController extends Controller
         try {
             $driver = User::mappingSingleDriver($driver);
 
-            return api_response(data: $driver);
+            return api_response(data: $driver, message: 'Successfully getting driver details.');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'Error in getting driver details.', code: 500);
         }
     }
 
+    /**
+     * Update driver details
+     * @param UserRequest $request
+     * @param User $driver
+     * @return JsonResponse
+     */
+    public function update(UpdateDriverRequest $request, User $driver){
+        try {
+            DB::beginTransaction();
+            $validatedData = $request->validated();
+
+            User::handelUpdateDetails($driver, $validatedData);
+
+            DB::commit();
+            return api_response(data: User::mappingSingleDriver($driver),message: 'Profile updated successfully.');
+        } catch (Exception $e) {
+            DB::rollBack();
+            return api_response(errors: [$e->getMessage()], message: 'Profile updated error.', code: 500);
+        }
+    }
 
     /**
      * Change driver state from received to ready or to in break

@@ -3,11 +3,12 @@
 namespace App\Models;
 
 use App\Models\Traits\HasUuid;
+use App\Models\Traits\MovementTypeTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 class TaxiMovementType extends Model
 {
-    use HasFactory, HasUuid;
+    use HasFactory, HasUuid, MovementTypeTrait;
 
     protected $keyType = 'string';
     protected $primaryKey = 'id';

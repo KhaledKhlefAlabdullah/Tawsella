@@ -86,6 +86,9 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
         return $this->hasMany(TaxiMovement::class,'customer_id');
     }
 
+    public function driver_movements(){
+        return $this->hasMany(TaxiMovement::class,'driver_id');
+    }
     public function admin_offers(){
         return $this->hasMany(Offer::class,'admin_id');
     }

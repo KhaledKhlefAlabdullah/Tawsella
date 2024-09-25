@@ -9,6 +9,7 @@ use App\Models\Rating;
 use App\Models\TaxiMovement;
 use App\Models\User;
 use App\Models\UserProfile;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -70,17 +71,25 @@ trait UserTrait
         });
     }
 
+    /**
+     * Register new user in database
+     * @param UserRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public static function registerUser(UserRequest $request)
     {
         try {
             DB::beginTransaction();
+
             $validatedData = $request->validated();
 
+            // Create the user
             $user = User::create([
                 'email' => $validatedData['email'],
                 'password' => Hash::make($validatedData['password']),
             ]);
 
+            // Create user profile
             UserProfile::create([
                 'user_id' => $user->id,
                 'name' => $validatedData['name'],
@@ -88,24 +97,64 @@ trait UserTrait
                 'phone_number' => $validatedData['phone_number'],
             ]);
 
+            // Assign role based on authenticated user
             $authUser = Auth::user();
             if ($authUser && $authUser->hasRole(UserType::Admin()->key)) {
                 $user->assignRole(UserType::TaxiDriver()->key);
                 $user->mail_code_verified_at = now();
                 $user->save();
+                DB::commit();
+
                 return api_response(data: ['user' => $user, 'profile' => $user->profile], message: 'Register success');
             }
 
+            // Default role for other users
             $user->assignRole(UserType::Customer()->key);
             $user->sendEmailVerificationNotification(true);
 
+            // Generate a token for the newly registered user
             $token = createUserToken($user, 'register-token');
+
             DB::commit();
             return api_response(data: ['token' => $token, 'user_id' => $user->id, 'mail_code_verified_at' => $user->mail_code_verified_at], message: 'Register success');
 
+        } catch (QueryException $e) {
+            DB::rollBack();
+            return api_response(errors: [$e->getMessage()], message: 'Database error during registration', code: 500);
         } catch (Exception $e) {
             DB::rollBack();
-            return api_response(errors: [$e->getMessage()], message: 'Register failed', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Registration failed', code: 500);
+        }
+    }
+
+    /**
+     * @param User $user
+     * @param $validatedData
+     * @return void
+     */
+    public static function handelUpdateDetails(User $user, $validatedData)
+    {
+        if (isset($validatedData['email']))
+            $user->update([
+                'email' => $validatedData['email']
+            ]);
+        if (isset($validatedData['password']))
+            $user->update([
+                'password' => Hash::make($validatedData['password']),
+            ]);
+
+        $userProfile = $user->profile;
+        $userProfile->update([
+            'name' => $validatedData['name'],
+            'phone_number' => $validatedData['phone_number']
+        ]);
+        if (isset($validatedData['avatar'])) {
+            $avatar = $validatedData['avatar'];
+            $path = 'images/profiles';
+            $avatar_path = editFile($userProfile->avatar, $path, $avatar);
+            $userProfile->update([
+                'avatar' => $avatar_path
+            ]);
         }
     }
 }

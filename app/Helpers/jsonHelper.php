@@ -28,7 +28,7 @@ if (!function_exists('api_response')) {
             $response['data'] = $data;
         }
 
-        if ($pagination !== null) {
+        if (!empty($pagination)) {
             $response['pagination'] = $pagination;
         }
 

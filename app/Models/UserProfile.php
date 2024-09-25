@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\UserEnums\UserGender;
 use App\Models\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -35,7 +36,7 @@ class UserProfile extends Model
 
         static::creating(function ($profile) {
             if (empty($profile->avatar)) {
-                $profile->avatar = $profile->gender == 'male'
+                $profile->avatar = $profile->gender == UserGender::male
                     ? '/images/profile_images/man.png'
                     : '/images/profile_images/woman.png';
             }

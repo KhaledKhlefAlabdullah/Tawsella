@@ -17,7 +17,7 @@ trait MovementTrait
      */
     public static function mappingMovements($movements)
     {
-        $mappedMovements = $movements->map(function ($movement) {
+        $mappedMovements = collect($movements)->map(function ($movement) {
             $movement_state = function ($movement) {
                 $state = '';
                 if ($movement->request_state == MovementRequestStatus::Accepted and !$movement->is_completed) {

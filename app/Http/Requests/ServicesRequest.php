@@ -32,11 +32,18 @@ class ServicesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'admin_id' => ['required','string',],
-            'name' => ['required','string',],
-            'description' => ['required','string',],
+            'admin_id' => ['sometimes','string',],
+            'name' => ['sometimes','string',],
+            'description' => ['sometimes','string',],
             'image' => ['nullable','mimes:png,jpg,jpeg','max:10024'],
             'logo' => ['nullable','mimes:png,jpg,jpeg','max:10024']
+        ];
+    }
+
+    public function messages(): array{
+        return [
+          'image.mimes' => 'The image must be a file of type: png, jpg, jpeg',
+          'logo.mimes' => 'The image must be a file of type: png, jpg, jpeg',
         ];
     }
 }
