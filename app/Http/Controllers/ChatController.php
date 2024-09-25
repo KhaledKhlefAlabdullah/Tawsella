@@ -32,10 +32,9 @@ class ChatController extends Controller
         // Retrieve chats where the user is a member
         $query = Chat::whereIn('id', $chatIds);
 
-
         $chatsQ = $this->paginationService->applyPagination($query, $request);
 
-        $chats = collect($chatsQ)->map(function ($chat) {
+        $chats = collect($chatsQ->items())->map(function ($chat) {
             $messages = $chat->members->filter(function ($member) {
                 return $member->id !== getMyId();
             })->map(function ($member) use ($chat) {

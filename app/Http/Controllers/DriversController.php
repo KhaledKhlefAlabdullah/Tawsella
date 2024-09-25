@@ -35,7 +35,7 @@ class DriversController extends Controller
 
         $drivers = $this->paginationService->applyPagination($query, $request);
 
-        $mappedDrivers = User::mappingDrivers($drivers);
+        $mappedDrivers = User::mappingDrivers($drivers->items());
         return api_response(data: $mappedDrivers, message: 'Successfully getting drivers.', pagination: get_pagination($drivers, $request));
     }
 

@@ -30,8 +30,8 @@ class PaginationService
 
     public function applySorting(Builder $query, Request $request): Builder
     {
-        $sortBy = $request->query('Sort.SortBy', 'Id');
-        $ascending = $request->query('Sort.Ascending', true) === 'true';
+        $sortBy = $request->query('Sort.SortBy', 'id'); // Changed 'Id' to 'id' to match typical column name casing
+        $ascending = $request->query('Sort.Ascending', 'true') === 'true';
 
         return $query->orderBy($sortBy, $ascending ? 'asc' : 'desc');
     }
@@ -50,9 +50,10 @@ class PaginationService
      * @param Request $request
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function applyPagination(Builder $query, Request $request){
+    public function applyPagination(Builder $query, Request $request)
+    {
         $query = $this->applyFilters($query, $request);
         $query = $this->applySorting($query, $request);
-        return $this->applyPagination($query, $request);
+        return $this->paginate($query, $request); // Corrected the method call
     }
 }

@@ -31,7 +31,7 @@ class OurServiceController extends Controller
         $query = OurService::query();
 
         $services = $this->paginationService->applyPagination($query, $request);
-        return api_response(data: $services, message: 'Successfully getting messages', pagination: get_pagination($services, $request));
+        return api_response(data: $services->items(), message: 'Successfully getting messages', pagination: get_pagination($services, $request));
     }
 
     /**

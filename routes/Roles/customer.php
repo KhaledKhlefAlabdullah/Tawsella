@@ -2,11 +2,9 @@
 
 use App\Http\Middleware\RolesMiddlewares\CustomerMiddleware;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TaxiMovementTypeController;
 use App\Http\Controllers\TaxiMovementController;
 
 Route::middleware([CustomerMiddleware::class])->group(function () {
-    Route::get('/movement-types', [TaxiMovementTypeController::class, 'index']);
     /**
      * Movements Management
      */

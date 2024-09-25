@@ -6,6 +6,7 @@ use App\Enums\UserEnums\DriverState;
 use App\Enums\UserEnums\UserType;
 use App\Models\TaxiMovement;
 use App\Models\User;
+use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
 
 trait DriverTrait
 {
@@ -81,26 +82,14 @@ trait DriverTrait
 
     /**
      * Mapping the drivers.
-     * @param \Illuminate\Contracts\Pagination\LengthAwarePaginator $drivers
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @param $drivers
+     * @throws InvalidEnumMemberException
      */
     public static function mappingDrivers($drivers)
     {
         // Extract the items and map the driver data
         $mappedDrivers = $drivers->getCollection()->map(function ($driver) {
-            $unBring = $driver->calculations()->where('is_bring', false)->sum('totalPrice');
-            return (object)[
-                'driver_id' => $driver->id,
-                'name' => $driver->profile->name,
-                'email' => $driver->email,
-                'phone_number' => $driver->profile->phone_number,
-                'avatar' => $driver->profile->avatar,
-                'is_active' => $driver->is_active,
-                'unBring' => $unBring,
-                'driver_state' => DriverState::getKey($driver->driver_state),
-                'plate_number' => $driver->taxi?->plate_number,
-                'lamp_number' => $driver->taxi?->lamp_number,
-            ];
+            return self::extracted($driver);
         });
 
         // Replace the items in the paginator with the mapped items
@@ -120,20 +109,7 @@ trait DriverTrait
      */
     public static function mappingSingleDriver(User $driver)
     {
-        $unBring = $driver->calculations()->where('is_bring', false)->sum('totalPrice');
-
-        return (object)[
-            'driver_id' => $driver->id,
-            'name' => $driver->profile->name,
-            'email' => $driver->email,
-            'phone_number' => $driver->profile->phone_number,
-            'avatar' => $driver->profile->avatar,
-            'is_active' => $driver->is_active,
-            'unBring' => $unBring,
-            'driver_state' => DriverState::getKey($driver->driver_state),
-            'plate_number' => $driver->taxi?->plate_number,
-            'lamp_number' => $driver->taxi?->lamp_number,
-        ];
+        return self::extracted($driver);
     }
 
     /**
@@ -149,5 +125,27 @@ trait DriverTrait
             ->get();
 
         return $drivers;
+    }
+
+    /**
+     * @param $driver
+     * @return object
+     * @throws \BenSampo\Enum\Exceptions\InvalidEnumMemberException
+     */
+    public static function extracted($driver): object
+    {
+        $unBring = $driver->calculations()->where('is_bring', false)->sum('totalPrice');
+        return (object)[
+            'driver_id' => $driver->id,
+            'name' => $driver->profile->name,
+            'email' => $driver->email,
+            'phone_number' => $driver->profile->phone_number,
+            'avatar' => $driver->profile->avatar,
+            'is_active' => $driver->is_active,
+            'unBring' => $unBring,
+            'driver_state' => DriverState::getKey($driver->driver_state),
+            'plate_number' => $driver->taxi?->plate_number,
+            'lamp_number' => $driver->taxi?->lamp_number,
+        ];
     }
 }

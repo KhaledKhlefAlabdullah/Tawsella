@@ -46,7 +46,7 @@ class TaxiMovementController extends Controller
 
         $taxiMovement = $this->paginationService->applyPagination($query, $request);
 
-        return api_response(data: TaxiMovement::mappingMovements($taxiMovement), message: 'Successfully getting life taxiMovements.', pagination: get_pagination($taxiMovement, $request));
+        return api_response(data: TaxiMovement::mappingMovements($taxiMovement->items()), message: 'Successfully getting life taxiMovements.', pagination: get_pagination($taxiMovement, $request));
     }
 
 
@@ -61,7 +61,7 @@ class TaxiMovementController extends Controller
 
         $completedRequests = $this->paginationService->applyPagination($query, $request);
 
-        return api_response(data: TaxiMovement::mappingMovements($completedRequests), message: 'Successfully getting completed taxiMovements.', pagination: get_pagination($completedRequests, $request));
+        return api_response(data: TaxiMovement::mappingMovements($completedRequests->items()), message: 'Successfully getting completed taxiMovements.', pagination: get_pagination($completedRequests, $request));
     }
 
     /**

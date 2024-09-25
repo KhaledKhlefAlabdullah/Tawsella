@@ -28,13 +28,15 @@ class TaxiMovementTypeController extends Controller
     {
         $query = TaxiMovementType::query()->where('is_general', false);
 
-
         $movementTypes = $this->paginationService->applyPagination($query, $request);
 
         $generalMovementTypes = TaxiMovementType::where('is_general', true)->get();
 
         $message = 'Successfully getting movements types';
-        return api_response(data: ['movementTypes' => $generalMovementTypes, 'movements' => $movementTypes->items()], pagination: get_pagination($movementTypes, $request), message: $message);
+        return api_response(
+            data: ['movementTypes' => $generalMovementTypes, 'movements' => $movementTypes->items()],
+            message: $message,
+            pagination: get_pagination($movementTypes, $request));
     }
 
     /**

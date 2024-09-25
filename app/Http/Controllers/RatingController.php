@@ -28,7 +28,7 @@ class RatingController extends Controller
         $query = User::query()->with('driver_ratings');
 
         $driversRatings = $this->paginationService->applyPagination($query, $request);
-        return api_response(data: $driversRatings, message: 'Successfully getting drivers ratings.', pagination: get_pagination($driversRatings, $request));
+        return api_response(data: $driversRatings->items(), message: 'Successfully getting drivers ratings.', pagination: get_pagination($driversRatings, $request));
     }
 
     /**

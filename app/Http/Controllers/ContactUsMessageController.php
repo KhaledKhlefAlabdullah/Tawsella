@@ -35,7 +35,7 @@ class ContactUsMessageController extends Controller
 
         $contact_us = $this->paginationService->applyPagination($query, $request);
 
-        return api_response(data: $contact_us, message: 'Successfully getting contact us messages.', pagination: get_pagination($contact_us, $request));
+        return api_response(data: $contact_us->items(), message: 'Successfully getting contact us messages.', pagination: get_pagination($contact_us, $request));
     }
 
     /**
