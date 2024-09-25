@@ -116,7 +116,7 @@ trait UserTrait
             $token = createUserToken($user, 'register-token');
 
             DB::commit();
-            return api_response(data: ['token' => $token, 'user_id' => $user->id, 'mail_code_verified_at' => $user->mail_code_verified_at], message: 'Register success');
+            return api_response(data: ['token' => $token, 'user' => $user, 'profile' => $user->profile, 'mail_code_verified_at' => $user->mail_code_verified_at], message: 'Register success');
 
         } catch (QueryException $e) {
             DB::rollBack();

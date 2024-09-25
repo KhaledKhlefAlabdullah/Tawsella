@@ -35,7 +35,7 @@ class AuthenticatedSessionController extends Controller
             // Create a new token for the user
             $token = createUserToken($user, 'login-token');
 
-            return api_response(data: ['token' => $token, 'user' => $user, 'mail_code_verified_at' => $user->mail_code_verified_at], message: 'Successfully logged in');
+            return api_response(data: ['token' => $token, 'user' => $user, 'profile' => $user->profile, 'mail_code_verified_at' => $user->mail_code_verified_at], message: 'Successfully logged in');
 
         } catch (AuthenticationException $e) {
             // Catch AuthenticationException and return an unauthorized response
