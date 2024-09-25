@@ -19,5 +19,6 @@ yarn-error.log
 /.vscode
 *.jpg
 *.jpeg
+*.png
 *.pdf
 *.gif
