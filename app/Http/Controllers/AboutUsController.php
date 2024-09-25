@@ -21,16 +21,9 @@ class AboutUsController extends Controller
      */
     public function index()
     {
-        try {
-            $aboutUsRecords = AboutUs::select('id', 'title', 'description', 'complaints_number', 'image');
-
-            $additional_info = AboutUs::select('id', 'title', 'description', 'image')->where('is_general', false)->get();
-
-            return api_response(data: ['aboutUsRecords' => $aboutUsRecords, 'additional_info' => $additional_info], message: 'Successfully retrieved about us.');
-
-        } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in return about us informatios', code: 500);
-        }
+        $aboutUsRecords = AboutUs::select('id', 'title', 'description', 'complaints_number', 'image');
+        $additional_info = AboutUs::select('id', 'title', 'description', 'image')->where('is_general', false)->get();
+        return api_response(data: ['aboutUsRecords' => $aboutUsRecords, 'additional_info' => $additional_info], message: 'Successfully retrieved about us.');
     }
 
     /**

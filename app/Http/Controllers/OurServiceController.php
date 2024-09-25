@@ -29,9 +29,8 @@ class OurServiceController extends Controller
     {
         // Fetch all records from OurService model
         $query = OurService::query();
-        $query = $this->paginationService->applyFilters($query, $request);
-        $query = $this->paginationService->applySorting($query, $request);
-        $services = $this->paginationService->paginate($query, $request);
+
+        $services = $this->paginationService->applyPagination($query, $request);
         return api_response(data: $services, message: 'Successfully getting messages', pagination: get_pagination($services, $request));
     }
 

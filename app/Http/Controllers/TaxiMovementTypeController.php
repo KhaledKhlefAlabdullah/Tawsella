@@ -28,9 +28,8 @@ class TaxiMovementTypeController extends Controller
     {
         $query = TaxiMovementType::query()->where('is_general', false);
 
-        $query = $this->paginationService->applyFilters($query, $request);
-        $query = $this->paginationService->applySorting($query, $request);
-        $movementTypes = $this->paginationService->paginate($query, $request);
+
+        $movementTypes = $this->paginationService->applyPagination($query, $request);
 
         $generalMovementTypes = TaxiMovementType::where('is_general', true)->get();
 

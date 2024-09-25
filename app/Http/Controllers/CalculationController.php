@@ -31,14 +31,13 @@ class CalculationController extends Controller
     public function index(Request $request)
     {
         $query = User::query()->role(UserType::TaxiDriver()->key);
-        $query = $this->paginationService->applyFilters($query, $request);
-        $query = $this->paginationService->applySorting($query, $request);
-        $drivers = $this->paginationService->paginate($query, $request);
-
+        $drivers = $this->paginationService->applyPagination($query, $request);
         return api_response(data: [
             'calculations' => Calculation::mappingDriversCalculations($drivers),
             'drivers' => $drivers
-        ], message: 'Successfully getting drivers and calculations', pagination: get_pagination($drivers, $request));
+            ],
+            message: 'Successfully getting drivers and calculations',
+            pagination: get_pagination($drivers, $request));
     }
 
 

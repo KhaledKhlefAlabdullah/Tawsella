@@ -43,4 +43,16 @@ class PaginationService
 
         return $query->paginate($pageSize, ['*'], 'PageNumber', $pageNumber);
     }
+
+    /**
+     * Apply pagination
+     * @param Builder $query
+     * @param Request $request
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function applyPagination(Builder $query, Request $request){
+        $query = $this->applyFilters($query, $request);
+        $query = $this->applySorting($query, $request);
+        return $this->applyPagination($query, $request);
+    }
 }

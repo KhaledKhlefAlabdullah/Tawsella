@@ -32,9 +32,8 @@ class DriversController extends Controller
     {
         $query = User::query()->with(['taxi', 'profile'])
             ->role(UserType::TaxiDriver()->key);
-        $query = $this->paginationService->applyFilters($query, $request);
-        $query = $this->paginationService->applySorting($query, $request);
-        $drivers = $this->paginationService->paginate($query, $request);
+
+        $drivers = $this->paginationService->applyPagination($query, $request);
 
         $mappedDrivers = User::mappingDrivers($drivers);
         return api_response(data: $mappedDrivers, message: 'Successfully getting drivers.', pagination: get_pagination($drivers, $request));

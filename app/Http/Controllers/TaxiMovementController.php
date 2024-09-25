@@ -15,26 +15,38 @@ use App\Http\Requests\TaxiMovements\FoundCustomerRequest;
 use App\Http\Requests\TaxiMovements\TaxiMovementRequest;
 use App\Models\TaxiMovement;
 use App\Models\User;
+use App\Services\PaginationService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class TaxiMovementController extends Controller
 {
 
+    protected $paginationService;
+
+    public function __construct(PaginationService $paginationService)
+    {
+        $this->paginationService = $paginationService;
+    }
+
     /**
      * Show the form for creating a new resource.
      * @return JsonResponse
      * @author Khaled <khaledabdullah2001104@gmail.com>
      */
-    public function LifeTaxiMovements()
+    public function LifeTaxiMovements(Request $request)
     {
         $currentDate = Carbon::now()->format('Y-m-d');
-        $taxiMovement = TaxiMovement::where(['is_completed' => false, 'is_canceled' => false, 'request_state' => MovementRequestStatus::Accepted])
-            ->whereDate('created_at', $currentDate)->get();
-        return api_response(data: TaxiMovement::mappingMovements($taxiMovement), message: 'Successfully getting life taxiMovements.');
+        $query = TaxiMovement::query()->where(['is_completed' => false, 'is_canceled' => false, 'request_state' => MovementRequestStatus::Accepted])
+            ->whereDate('created_at', $currentDate);
+
+        $taxiMovement = $this->paginationService->applyPagination($query, $request);
+
+        return api_response(data: TaxiMovement::mappingMovements($taxiMovement), message: 'Successfully getting life taxiMovements.', pagination: get_pagination($taxiMovement, $request));
     }
 
 
@@ -43,11 +55,13 @@ class TaxiMovementController extends Controller
      * @return JsonResponse
      * @author Khaled <khaledabdullah2001104@gmail.com>
      */
-    public function completedTaxiMovements()
+    public function completedTaxiMovements(Request $request)
     {
-        $completedRequests = TaxiMovement::where('is_completed', true)
-            ->get();
-        return api_response(data: TaxiMovement::mappingMovements($completedRequests));
+        $query = TaxiMovement::query()->where('is_completed', true);
+
+        $completedRequests = $this->paginationService->applyPagination($query, $request);
+
+        return api_response(data: TaxiMovement::mappingMovements($completedRequests), message: 'Successfully getting completed taxiMovements.', pagination: get_pagination($completedRequests, $request));
     }
 
     /**

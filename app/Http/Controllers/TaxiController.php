@@ -32,9 +32,8 @@ class TaxiController extends Controller
     public function index(Request $request)
     {
         $query = Taxi::query()->with('driver.profile');
-        $query = $this->paginationService->applyFilters($query, $request);
-        $query = $this->paginationService->applySorting($query, $request);
-        $taxisDetails = $this->paginationService->paginate($query, $request);
+
+        $taxisDetails = $this->paginationService->applyPagination($query, $request);
 
         $taxis = Taxi::mappingTaxis($taxisDetails);
         return api_response(data: $taxis, message: 'Successfully retrieved taxis', pagination:  get_pagination($taxisDetails, $request));

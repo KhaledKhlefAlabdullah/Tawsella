@@ -32,9 +32,8 @@ class ChatController extends Controller
         // Retrieve chats where the user is a member
         $query = Chat::whereIn('id', $chatIds);
 
-        $query = $this->paginationService->applyFilters($query, $request);
-        $query = $this->paginationService->applySorting($query, $request);
-        $chatsQ = $this->paginationService->paginate($query, $request);
+
+        $chatsQ = $this->paginationService->applyPagination($query, $request);
 
         $chats = collect($chatsQ)->map(function ($chat) {
             $messages = $chat->members->filter(function ($member) {

@@ -32,9 +32,8 @@ class ContactUsMessageController extends Controller
     public function index(Request $request)
     {
         $query = ContactUsMessage::query()->where('is_answered', false);
-        $query = $this->paginationService->applyFilters($query, $request);
-        $query = $this->paginationService->applySorting($query, $request);
-        $contact_us = $this->paginationService->paginate($query, $request);
+
+        $contact_us = $this->paginationService->applyPagination($query, $request);
 
         return api_response(data: $contact_us, message: 'Successfully getting contact us messages.', pagination: get_pagination($contact_us, $request));
     }
