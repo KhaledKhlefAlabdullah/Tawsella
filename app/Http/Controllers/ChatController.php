@@ -5,52 +5,60 @@ namespace App\Http\Controllers;
 use App\Models\Chat;
 use App\Models\ChatMember;
 use App\Models\User;
+use App\Services\PaginationService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class ChatController extends Controller
 {
+    protected $paginationService;
+
+    public function __construct(PaginationService $paginationService)
+    {
+        $this->paginationService = $paginationService;
+    }
+
     /**
      * Display a listing of chats i member in
      * @return JsonResponse list of chats i memeber in
      */
-    public function index()
+    public function index(Request $request)
     {
-        try {
-            // Get chat IDs for the current user
-            $chatIds = ChatMember::where('member_id', getMyId())
-                ->pluck('chat_id');
+        // Get chat IDs for the current user
+        $chatIds = ChatMember::where('member_id', getMyId())
+            ->pluck('chat_id');
 
-            // Retrieve chats where the user is a member
-            $chats = Chat::whereIn('id', $chatIds)
-                ->get()
-                ->map(function ($chat) {
-                    $messages = $chat->members->filter(function ($member) {
-                        return $member->id !== getMyId();
-                    })->map(function ($member) use ($chat) {
+        // Retrieve chats where the user is a member
+        $query = Chat::whereIn('id', $chatIds);
 
-                        $lastMessage = $chat->messages->sortByDesc('created_at')->first();
+        $query = $this->paginationService->applyFilters($query, $request);
+        $query = $this->paginationService->applySorting($query, $request);
+        $chatsQ = $this->paginationService->paginate($query, $request);
 
-                        return [
-                            'chat_id' => $chat->id,
-                            'receiver_id' => $member->id,
-                            'receiver_name' => $member->profile->name ?? null,
-                            'receiver_avatar' => $member->profile->avatar ?? null,
-                            'message' => $lastMessage->message ? $lastMessage->message : 'received media',
-                            'created_at' => $lastMessage->created_at ?? null,
-                            'is_edited' => $lastMessage->is_edited ?? null,
-                        ];
-                    });
+        $chats = collect($chatsQ)->map(function ($chat) {
+            $messages = $chat->members->filter(function ($member) {
+                return $member->id !== getMyId();
+            })->map(function ($member) use ($chat) {
 
-                    return $messages;
-                });
+                $lastMessage = $chat->messages->sortByDesc('created_at')->first();
 
-            // Return response with formatted chat data
-            return api_response(data: $chats, message: 'Successfully getting chats');
-        } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in getting chats', code: 500);
-        }
+                return [
+                    'chat_id' => $chat->id,
+                    'receiver_id' => $member->id,
+                    'receiver_name' => $member->profile->name ?? null,
+                    'receiver_avatar' => $member->profile->avatar ?? null,
+                    'message' => $lastMessage->message ? $lastMessage->message : 'received media',
+                    'created_at' => $lastMessage->created_at ?? null,
+                    'is_edited' => $lastMessage->is_edited ?? null,
+                ];
+            });
+
+            return $messages;
+        });
+
+        // Return response with formatted chat data
+        return api_response(data: $chats, message: 'Successfully getting chats', pagination: get_pagination($chatsQ, $request));
     }
 
     /**

@@ -18,7 +18,7 @@ class OfferController extends Controller
      * Retrieves and displays both valid and ended offers.
      * Valid offers are those whose validity date is today or in the future.
      * Ended offers are those whose validity date is in the past.
-     * @return JsonResponse|JsonResponse Returns a JSON response containing valid and ended offers.
+     * @return JsonResponse Returns a JSON response containing valid and ended offers.
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-21 - T-22
      */
@@ -30,7 +30,7 @@ class OfferController extends Controller
 
             $authUser = Auth::user();
             if (!$authUser->hasRole(UserType::Admin()->key))
-                return api_response(data: $validOffers, message: 'تم الحصول على العروض بنجاح');
+                return api_response(data: $validOffers, message: 'Successfully getting offers');
 
             $endedOffers = Offer::getOffers('<');
             $response = ['validOffers' => $validOffers, 'endedOffers' => $endedOffers];

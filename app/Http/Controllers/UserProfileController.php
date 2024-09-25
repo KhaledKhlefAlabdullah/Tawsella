@@ -3,16 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UserRequests\UserRequest;
-use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\View\View;
+
 
 
 class UserProfileController extends Controller
@@ -20,7 +16,7 @@ class UserProfileController extends Controller
 
     /**
      * Return Auth User Profile
-     * @return JsonResponse|JsonResponse UserProfile data
+     * @return JsonResponse UserProfile data
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-13
      */
@@ -44,7 +40,7 @@ class UserProfileController extends Controller
     /**
      * Update the specified resource in storage.
      * @param UserRequest $request is profile data
-     * @return JsonResponse|JsonResponse
+     * @return JsonResponse
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-14
      */

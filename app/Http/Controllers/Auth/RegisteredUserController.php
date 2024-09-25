@@ -7,13 +7,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UserRequests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
     /**
      * Handle an incoming registration request.
-     * @return JsonResponse|\Illuminate\Validation\ValidationException|JsonResponse if request want json return json response if not redirect to main page
+     * @return JsonResponse|\Illuminate\Validation\ValidationException if request want json return json response if not redirect to main page
      * @returns
      * @throws \Illuminate\Validation\ValidationException
      */

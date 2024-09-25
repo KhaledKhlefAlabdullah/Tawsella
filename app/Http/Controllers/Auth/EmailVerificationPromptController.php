@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 
 class EmailVerificationPromptController extends Controller
 {
@@ -17,6 +16,6 @@ class EmailVerificationPromptController extends Controller
     {
         return $request->user()->hasVerifiedEmail()
                     ? redirect()->intended(RouteServiceProvider::HOME)
-                    : api_response(data'auth.verify-email');
+                    : view('auth.verify-email');
     }
 }

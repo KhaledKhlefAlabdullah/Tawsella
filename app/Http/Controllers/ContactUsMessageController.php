@@ -7,6 +7,7 @@ use App\Http\Requests\ContactUsMessagesRequest;
 use App\Mail\ContactUsMails;
 use App\Models\ContactUsMessage;
 use App\Models\User;
+use App\Services\PaginationService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,16 +16,27 @@ use Illuminate\Support\Facades\Mail;
 
 class ContactUsMessageController extends Controller
 {
+    protected $paginationService;
+
+    public function __construct(PaginationService $paginationService)
+    {
+        $this->paginationService = $paginationService;
+    }
+
     /**
      * Display a listing of the contact-us messages.
      * @return JsonResponse with contact-us-messages, success message and status code 200 if success or with errors in failed
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-35
      */
-    public function index()
+    public function index(Request $request)
     {
-        $contact_us = Auth::user()->contact_us_messages()->where('is_answered', false)->get();
-        return api_response(data: $contact_us, message: 'Successfully getting contact us messages.');
+        $query = ContactUsMessage::query()->where('is_answered', false);
+        $query = $this->paginationService->applyFilters($query, $request);
+        $query = $this->paginationService->applySorting($query, $request);
+        $contact_us = $this->paginationService->paginate($query, $request);
+
+        return api_response(data: $contact_us, message: 'Successfully getting contact us messages.', pagination: get_pagination($contact_us, $request));
     }
 
     /**
@@ -98,7 +110,7 @@ class ContactUsMessageController extends Controller
             $contactUsMessage->delete();
             return api_response(message: 'Contact us message deleted successfully');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()],message: 'Error in deleting contact us message.', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Error in deleting contact us message.', code: 500);
         }
     }
 }

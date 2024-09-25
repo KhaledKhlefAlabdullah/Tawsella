@@ -29,7 +29,7 @@ class RatingController extends Controller
         $query = $this->paginationService->applyFilters($query, $request);
         $query = $this->paginationService->applySorting($query, $request);
         $driversRatings = $this->paginationService->paginate($query, $request);
-        return api_response(data: $driversRatings, pagination: get_pagination($driversRatings, $request), message: 'Successfully getting drivers ratings.');
+        return api_response(data: $driversRatings, message: 'Successfully getting drivers ratings.', pagination: get_pagination($driversRatings, $request));
     }
 
     /**

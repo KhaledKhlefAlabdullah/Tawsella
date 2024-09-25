@@ -3,30 +3,41 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserEnums\DriverState;
+use App\Enums\UserEnums\UserType;
 use App\Events\Movements\DriverChangeStateEvent;
 use App\Http\Requests\DriverStateRequest;
 use App\Http\Requests\UserRequests\UserRequest;
 use App\Models\User;
+use App\Services\PaginationService;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\View\View;
 
 class DriversController extends Controller
 {
+    protected $paginationService;
+
+    public function __construct(PaginationService $paginationService)
+    {
+        $this->paginationService = $paginationService;
+    }
+
+
     /**
      * Retrieve drivers details
      * @return JsonResponse
      */
-    public function index()
+    public function index(Request $request)
     {
-        try {
-            $drivers = User::getDrivers(15); // 15 items per page
+        $query = User::query()->with(['taxi', 'profile'])
+            ->role(UserType::TaxiDriver()->key);
+        $query = $this->paginationService->applyFilters($query, $request);
+        $query = $this->paginationService->applySorting($query, $request);
+        $drivers = $this->paginationService->paginate($query, $request);
 
-            return api_response(data: $drivers, message: 'Successfully getting drivers.');
-        } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()],message: 'Error in getting drivers data.', code: 500);
-        }
+        $mappedDrivers = User::mappingDrivers($drivers);
+        return api_response(data: $mappedDrivers, message: 'Successfully getting drivers.', pagination: get_pagination($drivers, $request));
     }
 
     /**
@@ -34,7 +45,8 @@ class DriversController extends Controller
      * @param UserRequest $request
      * @return JsonResponse
      */
-    public function store(UserRequest $request){
+    public function store(UserRequest $request)
+    {
         return User::registerUser($request);
     }
 
@@ -48,7 +60,7 @@ class DriversController extends Controller
         try {
             $driver = User::mappingSingleDriver($driver);
 
-            return api_response(data:$driver);
+            return api_response(data: $driver);
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'Error in getting driver details.', code: 500);
         }

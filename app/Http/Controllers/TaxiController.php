@@ -37,7 +37,7 @@ class TaxiController extends Controller
         $taxisDetails = $this->paginationService->paginate($query, $request);
 
         $taxis = Taxi::mappingTaxis($taxisDetails);
-        return api_response(data: $taxis, pagination:  get_pagination($taxisDetails, $request), message: 'Successfully retrieved taxis');
+        return api_response(data: $taxis, message: 'Successfully retrieved taxis', pagination:  get_pagination($taxisDetails, $request));
     }
 
     /**

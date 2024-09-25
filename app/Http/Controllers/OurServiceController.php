@@ -32,7 +32,7 @@ class OurServiceController extends Controller
         $query = $this->paginationService->applyFilters($query, $request);
         $query = $this->paginationService->applySorting($query, $request);
         $services = $this->paginationService->paginate($query, $request);
-        return api_response(data: $services, message: 'Successfully getting messages');
+        return api_response(data: $services, message: 'Successfully getting messages', pagination: get_pagination($services, $request));
     }
 
     /**
@@ -59,7 +59,7 @@ class OurServiceController extends Controller
                 'logo' => $logoPath
             ]);
 
-            return api_response(data: $ourService,message: 'Successfully created our services');
+            return api_response(data: $ourService, message: 'Successfully created our services');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'Error in creating our services', code: 500);
         }
@@ -89,7 +89,7 @@ class OurServiceController extends Controller
                 'logo' => $logoPath
             ]);
 
-            return api_response(data: $service,message: 'Successfully updated our services');
+            return api_response(data: $service, message: 'Successfully updated our services');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'Error in updated our services', code: 500);
         }
@@ -112,7 +112,7 @@ class OurServiceController extends Controller
 
             return api_response(message: 'Successfully deleted our services');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()],message: 'Error in deleted our services', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Error in deleted our services', code: 500);
         }
     }
 }
