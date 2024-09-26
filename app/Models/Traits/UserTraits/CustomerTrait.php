@@ -22,12 +22,12 @@ trait CustomerTrait
             // Basic user mapping
             return [
                 'user_id' => $driver->id,
-                'name' => $driver->profile->name ?? '',
+                'name' => $driver->profile?->name ?? '',
                 'email' => $driver->email,
-                'phone_number' => $driver->profile->phone_number ?? '',
-                'avatar' => $driver->profile->avatar ?? '',
+                'phone_number' => $driver->profile?->phone_number ?? '',
+                'avatar' => $driver->profile?->avatar ?? '',
                 'user_type' => $driver->getRoleNames()[0],
-                'gender' => $driver->profile->gender ?? '',
+                'gender' => $driver->profile?->gender ?? '',
                 'distance' => $driver->distance.' KM',
                 'latitude' => $driver->last_location_latitude,
                 'longitude' => $driver->last_location_longitude,

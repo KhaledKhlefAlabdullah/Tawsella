@@ -32,7 +32,7 @@ class UpdateDriverRequest extends FormRequest
         return [
             'name' => ['sometimes', 'string', 'max:255'],
             'email' => ['sometimes', 'string', 'lowercase', 'email', 'max:255', is_null($user) ? 'unique:' . User::class : Rule::unique('users')->ignore($user->id)],
-            'phone_number' => ['sometimes', 'nullable', 'string', new PhoneNumber, is_null($user) ? 'unique:' . UserProfile::class : Rule::unique('user_profiles')->ignore($user->profile->id)],
+            'phone_number' => ['sometimes', 'nullable', 'string', new PhoneNumber, is_null($user) ? 'unique:' . UserProfile::class : Rule::unique('user_profiles')->ignore($user->profile?->id)],
             'gender' => ['sometimes', 'string', Rule::in(UserGender::getKeys())],
             'password' => ['sometimes', Password::defaults()],
         ];

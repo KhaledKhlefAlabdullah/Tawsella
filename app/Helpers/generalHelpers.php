@@ -239,8 +239,8 @@ if (!function_exists('send_notifications')) {
         $user_profile = Auth::check()
             ? (object)[
                 'email' => $user->email,
-                'name' => $user->profile->name,
-                'avatar_url' => $user->profile->avatar
+                'name' => $user->profile?->name,
+                'avatar_url' => $user->profile?->avatar
             ]
             : (object)[
                 'email' => 'default@example.com',

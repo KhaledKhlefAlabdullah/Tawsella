@@ -136,7 +136,7 @@ class DriversController extends Controller
     public function destroy(User $driver)
     {
         try {
-            removeFile($driver->profile->avatar);
+            removeFile($driver->profile?->avatar);
             $taxi = $driver->taxi;
             if ($taxi) {
                 $taxi->update(['driver_id' => null]);

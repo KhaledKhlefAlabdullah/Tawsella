@@ -25,9 +25,9 @@ class ContactUsMessagesRequest extends FormRequest
         $user = Auth::user();
         if ($user) {
             $this->merge([
-                'sender_name' => $user->profile->name,
+                'sender_name' => $user->profile?->name,
                 'email' => $user->email,
-                'phone_number' => $user->profile->phone_number,
+                'phone_number' => $user->profile?->phone_number,
                 'is_registeredInApp' => true
             ]);
         }else{
