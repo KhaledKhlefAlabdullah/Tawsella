@@ -136,6 +136,7 @@ trait DriverTrait
             'phone_number' => $driver->profile?->phone_number,
             'avatar' => $driver->profile?->avatar,
             'is_active' => $driver->is_active,
+            'has_taxi' => $driver->taxi()->exists(),
             'unBring' => $unBring,
             'driver_state' => DriverState::getKey($driver->driver_state),
             'plate_number' => $driver->taxi?->plate_number,
