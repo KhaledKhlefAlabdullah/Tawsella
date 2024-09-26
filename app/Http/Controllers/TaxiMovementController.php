@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\MovementRequestStatus;
 use App\Enums\UserEnums\DriverState;
+use App\Enums\UserEnums\UserGender;
 use App\Events\Movements\AcceptTransportationServiceRequestEvent;
 use App\Events\Movements\CustomerCanceledMovementEvent;
 use App\Events\Movements\DriverChangeMovementStateEvent;
@@ -94,14 +95,15 @@ class TaxiMovementController extends Controller
         try {
             TaxiMovement::calculateCanceledMovements(Auth::user());
             $validatedData = $request->validated();
-            $driver = getAndCheckModelById(User::class, $validatedData['driver_id']);
-            if ($driver->driver_stet != DriverState::Ready) {
-                return api_response(
-                    message: 'This driver is currently unavailable. Please try another driver.',
-                    code: 409
-                );
-            }
+//            $driver = getAndCheckModelById(User::class, $validatedData['driver_id']);
+//            if ($driver->driver_stet != DriverState::Ready) {
+//                return api_response(
+//                    message: 'This driver is currently unavailable. Please try another driver.',
+//                    code: 409
+//                );
+//            }
             User::checkExistingCustomerMovements($validatedData['customer_id']);
+            $validatedData['gender'] = UserGender::getValue($validatedData['gender']);
             $taxiMovement = TaxiMovement::create($validatedData);
             event(new RequestingTransportationServiceEvent($taxiMovement));
             return api_response(message: 'Successfully creating movement');
