@@ -8,7 +8,6 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 
 
 
@@ -27,9 +26,9 @@ class UserProfileController extends Controller
             $user = Auth::user();
             $profile = [
                 'id' => $user->id,
-                'name' => $user->profile->name,
-                'avatar' => $user->profile->avatar,
-                'phone_number' => $user->profile->phone_number,
+                'name' => $user->profile?->name,
+                'avatar' => $user->profile?->avatar,
+                'phone_number' => $user->profile?->phone_number,
                 'email' => $user->email
             ];
             return api_response(data: $profile, message: 'Profile retrieved successfully.');
@@ -55,9 +54,9 @@ class UserProfileController extends Controller
 
             $profile = [
                 'id' => $user->id,
-                'name' => $user->profile->name,
-                'avatar' => $user->profile->avatar,
-                'phone_number' => $user->profile->phone_number,
+                'name' => $user->profile?->name,
+                'avatar' => $user->profile?->avatar,
+                'phone_number' => $user->profile?->phone_number,
                 'email' => $user->email
             ];
 

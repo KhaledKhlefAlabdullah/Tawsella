@@ -48,10 +48,10 @@ trait MovementTrait
                 'path' => json_decode($movement->path) ?? null,
                 'driver_email' => $movement->driver->email,
                 'customer_email' => $movement->customer->email,
-                'driver_name' => $movement->driver()->profile->name,
-                'driver_phone' => $movement->driver()->profile->phone_number,
-                'customer_name' => $movement->customer()->profile->name,
-                'customer_phone' => $movement->customer()->profile->phone_number,
+                'driver_name' => $movement->driver()->profile?->name,
+                'driver_phone' => $movement->driver()->profile?->phone_number,
+                'customer_name' => $movement->customer()->profile?->name,
+                'customer_phone' => $movement->customer()->profile?->phone_number,
                 'taxi_id' => $movement->taxi_id,
                 'car_name' => $movement->taxi->car_name,
                 'car_lamp_number' => $movement->taxi->lamp_number,
@@ -102,9 +102,13 @@ trait MovementTrait
         $today = Carbon::today();
 
         // Filter movements for those that are canceled and created today
-        $todayCanceledMovements = $user->customer_movements->filter(function ($movement) use ($today) {
-            return $movement->is_canceled && $movement->created_at->isSameDay($today);
-        })->count();
+        if ($user->customer_movements) {
+            $todayCanceledMovements = $user->customer_movements?->filter(function ($movement) use ($today) {
+                return $movement->is_canceled && $movement->created_at->isSameDay($today);
+            })->count();
+        } else {
+            $todayCanceledMovements = 0;
+        }
 
         if ($todayCanceledMovements >= 10) {
             $message = 'You have exceeded the allowed number of canceled movements for today.';
@@ -115,11 +119,14 @@ trait MovementTrait
         // Get the date ten days ago from today
         $tenDaysAgo = $today->copy()->subDays(10);
 
-        // Filter movements for those that are canceled and created within the last ten days
-        $lastTenDaysCanceledMovements = $user->movements->filter(function ($movement) use ($tenDaysAgo, $today) {
-            return $movement->is_canceled && $movement->created_at->between($tenDaysAgo, $today);
-        })->count();
-
+        if ($user->customer_movements) {
+            // Filter movements for those that are canceled and created within the last ten days
+            $lastTenDaysCanceledMovements = $user->customer_movements?->filter(function ($movement) use ($tenDaysAgo, $today) {
+                return $movement->is_canceled && $movement->created_at->between($tenDaysAgo, $today);
+            })->count();
+        } else {
+            $lastTenDaysCanceledMovements = 0;
+        }
         if ($lastTenDaysCanceledMovements >= 30) {
             $user->is_active = false;
             $user->save();
@@ -151,9 +158,9 @@ trait MovementTrait
                     'gender' => $taxiMovement->gender,
                     'lat' => $taxiMovement->start_latitude,
                     'long' => $taxiMovement->start_longitude,
-                    'avatar' => $taxiMovement->customer()->profile->avatar ?? null,
-                    'customer_name' => $taxiMovement->customer()->profile->name ?? null,
-                    'customer_phone' => $taxiMovement->customer()->profile->phone_number ?? null,
+                    'avatar' => $taxiMovement->customer()->profile?->avatar ?? null,
+                    'customer_name' => $taxiMovement->customer()->profile?->name ?? null,
+                    'customer_phone' => $taxiMovement->customer()->profile?->phone_number ?? null,
                     'type' => $taxiMovement->movementType->type ?? null,
                     'time' => $taxiMovement->created_at,
                 ];

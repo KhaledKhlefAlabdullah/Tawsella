@@ -78,7 +78,7 @@ class TaxiController extends Controller
             'lat' => $taxi->last_location_latitude,
             'driver_id' => $taxi->driver_id,
             'long' => $taxi->last_location_longitude,
-            'name' => $taxi->driver()->profile->name,
+            'name' => $taxi->driver()->profile?->name,
         ];
         return api_response(data: $data, message: 'Successfully retrieving life map');
     }

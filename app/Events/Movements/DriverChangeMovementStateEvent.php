@@ -38,8 +38,8 @@ class DriverChangeMovementStateEvent implements ShouldBroadcast
 
     public function broadcastWith(): array
     {
-        $driverName = $this->taxiMovement->driver->profile->name;
-        $customerName = $this->taxiMovement->customer->profile->name;
+        $driverName = $this->taxiMovement->driver->profile?->name;
+        $customerName = $this->taxiMovement->customer->profile?->name;
         $from = $this->taxiMovement->start_address;
         $to = $this->taxiMovement->destination_address;
 

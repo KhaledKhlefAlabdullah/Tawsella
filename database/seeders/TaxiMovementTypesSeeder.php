@@ -14,9 +14,6 @@ class TaxiMovementTypesSeeder extends Seeder
     public function run(): void
     {
         $movementTypes = [
-            ['type' => 'طلب داخلي', 'price' => 50, 'payment' => 0, 'is_general' => true],
-            ['type' => 'طلب خارجي', 'is_onKM' => true, 'price' => 0.5, 'payment' => 1, 'is_general' => true],
-            ['type' => 'استأجار سيارة لمدة زمنية', 'description' => 'تواصل معنا على الرقم', 'price' => 1000, 'payment' => 1, 'is_general' => true],
             ['type' => 'اعزاز', 'price' => 50],
             ['type' => 'سجو', 'price' => 75],
             ['type' => 'كفر كلبين', 'price' => 80],
@@ -60,6 +57,16 @@ class TaxiMovementTypesSeeder extends Seeder
 
         foreach ($movementTypes as $movementType) {
             TaxiMovementType::create($movementType);
+        }
+
+        $GeneralMovementsTypes = [
+            ['id' => 't-m-t-1', 'type' => 'طلب داخلي', 'price' => 50, 'payment' => 0, 'is_general' => true],
+            ['id' => 't-m-t-2', 'type' => 'طلب خارجي', 'is_onKM' => true, 'price' => 0.5, 'payment' => 1, 'is_general' => true],
+            ['id' => 't-m-t-3', 'type' => 'استأجار سيارة لمدة زمنية', 'description' => 'تواصل معنا على الرقم', 'price' => 1000, 'payment' => 1, 'is_general' => true],
+        ];
+
+        foreach ($GeneralMovementsTypes as $GeneralMovementsType) {
+            TaxiMovementType::create($GeneralMovementsType);
         }
     }
 }

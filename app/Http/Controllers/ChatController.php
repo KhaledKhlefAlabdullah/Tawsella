@@ -35,24 +35,29 @@ class ChatController extends Controller
         $chatsQ = $this->paginationService->applyPagination($query, $request);
 
         $chats = collect($chatsQ->items())->map(function ($chat) {
-            $messages = $chat->members->filter(function ($member) {
-                return $member->id !== getMyId();
-            })->map(function ($member) use ($chat) {
+            // Ensure $chat->members is not null before filtering
+            if ($chat->members) {
+                $messages = $chat->members?->filter(function ($member) {
+                    return $member?->id !== getMyId();
+                })->map(function ($member) use ($chat) {
+                    // Ensure $chat->messages is not null and has at least one message
+                    $lastMessage = $chat->messages?->sortByDesc('created_at')->first();
 
-                $lastMessage = $chat->messages->sortByDesc('created_at')->first();
+                    return [
+                        'chat_id' => $chat->id,
+                        'receiver_id' => $member?->id ?? null,
+                        'receiver_name' => $member?->profile?->name ?? null,
+                        'receiver_avatar' => $member?->profile?->avatar ?? null,
+                        'message' => $lastMessage?->message ? $lastMessage->message : 'received media',
+                        'created_at' => $lastMessage?->created_at ?? null,
+                        'is_edited' => $lastMessage?->is_edited ?? null,
+                    ];
+                });
 
-                return [
-                    'chat_id' => $chat->id,
-                    'receiver_id' => $member->id,
-                    'receiver_name' => $member->profile->name ?? null,
-                    'receiver_avatar' => $member->profile->avatar ?? null,
-                    'message' => $lastMessage->message ? $lastMessage->message : 'received media',
-                    'created_at' => $lastMessage->created_at ?? null,
-                    'is_edited' => $lastMessage->is_edited ?? null,
-                ];
-            });
-
-            return $messages;
+                return $messages;
+            } else {
+                return collect();
+            }
         });
 
         // Return response with formatted chat data
@@ -73,7 +78,7 @@ class ChatController extends Controller
             }
 
             $userName = User::where('user_id', getMyId())->value('name');
-            $receiverName = $receiver->profile->name;
+            $receiverName = $receiver->profile?->name;
 
             // Generate chat names based on username
             $chatName = 'chat-between-' . $userName . '-and-' . $receiverName;

@@ -8,7 +8,6 @@ use App\Http\Controllers\MessageController;
 /**
  * Profile Management
  */
-// todo make edit apis in front
 Route::group(['prefix' => 'profile', 'controller' => UserProfileController::class], function () {
     Route::get('/', 'index');
     Route::post('/', 'update');

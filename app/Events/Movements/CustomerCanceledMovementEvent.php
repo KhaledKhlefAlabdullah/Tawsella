@@ -44,9 +44,9 @@ class CustomerCanceledMovementEvent implements ShouldBroadcast
             'message' => $this->taxiMovement->state_message,
             'customer' => [
                 'id' => $customer->id,
-                'name' => $customer->profile->name,
-                'avatar' => $customer->profile->avatar,
-                'phone_number' => $customer->profile->phone_number,
+                'name' => $customer->profile?->name,
+                'avatar' => $customer->profile?->avatar,
+                'phone_number' => $customer->profile?->phone_number,
             ]
         ];
     }

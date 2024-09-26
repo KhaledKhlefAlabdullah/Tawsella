@@ -30,14 +30,14 @@ trait UserTrait
             // Basic user mapping
             $mapping = [
                 'user_id' => $user->id,
-                'name' => $user->profile->name ?? '',
+                'name' => $user->profile?->name ?? '',
                 'points' => $user->points ?? 0,
                 'email' => $user->email,
-                'phone_number' => $user->profile->phone_number ?? '',
-                'avatar' => $user->profile->avatar ?? '',
+                'phone_number' => $user->profile?->phone_number ?? '',
+                'avatar' => $user->profile?->avatar ?? '',
                 'is_active' => $user->is_active,
                 'user_type' => $user->getRoleNames()[0],
-                'gender' => $user->profile->gender ?? '',
+                'gender' => $user->profile?->gender ?? '',
                 'created_at' => $user->created_at,
             ];
 

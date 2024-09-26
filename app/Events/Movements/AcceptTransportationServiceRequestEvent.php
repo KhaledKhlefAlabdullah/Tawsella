@@ -36,7 +36,8 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
 
         return [
             new PrivateChannel('customer.' . $customer_id),
-            new PrivateChannel('driver.' . $driver_id)        ];
+            new PrivateChannel('driver.' . $driver_id)
+        ];
     }
 
     public function getDriverData()
