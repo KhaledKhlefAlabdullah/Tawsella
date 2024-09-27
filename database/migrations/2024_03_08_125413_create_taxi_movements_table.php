@@ -29,6 +29,7 @@ return new class extends Migration
             $table->boolean('is_completed')->default(false);
             $table->boolean('is_canceled')->default(false);
             $table->integer('request_state')->default(\App\Enums\MovementRequestStatus::Pending);
+            $table->string('state_message')->nullable();
             $table->foreign('driver_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('customer_id')->references('id')->on('users')->onDelete('set null');
             $table->foreign('taxi_id')->references('id')->on('taxis')->onDelete('cascade');
