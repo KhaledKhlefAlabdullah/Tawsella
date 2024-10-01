@@ -40,6 +40,6 @@ class UsersSeeder extends Seeder
             'mail_code_verified_at' => now(),
         ]);
 
-        $user->assignrole(UserType::TaxiDriver()->key);
+        $driver->assignrole(UserType::TaxiDriver()->key);
     }
 }
