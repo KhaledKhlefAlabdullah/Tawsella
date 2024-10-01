@@ -18,19 +18,19 @@ class UsersProfilesSeeder extends Seeder
 
         $profiles = [
             [
-                'user_id' => 'Asds-52664d66-aasd5566-C2',
+                'user_id' => '3973d286-df6f-4eb8-be0e-283nde47cb1a',
                 'name' => 'customer 2',
                 'gender' => UserGender::male,
                 'phone_number' => '+96563335648',
             ],
             [
                 'id' => Str::uuid(),
-                'user_id' => 'Asds-52664d66-aasd5566-C1',
+                'user_id' => '3173d286-df6f-4eb8-be0e-283ade37cb1a',
                 'name' => 'customer 1',
                 'phone_number' => '+96563335648',
             ],
             [
-                'user_id' => 'Asds-52664d66-aasd5566-D1',
+                'user_id' => '3473d276-df6f-4eb8-be0e-283ade38cb1a',
                 'name' => 'driver 1',
                 'gender' => UserGender::female,
                 'phone_number' => '+965634535648',

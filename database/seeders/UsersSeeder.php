@@ -16,13 +16,13 @@ class UsersSeeder extends Seeder
     {
         $users = [
             [
-                'id' => 'Asds-52664d66-aasd5566-C2',
+                'id' => '3973d286-df6f-4eb8-be0e-283nde47cb1a',
                 'email'=>'customer2@gmail.com',
                 'password'=>Hash::make('12345678'),
                 'mail_code_verified_at' => now(),
             ],
             [
-                'id' => 'Asds-52664d66-aasd5566-C1',
+                'id' => '3173d286-df6f-4eb8-be0e-283ade37cb1a',
                 'email'=>'customer1@gmail.com',
                 'password'=>Hash::make('12345678'),
                 'mail_code_verified_at' => now(),
@@ -34,7 +34,7 @@ class UsersSeeder extends Seeder
         }
 
         $driver = User::create([
-            'id' => 'Asds-52664d66-aasd5566-D1',
+            'id' => '3473d276-df6f-4eb8-be0e-283ade38cb1a',
             'email'=>'driver1@gmail.com',
             'password'=>Hash::make('12345678'),
             'mail_code_verified_at' => now(),
