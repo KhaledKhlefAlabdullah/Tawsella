@@ -117,7 +117,7 @@ class DriversController extends Controller
                 $message = 'Driver is Ready';
             }
 
-            $driver->state = $validatedData['state'];
+            $driver->driver_state = $validatedData['state'];
             $driver->save();
 
             DriverChangeStateEvent::dispatch($driver);
