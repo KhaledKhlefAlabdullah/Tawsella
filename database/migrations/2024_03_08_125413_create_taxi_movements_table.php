@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('movement_type_id');
             $table->string('start_address')->nullable();
             $table->string('destination_address')->nullable();
-            $table->integer('gender')->nullable(\App\Enums\UserEnums\UserGender::male);
+            $table->integer('gender')->default(\App\Enums\UserEnums\UserGender::male);
             $table->double('start_latitude');
             $table->double('start_longitude');
             $table->double('end_latitude')->nullable();
