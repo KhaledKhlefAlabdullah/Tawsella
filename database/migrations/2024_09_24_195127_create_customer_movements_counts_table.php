@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id')->primary()->unique();
             $table->uuid('customer_id');
             $table->integer('movements_count')->default(0);
-            $table->dateTime('last_win_date');
+            $table->dateTime('last_win_date')->nullable();
             $table->foreign('customer_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });

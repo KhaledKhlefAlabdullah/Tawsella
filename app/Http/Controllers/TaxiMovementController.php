@@ -93,13 +93,18 @@ class TaxiMovementController extends Controller
     public function store(TaxiMovementRequest $request)
     {
         try {
-            TaxiMovement::calculateCanceledMovements(Auth::user());
+            $canceledMovementResponse = TaxiMovement::calculateCanceledMovements(Auth::user());
+            if($canceledMovementResponse){
+                return $canceledMovementResponse;
+            }
             $validatedData = $request->validated();
-            User::checkExistingCustomerMovements($validatedData['customer_id']);
+            $ExistsCustomerMovementsResponse = User::checkExistingCustomerMovements($validatedData['customer_id']);
+            if($ExistsCustomerMovementsResponse){
+                return $ExistsCustomerMovementsResponse;
+            }
             $validatedData['gender'] = UserGender::getValue($validatedData['gender']);
             $taxiMovement = TaxiMovement::create($validatedData);
-            RequestingTransportationServiceEvent::dispatch($taxiMovement);
-            event(new RequestingTransportationServiceEvent($taxiMovement));
+            broadcast(new RequestingTransportationServiceEvent($taxiMovement));
             return api_response(message: 'Successfully creating movement');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'Error in creatting taxi movement', code: 500);
