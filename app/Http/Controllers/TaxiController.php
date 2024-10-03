@@ -60,9 +60,14 @@ class TaxiController extends Controller
                 'last_location_longitude' => $validatedData['long']
             ]);
             $lifeMovementForDriver = $driver->driver_movements()->where(['is_completed' => false, 'is_canceled' => false])
-                ->where('request_state', MovementRequestStatus::Accepted)->first();
+                ->where('request_state', MovementRequestStatus::Accepted)->latest()->first();
             $receiver = User::find($lifeMovementForDriver->customer->id);
-            GetTaxiLocationsEvent::dispatch($receiver, $taxi);
+            if($receiver){
+                GetTaxiLocationsEvent::dispatch($taxi, $receiver);
+            }
+
+            GetTaxiLocationsEvent::dispatch($taxi);
+
             return api_response(message: 'Successfully updating taxi locations.');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'Error in updating taxi location', code: 500);

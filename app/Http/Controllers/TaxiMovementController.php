@@ -98,6 +98,9 @@ class TaxiMovementController extends Controller
                 return $canceledMovementResponse;
             }
             $validatedData = $request->validated();
+            $validatedData['gender'] = UserGender::getValue($validatedData['gender']);
+            $taxiMovement = TaxiMovement::create($validatedData);
+            broadcast(new RequestingTransportationServiceEvent($taxiMovement));
             $ExistsCustomerMovementsResponse = User::checkExistingCustomerMovements($validatedData['customer_id']);
             if($ExistsCustomerMovementsResponse){
                 return $ExistsCustomerMovementsResponse;
