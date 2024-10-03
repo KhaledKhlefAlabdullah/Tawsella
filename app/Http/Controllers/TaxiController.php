@@ -61,11 +61,13 @@ class TaxiController extends Controller
             ]);
             $lifeMovementForDriver = $driver->driver_movements()->where(['is_completed' => false, 'is_canceled' => false])
                 ->where('request_state', MovementRequestStatus::Accepted)->latest()->first();
-            $receiver = User::find($lifeMovementForDriver->customer->id);
-            if($receiver){
-                GetTaxiLocationsEvent::dispatch($taxi, $receiver);
-            }else {
-                GetTaxiLocationsEvent::dispatch($taxi);
+            if($lifeMovementForDriver) {
+                $receiver = User::find($lifeMovementForDriver->customer->id);
+                if ($receiver) {
+                    GetTaxiLocationsEvent::dispatch($taxi, $receiver);
+                } else {
+                    GetTaxiLocationsEvent::dispatch($taxi);
+                }
             }
             return api_response(message: 'Successfully updating taxi locations.');
         } catch (Exception $e) {
