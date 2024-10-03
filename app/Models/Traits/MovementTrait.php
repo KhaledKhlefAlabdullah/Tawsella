@@ -172,9 +172,9 @@ trait MovementTrait
      * Increment customer movements numbers or create new record
      * @return void
      */
-    public function incrementMovementCount()
+    public function incrementMovementCount(string $id)
     {
-        $customer = $this->customer()->first();
+        $customer = User::find($id);
         if ($customer) {
             if ($customer->has('movementsCount')) {
                 $customer->movementsCount->increment('movements_count');
