@@ -4,6 +4,7 @@ namespace App\Models\Traits;
 
 use App\Enums\MovementRequestStatus;
 use App\Models\Calculation;
+use App\Models\CustomerMovementsCount;
 use App\Models\TaxiMovement;
 use App\Models\User;
 use Carbon\Carbon;
@@ -179,7 +180,8 @@ trait MovementTrait
             if ($customer->movementsCount) {
                 $customer->movementsCount->increment('movements_count');
             } else {
-                $customer->movementsCount->create([
+                CustomerMovementsCount::create([
+                    'customer_id' => $id,
                     'movements_count' => 1,
                 ]);
             }
