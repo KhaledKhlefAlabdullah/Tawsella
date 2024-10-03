@@ -98,6 +98,7 @@ class TaxiMovementController extends Controller
             User::checkExistingCustomerMovements($validatedData['customer_id']);
             $validatedData['gender'] = UserGender::getValue($validatedData['gender']);
             $taxiMovement = TaxiMovement::create($validatedData);
+            RequestingTransportationServiceEvent::dispatch($taxiMovement);
             event(new RequestingTransportationServiceEvent($taxiMovement));
             return api_response(message: 'Successfully creating movement');
         } catch (Exception $e) {
