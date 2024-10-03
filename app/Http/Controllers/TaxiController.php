@@ -64,10 +64,9 @@ class TaxiController extends Controller
             $receiver = User::find($lifeMovementForDriver->customer->id);
             if($receiver){
                 GetTaxiLocationsEvent::dispatch($taxi, $receiver);
+            }else {
+                GetTaxiLocationsEvent::dispatch($taxi);
             }
-
-            GetTaxiLocationsEvent::dispatch($taxi);
-
             return api_response(message: 'Successfully updating taxi locations.');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'Error in updating taxi location', code: 500);
