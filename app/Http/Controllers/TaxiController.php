@@ -52,6 +52,9 @@ class TaxiController extends Controller
         try {
             $validatedData = $request->validated();
             $taxi = $driver->taxi;
+            if(!$taxi){
+                return api_response(message: 'This driver don\'t have taxi', code: 404);
+            }
             $taxi->update([
                 'last_location_latitude' => $validatedData['lat'],
                 'last_location_longitude' => $validatedData['long']

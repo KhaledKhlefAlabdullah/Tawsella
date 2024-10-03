@@ -32,6 +32,12 @@ class AuthenticatedSessionController extends Controller
             // Get user details
             $user = $request->user();
 
+            $taxi = $user->taxi;
+
+            if(!$taxi){
+                return api_response(message: 'You Cannot logged in because you don\'t have taxi', code: 403);
+            }
+
             // Create a new token for the user
             $token = createUserToken($user, 'login-token');
 
