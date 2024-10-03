@@ -174,7 +174,7 @@ trait MovementTrait
      */
     public function incrementMovementCount()
     {
-        $customer = $this->customer;
+        $customer = $this->customer()->first();
         if ($customer) {
             if ($customer->has('movementsCount')) {
                 $customer->movementsCount->increment('movements_count');
