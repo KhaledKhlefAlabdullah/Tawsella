@@ -176,7 +176,7 @@ trait MovementTrait
     {
         $customer = User::find($id);
         if ($customer) {
-            if ($customer->has('movementsCount')) {
+            if ($customer->movementsCount) {
                 $customer->movementsCount->increment('movements_count');
             } else {
                 $customer->movementsCount->create([
