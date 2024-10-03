@@ -11,8 +11,9 @@ use BenSampo\Enum\Enum;
  */
 final class MovementRequestStatus extends Enum
 {
-    const Accepted = 0;
-    const Rejected = 1;
+
+    const Rejected = 0;
+    const Accepted = 1;
     const Pending = 2;
 
     public static function getMovementStatuses(): array

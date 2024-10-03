@@ -29,7 +29,7 @@ trait DriverTrait
             // Update the request state
             $taxiMovement->update([
                 'request_state' => $state,
-                'is_redirected' => $state,
+                'is_redirected' => true,
                 'state_message' => $message,
                 'driver_id' => $driver->id ?? null,
                 'taxi_id' => $driver->taxi->id ?? null
