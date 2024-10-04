@@ -14,6 +14,7 @@ use App\Http\Requests\TaxiMovements\MarkMovementAsCompletedRequest;
 use App\Http\Requests\TaxiMovements\AcceptOrRejectMovementRequest;
 use App\Http\Requests\TaxiMovements\FoundCustomerRequest;
 use App\Http\Requests\TaxiMovements\TaxiMovementRequest;
+use App\Models\Chat;
 use App\Models\TaxiMovement;
 use App\Models\User;
 use App\Services\PaginationService;
@@ -125,19 +126,27 @@ class TaxiMovementController extends Controller
         try {
             DB::beginTransaction();
             $validatedData = $request->validated();
-            $driver = getAndCheckModelById(User::class, $validatedData['driver_id']);
+            $driver = User::find($validatedData['driver_id']);
             if ($driver->driver_state != DriverState::Ready) {
                 return api_response(message: 'This driver is currently unavailable. Please try another driver.', code: 409);
             }
             $state = MovementRequestStatus::Accepted;
 
-            User::processMovementState($taxiMovement, $state, null, $driver);
-
+            $processMovementStateRequest = User::processMovementState($taxiMovement, $state, null, $driver);
+            if($processMovementStateRequest){
+                return $processMovementStateRequest;
+            }
             // Update the driver state
             $driver->driver_state = DriverState::Reserved;
             $driver->save();
             $message = __('accepted-movement-success');
+            $customer = User::find($taxiMovement->customer->id);
+            $createChatBetweenUsersRequest = Chat::CreateChatBetweenUserAndDriver($customer, $driver);
+            if($createChatBetweenUsersRequest) {
+                return $createChatBetweenUsersRequest;
+            }
             DB::commit();
+
             AcceptTransportationServiceRequestEvent::dispatch($taxiMovement);
 
             return api_response(message: $message);
@@ -162,8 +171,10 @@ class TaxiMovementController extends Controller
 
             $state = MovementRequestStatus::Rejected;
 
-            User::processMovementState($taxiMovement, $state, $validatedData['message']);
-
+            $processMovementStateRequest = User::processMovementState($taxiMovement, $state, $validatedData['message']);
+            if($processMovementStateRequest){
+                return $processMovementStateRequest;
+            }
             DB::commit();
             RejectTransportationServiceRequestEvent::dispatch($taxiMovement);
 
@@ -259,8 +270,10 @@ class TaxiMovementController extends Controller
 
             CustomerCanceledMovementEvent::dispatch($taxiMovement);
 
-            TaxiMovement::calculateCanceledMovements(Auth::user());
-
+            $calculateCanceledMovementsRequest = TaxiMovement::calculateCanceledMovements(Auth::user());
+            if($calculateCanceledMovementsRequest){
+                return $calculateCanceledMovementsRequest;
+            }
             return api_response(message: 'Movement Canceled Successfully');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'Movement Canceled error', code: 500);

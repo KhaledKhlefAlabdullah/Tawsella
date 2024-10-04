@@ -9,6 +9,7 @@ use App\Services\PaginationService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ChatController extends Controller
 {
@@ -72,29 +73,15 @@ class ChatController extends Controller
     public function store(User $receiver)
     {
         try {
-
-            if (!$receiver) {
-                return api_response(message: 'This user not found or there problem in his id', code: 404);
+            DB::beginTransaction();
+            $createChatBetweenUsersRequest = Chat::CreateChatBetweenUserAndDriver($receiver);
+            if($createChatBetweenUsersRequest) {
+                return $createChatBetweenUsersRequest;
             }
-
-            $userName = User::where('user_id', getMyId())->value('name');
-            $receiverName = $receiver->profile?->name;
-
-            // Generate chat names based on username
-            $chatName = 'chat-between-' . $userName . '-and-' . $receiverName;
-            $chatNameR = 'chat-between-' . $receiverName . '-and-' . $userName;
-
-            // Check if the chat already exists, if not create a new one
-            $chat = Chat::where('name', $chatName)->orWhere('name', $chatNameR)->first();
-            if (!$chat) {
-                $chat = Chat::create([
-                    'name' => 'chat-between-' . $userName . '-and-' . $receiverName,
-                ]);
-
-                $chat->members()->attach([$receiver->id, getMyId()]);
-            }
+            DB::commit();
             return api_response(message: 'Successfully creating chat');
         } catch (Exception $e) {
+            DB::rollBack();
             return api_response(errors: [$e->getMessage()], message: 'Error in creating chat', code: 500);
         }
     }

@@ -13,29 +13,39 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
+Broadcast::routes(['middleware' => ['auth:sanctum']]);  // Use API auth for token-based authentication
+
 Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return  $user->id ==  $id;
 });
 
 
-Broadcast::channel('Taxi-movement.{admin_id}', function ($user, $admin_id) {
-    return  $user->id ==  $admin_id;
+Broadcast::channel('Taxi-movement.{id}', function ($user, $id) {
+    return  $user->id ==  $id;
 });
 
 
-Broadcast::channel('TaxiLocation.{admin_id}', function ($user, $admin_id) {
+Broadcast::channel('TaxiLocation.{id}', function ($user, $id) {
 
-    return $user->id == $admin_id;
+    return $user->id == $id;
 });
 
-Broadcast::channel('customer-channel.{customer_id}', function ($user, $customer_id) {
-    return  $user->id ==  $customer_id;
+Broadcast::channel('customer-channel.{id}', function ($user, $id) {
+    return  $user->id ==  $id;
 });
 
-Broadcast::channel('driver-channel.{driver_id}', function ($user, $driver_id) {
-    return  $user->id ==  $driver_id;
+Broadcast::channel('driver-channel.{id}', function ($user, $id) {
+    return  $user->id ==  $id;
 });
 
-Broadcast::channel('found-customer.{admin_id}', function ($user, $admin_id) {
-    return  $user->id ==  $admin_id;
+Broadcast::channel('found-customer.{id}', function ($user, $id) {
+    return  $user->id ==  $id;
+});
+
+Broadcast::channel('driver.{id}', function ($user, $id) {
+    return  $user->id ==  $id;
+});
+
+Broadcast::channel('customer.{id}', function ($user, $id) {
+    return  $user->id ==  $id;
 });

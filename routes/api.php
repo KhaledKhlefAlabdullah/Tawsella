@@ -23,6 +23,11 @@ Route::middleware(['auth:sanctum', EnsureEmailIsVerifiedByCodeMiddleware::class]
     require __DIR__ . '/Roles/admin.php';
     require __DIR__.'/Roles/allAuthUsers.php';
 });
+
+Route::get('/csrf-token', function () {
+    return response()->json(['csrf_token' => csrf_token()]);
+});
+
 require __DIR__.'/Roles/publicApis.php';
 require __DIR__ . '/auth.php';
 
