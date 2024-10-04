@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Providers\RouteServiceProvider;
+use Cassandra\Type\UserType;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\RedirectResponse;
@@ -34,7 +35,7 @@ class AuthenticatedSessionController extends Controller
 
             $taxi = $user->taxi;
 
-            if(!$taxi){
+            if($user->hasRole(\App\Enums\UserEnums\UserType::TaxiDriver()->key) && !$taxi){
                 return api_response(message: 'You Cannot logged in because you don\'t have taxi', code: 403);
             }
 
