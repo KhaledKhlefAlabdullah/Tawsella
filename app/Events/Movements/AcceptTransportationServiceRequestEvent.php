@@ -54,7 +54,7 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
 
     public function broadcastWithDriver(): array
     {
-        $customer_profile = $this->taxiMovement->customer()->profile;
+        $customer_profile = $this->taxiMovement->customer ? $this->taxiMovement->customer->profile : null;
 
         return [
             'request_id' => $this->taxiMovement->id,
@@ -65,7 +65,8 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
 
     public function broadcastWithCustomer(): array
     {
-        $driver_profile = $this->taxiMovement->driver()->profile;
+        $driver_profile = $this->taxiMovement->driver ? $this->taxiMovement->driver->profile : null;
+
         return [
             'message' => 'accepted',
             'driver' => $driver_profile
@@ -79,22 +80,19 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
      */
     public function broadcastWith(): array
     {
-        $channels = $this->broadcastOn();
-
-        // Check which channel is being broadcast to
-        foreach ($channels as $channel) {
-            if ($channel instanceof PrivateChannel && strpos($channel->name, 'customer') !== false) {
-                return $this->broadcastWithCustomer();
-            } elseif ($channel instanceof PrivateChannel && strpos($channel->name, 'driver') !== false) {
-                return $this->broadcastWithDriver();
-            }
+        if (in_array('customer.' . $this->taxiMovement->customer_id, array_map(fn($channel) => $channel->name, $this->broadcastOn()))) {
+            return $this->broadcastWithCustomer();
+        }
+        if (in_array('driver.' . $this->taxiMovement->driver_id, array_map(fn($channel) => $channel->name, $this->broadcastOn()))) {
+            return $this->broadcastWithDriver();
         }
 
-        // Default data if channel not recognized
         return [];
     }
 
-    public function broadcastAs(){
+
+    public function broadcastAs()
+    {
         return 'accept-request';
     }
 }
