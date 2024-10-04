@@ -21,7 +21,7 @@ class GetTaxiLocationsEvent implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(?User $receiver, Taxi $taxi)
+    public function __construct(Taxi $taxi, ?User $receiver)
     {
         $this->receiver = $receiver;
         $this->taxi = $taxi;
