@@ -74,7 +74,7 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     //************************************************************************************* */
     Route::group(['prefix' => 'dashboard', 'controller' => DashboardController::class], function () {
         Route::get('/', 'index');
-        Route::get('/movement-details/{taxiMovement}', [DashboardController::class, 'getMovementDetails']);
+        Route::get('/movement-details/{taxiMovement}', [DashboardController::class, 'showRequestDetails']);
         Route::get('/report', 'viewReport');
         Route::get('/report/download', 'downloadReport');
     });

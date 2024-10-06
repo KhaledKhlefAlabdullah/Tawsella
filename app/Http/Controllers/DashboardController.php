@@ -37,6 +37,10 @@ class DashboardController extends Controller
         return api_response(data: $data, message: 'Successfully get data');
     }
 
+    /**
+     * @param TaxiMovement $taxiMovement
+     * @return JsonResponse\
+     */
     public function showRequestDetails(TaxiMovement $taxiMovement){
         $details = $taxiMovement->getSingleLifeTaxiMovementDetails();
         return api_response(data: $details, message: 'Successfully get taxi movement details');
