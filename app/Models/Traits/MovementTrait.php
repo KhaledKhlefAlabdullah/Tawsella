@@ -169,6 +169,25 @@ trait MovementTrait
     }
 
 
+    public function getSingleLifeTaxiMovementDetails()
+    {
+        // Query to get requests for the current day
+        return (object)[
+            'id' => $this->id,
+            'from' => $this->start_address,
+            'to' => $this->destination_address,
+            'gender' => $this->gender,
+            'lat' => $this->start_latitude,
+            'long' => $this->start_longitude,
+            'avatar' => $this->customer()->profile?->avatar ?? null,
+            'customer_name' => $this->customer()->profile?->name ?? null,
+            'customer_phone' => $this->customer()->profile?->phone_number ?? null,
+            'type' => $this->movementType->type ?? null,
+            'time' => $this->created_at,
+        ];
+    }
+
+
     /**
      * Increment customer movements numbers or create new record
      * @return void

@@ -37,6 +37,11 @@ class DashboardController extends Controller
         return api_response(data: $data, message: 'Successfully get data');
     }
 
+    public function showRequestDetails(TaxiMovement $taxiMovement){
+        $details = $taxiMovement->getSingleLifeTaxiMovementDetails();
+        return api_response(data: $details, message: 'Successfully get taxi movement details');
+    }
+
     /**
      * Return install app page
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Foundation\Application
