@@ -37,7 +37,7 @@ trait UserTrait
                 'avatar' => $user->profile?->avatar ?? '',
                 'is_active' => $user->is_active,
                 'user_type' => $user->getRoleNames()[0],
-                'gender' => $user->profile?->gender ?? '',
+                'gender' => UserGender::getKey($user->profile?->gender) ?? '',
                 'created_at' => $user->created_at,
             ];
 

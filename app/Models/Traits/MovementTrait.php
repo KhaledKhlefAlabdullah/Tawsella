@@ -3,6 +3,7 @@
 namespace App\Models\Traits;
 
 use App\Enums\MovementRequestStatus;
+use App\Enums\UserEnums\UserGender;
 use App\Models\Calculation;
 use App\Models\CustomerMovementsCount;
 use App\Models\TaxiMovement;
@@ -41,7 +42,7 @@ trait MovementTrait
                 'movement_id' => $movement->id,
                 'start_address' => $movement->start_address,
                 'destination_address' => $movement->destination_address,
-                'gender' => $movement->gender,
+                'gender' => UserGender::getKey($movement->gender),
                 'start_latitude' => $movement->start_latitude,
                 'start_longitude' => $movement->start_longitude,
                 'end_latitude' => $movement->end_latitude ?? null,
@@ -49,16 +50,16 @@ trait MovementTrait
                 'path' => json_decode($movement->path) ?? null,
                 'driver_email' => $movement->driver->email,
                 'customer_email' => $movement->customer->email,
-                'driver_name' => $movement->driver()->profile?->name,
-                'driver_phone' => $movement->driver()->profile?->phone_number,
-                'customer_name' => $movement->customer()->profile?->name,
-                'customer_phone' => $movement->customer()->profile?->phone_number,
+                'driver_name' => $movement->driver->profile?->name,
+                'driver_phone' => $movement->driver->profile?->phone_number,
+                'customer_name' => $movement->customer->profile?->name,
+                'customer_phone' => $movement->customer->profile?->phone_number,
                 'taxi_id' => $movement->taxi_id,
                 'car_name' => $movement->taxi->car_name,
                 'car_lamp_number' => $movement->taxi->lamp_number,
                 'car_plate_number' => $movement->taxi->plate_number,
                 'type' => $movement->movement_type->type,
-                'price' => $movement->calculations->totalPrice ?? null,
+                'price' => $movement?->calculations->totalPrice ?? 0,
                 'date' => $movement->created_at,
             ];
         });
@@ -156,7 +157,7 @@ trait MovementTrait
                     'id' => $taxiMovement->id,
                     'from' => $taxiMovement->start_address,
                     'to' => $taxiMovement->destination_address,
-                    'gender' => $taxiMovement->gender,
+                    'gender' => UserGender::getKey($taxiMovement->gender),
                     'lat' => $taxiMovement->start_latitude,
                     'long' => $taxiMovement->start_longitude,
                     'avatar' => $taxiMovement->customer()->profile?->avatar ?? null,
@@ -176,7 +177,7 @@ trait MovementTrait
             'id' => $this->id,
             'from' => $this->start_address,
             'to' => $this->destination_address,
-            'gender' => $this->gender,
+            'gender' => UserGender::getKey($this->gender),
             'lat' => $this->start_latitude,
             'long' => $this->start_longitude,
             'avatar' => $this->customer()->profile?->avatar ?? null,

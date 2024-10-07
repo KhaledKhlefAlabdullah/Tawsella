@@ -2,6 +2,7 @@
 
 namespace App\Events\Movements;
 
+use App\Enums\UserEnums\UserGender;
 use App\Models\TaxiMovement;
 use App\Models\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -43,7 +44,7 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
     public function getDriverData()
     {
         return [
-            'gender' => $this->taxiMovement->gender,
+            'gender' => UserGender::getKey($this->taxiMovement->gender),
             'customer_address' => $this->taxiMovement->start_address,
             'destination_address' => $this->taxiMovement->destination_address,
             'location_lat' => $this->taxiMovement->start_latitude,

@@ -56,7 +56,7 @@ trait DriverTrait
             return [
                 'id' => $driver->id,
                 'name' => $driver->profile?->name,
-                'gender' => $driver->profile?->gender,
+                'gender' => UserGender::getKey($driver->profile?->gender),
                 'avatar' => $driver->profile?->avatar
             ];
         });
