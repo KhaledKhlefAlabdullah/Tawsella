@@ -246,7 +246,7 @@ class TaxiMovementController extends Controller
                 'completed-movement'
             );
 
-            return api_response(data: $calculation->totalPrice, message: 'Successfully completed movement request');
+            return api_response(data:[ 'amount' => $calculation->totalPrice], message: 'Successfully completed movement request');
         } catch (Exception $e) {
             DB::rollBack();
             return api_response(errors: [$e->getMessage()], message: 'Error in make movement completed', code: 500);
