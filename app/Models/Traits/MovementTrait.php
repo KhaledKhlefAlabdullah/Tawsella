@@ -155,11 +155,11 @@ trait MovementTrait
             ->map(function ($taxiMovement) {
                 return (object)[
                     'id' => $taxiMovement->id,
-                    'from' => $taxiMovement->start_address,
-                    'to' => $taxiMovement->destination_address,
+                    'start_address' => $taxiMovement->start_address,
+                    'destination_address' => $taxiMovement->destination_address,
                     'gender' => UserGender::getKey($taxiMovement->gender),
-                    'lat' => $taxiMovement->start_latitude,
-                    'long' => $taxiMovement->start_longitude,
+                    'start_latitude' => $taxiMovement->start_latitude,
+                    'start_longitude' => $taxiMovement->start_longitude,
                     'avatar' => $taxiMovement->customer()->profile?->avatar ?? null,
                     'customer_name' => $taxiMovement->customer()->profile?->name ?? null,
                     'customer_phone' => $taxiMovement->customer()->profile?->phone_number ?? null,
@@ -175,11 +175,11 @@ trait MovementTrait
         // Query to get requests for the current day
         return (object)[
             'id' => $this->id,
-            'from' => $this->start_address,
-            'to' => $this->destination_address,
+            'start_address' => $this->start_address,
+            'destination_address' => $this->destination_address,
             'gender' => UserGender::getKey($this->gender),
-            'lat' => $this->start_latitude,
-            'long' => $this->start_longitude,
+            'start_latitude' => $this->start_latitude,
+            'start_longitude' => $this->start_longitude,
             'avatar' => $this->customer()->profile?->avatar ?? null,
             'customer_name' => $this->customer()->profile?->name ?? null,
             'customer_phone' => $this->customer()->profile?->phone_number ?? null,
