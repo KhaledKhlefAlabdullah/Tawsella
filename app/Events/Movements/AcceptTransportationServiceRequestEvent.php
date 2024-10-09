@@ -36,8 +36,8 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
         $driver_id = $this->taxiMovement->driver_id;
 
         return [
-            new PrivateChannel('customer.' . $customer_id),
-            new PrivateChannel('driver.' . $driver_id)
+            'customer.' . $customer_id,
+            'driver.' . $driver_id
         ];
     }
 
