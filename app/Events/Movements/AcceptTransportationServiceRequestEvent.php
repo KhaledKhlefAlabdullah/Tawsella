@@ -69,7 +69,7 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
         $driver_profile = $this->taxiMovement->driver ? $this->taxiMovement->driver->profile : null;
 
         return [
-            'message' => 'accepted',
+            'message' => $this->taxiMovement->state_message,
             'driver' => $driver_profile
         ];
     }

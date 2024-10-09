@@ -131,15 +131,14 @@ class TaxiMovementController extends Controller
                 return api_response(message: 'This driver is currently unavailable. Please try another driver.', code: 409);
             }
             $state = MovementRequestStatus::Accepted;
-
-            $processMovementStateRequest = User::processMovementState($taxiMovement, $state, null, $driver);
+            $message = __('accepted-movement-success');
+            $processMovementStateRequest = User::processMovementState($taxiMovement, $state, $message, $driver);
             if($processMovementStateRequest){
                 return $processMovementStateRequest;
             }
             // Update the driver state
             $driver->driver_state = DriverState::Reserved;
             $driver->save();
-            $message = __('accepted-movement-success');
             $customer = User::find($taxiMovement->customer->id);
             $createChatBetweenUsersRequest = Chat::CreateChatBetweenUserAndDriver($customer, $driver);
             if($createChatBetweenUsersRequest) {
