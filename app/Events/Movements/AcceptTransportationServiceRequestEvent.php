@@ -104,6 +104,6 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
      */
     public function broadcastAs(): string
     {
-        return 'accept-request';
+        return 'acceptRequest';
     }
 }
