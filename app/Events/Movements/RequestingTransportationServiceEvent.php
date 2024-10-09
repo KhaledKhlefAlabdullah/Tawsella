@@ -49,8 +49,8 @@ class RequestingTransportationServiceEvent implements ShouldBroadcast
             'gender' => $this->taxiMovement->gender,
             'customer_address' => $this->taxiMovement->customer_address,
             'destination_address' => $this->taxiMovement->customer_destination_address,
-            'lat' => $this->taxiMovement->start_latitude,
-            'long' => $this->taxiMovement->start_longitude,
+            'start_latitude' => $this->taxiMovement->start_latitude,
+            'start_longitude' => $this->taxiMovement->start_longitude,
             'time' => date('Y-m-d -- h:i A', strtotime($this->taxiMovement->created_at))
         ];
     }
