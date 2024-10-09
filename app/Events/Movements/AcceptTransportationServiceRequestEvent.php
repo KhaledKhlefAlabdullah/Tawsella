@@ -4,7 +4,6 @@ namespace App\Events\Movements;
 
 use App\Enums\UserEnums\UserGender;
 use App\Models\TaxiMovement;
-use App\Models\User;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -32,16 +31,18 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
      */
     public function broadcastOn(): array
     {
-        $customer_id = $this->taxiMovement->customer_id;
-        $driver_id = $this->taxiMovement->driver_id;
-
         return [
-            'customer.' . $customer_id,
-            'driver.' . $driver_id
+            new PrivateChannel('customer.' . $this->taxiMovement->customer_id),
+            new PrivateChannel('driver.' . $this->taxiMovement->driver_id)
         ];
     }
 
-    public function getDriverData()
+    /**
+     * Get the driver-related data.
+     *
+     * @return array
+     */
+    public function getDriverData(): array
     {
         return [
             'gender' => UserGender::getKey($this->taxiMovement->gender),
@@ -49,10 +50,15 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
             'destination_address' => $this->taxiMovement->destination_address,
             'location_lat' => $this->taxiMovement->start_latitude,
             'location_long' => $this->taxiMovement->start_longitude,
-            'type' => $this->taxiMovement->movement_type->type
+            'type' => $this->taxiMovement->movement_type->type,
         ];
     }
 
+    /**
+     * Data to broadcast with the driver.
+     *
+     * @return array
+     */
     public function broadcastWithDriver(): array
     {
         $customer_profile = $this->taxiMovement->customer ? $this->taxiMovement->customer->profile : null;
@@ -64,6 +70,11 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
         ];
     }
 
+    /**
+     * Data to broadcast with the customer.
+     *
+     * @return array
+     */
     public function broadcastWithCustomer(): array
     {
         $driver_profile = $this->taxiMovement->driver ? $this->taxiMovement->driver->profile : null;
@@ -81,18 +92,18 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
      */
     public function broadcastWith(): array
     {
-        if (in_array('customer.' . $this->taxiMovement->customer_id, array_map(fn($channel) => $channel->name, $this->broadcastOn()))) {
-            return $this->broadcastWithCustomer();
-        }
-        if (in_array('driver.' . $this->taxiMovement->driver_id, array_map(fn($channel) => $channel->name, $this->broadcastOn()))) {
-            return $this->broadcastWithDriver();
-        }
-
-        return [];
+        return array_merge(
+            $this->broadcastWithCustomer(),
+            $this->broadcastWithDriver()
+        );
     }
 
-
-    public function broadcastAs()
+    /**
+     * Get the event name to broadcast as.
+     *
+     * @return string
+     */
+    public function broadcastAs(): string
     {
         return 'accept-request';
     }
