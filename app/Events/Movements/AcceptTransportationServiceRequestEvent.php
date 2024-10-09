@@ -32,8 +32,8 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('customer.' . $this->taxiMovement->customer_id),
-            new PrivateChannel('driver.' . $this->taxiMovement->driver_id)
+            'customer.' . $this->taxiMovement->customer_id,
+            'driver.' . $this->taxiMovement->driver_id
         ];
     }
 
