@@ -25,7 +25,7 @@ trait OfferTrait
                 'valid_date' => $offer->valid_date,
                 'type' => $offer->movement_type_offer->type ?? null,
                 'price' => $offer->movement_type_offer->price ?? null,
-                'description' => $offer->movement_type_offer->description ?? null
+                'description' => $offer->description ?? null
             ];
         });
     }

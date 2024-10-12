@@ -106,7 +106,7 @@ class TaxiMovementController extends Controller
             $validatedData['gender'] = UserGender::getValue($validatedData['gender']);
             $taxiMovement = TaxiMovement::create($validatedData);
             broadcast(new RequestingTransportationServiceEvent($taxiMovement));
-            return api_response(message: 'Successfully creating movement');
+            return api_response(data: ['movement_id' => $taxiMovement->id],message: 'Successfully creating movement');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'Error in creatting taxi movement', code: 500);
         }
