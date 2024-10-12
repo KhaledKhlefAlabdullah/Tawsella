@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\ContactUsMessageController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Middleware\RolesMiddlewares\AdminMiddleware;
@@ -86,5 +87,14 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     Route::post('contact-us/answer/{contact_us}', [ContactUsMessageController::class, 'answer']);
     //*************************** End route contact us **************************************** */
     //************************************************************************************* */
+    //*************************** Start route about us ************************************** */
+    //*************************************************************************************** */
+    Route::group(['prefix' => 'about-us', 'controller' => AboutUsController::class], function () {
+        Route::post('general/add-or-update', 'storeOrUpdate');
+        Route::post('additional/add', 'storeAdditionalInfo');
+        Route::put('additional/edit', 'updateAdditionalInfo');
+    });
+    //*************************** End route contact us **************************************** */
+    //***************************************************************************************** */
 });
 
