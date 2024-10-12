@@ -17,38 +17,39 @@ trait AdminTrait
     public static function getReportData(Carbon $startDate, Carbon $endDate)
     {
         // Movements within the date range
-        $numberOfMovements = TaxiMovement::whereBetween('created_at', [$startDate, $endDate])->count() ?? 0;
+        $movementsQuery = TaxiMovement::whereBetween('created_at', [$startDate, $endDate]);
 
-        // Completed movements within the date range
-        $numberOfCompletedMovements = TaxiMovement::whereBetween('created_at', [$startDate, $endDate])
-            ->where('is_completed', true)
-            ->count() ?? 0;
-
-        // Rejected movements within the date range
-        $numberOfRejectedMovements = TaxiMovement::whereBetween('created_at', [$startDate, $endDate])
-            ->where('request_state', MovementRequestStatus::Rejected)
-            ->count() ?? 0;
-
-        // Canceled movements within the date range
-        $numberOfCanceledMovements = TaxiMovement::whereBetween('created_at', [$startDate, $endDate])
-            ->where('is_canceled', true)
-            ->count() ?? 0;
+        $numberOfMovements = $movementsQuery->count() ?? 0;
+        $numberOfCompletedMovements = $movementsQuery->where('is_completed', true)->count() ?? 0;
+        $numberOfRejectedMovements = $movementsQuery->where('request_state', MovementRequestStatus::Rejected)->count() ?? 0;
+        $numberOfCanceledMovements = $movementsQuery->where('is_canceled', true)->count() ?? 0;
 
         // Total amount of movements within the date range
-        $totalAmount = Calculation::whereBetween('created_at', [$startDate, $endDate])
-            ->sum('totalPrice') ?? 0;
+        $totalAmount = Calculation::whereBetween('created_at', [$startDate, $endDate])->sum('totalPrice') ?? 0;
 
-        // Get movements with related data within the date range
-        $movements = TaxiMovement::with(['calculations', 'driver', 'movement_type'])
-            ->whereBetween('created_at', [$startDate, $endDate])
-            ->get() ?? 0;
-
-        // Get driver movements with related data within the date range
-        $driversMovements = User::with(['driver_movements.calculations', 'driver_movements.movement_type', 'driver_ratings'])
-            ->whereHas('driver_movements', function ($query) use ($startDate, $endDate) {
+        // Get driver movements with related data within the date range using eager loading
+        $drivers = User::whereHas('driver_movements', function ($query) use ($startDate, $endDate) {
+            $query->whereBetween('created_at', [$startDate, $endDate]);
+        })
+            ->with(['driver_movements' => function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('created_at', [$startDate, $endDate]);
-            })
-            ->get() ?? 0;
+            }, 'profile'])
+            ->get() ?? null;
+
+        $driversMovements = [];
+        foreach ($drivers as $driver) {
+            $movementsCount = $driver->driver_movements->count();
+            $totalDriverAmount = Calculation::whereBetween('created_at', [$startDate, $endDate])
+                ->where('driver_id', $driver->id)
+                ->sum('totalPrice') ?? 0;
+
+            $driversMovements[] = [
+                'avatar' => $driver->profile->avatar,
+                'name' => $driver->profile->name,
+                'movementsCount' => $movementsCount,
+                'totalAmount' => $totalDriverAmount
+            ];
+        }
 
         return [
             'numberOfMovements' => $numberOfMovements,
@@ -56,7 +57,6 @@ trait AdminTrait
             'numberOfRejectedMovements' => $numberOfRejectedMovements,
             'numberOfCanceledMovements' => $numberOfCanceledMovements,
             'totalAmount' => $totalAmount,
-            'movements' => $movements,
             'driversMovements' => $driversMovements,
         ];
     }
