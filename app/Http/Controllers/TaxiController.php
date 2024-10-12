@@ -36,7 +36,7 @@ class TaxiController extends Controller
         $taxisDetails = $this->paginationService->applyPagination($query, $request);
 
         $taxis = Taxi::mappingTaxis($taxisDetails->items());
-        return api_response(data: $taxis, message: 'Successfully retrieved taxis', pagination:  get_pagination($taxisDetails, $request));
+        return api_response(data: $taxis, message: 'Successfully retrieved taxis', pagination: get_pagination($taxisDetails, $request));
     }
 
     /**
@@ -52,16 +52,19 @@ class TaxiController extends Controller
         try {
             $validatedData = $request->validated();
             $taxi = $driver->taxi;
-            if(!$taxi){
+            if (!$taxi) {
                 return api_response(message: 'This driver don\'t have taxi', code: 404);
             }
             $taxi->update([
                 'last_location_latitude' => $validatedData['lat'],
                 'last_location_longitude' => $validatedData['long']
             ]);
+
             $lifeMovementForDriver = $driver->driver_movements()->where(['is_completed' => false, 'is_canceled' => false])
                 ->where('request_state', MovementRequestStatus::Accepted)->latest()->first();
-            if($lifeMovementForDriver) {
+            if ($lifeMovementForDriver) {
+                // add point to path in taxi movements table to view it map
+                $lifeMovementForDriver->addPointToPath($validatedData['lat'], $validatedData['long']);
                 $receiver = User::find($lifeMovementForDriver->customer->id);
                 if ($receiver) {
                     GetTaxiLocationsEvent::dispatch($taxi, $receiver);

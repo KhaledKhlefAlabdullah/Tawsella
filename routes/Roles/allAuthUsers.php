@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\ChatController;
@@ -40,3 +41,10 @@ Route::post('/set-message-starred/{message}', [MessageController::class, 'setMes
 /**
  * End Messages Management
  */
+
+Route::group(['prefix' => 'notifications', 'controller' => NotificationController::class], function () {
+    Route::get('/', 'index');
+    Route::get('/unread','unReadNotifications');
+    Route::post('/','readNotifications');
+    Route::post('/{notificationId}','readSingleNotifications');
+});

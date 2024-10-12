@@ -112,9 +112,9 @@ class MessageController extends Controller
             ], $validatedData['receiver_id']);
 
             // Send Message notification
-            $receiver = getAndCheckModelById(User::class, $validatedData['receiver_id']);
+            $receiver = User::find($validatedData['receiver_id']);
 
-            $notificationMessage = is_null($message->message) ? 'receive an media message' : $message->message;
+            $notificationMessage = is_null($message->message) ? "receive an media message\n" : $message->message;
 
             send_notifications($receiver, $notificationMessage);
 

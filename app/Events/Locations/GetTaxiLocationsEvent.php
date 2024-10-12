@@ -17,14 +17,16 @@ class GetTaxiLocationsEvent implements ShouldBroadcast
 
     protected User $receiver;
     protected Taxi $taxi;
+    protected array $path;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(Taxi $taxi, ?User $receiver)
+    public function __construct(Taxi $taxi, ?User $receiver, ?array $path)
     {
         $this->receiver = $receiver;
         $this->taxi = $taxi;
+        $this->path = $path;
     }
 
     /**
@@ -34,7 +36,7 @@ class GetTaxiLocationsEvent implements ShouldBroadcast
     public function broadcastOn()
     {
         $channels = [];
-        if($this->receiver){
+        if ($this->receiver) {
             $channels[] = new PrivateChannel('TaxiLocation.' . $this->receiver->id);
         }
 
@@ -45,14 +47,22 @@ class GetTaxiLocationsEvent implements ShouldBroadcast
 
     public function broadcastWith(): array
     {
-        return [
+        $data = [
             'driver_id' => $this->taxi->driver_id,
             'lat' => $this->taxi->last_location_latitude,
             'long' => $this->taxi->last_location_longitude
         ];
+
+        if ($this->path) {
+            $data = array_merge($data, ['path' => $this->path]);
+        }
+
+        return $data;
     }
 
-     public function broadcastAs(){
-         return 'TaxiLocation';
-     }
+
+    public function broadcastAs()
+    {
+        return 'TaxiLocation';
+    }
 }

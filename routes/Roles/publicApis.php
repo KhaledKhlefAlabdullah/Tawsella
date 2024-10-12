@@ -27,3 +27,4 @@ Route::get('/phone', function () {
 
 
 Route::apiResource('our-services', OurServiceController::class)->only(['index', 'show']);
+
