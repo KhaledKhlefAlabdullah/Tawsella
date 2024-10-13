@@ -79,7 +79,7 @@ class TaxiMovementController extends Controller
             'lat' => $taxiMovement->end_latitude,
             'long' => $taxiMovement->end_longitude,
             'name' => $taxiMovement->driver()->profile?->name,
-            'path' => $taxiMovement->path ?? []
+            'path' => json_decode($taxiMovement->path) ?? []
         ];
         return api_response(data: $data, message: 'Successfully getting map taxiMovement.');
     }
