@@ -95,18 +95,18 @@ class TaxiMovementController extends Controller
     {
         try {
             $canceledMovementResponse = TaxiMovement::calculateCanceledMovements(Auth::user());
-            if($canceledMovementResponse){
+            if ($canceledMovementResponse) {
                 return $canceledMovementResponse;
             }
             $validatedData = $request->validated();
             $ExistsCustomerMovementsResponse = User::checkExistingCustomerMovements($validatedData['customer_id']);
-            if($ExistsCustomerMovementsResponse){
+            if ($ExistsCustomerMovementsResponse) {
                 return $ExistsCustomerMovementsResponse;
             }
             $validatedData['gender'] = UserGender::getValue($validatedData['gender']);
             $taxiMovement = TaxiMovement::create($validatedData);
             broadcast(new RequestingTransportationServiceEvent($taxiMovement));
-            return api_response(data: ['movement_id' => $taxiMovement->id],message: 'Successfully creating movement');
+            return api_response(data: ['movement_id' => $taxiMovement->id], message: 'Successfully creating movement');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'Error in creatting taxi movement', code: 500);
         }
@@ -133,7 +133,7 @@ class TaxiMovementController extends Controller
             $state = MovementRequestStatus::Accepted;
             $message = __('accepted-movement-success');
             $processMovementStateRequest = User::processMovementState($taxiMovement, $state, $message, $driver);
-            if($processMovementStateRequest){
+            if ($processMovementStateRequest) {
                 return $processMovementStateRequest;
             }
             // Update the driver state
@@ -141,7 +141,7 @@ class TaxiMovementController extends Controller
             $driver->save();
             $customer = User::find($taxiMovement->customer->id);
             $createChatBetweenUsersRequest = Chat::CreateChatBetweenUserAndDriver($customer, $driver);
-            if($createChatBetweenUsersRequest) {
+            if ($createChatBetweenUsersRequest) {
                 return $createChatBetweenUsersRequest;
             }
             DB::commit();
@@ -171,7 +171,7 @@ class TaxiMovementController extends Controller
             $state = MovementRequestStatus::Rejected;
 
             $processMovementStateRequest = User::processMovementState($taxiMovement, $state, $validatedData['message']);
-            if($processMovementStateRequest){
+            if ($processMovementStateRequest) {
                 return $processMovementStateRequest;
             }
             DB::commit();
@@ -245,7 +245,7 @@ class TaxiMovementController extends Controller
                 'completed-movement'
             );
 
-            return api_response(data:[ 'amount' => $calculation->totalPrice], message: 'Successfully completed movement request');
+            return api_response(data: ['amount' => $calculation->totalPrice], message: 'Successfully completed movement request');
         } catch (Exception $e) {
             DB::rollBack();
             return api_response(errors: [$e->getMessage()], message: 'Error in make movement completed', code: 500);
@@ -270,7 +270,7 @@ class TaxiMovementController extends Controller
             CustomerCanceledMovementEvent::dispatch($taxiMovement);
 
             $calculateCanceledMovementsRequest = TaxiMovement::calculateCanceledMovements(Auth::user());
-            if($calculateCanceledMovementsRequest){
+            if ($calculateCanceledMovementsRequest) {
                 return $calculateCanceledMovementsRequest;
             }
             return api_response(message: 'Movement Canceled Successfully');
@@ -279,6 +279,29 @@ class TaxiMovementController extends Controller
         }
     }
 
+    public function getLastRequestForCustomer()
+    {
+
+        $lastRequest = Auth::user()->customer_movements()
+            ->where('is_completed', false)
+            ->where('is_canceled', false)
+            ->where('is_redirected', true)
+            ->whereDate('created_at', Carbon::today())
+            ->latest()
+            ->first();
+
+        if(!$lastRequest){
+            return api_response(message: 'There no request for this customer', code: 404);
+        }
+
+        $driver_profile = $lastRequest->driver ? $lastRequest->driver->profile : null;
+
+        return [
+            'request_id' => $lastRequest->id,
+            'message' => $lastRequest->state_message,
+            'driver' => $driver_profile
+        ];
+    }
 
     /**
      * Send Taxi movemnt request details
@@ -324,7 +347,7 @@ class TaxiMovementController extends Controller
             $taxiMovement->delete();
             return api_response(message: 'Successfully deleted taxi movement');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()],message: 'Error in deleted taxi movement', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Error in deleted taxi movement', code: 500);
         }
     }
 }
