@@ -65,7 +65,8 @@ class TaxiController extends Controller
             if ($lifeMovementForDriver) {
                 // add point to path in taxi movements table to view it map
                 $lifeMovementForDriver->addPointToPath($validatedData['lat'], $validatedData['long']);
-                GetTaxiLocationsEvent::dispatch($taxi, $lifeMovementForDriver->path);
+
+                GetTaxiLocationsEvent::dispatch($taxi, json_decode($lifeMovementForDriver->path));
             }else{
                 GetTaxiLocationsEvent::dispatch($taxi);
             }
