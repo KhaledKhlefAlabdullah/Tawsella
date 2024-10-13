@@ -10,7 +10,7 @@ Route::middleware([CustomerMiddleware::class])->group(function () {
      */
     Route::group(['prefix' => 'movements','movement','controller' => TaxiMovementController::class], function () {
         Route::post('/', 'store');
-        Route::post('/cancel{taxiMovement}', 'canceledMovement');
+        Route::post('/cancel/{taxiMovement}', 'canceledMovement');
         Route::get('/latest', 'getLastRequestForCustomer');
     });
     /**
