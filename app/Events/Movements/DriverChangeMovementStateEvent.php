@@ -62,4 +62,8 @@ class DriverChangeMovementStateEvent implements ShouldBroadcast
             __('driver') . ' ' . $driverName . ' ' . __('don\'t-find') . ' ' . __('customer') . ' ' . $customerName;
     }
 
+    public function broadcastAs(): string
+    {
+        return 'foundCustomer';
+    }
 }

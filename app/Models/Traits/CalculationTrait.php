@@ -23,7 +23,7 @@ trait CalculationTrait
                 'driver_id' => $driver_id,
                 'name' => $driver->profile?->name,
                 'avatar' => $driver->profile?->avatar,
-                'plate_number' => $driver->plate_number,
+                'plate_number' => $driver->taxi?->plate_number,
                 'today_account' => $total_today,
                 'all_account' => $total_previous
             ];
