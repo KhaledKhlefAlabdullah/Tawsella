@@ -32,8 +32,8 @@ class CustomerCanceledMovementEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('user-canceled-movement-request.' . $this->movement->driver_id),
-            new PrivateChannel('user-canceled-movement-request.' . getAdminId()),
+            'driver-customer-cancel.' . $this->taxiMovement->driver_id,
+            new PrivateChannel('admin-customer-cancel.' . getAdminId()),
         ];
     }
 
@@ -53,6 +53,6 @@ class CustomerCanceledMovementEvent implements ShouldBroadcast
 
     public function broadcastAs(): string
     {
-        return 'canceled-transportation-service-request';
+        return 'canceledTransportationServiceRequest';
     }
 }

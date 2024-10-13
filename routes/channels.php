@@ -30,11 +30,11 @@ Broadcast::channel('TaxiLocation.{id}', function ($user, $id) {
     return $user->id == $id;
 });
 
-Broadcast::channel('customer-channel.{id}', function ($user, $id) {
+Broadcast::channel('admin-customer-cancel.{id}', function ($user, $id) {
     return  $user->id ==  $id;
 });
 
-Broadcast::channel('driver-channel.{id}', function ($user, $id) {
+Broadcast::channel('driver-customer-cancel.{id}', function ($user, $id) {
     return  $user->id ==  $id;
 });
 
