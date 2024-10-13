@@ -47,7 +47,7 @@ trait MovementTrait
                 'start_longitude' => $movement->start_longitude,
                 'end_latitude' => $movement->end_latitude ?? null,
                 'end_longitude' => $movement->end_longitude ?? null,
-                'path' => json_decode($movement->path) ?? null,
+                'path' => json_decode($movement->path) ?? [],
                 'driver_email' => $movement->driver->email,
                 'customer_email' => $movement->customer->email,
                 'driver_name' => $movement->driver->profile?->name,
