@@ -16,7 +16,7 @@ class GetTaxiLocationsEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     protected Taxi $taxi;
-    protected array $path;
+    protected $path;
 
     /**
      * Create a new event instance.
