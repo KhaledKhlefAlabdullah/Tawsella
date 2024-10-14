@@ -52,7 +52,6 @@ class TaxiMovementController extends Controller
         return api_response(data: TaxiMovement::mappingMovements($taxiMovement->items()), message: 'Successfully getting life taxiMovements.', pagination: get_pagination($taxiMovement, $request));
     }
 
-
     /**
      * Get Completed taxi movements requests
      * @return JsonResponse
@@ -147,7 +146,7 @@ class TaxiMovementController extends Controller
             }
             DB::commit();
 
-            AcceptTransportationServiceRequestEvent::dispatch($taxiMovement, $createChatBetweenUsersRequest);
+            AcceptTransportationServiceRequestEvent::dispatch($taxiMovement);
 
             return api_response(message: $message);
         } catch (Exception $e) {
