@@ -110,7 +110,7 @@ class MessageController extends Controller
                 'is_edited' => $message->is_edited,
                 'is_stared' => $message->is_stared,
                 'created_at' => $message->created_at
-            ], $validatedData['receiver_id']);
+            ], $validatedData['chat_id']);
 
             // Send Message notification
             $receiver = User::find($validatedData['receiver_id']);

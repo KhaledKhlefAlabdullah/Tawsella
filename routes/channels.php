@@ -51,5 +51,6 @@ Broadcast::channel('customer.{id}', function ($user, $id) {
 });
 
 Broadcast::channel('send-message.{id}', function ($user, $id) {
-    return  $user->id ==  $id;
+    $chat = \App\Models\ChatMember::where(['chat_id' => $id, 'member_id' => $user->id])->first();
+    return  $chat != null;
 });
