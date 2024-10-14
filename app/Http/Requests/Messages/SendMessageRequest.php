@@ -29,7 +29,7 @@ class SendMessageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'chat_id' => ['uuid', 'required', 'exists:chats,id'],
+//            'chat_id' => ['uuid', 'required', 'exists:chats,id'],
             'sender_id' => ['uuid', 'required', 'exists:users,id'],
             'receiver_id' => ['uuid', 'required', 'exists:users,id'],
             'message' => ['sometimes', 'string', 'min:1'],

@@ -15,6 +15,7 @@ use App\Http\Requests\TaxiMovements\AcceptOrRejectMovementRequest;
 use App\Http\Requests\TaxiMovements\FoundCustomerRequest;
 use App\Http\Requests\TaxiMovements\TaxiMovementRequest;
 use App\Models\Chat;
+use App\Models\ChatMember;
 use App\Models\TaxiMovement;
 use App\Models\User;
 use App\Services\PaginationService;
@@ -59,7 +60,7 @@ class TaxiMovementController extends Controller
      */
     public function completedTaxiMovements(Request $request)
     {
-        $query = TaxiMovement::query()->where('is_completed', true);
+        $query = TaxiMovement::query()->where(['is_completed' => true, 'is_canceled' => false]);
 
         $completedRequests = $this->paginationService->applyPagination($query, $request);
 
@@ -146,7 +147,7 @@ class TaxiMovementController extends Controller
             }
             DB::commit();
 
-            AcceptTransportationServiceRequestEvent::dispatch($taxiMovement);
+            AcceptTransportationServiceRequestEvent::dispatch($taxiMovement, $createChatBetweenUsersRequest);
 
             return api_response(message: $message);
         } catch (Exception $e) {
@@ -279,6 +280,9 @@ class TaxiMovementController extends Controller
         }
     }
 
+    /**
+     * @return array|JsonResponse
+     */
     public function getLastRequestForCustomer()
     {
 
@@ -290,13 +294,21 @@ class TaxiMovementController extends Controller
             ->latest()
             ->first();
 
-        if(!$lastRequest){
+        if (!$lastRequest) {
             return api_response(message: 'There no request for this customer', code: 404);
         }
 
         $driver_profile = $lastRequest->driver ? $lastRequest->driver->profile : null;
+        $chat = ChatMember::where('member_id', $driver_profile->user_id)
+            ->where('chat_id', function ($query) {
+                $query->select('chat_id')
+                    ->from('chat_members')
+                    ->where('member_id', Auth::id());
+            })
+            ->first();
 
         return [
+            'chat_id' => $chat->chat_id ?? '',
             'request_id' => $lastRequest->id,
             'message' => $lastRequest->state_message,
             'driver' => $driver_profile
@@ -308,32 +320,67 @@ class TaxiMovementController extends Controller
      */
     public function get_request_data(string $driver_id)
     {
-        try {
-            //todo need to remove and use realtime
-            $request = TaxiMovement::select(
-                'taxi_movements.id as request_id',
-                'up.name',
-                'up.phone_number',
-                'taxi_movements.start_address as customer_address',
-                'taxi_movements.destination_address as destination_address',
-                'taxi_movements.gender as gender',
-                'taxi_movements.start_latitude as location_lat',
-                'taxi_movements.start_longitude as location_long',
-                'tmt.type',
-                'tmt.price',
-                'tmt.is_onKM'
-            )
-                ->join('user_profiles as up', 'taxi_movements.customer_id', '=', 'up.user_id')
-                ->join('taxi_movement_types as tmt', 'taxi_movements.movement_type_id', '=', 'tmt.id')
-                ->where(['taxi_movements.driver_id' => $driver_id, 'is_completed' => false, 'is_canceled' => false, 'is_redirected' => true])
-                ->whereDate('taxi_movements.created_at', today())
-                ->first();
-            if ($request)
-                return api_response(data: $request, message: 'نجح في الحول على بيانات');
-            return api_response(message: 'there now data');
-        } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'حدث خطأ في الحصول على بيانات', code: 500);
+        $lastRequest = Auth::user()->driver_movements()
+            ->where('is_completed', false)
+            ->where('is_canceled', false)
+            ->where('is_redirected', true)
+            ->whereDate('created_at', Carbon::today())
+            ->latest()
+            ->first();
+
+        if (!$lastRequest) {
+            return api_response(message: 'There no request for this driver', code: 404);
         }
+
+        $driver_profile = $lastRequest->driver ? $lastRequest->driver->profile : null;
+        $chat = ChatMember::where('member_id', $driver_profile->user_id)
+            ->where('chat_id', function ($query) {
+                $query->select('chat_id')
+                    ->from('chat_members')
+                    ->where('member_id', Auth::id());
+            })
+            ->first();
+
+        return [
+            'chat_id' => $chat->chat_id ?? '',
+            'request_id' => $lastRequest->id,
+            'name' => $lastRequest->customer?->profile->name,
+            'phone_number' => $lastRequest->customer?->profile->phone_number,
+            'customer_address' => $lastRequest->start_address,
+            'destination_address' => $lastRequest->destination_address,
+            'gender' => UserGender::getKey($lastRequest->gender),
+            'location_lat' => $lastRequest->start_latitude,
+            'location_long' => $lastRequest->start_longitude,
+            'type' => $lastRequest->movement_type->type,
+            'price' => $lastRequest->movement_type->price,
+            'is_onKM' => $lastRequest->movement_type->is_onKM
+        ];
+//        try {
+//            //todo need to remove and use realtime
+//            $request = TaxiMovement::select(
+//                'taxi_movements.id as request_id',
+//                'up.name',
+//                'up.phone_number',
+//                'taxi_movements.start_address as customer_address',
+//                'taxi_movements.destination_address as destination_address',
+//                'taxi_movements.gender as gender',
+//                'taxi_movements.start_latitude as location_lat',
+//                'taxi_movements.start_longitude as location_long',
+//                'tmt.type',
+//                'tmt.price',
+//                'tmt.is_onKM'
+//            )
+//                ->join('user_profiles as up', 'taxi_movements.customer_id', '=', 'up.user_id')
+//                ->join('taxi_movement_types as tmt', 'taxi_movements.movement_type_id', '=', 'tmt.id')
+//                ->where(['taxi_movements.driver_id' => $driver_id, 'is_completed' => false, 'is_canceled' => false, 'is_redirected' => true])
+//                ->whereDate('taxi_movements.created_at', today())
+//                ->first();
+//            if ($request)
+//                return api_response(data: $request, message: 'نجح في الحول على بيانات');
+//            return api_response(message: 'there now data');
+//        } catch (Exception $e) {
+//            return api_response(errors: [$e->getMessage()], message: 'حدث خطأ في الحصول على بيانات', code: 500);
+//        }
     }
 
     /**

@@ -44,5 +44,6 @@ trait ChatsTrait
                 'member_id' => $receiver->id,
             ]);
         }
+        return $chat->id;
     }
 }

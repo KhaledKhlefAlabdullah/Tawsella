@@ -7,6 +7,7 @@ use App\Events\Messages\SendMessageEvent;
 use App\Http\Requests\Messages\EditMessageRequest;
 use App\Http\Requests\Messages\SendMessageRequest;
 use App\Models\Chat;
+use App\Models\ChatMember;
 use App\Models\Message;
 use App\Models\User;
 use Exception;

@@ -14,13 +14,15 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     protected TaxiMovement $taxiMovement;
+    protected string $chat_id;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(TaxiMovement $taxiMovement)
+    public function __construct(TaxiMovement $taxiMovement, string $chat_id = null)
     {
         $this->taxiMovement = $taxiMovement;
+        $this->chat_id = $chat_id;
     }
 
     /**
@@ -63,6 +65,7 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
         $customer_profile = $this->taxiMovement->customer ? $this->taxiMovement->customer->profile : null;
 
         return [
+            'chat_id' => $this->chat_id,
             'request_id' => $this->taxiMovement->id,
             'customer' => $customer_profile,
             'taxiMovementInfo' => $this->getDriverData()
@@ -79,6 +82,7 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
         $driver_profile = $this->taxiMovement->driver ? $this->taxiMovement->driver->profile : null;
 
         return [
+            'chat_id' => $this->chat_id,
             'request_id' => $this->taxiMovement->id,
             'message' => $this->taxiMovement->state_message,
             'driver' => $driver_profile

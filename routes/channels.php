@@ -49,3 +49,7 @@ Broadcast::channel('driver.{id}', function ($user, $id) {
 Broadcast::channel('customer.{id}', function ($user, $id) {
     return  $user->id ==  $id;
 });
+
+Broadcast::channel('send-message.{id}', function ($user, $id) {
+    return  $user->id ==  $id;
+});

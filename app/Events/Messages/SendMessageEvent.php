@@ -32,11 +32,16 @@ class SendMessageEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('send-message.'.$this->receiver_id),
+            'send-message.'.$this->receiver_id
         ];
     }
 
     public function broadCastWith(){
         return $this->message;
+    }
+
+    public function broadcastAs()
+    {
+        return 'sendMessage';
     }
 }
