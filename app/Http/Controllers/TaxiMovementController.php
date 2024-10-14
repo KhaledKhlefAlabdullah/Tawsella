@@ -345,6 +345,7 @@ class TaxiMovementController extends Controller
         return [
             'chat_id' => $chat->chat_id ?? '',
             'request_id' => $lastRequest->id,
+            'customer_id' => $lastRequest->customer->id,
             'name' => $lastRequest->customer?->profile->name,
             'phone_number' => $lastRequest->customer?->profile->phone_number,
             'customer_address' => $lastRequest->start_address,
