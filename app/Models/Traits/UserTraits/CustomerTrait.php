@@ -66,6 +66,7 @@ trait CustomerTrait
         // To check if the customer have request in last 4 mentees don't create new one and return message
         $existsRequest = TaxiMovement::where('customer_id', $customer_id)
             ->where('created_at', '>=', Carbon::now()->subMinutes(10))
+            ->where('is_canceled', false)
             ->latest()
             ->first();
 

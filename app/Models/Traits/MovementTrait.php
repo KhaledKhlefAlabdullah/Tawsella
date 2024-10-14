@@ -149,6 +149,7 @@ trait MovementTrait
             ->whereDate('created_at', $currentDate)
             ->where([
                 'is_redirected' => false,
+                'is_canceled' => false,
                 'request_state' => MovementRequestStatus::Pending
             ])
             ->get()
