@@ -15,7 +15,8 @@ trait ChatsTrait
      * @param User $receiver
      * @return \Illuminate\Http\JsonResponse|void
      */
-    public static function CreateChatBetweenUserAndDriver(User $receiver, User $driver = null){
+    public static function CreateChatBetweenUserAndDriver(User $receiver, User $driver = null)
+    {
         if (!$receiver) {
             return api_response(message: 'This user not found or there problem in his id', code: 404);
         }
@@ -33,12 +34,22 @@ trait ChatsTrait
             $chat = Chat::create([
                 'name' => 'chat-between-' . $userName . '-and-' . $receiverName,
             ]);
+        }
 
+        if (!ChatMember::where([
+            'chat_id' => $chat->id,
+            'member_id' => $driver->id,
+        ])->first()) {
             ChatMember::create([
                 'chat_id' => $chat->id,
                 'member_id' => $driver->id,
             ]);
+        }
 
+        if (!ChatMember::where([
+            'chat_id' => $chat->id,
+            'member_id' => $receiver->id,
+        ])->first()) {
             ChatMember::create([
                 'chat_id' => $chat->id,
                 'member_id' => $receiver->id,
