@@ -302,7 +302,7 @@ class TaxiMovementController extends Controller
             ->where('chat_id', function ($query) {
                 $query->select('chat_id')
                     ->from('chat_members')
-                    ->where('member_id', Auth::id());
+                    ->where('member_id', Auth::id())->first();
             })
             ->first();
 
@@ -336,7 +336,7 @@ class TaxiMovementController extends Controller
             ->where('chat_id', function ($query) {
                 $query->select('chat_id')
                     ->from('chat_members')
-                    ->where('member_id', Auth::id());
+                    ->where('member_id', Auth::id())->first();
             })
             ->first();
 

@@ -9,6 +9,7 @@ use App\Services\PaginationService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ChatController extends Controller
@@ -74,7 +75,7 @@ class ChatController extends Controller
     {
         try {
             DB::beginTransaction();
-            $createChatBetweenUsersRequest = Chat::CreateChatBetweenUserAndDriver($receiver);
+            $createChatBetweenUsersRequest = Chat::CreateChatBetweenUserAndDriver($receiver, Auth::user());
             if($createChatBetweenUsersRequest) {
                 return $createChatBetweenUsersRequest;
             }

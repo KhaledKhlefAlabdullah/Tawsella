@@ -20,7 +20,7 @@ trait ChatsTrait
             return api_response(message: 'This user not found or there problem in his id', code: 404);
         }
 
-        $userName = $driver ? $driver->profile->name : UserProfile::where('user_id', getMyId())->value('name');
+        $userName = $driver->profile->name;
         $receiverName = $receiver->profile?->name;
 
         // Generate chat names based on username
@@ -36,7 +36,7 @@ trait ChatsTrait
 
             ChatMember::create([
                 'chat_id' => $chat->id,
-                'member_id' => getMyId(),
+                'member_id' => $driver->id,
             ]);
 
             ChatMember::create([
