@@ -81,7 +81,7 @@ class TaxiMovementTypeController extends Controller
         try {
             $validatedData = $request->validated();
             if (isset($validatedData['payment']))
-                    $validatedData['payment'] ?? PaymentTypesEnum::getValue($validatedData['payment']);
+                    $validatedData['payment'] = PaymentTypesEnum::getValue($validatedData['payment']);
             $movement_type->update($validatedData);
             return api_response(data: TaxiMovementType::mappingSingleMovementType($movement_type), message: 'Successfully updating movements type');
         } catch (Exception $e) {
