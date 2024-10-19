@@ -31,9 +31,21 @@ class DriverChangeMovementStateEvent implements ShouldBroadcast
      * Get the channels the event should broadcast on.
      *
      */
-    public function broadcastOn(): Channel
+    public function broadcastOn()
     {
         return ['found-customer.' . getAdminId()];
+    }
+
+    public function getMessage($driverName, $customerName, $from, $to)
+    {
+        if ($this->state == 'completed-movement') {
+            return __('driver') . ' ' . $driverName . ' ' . __('complete-movement') . ' ' . __('from') . ' ' . $from . ' ' . __('to') . ' ' . $to;
+
+        }
+
+        return $this->state ?
+            __('driver') . ' ' . $driverName . ' ' . __('find') . ' ' . __('customer') . ' ' . $customerName :
+            __('driver') . ' ' . $driverName . ' ' . __('don\'t-find') . ' ' . __('customer') . ' ' . $customerName;
     }
 
     public function broadcastWith(): array
@@ -48,18 +60,6 @@ class DriverChangeMovementStateEvent implements ShouldBroadcast
             'customer' => $customerName,
             'message' => $this->getMessage($driverName, $customerName, $from, $to),
         ];
-    }
-
-    protected function getMessage($driverName, $customerName, $from, $to)
-    {
-        if ($this->state == 'completed-movement') {
-            return __('driver') . ' ' . $driverName . ' ' . __('complete-movement') . ' ' . __('from') . ' ' . $from . ' ' . __('to') . ' ' . $to;
-
-        }
-
-        return $this->state ?
-            __('driver') . ' ' . $driverName . ' ' . __('find') . ' ' . __('customer') . ' ' . $customerName :
-            __('driver') . ' ' . $driverName . ' ' . __('don\'t-find') . ' ' . __('customer') . ' ' . $customerName;
     }
 
     public function broadcastAs(): string
