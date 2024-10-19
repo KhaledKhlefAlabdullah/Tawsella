@@ -196,9 +196,9 @@ class TaxiMovementController extends Controller
             $validatedData = $request->validated();
             $driverName = $taxiMovement->driver->profile->name;
             $customerName = $taxiMovement->customer->profile->name;
-
+            $message = 'driver: '.$driverName. ($validatedData['state'] ? ' found' : ' don\'t found').' customer: '.$customerName;
             event(new CustomerFoundEvent(
-                $driverName, $customerName, $validatedData['state'] ? 'find' : 'unfounded'
+                $driverName, $customerName, $message
             ));
 
             if ($validatedData['state']) {
@@ -242,16 +242,17 @@ class TaxiMovementController extends Controller
                 'driver_state' => DriverState::Ready
             ]);
 
-            DB::commit();
             $driverName = $taxiMovement->driver->profile->name;
             $customerName = $taxiMovement->customer->profile->name;
-
-            DriverChangeMovementStateEvent::dispatch(
+            $from = $taxiMovement->start_address;
+            $to = $taxiMovement->destination_address;
+            $message = 'completed movement request from: '.$from.' to: '.$to;
+            DB::commit();
+            event(new DriverChangeMovementStateEvent(
                 $driverName,
                 $customerName,
-                'completed-movement'
-            );
-
+                $message,
+            ));
             return api_response(data: ['amount' => $calculation->totalPrice], message: 'Successfully completed movement request');
         } catch (Exception $e) {
             DB::rollBack();

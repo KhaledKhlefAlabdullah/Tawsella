@@ -19,7 +19,7 @@ class DriverChangeMovementStateEvent implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(string $driverName, string $customerName, $message)
+    public function __construct(string $driverName, string $customerName, string $message)
     {
         $this->driverName = $driverName;
         $this->customerName = $customerName;
@@ -38,8 +38,8 @@ class DriverChangeMovementStateEvent implements ShouldBroadcast
     public function broadcastWith(): array
     {
         return [
-            'driver' => $driverName,
-            'customer' => $customerName,
+            'driver' => $this->driverName,
+            'customer' => $this->customerName,
             'message' => $this->message,
         ];
     }
