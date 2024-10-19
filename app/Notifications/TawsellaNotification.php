@@ -92,7 +92,7 @@ class TawsellaNotification extends Notification implements ShouldQueue
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('Notification-to-user.' . $this->receiver->id);
+        'Notification-to-user.' . $this->receiver->id;
     }
 
     public function broadcastAs(){

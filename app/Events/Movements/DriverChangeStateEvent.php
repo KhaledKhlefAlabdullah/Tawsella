@@ -32,7 +32,7 @@ class DriverChangeStateEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('driver-change-state.'.getAdminId()),
+            'driver-change-state.'.getAdminId(),
         ];
     }
 

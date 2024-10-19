@@ -31,7 +31,7 @@ class RejectTransportationServiceRequestEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('customer-channel.' . $this->taxiMovement->customer_id),
+            'customer-channel.' . $this->taxiMovement->customer_id,
         ];
     }
 

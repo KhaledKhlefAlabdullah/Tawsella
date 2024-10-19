@@ -32,7 +32,7 @@ class UpdateMessageEvent
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('update-message-'.$this->message->receiver_id),
+           'update-message-'.$this->message->receiver_id,
         ];
     }
 

@@ -33,7 +33,7 @@ class RequestingTransportationServiceEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('Taxi-movement.'.getAdminId() ),
+            'Taxi-movement.'.getAdminId()
         ];
     }
 

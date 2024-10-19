@@ -28,7 +28,7 @@ class ReadMessageEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-name'),
+            'channel-name',
         ];
     }
 }

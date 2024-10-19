@@ -25,7 +25,7 @@ class TheClientWasNotFoundEvent
     {
         $this->driverName = $driverName;
         $this->customerName = $customerName;
-        $this->message = $message ?? __('Customer-Was-Not-Found').' '.$customerName;
+        $this->message = $message ?? __('Customer-Was-Not-Found') . ' ' . $customerName;
 
     }
 
@@ -37,15 +37,15 @@ class TheClientWasNotFoundEvent
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('movement-was-not-found.'.getAdminId()),
+            'movement-was-not-found.' . getAdminId(),
         ];
     }
 
-    public function broadcastWith():array
+    public function broadcastWith(): array
     {
         return [
-            'driver' => $this->driverName ,
-            'customer' => $this->customerName ,
+            'driver' => $this->driverName,
+            'customer' => $this->customerName,
             'message' => $this->message
         ];
     }
