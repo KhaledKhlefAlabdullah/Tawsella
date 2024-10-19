@@ -37,7 +37,7 @@ class CustomerFoundEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            'movement-found.'.getAdminId(),
+            'found-customer.'.getAdminId(),
         ];
     }
 
@@ -52,6 +52,6 @@ class CustomerFoundEvent implements ShouldBroadcast
 
     public function broadcastAs(): string
     {
-        return 'movement-customer-found';
+        return 'foundCustomer';
     }
 }

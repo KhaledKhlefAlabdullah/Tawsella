@@ -7,6 +7,7 @@ use App\Enums\UserEnums\DriverState;
 use App\Enums\UserEnums\UserGender;
 use App\Events\Movements\AcceptTransportationServiceRequestEvent;
 use App\Events\Movements\CustomerCanceledMovementEvent;
+use App\Events\Movements\CustomerFoundEvent;
 use App\Events\Movements\DriverChangeMovementStateEvent;
 use App\Events\Movements\RejectTransportationServiceRequestEvent;
 use App\Events\Movements\RequestingTransportationServiceEvent;
@@ -193,10 +194,12 @@ class TaxiMovementController extends Controller
     {
         try {
             $validatedData = $request->validated();
+            $driverName = $taxiMovement->driver->profile->name;
+            $customerName = $taxiMovement->customer->profile->name;
 
-            DriverChangeMovementStateEvent::dispatch(
-                $taxiMovement, $validatedData['state'] ? 'find' : 'unfounded'
-            );
+            event(new CustomerFoundEvent(
+                $driverName, $customerName, $validatedData['state'] ? 'find' : 'unfounded'
+            ));
 
             if ($validatedData['state']) {
                 $taxiMovement->state_message = __('customer-was-found');
@@ -240,8 +243,12 @@ class TaxiMovementController extends Controller
             ]);
 
             DB::commit();
+            $driverName = $taxiMovement->driver->profile->name;
+            $customerName = $taxiMovement->customer->profile->name;
+
             DriverChangeMovementStateEvent::dispatch(
-                $taxiMovement,
+                $driverName,
+                $customerName,
                 'completed-movement'
             );
 
