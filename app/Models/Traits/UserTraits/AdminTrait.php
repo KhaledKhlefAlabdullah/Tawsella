@@ -21,8 +21,14 @@ trait AdminTrait
 
         $numberOfMovements = $movementsQuery->count() ?? 0;
         $numberOfCompletedMovements = $movementsQuery->where('is_completed', true)->count() ?? 0;
-        $numberOfRejectedMovements = $movementsQuery->where('request_state', MovementRequestStatus::Rejected)->count() ?? 0;
-        $numberOfCanceledMovements = $movementsQuery->where('is_canceled', true)->count() ?? 0;
+        $numberOfRejectedMovements = TaxiMovement::whereBetween('created_at', [$startDate, $endDate])
+            ->where('request_state', MovementRequestStatus::Rejected)
+            ->count() ?? 0;
+
+// Clone the original query for canceled movements
+        $numberOfCanceledMovements = TaxiMovement::whereBetween('created_at', [$startDate, $endDate])
+            ->where('is_canceled', true)
+            ->count() ?? 0;
 
         // Total amount of movements within the date range
         $totalAmount = Calculation::whereBetween('created_at', [$startDate, $endDate])->sum('totalPrice') ?? 0;
