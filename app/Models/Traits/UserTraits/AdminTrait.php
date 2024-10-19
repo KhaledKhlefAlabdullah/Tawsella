@@ -16,11 +16,8 @@ trait AdminTrait
      */
     public static function getReportData(Carbon $startDate, Carbon $endDate)
     {
-        // Movements within the date range
-        $movementsQuery = TaxiMovement::whereBetween('created_at', [$startDate, $endDate]);
-
-        $numberOfMovements = $movementsQuery->count() ?? 0;
-        $numberOfCompletedMovements = $movementsQuery->where('is_completed', true)->count() ?? 0;
+        $numberOfMovements = TaxiMovement::whereBetween('created_at', [$startDate, $endDate])->count() ?? 0;
+        $numberOfCompletedMovements = TaxiMovement::whereBetween('created_at', [$startDate, $endDate])->where('is_completed', true)->count() ?? 0;
         $numberOfRejectedMovements = TaxiMovement::whereBetween('created_at', [$startDate, $endDate])
             ->where('request_state', MovementRequestStatus::Rejected)
             ->count() ?? 0;
