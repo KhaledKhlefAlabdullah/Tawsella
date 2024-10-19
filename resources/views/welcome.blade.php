@@ -368,163 +368,55 @@
             </div>
         </section><!-- End Pricing Section -->
 
-        <!-- Gallery Section -->
-        <section id="gallery" class="gallery section">
-
-            <!-- Section Title -->
-            <div class="container section-title" data-aos="fade-up">
-                <h2>Gallery</h2>
-                <div><span>Check Our</span> <span class="description-title">Gallery</span></div>
-            </div><!-- End Section Title -->
-
-            <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-                <div class="row g-0">
-
-                    <div class="col-lg-3 col-md-4">
-                        <div class="gallery-item">
-                            <a href="{{asset('assets/img/gallery/gallery-1.jpg')}}" class="glightbox"
-                                data-gallery="images-gallery">
-                                <img src="{{asset('assets/img/gallery/gallery-1.jpg')}}" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                    </div><!-- End Gallery Item -->
-
-                    <div class="col-lg-3 col-md-4">
-                        <div class="gallery-item">
-                            <a href="{{asset('assets/img/gallery/gallery-2.jpg')}}" class="glightbox"
-                                data-gallery="images-gallery">
-                                <img src="{{asset('assets/img/gallery/gallery-2.jpg')}}" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                    </div><!-- End Gallery Item -->
-
-                    <div class="col-lg-3 col-md-4">
-                        <div class="gallery-item">
-                            <a href="{{asset('assets/img/gallery/gallery-3.jpg')}}" class="glightbox"
-                                data-gallery="images-gallery">
-                                <img src="{{asset('assets/img/gallery/gallery-3.jpg')}}" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                    </div><!-- End Gallery Item -->
-
-                    <div class="col-lg-3 col-md-4">
-                        <div class="gallery-item">
-                            <a href="{{asset('assets/img/gallery/gallery-4.jpg')}}" class="glightbox"
-                                data-gallery="images-gallery">
-                                <img src="{{asset('assets/img/gallery/gallery-4.jpg')}}" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                    </div><!-- End Gallery Item -->
-
-                    <div class="col-lg-3 col-md-4">
-                        <div class="gallery-item">
-                            <a href="{{asset('assets/img/gallery/gallery-5.jpg')}}" class="glightbox"
-                                data-gallery="images-gallery">
-                                <img src="{{asset('assets/img/gallery/gallery-5.jpg')}}" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                    </div><!-- End Gallery Item -->
-
-                    <div class="col-lg-3 col-md-4">
-                        <div class="gallery-item">
-                            <a href="{{asset('assets/img/gallery/gallery-6.jpg')}}" class="glightbox"
-                                data-gallery="images-gallery">
-                                <img src="{{asset('assets/img/gallery/gallery-6.jpg')}}" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                    </div><!-- End Gallery Item -->
-
-                    <div class="col-lg-3 col-md-4">
-                        <div class="gallery-item">
-                            <a href="{{asset('assets/img/gallery/gallery-7.jpg')}}" class="glightbox"
-                                data-gallery="images-gallery">
-                                <img src="{{asset('assets/img/gallery/gallery-7.jpg')}}" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                    </div><!-- End Gallery Item -->
-
-                    <div class="col-lg-3 col-md-4">
-                        <div class="gallery-item">
-                            <a href="{{asset('assets/img/gallery/gallery-8.jpg')}}" class="glightbox"
-                                data-gallery="images-gallery">
-                                <img src="{{asset('assets/img/gallery/gallery-8.jpg')}}" alt="" class="img-fluid">
-                            </a>
-                        </div>
-                    </div><!-- End Gallery Item -->
-
-                </div>
-
-            </div>
-
-        </section><!-- /Gallery Section -->
-
         <!-- Testimonials Section -->
         <section id="testimonials" class="testimonials section dark-background">
-
-            <img src="{{asset('assets/img/testimonials-bg.jpg')}}" class="testimonials-bg" alt="">
-
+            <img src="{{asset('img/11.png')}}" class="testimonials-bg" alt="">
             <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-                <div class="swiper init-swiper">
-                    <script type="application/json" class="swiper-config">
-              {
-                "loop": true,
-                "speed": 600,
-                "autoplay": {
-                  "delay": 5000
-                },
-                "slidesPerView": "auto",
-                "pagination": {
-                  "el": ".swiper-pagination",
-                  "type": "bullets",
-                  "clickable": true
-                }
-              }
-            </script>
-                    <div class="swiper-wrapper">
-
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <img src="{{asset('assets/img/testimonials/testimonials-1.jpg')}}" alt="">
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <img src="{{asset('assets/img/testimonials/testimonials-1.jpg')}}" alt="">
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <img src="{{asset('assets/img/testimonials/testimonials-1.jpg')}}" alt="">
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <img src="{{asset('assets/img/testimonials/testimonials-1.jpg')}}" alt="">
-                            </div>
-                        </div>
-
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <img src="{{asset('assets/img/testimonials/testimonials-1.jpg')}}" alt="">
-                            </div>
-                        </div>
-                        <div class="swiper-slide">
-                            <div class="testimonial-item">
-                                <img src="{{asset('assets/img/testimonials/testimonials-1.jpg')}}" alt="">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="swiper-pagination"></div>
+                
+        <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <div class="row">
+                    <div class="col-3"><img src="{{asset('img/4.png')}}" style="width: 300px" alt="..."></div>
+                    <div class="col-3"><img src="{{asset('img/3.png')}}" style="width: 300px" alt="..."></div>
+                    <div class="col-3"><img src="{{asset('img/2.png')}}" style="width: 300px"  alt="..."></div>
+                    <div class="col-3"><img src="{{asset('img/1.png')}}" style="width: 300px" alt="..."></div>
                 </div>
-
+              </div>
+              <div class="carousel-item">
+                <div class="row">
+                    <div class="col-3"><img src="{{asset('img/8.png')}}" style="width: 300px" alt="..."></div>
+                    <div class="col-3"><img src="{{asset('img/7.png')}}" style="width: 300px" alt="..."></div>
+                    <div class="col-3"><img src="{{asset('img/6.png')}}" style="width: 300px"  alt="..."></div>
+                    <div class="col-3"><img src="{{asset('img/5.png')}}" style="width: 300px" alt="..."></div>
+                </div>
+              </div>
+              <div class="carousel-item">
+                <div class="row">
+                    <div class="col-3"><img src="{{asset('img/9.png')}}" style="width: 300px" alt="..."></div>
+                    <div class="col-3"><img src="{{asset('img/10.png')}}" style="width: 300px" alt="..."></div>
+                    <div class="col-3"><img src="{{asset('img/11.png')}}" style="width: 300px"  alt="..."></div>
+                    <div class="col-3"><img src="{{asset('img/1.png')}}" style="width: 300px" alt="..."></div>
+                </div>
+              </div>
+              
             </div>
-
-        </section><!-- /Testimonials Section -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+        
+            </div>
+        
+        </section>
+        
+        
+        <!-- /Testimonials Section -->
 
         <!-- ======= F.A.Q Section ======= -->
         <section id="faq" class="faq section-bg">
