@@ -33,7 +33,7 @@ class DriverChangeMovementStateEvent implements ShouldBroadcast
      */
     public function broadcastOn(): Channel
     {
-        return new PrivateChannel('found-customer.' . getAdminId());
+        return ['found-customer.' . getAdminId()];
     }
 
     public function broadcastWith(): array

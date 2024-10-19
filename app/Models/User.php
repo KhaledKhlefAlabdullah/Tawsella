@@ -106,7 +106,7 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
     }
 
     public function calculations(){
-        return $this->hasMany(calculation::class,'driver_id');
+        return $this->hasMany(Calculation::class,'driver_id');
     }
 
     public function movementsCount()

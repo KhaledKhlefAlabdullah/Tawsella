@@ -33,7 +33,7 @@ class GetCustomerLocationEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('customer-location.' . $this->driver->id),
+            'customer-location.' . $this->driver->id,
         ];
     }
 

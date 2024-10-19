@@ -37,7 +37,7 @@ class CustomerFoundEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('movement-found.'.getAdminId()),
+            'movement-found.'.getAdminId(),
         ];
     }
 

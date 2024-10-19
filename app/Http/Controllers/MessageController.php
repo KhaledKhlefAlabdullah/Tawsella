@@ -112,12 +112,12 @@ class MessageController extends Controller
                 'created_at' => $message->created_at
             ], $validatedData['chat_id']);
 
-            // Send Message notification
-            $receiver = User::find($validatedData['receiver_id']);
-
-            $notificationMessage = is_null($message->message) ? "receive an media message\n" : $message->message;
-
-            send_notifications($receiver, $notificationMessage);
+//            // Send Message notification
+//            $receiver = User::find($validatedData['receiver_id']);
+//
+//            $notificationMessage = is_null($message->message) ? "receive an media message\n" : $message->message;
+//
+//            send_notifications($receiver, $notificationMessage);
 
             return api_response(message: 'Successfully sending message');
         } catch (Exception $e) {

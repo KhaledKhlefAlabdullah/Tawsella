@@ -33,7 +33,7 @@ class GetTaxiLocationsEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return [new PrivateChannel('TaxiLocation.' . getAdminId())];
+        return ['TaxiLocation.' . getAdminId()];
     }
 
     public function broadcastWith(): array

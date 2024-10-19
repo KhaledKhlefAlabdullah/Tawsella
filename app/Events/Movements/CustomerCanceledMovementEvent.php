@@ -33,7 +33,7 @@ class CustomerCanceledMovementEvent implements ShouldBroadcast
     {
         return [
             'driver-customer-cancel.' . $this->taxiMovement->driver_id,
-            new PrivateChannel('admin-customer-cancel.' . getAdminId()),
+            'admin-customer-cancel.' . getAdminId(),
         ];
     }
 
