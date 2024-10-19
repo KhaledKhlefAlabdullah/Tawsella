@@ -195,7 +195,7 @@ class TaxiMovementController extends Controller
             $validatedData = $request->validated();
 
             DriverChangeMovementStateEvent::dispatch(
-                $taxiMovement, $validatedData['state']
+                $taxiMovement, $validatedData['state'] ? 'find' : 'unfounded'
             );
 
             if ($validatedData['state']) {

@@ -43,7 +43,7 @@ class DriverChangeMovementStateEvent implements ShouldBroadcast
 
         }
 
-        return $this->state ?
+        return $this->state == 'find' ?
             __('driver') . ' ' . $driverName . ' ' . __('find') . ' ' . __('customer') . ' ' . $customerName :
             __('driver') . ' ' . $driverName . ' ' . __('don\'t-find') . ' ' . __('customer') . ' ' . $customerName;
     }
