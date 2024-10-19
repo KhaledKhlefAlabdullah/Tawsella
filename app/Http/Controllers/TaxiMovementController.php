@@ -248,7 +248,7 @@ class TaxiMovementController extends Controller
             $to = $taxiMovement->destination_address;
             $message = 'completed movement request from: '.$from.' to: '.$to;
             DB::commit();
-            event(new DriverChangeMovementStateEvent(
+            event(new CustomerFoundEvent(
                 $driverName,
                 $customerName,
                 $message,
