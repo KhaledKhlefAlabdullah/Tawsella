@@ -4,15 +4,11 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Providers\RouteServiceProvider;
-use Cassandra\Type\UserType;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Validation\ValidationException as ValidationValidationException;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -46,12 +42,12 @@ class AuthenticatedSessionController extends Controller
 
         } catch (AuthenticationException $e) {
             // Catch AuthenticationException and return an unauthorized response
-            return api_response(errors: [[$e->getMessage()], 'Unauthorized access'], message: 'Invalid credentials', code: 401);
+            return api_response(message: 'Invalid credentials', code: 401, errors: [[$e->getMessage()], 'Unauthorized access']);
         } catch (ValidationException $e) {
             // Catch ValidationException and return a validation error response
-            return api_response(errors: [$e->errors()], message: 'Validation error', code: 422);
+            return api_response(message: 'Validation error', code: 422, errors: [$e->errors()]);
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Login error', code: 500);
+            return api_response(message: 'Login error', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -69,7 +65,7 @@ class AuthenticatedSessionController extends Controller
 
         } catch (\Exception $e) {
             // Handle any exceptions that might occur during logout
-            return api_response(errors: [$e->getMessage()], message: 'Logged out error');
+            return api_response(message: 'Logged out error', errors: [$e->getMessage()]);
         }
     }
 }
