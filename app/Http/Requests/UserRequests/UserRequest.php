@@ -35,6 +35,8 @@ class UserRequest extends FormRequest
             'phone_number' => ['sometimes', 'nullable', 'string', new PhoneNumber, is_null($user) ? 'unique:' . UserProfile::class : Rule::unique('user_profiles')->ignore($user->profile?->id)],
             'avatar' => ['sometimes','mimes:jpeg,jpg,png', 'max:10048'],
             'gender' => ['sometimes', 'string', Rule::in(UserGender::getKeys())],
+            'address' => ['sometimes', 'string', 'max:255'],
+            'birthdate' => ['sometimes', 'date', 'date_format:Y-m-d'],
             'password' => ['sometimes', Password::defaults()],
         ];
     }

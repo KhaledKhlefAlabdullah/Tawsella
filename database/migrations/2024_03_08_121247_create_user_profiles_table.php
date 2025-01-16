@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('avatar')->default('/images/profile/man.png');
             $table->string('phone_number')->nullable();
             $table->integer('gender')->default(UserGender::male);
+            $table->date('birthdate')->nullable();
+            $table->string('address')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
             $table->SoftDeletes();

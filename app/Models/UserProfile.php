@@ -7,13 +7,14 @@ use App\Models\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+
 class UserProfile extends Model
 {
-    use HasFactory,HasUuid,SoftDeletes;
+    use HasFactory, HasUuid, SoftDeletes;
 
-    protected $keyType='string';
+    protected $keyType = 'string';
 
-    protected $primaryKey='id';
+    protected $primaryKey = 'id';
 
     public $incrementing = false;
 
@@ -27,7 +28,9 @@ class UserProfile extends Model
         'name',
         'avatar',
         'phone_number',
-        'gender'
+        'gender',
+        'address',
+        'birthdate'
     ];
 
     protected static function boot()
@@ -43,7 +46,8 @@ class UserProfile extends Model
         });
     }
 
-    public function user(){
-        return $this->belongsTo(User::class,'user_id');
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
