@@ -17,7 +17,7 @@ class RolesSeeder extends Seeder
         $roles = UserType::getKeys();
 
         foreach ($roles as $roleName) {
-            Role::create(['name' => $roleName]);
+            Role::create(['name' => $roleName, 'is_default' => 1, 'guard_name' => 'web']);
         }
     }
 }

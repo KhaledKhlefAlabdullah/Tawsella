@@ -99,7 +99,7 @@ trait UserTrait
                 'birthdate' => $validatedData['birthdate'] ?? null
             ]);
 
-            // Assign role based on authenticated user
+            // Assign role based on authe
             $authUser = Auth::user();
             if ($authUser && $authUser->hasRole(UserType::Admin()->key)) {
                 $user->assignRole(UserType::TaxiDriver()->key);
