@@ -95,8 +95,8 @@ trait UserTrait
                 'name' => $validatedData['name'],
                 'gender' => UserGender::getValue($validatedData['gender']),
                 'phone_number' => $validatedData['phone_number'],
-                'address' => $validatedData['address'],
-                'birthdate' => $validatedData['birthdate']
+                'address' => $validatedData['address'] ?? null,
+                'birthdate' => $validatedData['birthdate'] ?? null
             ]);
 
             // Assign role based on authenticated user
