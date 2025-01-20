@@ -8,8 +8,6 @@ use BenSampo\Enum\Enum;
  * @method static static Admin()
  * @method static static Customer()
  * @method static static TaxiDriver()
- * @method static static TransportCarDriver()
- * @method static static Motorocyclist()
  */
 final class UserType extends Enum
 {
