@@ -19,6 +19,9 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return  $user->id ==  $id;
 });
 
+Broadcast::channel('test', function () {
+    return  true;
+});
 
 Broadcast::channel('Taxi-movement.{id}', function ($user, $id) {
     return  $user->id ==  $id;
