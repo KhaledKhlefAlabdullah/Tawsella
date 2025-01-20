@@ -28,6 +28,9 @@ Route::get('/csrf-token', function () {
     return response()->json(['csrf_token' => csrf_token()]);
 });
 
+Route::post('test', function () {
+    \broadcast(\App\Events\test::class);
+});
 require __DIR__.'/Roles/publicApis.php';
 require __DIR__ . '/auth.php';
 
