@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\test;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Middleware\EnsureEmailIsVerifiedByCodeMiddleware;
@@ -29,7 +30,8 @@ Route::get('/csrf-token', function () {
 });
 
 Route::post('test', function () {
-    \broadcast(\App\Events\test::class);
+    event(new test('Hello, world!'));
+    return 'Event dispatched!';
 });
 require __DIR__.'/Roles/publicApis.php';
 require __DIR__ . '/auth.php';

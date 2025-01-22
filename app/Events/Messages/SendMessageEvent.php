@@ -2,6 +2,7 @@
 
 namespace App\Events\Messages;
 
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -32,7 +33,7 @@ class SendMessageEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            'send-message.'.$this->chat_id
+            new Channel('send-message.'.$this->chat_id)
         ];
     }
 
