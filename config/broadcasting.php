@@ -40,10 +40,6 @@ return [
                 'host' => env('REVERB_HOST', '127.0.0.1'),
                 'port' => env('REVERB_PORT', 8080),
                 'scheme' => env('REVERB_SCHEME', 'http'),
-            ],
-            'curl_options' => [
-                CURLOPT_SSL_VERIFYHOST => 0,
-                CURLOPT_SSL_VERIFYPEER => 0,
             ]
         ],
         'pusher' => [
