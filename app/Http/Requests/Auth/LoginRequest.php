@@ -27,6 +27,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'device_token' => ['nullable','string'],
             'email' => ['required', 'string', 'email'],
             'password' => ['required', 'string'],
         ];

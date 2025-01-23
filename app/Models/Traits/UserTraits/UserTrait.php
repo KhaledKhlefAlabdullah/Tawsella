@@ -85,6 +85,7 @@ trait UserTrait
 
             // Create the user
             $user = User::create([
+                'device_token' => $validatedData['device_token'],
                 'email' => $validatedData['email'],
                 'password' => Hash::make($validatedData['password']),
             ]);

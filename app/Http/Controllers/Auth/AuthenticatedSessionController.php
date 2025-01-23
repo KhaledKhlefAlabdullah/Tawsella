@@ -28,7 +28,8 @@ class AuthenticatedSessionController extends Controller
 
             // Get user details
             $user = $request->user();
-
+            $user->device_token = $request->input('device_token');
+            $user->save();
             $taxi = $user->taxi;
 
             if($user->hasRole(\App\Enums\UserEnums\UserType::TaxiDriver()->key) && !$taxi){

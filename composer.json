@@ -8,6 +8,8 @@
         "php": "^8.2",
         "barryvdh/laravel-dompdf": "^3.0",
         "bensampo/laravel-enum": "^6.11",
+        "google/apiclient": "^2.18",
+        "guzzlehttp/guzzle": "^7.9",
         "laravel/fortify": "^1.21",
         "laravel/framework": "^11.0",
         "laravel/pulse": "^1.2",
