@@ -35,6 +35,7 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
     protected $fillable = [
         'email',
         'password',
+        'device_token',
         'driver_state',
         'is_active',
         'mail_verify_code',
