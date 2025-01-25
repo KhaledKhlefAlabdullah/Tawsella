@@ -24,7 +24,8 @@ class AuthenticatedSessionController extends Controller
             $request->authenticate();
 
             // Delete all existing tokens for the authenticated user
-            $request->user()->tokens()->delete();
+            //todo un commit this in production
+//            $request->user()->tokens()->delete();
 
             // Get user details
             $user = $request->user();
