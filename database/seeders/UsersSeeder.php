@@ -42,7 +42,7 @@ class UsersSeeder extends Seeder
 
         $driver->assignrole(UserType::TaxiDriver()->key);
 
-        $driver->taxi->create([
+        $driver->taxi()->create([
             'car_name' => 'first',
             'lamp_number' => '1-F',
             'plate_number' => 'FCD-200',
