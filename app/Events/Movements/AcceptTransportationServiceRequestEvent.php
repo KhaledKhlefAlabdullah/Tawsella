@@ -36,22 +36,7 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
         ];
     }
 
-    /**
-     * Get the driver-related data.
-     *
-     * @return array
-     */
-    public function getDriverData(): array
-    {
-        return [
-            'gender' => UserGender::getKey($this->taxiMovement->gender),
-            'customer_address' => $this->taxiMovement->start_address,
-            'destination_address' => $this->taxiMovement->destination_address,
-            'location_lat' => $this->taxiMovement->start_latitude,
-            'location_long' => $this->taxiMovement->start_longitude,
-            'type' => $this->taxiMovement->movement_type->type,
-        ];
-    }
+
 
     /**
      * Data to broadcast with the driver.

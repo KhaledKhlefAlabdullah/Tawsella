@@ -19,6 +19,7 @@ use App\Models\Chat;
 use App\Models\ChatMember;
 use App\Models\TaxiMovement;
 use App\Models\User;
+use App\Services\FcmNotificationService;
 use App\Services\PaginationService;
 use Carbon\Carbon;
 use Exception;
@@ -31,10 +32,12 @@ class TaxiMovementController extends Controller
 {
 
     protected $paginationService;
+    protected $fcmNotificationService;
 
-    public function __construct(PaginationService $paginationService)
+    public function __construct(PaginationService $paginationService, FcmNotificationService $fcmNotificationService)
     {
         $this->paginationService = $paginationService;
+        $this->fcmNotificationService = $fcmNotificationService;
     }
 
     /**
@@ -147,7 +150,33 @@ class TaxiMovementController extends Controller
             }
             DB::commit();
 
-            AcceptTransportationServiceRequestEvent::dispatch($taxiMovement);
+            $customerPayload = [
+                'notification' => [
+                    'title' => 'Hello!',
+                    'body' => [
+                        'request_id' => $taxiMovement->id,
+                        'message' => 'your request was accepted.',
+                        'driver' => $driver->profile
+                    ],
+                ]
+            ];
+
+            $customerRecipientValue = $customer->device_token;
+            $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
+
+            $driverPayload =  [
+                'notification' => [
+                    'title' => 'Hello!',
+                    'body' => [
+                        'request_id' => $taxiMovement->id,
+                        'customer' => $customer->profile,
+                        'message' => 'you have new request',
+                        'taxiMovementInfo' => $this->getDriverData()
+                    ],
+                ]
+            ];
+            $driverRecipientValue = $driver->device_token;
+            $this->fcmNotificationService->sendNotification($driverPayload, $driverRecipientValue);
 
             return api_response(message: $message);
         } catch (Exception $e) {
@@ -155,6 +184,22 @@ class TaxiMovementController extends Controller
         }
     }
 
+    /**
+     * Get the driver-related data.
+     *
+     * @return array
+     */
+    public function getDriverData(): array
+    {
+        return [
+            'gender' => UserGender::getKey($this->taxiMovement->gender),
+            'customer_address' => $this->taxiMovement->start_address,
+            'destination_address' => $this->taxiMovement->destination_address,
+            'location_lat' => $this->taxiMovement->start_latitude,
+            'location_long' => $this->taxiMovement->start_longitude,
+            'type' => $this->taxiMovement->movement_type->type,
+        ];
+    }
     /**
      * Reject Taxi movement request
      * @param AcceptOrRejectMovementRequest $request contains the request details
@@ -196,7 +241,7 @@ class TaxiMovementController extends Controller
             $validatedData = $request->validated();
             $driverName = $taxiMovement->driver->profile->name;
             $customerName = $taxiMovement->customer->profile->name;
-            $message = 'driver: '.$driverName. ($validatedData['state'] ? ' found' : ' don\'t found').' customer: '.$customerName;
+            $message = 'driver: ' . $driverName . ($validatedData['state'] ? ' found' : ' don\'t found') . ' customer: ' . $customerName;
             event(new CustomerFoundEvent(
                 $driverName, $customerName, $message
             ));
@@ -246,7 +291,7 @@ class TaxiMovementController extends Controller
             $customerName = $taxiMovement->customer->profile->name;
             $from = $taxiMovement->start_address;
             $to = $taxiMovement->destination_address;
-            $message = 'completed movement request from: '.$from.' to: '.$to;
+            $message = 'completed movement request from: ' . $from . ' to: ' . $to;
             DB::commit();
             event(new CustomerFoundEvent(
                 $driverName,
