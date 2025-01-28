@@ -13,7 +13,7 @@ class FcmNotificationService
     public function __construct()
     {
         // Path to your service account key JSON file
-        $this->serviceAccountKeyPath = storage_path('./star-taxi-bfd86-90bda9de299f.json');
+        $this->serviceAccountKeyPath = __DIR__ .'/star-taxi-bfd86-90bda9de299f.json';
     }
 
     /**
