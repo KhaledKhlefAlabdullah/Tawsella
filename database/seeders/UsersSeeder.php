@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\UserEnums\UserGender;
 use App\Enums\UserEnums\UserType;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -28,9 +29,15 @@ class UsersSeeder extends Seeder
                 'mail_code_verified_at' => now(),
             ]
         ];
-        foreach ($users as $user) {
+
+        foreach ($users as $index => $user) {
             $user = User::create($user);
             $user->assignRole(UserType::Customer()->key);
+            $user->profile()->create(            [
+                'name' => 'customer'.$index,
+                'gender' => UserGender::male,
+                'phone_number' => '+9656333564'.$index,
+            ]);
         }
 
         $driver = User::create([
@@ -46,6 +53,13 @@ class UsersSeeder extends Seeder
             'car_name' => 'first',
             'lamp_number' => '1-F',
             'plate_number' => 'FCD-200',
+        ]);
+
+        $driver->profile()->create([
+            'user_id' => '3473d276-df6f-4eb8-be0e-283ade38cb1a',
+            'name' => 'driver 1',
+            'gender' => UserGender::female,
+            'phone_number' => '+965634535648',
         ]);
     }
 }

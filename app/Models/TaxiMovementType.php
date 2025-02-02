@@ -28,7 +28,7 @@ class TaxiMovementType extends Model
         return $this->hasMany(TaxiMovement::class, 'movement_type_id');
     }
 
-    public function movement_type_offers()
+    public function offers()
     {
         return $this->hasMany(Offer::class, 'movement_type_id');
     }
