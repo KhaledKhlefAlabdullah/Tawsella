@@ -67,7 +67,7 @@ class TaxiMovementTypesSeeder extends Seeder
 
         foreach ($GeneralMovementsTypes as $GeneralMovementsType) {
             $movementType = TaxiMovementType::create($GeneralMovementsType);
-            $movementType->offers([
+            $movementType->offers()->createMany([
                 [
                     'admin_id' => getAdminId(),
                     'offer' => 'العيد',
