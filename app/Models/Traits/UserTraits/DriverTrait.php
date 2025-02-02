@@ -93,6 +93,7 @@ trait DriverTrait
         $mappedDrivers = collect($drivers)->map(function ($driver) {
             return self::extracted($driver);
         });
+
         return $mappedDrivers;
     }
 

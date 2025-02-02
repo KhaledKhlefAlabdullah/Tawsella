@@ -19,7 +19,7 @@ trait CalculationTrait
             $total_today = Calculation::todayAccounts($driver_id);
             $total_previous = Calculation::totalAccounts($driver_id);
 
-            $combinedAccounts[] = (object)[
+            return (object)[
                 'driver_id' => $driver_id,
                 'name' => $driver->profile?->name,
                 'avatar' => $driver->profile?->avatar,
@@ -27,8 +27,6 @@ trait CalculationTrait
                 'today_account' => $total_today,
                 'all_account' => $total_previous
             ];
-
-            return $combinedAccounts;
         });
 
     }

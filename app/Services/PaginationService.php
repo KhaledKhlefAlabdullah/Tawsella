@@ -88,7 +88,7 @@ class PaginationService
     public function paginate(Builder $query, Request $request)
     {
         $pageNumber = (int) $request->query('PageNumber', 1);
-        $pageSize = (int) $request->query('PageSize', 50);
+        $pageSize = (int) $request->query('PageSize', 100000);
 
         return $query->paginate($pageSize, ['*'], 'page', $pageNumber);
     }
