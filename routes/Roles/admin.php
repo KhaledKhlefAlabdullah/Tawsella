@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AboutUsController;
+use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\ContactUsMessageController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Middleware\RolesMiddlewares\AdminMiddleware;
@@ -20,12 +21,7 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     //*****************************End route movements types******************************** */
     //************************************************************************************** */
 
-    //*****************************Start route services ******************************** */
-    //********************************************************************************** */
-    Route::apiResource('our-services', OurServiceController::class)->only(['store', 'destroy']);
-    Route::post('our-services/{our_service}', [OurServiceController::class, 'update']);
-    //*****************************End route services ******************************** */
-    //******************************************************************************** */
+
 
     //***************************start route driver ******************************** */
     //****************************************************************************** */
@@ -97,7 +93,11 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     //*************************** End route contact us **************************************** */
     //***************************************************************************************** */
 
-    Route::apiResource('advertisements', \App\Http\Controllers\AdvertisementController::class);
-
+    //*****************************Start route services ******************************** */
+    //********************************************************************************** */
+    Route::apiResource('advertisements', AdvertisementController::class)->only(['store','destroy']);
+    Route::post('our-services/{our_service}', [AdvertisementController::class, 'update']);
+    //*****************************End route services ******************************** */
+    //******************************************************************************** */
 });
 
