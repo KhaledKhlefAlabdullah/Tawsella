@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\Traits\HasUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-class OurService extends Model
+class Advertisement extends Model
 {
     use HasFactory,HasUuid;
 
@@ -15,10 +15,11 @@ class OurService extends Model
 
     protected $fillable =[
         'admin_id',
-        'name',
+        'title',
         'description',
         'image',
         'logo',
+        'validity_date'
     ];
 
     public function admin(){

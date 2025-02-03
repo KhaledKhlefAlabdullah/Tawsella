@@ -97,6 +97,7 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     //*************************** End route contact us **************************************** */
     //***************************************************************************************** */
 
+    Route::apiResource('advertisements', \App\Http\Controllers\AdvertisementController::class);
 
 });
 

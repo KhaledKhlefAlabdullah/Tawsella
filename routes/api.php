@@ -25,10 +25,6 @@ Route::middleware(['auth:sanctum', EnsureEmailIsVerifiedByCodeMiddleware::class]
     require __DIR__.'/Roles/allAuthUsers.php';
 });
 
-Route::get('/csrf-token', function () {
-    return response()->json(['csrf_token' => csrf_token()]);
-});
-
 Route::post('test', function () {
     event(new test('Hello, world!'));
     return 'Event dispatched!';

@@ -10,13 +10,14 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('our_services', function (Blueprint $table) {
+        Schema::create('advertisements', function (Blueprint $table) {
             $table->uuid('id')->unique()->primary();
             $table->string('admin_id');
-            $table->string('name');
+            $table->string('title');
             $table->string('image')->default('/images/services/images/service.jpg');
             $table->string('logo')->default('/images/services/logos/logo.jpg ');
             $table->text('description');
+            $table->dateTime('validity_date')->nullable();
             $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });

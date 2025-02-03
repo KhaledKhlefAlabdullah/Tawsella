@@ -103,7 +103,7 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
     }
 
     public function our_services(){
-        return $this->hasMany(OurService::class,'admin_id');
+        return $this->hasMany(Advertisement::class,'admin_id');
     }
 
     public function calculations(){

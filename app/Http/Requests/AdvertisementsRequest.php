@@ -3,9 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Support\Facades\Auth;
 
-class ServicesRequest extends FormRequest
+class AdvertisementsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -36,7 +35,8 @@ class ServicesRequest extends FormRequest
             'name' => ['sometimes','string',],
             'description' => ['sometimes','string',],
             'image' => ['nullable','mimes:png,jpg,jpeg','max:10024'],
-            'logo' => ['nullable','mimes:png,jpg,jpeg','max:10024']
+            'logo' => ['nullable','mimes:png,jpg,jpeg','max:10024'],
+            'validity_date' => ['sometimes','dateTime','after:today'],
         ];
     }
 

@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ServicesRequest;
-use App\Models\OurService;
+use App\Http\Requests\AdvertisementsRequest;
+use App\Models\Advertisement;
 use App\Services\PaginationService;
 use Exception;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use function Laravel\Prompts\error;
 
-class OurServiceController extends Controller
+class AdvertisementController extends Controller
 {
     protected $paginationService;
 
@@ -27,8 +26,8 @@ class OurServiceController extends Controller
      */
     public function index(Request $request)
     {
-        // Fetch all records from OurService model
-        $query = OurService::query();
+        // Fetch all records from Advertisement model
+        $query = Advertisement::query();
 
         $our_services = $this->paginationService->applyPagination($query, $request);
         return api_response(data: $our_services->items(), message: 'Successfully getting messages', pagination: get_pagination($our_services, $request));
@@ -36,21 +35,21 @@ class OurServiceController extends Controller
 
     /**
      * Get our service details
-     * @param OurService $our_service
+     * @param Advertisement $our_service
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(OurService $our_service){
+    public function show(Advertisement $our_service){
         return api_response(data: $our_service, message: 'Successfully getting our service details');
     }
 
     /**
      * Store a new service in the database.
-     * @param ServicesRequest $request Service data from request
+     * @param AdvertisementsRequest $request Service data from request
      * @return JsonResponse response indicating success or failure
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-16
      */
-    public function store(ServicesRequest $request)
+    public function store(AdvertisementsRequest $request)
     {
         try {
             $validatedData = $request->validated();
@@ -59,15 +58,16 @@ class OurServiceController extends Controller
 
             $logoPath = $validatedData['logo'] ? storeFile($validatedData['logo'], '/images/logos') : '/images/services/logos/logo.jpg';
 
-            $ourService = OurService::create([
+            $Advertisement = Advertisement::create([
                 'admin_id' => $validatedData['admin_id'],
-                'name' => $validatedData['name'],
+                'title' => $validatedData['title'],
                 'description' => $validatedData['description'],
                 'image' => $imagePath,
-                'logo' => $logoPath
+                'logo' => $logoPath,
+                'validity_date' => $validatedData['validity_date'],
             ]);
 
-            return api_response(data: $ourService, message: 'Successfully created our services');
+            return api_response(data: $Advertisement, message: 'Successfully created our services');
         } catch (Exception $e) {
             return api_response(errors: [$e->getMessage()], message: 'Error in creating our services', code: 500);
         }
@@ -75,13 +75,13 @@ class OurServiceController extends Controller
 
     /**
      * Update an existing service.
-     * @param ServicesRequest $request Updated service data
-     * @param OurService $our_service Service to update
+     * @param AdvertisementsRequest $request Updated service data
+     * @param Advertisement $our_service Service to update
      * @return JsonResponse redirect back response
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-17
      */
-    public function update(ServicesRequest $request, OurService $our_service)
+    public function update(AdvertisementsRequest $request, Advertisement $our_service)
     {
         try {
             $validatedData = $request->validated();
@@ -91,7 +91,7 @@ class OurServiceController extends Controller
 
             $our_service->update([
                 'admin_id' => $validatedData['admin_id'],
-                'name' => $validatedData['name'],
+                'title' => $validatedData['title'],
                 'description' => $validatedData['description'],
                 'image' => $imagePath,
                 'logo' => $logoPath
@@ -105,12 +105,12 @@ class OurServiceController extends Controller
 
     /**
      * Delete a service from the database.
-     * @param OurService $our_service Service to delete
+     * @param Advertisement $our_service Service to delete
      * @return JsonResponse API response indicating success or failure
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-18
      */
-    public function destroy(OurService $our_service)
+    public function destroy(Advertisement $our_service)
     {
         try {
 
