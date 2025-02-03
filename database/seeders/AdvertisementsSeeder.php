@@ -18,7 +18,7 @@ class AdvertisementsSeeder extends Seeder
         for ($i = 0; $i < 10; $i++) {
             DB::table('advertisements')->insert([
                 'id' => Str::uuid(),
-                'admin_id' => '1', // تأكد من وجود مستخدم بهذا المعرف في جدول users
+                'admin_id' => getAdminId(), // تأكد من وجود مستخدم بهذا المعرف في جدول users
                 'title' => 'إعلان ' . ($i + 1),
                 'image' => '/images/services/images/service.jpg',
                 'logo' => '/images/services/logos/logo.jpg',
