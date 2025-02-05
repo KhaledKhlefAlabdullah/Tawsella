@@ -26,20 +26,26 @@ class AdvertisementController extends Controller
      */
     public function index(Request $request)
     {
-        // Fetch all records from Advertisement model
-        $query = Advertisement::query();
+        $validAdvertisements = Advertisement::query()->where('validity_date', '>=', date('Y-m-d'));
+        $validAdvertisements = $this->paginationService->applyPagination($validAdvertisements, $request);
 
-        $our_services = $this->paginationService->applyPagination($query, $request);
-        return api_response(data: $our_services->items(), message: 'Successfully getting messages', pagination: get_pagination($our_services, $request));
+        $user = $request->user();
+        if ($user->hasRole('admin')) {
+            $invalidAdvertisements = Advertisement::query()->where('validity_date', '<', date('Y-m-d'));
+            $invalidAdvertisements = $this->paginationService->applyPagination($invalidAdvertisements, $request);
+            return api_response(data: ['validAdvertisements' => $validAdvertisements, 'invalidAdvertisements' => $invalidAdvertisements]);
+        }
+
+        return api_response(data: $validAdvertisements->items(), message: 'Successfully getting advertisements', pagination: get_pagination($validAdvertisements, $request));
     }
 
     /**
-     * Get our service details
+     * Get advertisements details
      * @param Advertisement $our_service
      * @return \Illuminate\Http\JsonResponse
      */
     public function show(Advertisement $our_service){
-        return api_response(data: $our_service, message: 'Successfully getting our service details');
+        return api_response(data: $our_service, message: 'Successfully getting advertisements details');
     }
 
     /**
@@ -67,9 +73,9 @@ class AdvertisementController extends Controller
                 'validity_date' => $validatedData['validity_date'],
             ]);
 
-            return api_response(data: $Advertisement, message: 'Successfully created our services');
+            return api_response(data: $Advertisement, message: 'Successfully created advertisementss');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in creating our services', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Error in creating advertisementss', code: 500);
         }
     }
 
@@ -97,9 +103,9 @@ class AdvertisementController extends Controller
                 'logo' => $logoPath
             ]);
 
-            return api_response(data: $our_service, message: 'Successfully updated our services');
+            return api_response(data: $our_service, message: 'Successfully updated advertisementss');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in updated our services', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Error in updated advertisementss', code: 500);
         }
     }
 
@@ -118,9 +124,9 @@ class AdvertisementController extends Controller
             removeFile($our_service->image);
             $our_service->delete();
 
-            return api_response(message: 'Successfully deleted our services');
+            return api_response(message: 'Successfully deleted advertisementss');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in deleted our services', code: 500);
+            return api_response(errors: [$e->getMessage()], message: 'Error in deleted advertisementss', code: 500);
         }
     }
 }
