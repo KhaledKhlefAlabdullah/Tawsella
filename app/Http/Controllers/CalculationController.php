@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\UserEnums\UserType;
-use App\Http\Requests\CalculationRequest;
 use App\Models\Calculation;
 use App\Models\TaxiMovement;
 use App\Models\User;
@@ -60,7 +59,7 @@ class CalculationController extends Controller
 
             return api_response(data: ['details' => $details, 'movements' => $movements], message: 'Successfully getting driver movements');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'هنالك خطأ في جلب البيانات الرجاء المحاولة مرة أخرى.', code: 500);
+            return api_response(message: 'There an error in getting the data tray again', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -70,13 +69,13 @@ class CalculationController extends Controller
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-
      */
-    public function bring(User $driver)
+    public function bring(User $driver): JsonResponse
     {
         try {
             $bringCount = $driver->calculations()->where('is_bring', false)->count();
 
             if ($bringCount == 0) {
-                return api_response('drivers.index')->with('success', 'The driver has no outstanding payments to bring.');
+                return api_response(message: 'The driver has no outstanding payments to bring.');
             }
 
             $driver->calculations()->where('is_bring', false)
@@ -84,7 +83,7 @@ class CalculationController extends Controller
 
             return api_response(message: 'The outstanding payments have been successfully marked as brought.');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error bringing payments. Please try again.', code: 500);
+            return api_response(message: 'Error bringing payments. Please try again.', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -95,14 +94,14 @@ class CalculationController extends Controller
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-
      */
-    public function destroy(Calculation $calculation)
+    public function  destroy(Calculation $calculation): JsonResponse
     {
         try {
             $calculation->delete();
 
             return api_response(message: 'Successfully calculation deleted.');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in deleted calculation.', code: 500);
+            return api_response(message: 'Error in deleted calculation.', code: 500, errors: [$e->getMessage()]);
         }
     }
 }
