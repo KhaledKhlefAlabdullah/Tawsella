@@ -41,11 +41,11 @@ class AdvertisementController extends Controller
 
     /**
      * Get advertisements details
-     * @param Advertisement $our_service
+     * @param Advertisement $advertisement
      * @return \Illuminate\Http\JsonResponse
      */
-    public function show(Advertisement $our_service){
-        return api_response(data: $our_service, message: 'Successfully getting advertisements details');
+    public function show(Advertisement $advertisement){
+        return api_response(data: $advertisement, message: 'Successfully getting advertisements details');
     }
 
     /**
@@ -75,54 +75,54 @@ class AdvertisementController extends Controller
 
             return api_response(data: $Advertisement, message: 'Successfully created advertisementss');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in creating advertisementss', code: 500);
+            return api_response(message: 'Error in creating advertisementss', code: 500, errors: [$e->getMessage()]);
         }
     }
 
     /**
      * Update an existing service.
      * @param AdvertisementsRequest $request Updated service data
-     * @param Advertisement $our_service Service to update
+     * @param Advertisement $advertisement Service to update
      * @return JsonResponse redirect back response
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-17
      */
-    public function update(AdvertisementsRequest $request, Advertisement $our_service)
+    public function update(AdvertisementsRequest $request, Advertisement $advertisement)
     {
         try {
             $validatedData = $request->validated();
 
-            $imagePath = array_key_exists('image',$validatedData) ? editFile($our_service->image, '/images/advertisements/images', $validatedData['image']) : $our_service->image;
-            $logoPath =array_key_exists( 'logo',$validatedData) ? editFile($our_service->logo, '/images/advertisements/logos', $validatedData['logo']) : $our_service->logo;
+            $imagePath = array_key_exists('image',$validatedData) ? editFile($advertisement->image, '/images/advertisements/images', $validatedData['image']) : $advertisement->image;
+            $logoPath = array_key_exists( 'logo',$validatedData) ? editFile($advertisement->logo, '/images/advertisements/logos', $validatedData['logo']) : $advertisement->logo;
 
-            $our_service->update([
+            $advertisement->update([
                 'admin_id' => $validatedData['admin_id'],
-                'title' => $validatedData['title'],
-                'description' => $validatedData['description'],
+                'title' => $validatedData['title'] ?? $advertisement->title,
+                'description' => $validatedData['description'] ?? $advertisement->description,
                 'image' => $imagePath,
                 'logo' => $logoPath
             ]);
 
-            return api_response(data: $our_service, message: 'Successfully updated advertisementss');
+            return api_response(data: $advertisement, message: 'Successfully updated advertisement');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in updated advertisementss', code: 500);
+            return api_response(message: 'Error in updated advertisement', code: 500, errors: [$e->getMessage()]);
         }
     }
 
     /**
      * Delete a service from the database.
-     * @param Advertisement $our_service Service to delete
+     * @param Advertisement $advertisement Service to delete
      * @return JsonResponse API response indicating success or failure
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-18
      */
-    public function destroy(Advertisement $our_service)
+    public function destroy(Advertisement $advertisement)
     {
         try {
 
-            removeFile($our_service->logo);
-            removeFile($our_service->image);
-            $our_service->delete();
+            removeFile($advertisement->logo);
+            removeFile($advertisement->image);
+            $advertisement->delete();
 
             return api_response(message: 'Successfully deleted advertisementss');
         } catch (Exception $e) {
