@@ -26,5 +26,4 @@ Route::get('/phone', function () {
 });
 
 
-Route::apiResource('advertisements', \App\Http\Controllers\AdvertisementController::class)->only(['index', 'show']);
 

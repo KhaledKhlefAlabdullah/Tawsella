@@ -48,3 +48,5 @@ Route::group(['prefix' => 'notifications', 'controller' => NotificationControlle
     Route::post('/','readNotifications');
     Route::post('/{notificationId}','readSingleNotifications');
 });
+
+Route::apiResource('advertisements', \App\Http\Controllers\AdvertisementController::class)->only(['index', 'show']);
