@@ -54,9 +54,9 @@ class AdvertisementController extends Controller
         try {
             $validatedData = $request->validated();
 
-            $imagePath = $validatedData['image'] ? storeFile($validatedData['image'], '/images/services') : '/images/services/images/service.jpg';
+            $imagePath = $validatedData['image'] ? storeFile($validatedData['image'], '/images/advertisements/images') : '/images/services/images/service.jpg';
 
-            $logoPath = $validatedData['logo'] ? storeFile($validatedData['logo'], '/images/logos') : '/images/services/logos/logo.jpg';
+            $logoPath = $validatedData['logo'] ? storeFile($validatedData['logo'], '/images/advertisements/logos') : '/images/services/logos/logo.jpg';
 
             $Advertisement = Advertisement::create([
                 'admin_id' => $validatedData['admin_id'],
@@ -86,8 +86,8 @@ class AdvertisementController extends Controller
         try {
             $validatedData = $request->validated();
 
-            $imagePath = $validatedData['image'] ? editFile($our_service->image, '/images/services/images', $validatedData['image']) : $our_service->image;
-            $logoPath = $validatedData['logo'] ? editFile($our_service->logo, '/images/services/logos', $validatedData['logo']) : $our_service->logo;
+            $imagePath = $validatedData['image'] ? editFile($our_service->image, '/images/advertisements/images', $validatedData['image']) : $our_service->image;
+            $logoPath = $validatedData['logo'] ? editFile($our_service->logo, '/images/advertisements/logos', $validatedData['logo']) : $our_service->logo;
 
             $our_service->update([
                 'admin_id' => $validatedData['admin_id'],
