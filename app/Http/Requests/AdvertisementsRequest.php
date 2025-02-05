@@ -32,7 +32,7 @@ class AdvertisementsRequest extends FormRequest
     {
         return [
             'admin_id' => ['sometimes','string',],
-            'name' => ['sometimes','string',],
+            'title' => ['sometimes','string',],
             'description' => ['sometimes','string',],
             'image' => ['nullable','mimes:png,jpg,jpeg','max:10024'],
             'logo' => ['nullable','mimes:png,jpg,jpeg','max:10024'],
