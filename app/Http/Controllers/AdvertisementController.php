@@ -92,8 +92,8 @@ class AdvertisementController extends Controller
         try {
             $validatedData = $request->validated();
 
-            $imagePath = $validatedData['image'] ? editFile($our_service->image, '/images/advertisements/images', $validatedData['image']) : $our_service->image;
-            $logoPath = $validatedData['logo'] ? editFile($our_service->logo, '/images/advertisements/logos', $validatedData['logo']) : $our_service->logo;
+            $imagePath = array_key_exists('image',$validatedData) ? editFile($our_service->image, '/images/advertisements/images', $validatedData['image']) : $our_service->image;
+            $logoPath =array_key_exists( 'logo',$validatedData) ? editFile($our_service->logo, '/images/advertisements/logos', $validatedData['logo']) : $our_service->logo;
 
             $our_service->update([
                 'admin_id' => $validatedData['admin_id'],
