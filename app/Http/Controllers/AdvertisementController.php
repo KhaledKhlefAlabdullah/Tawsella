@@ -30,7 +30,7 @@ class AdvertisementController extends Controller
         $validAdvertisements = $this->paginationService->applyPagination($validAdvertisements, $request);
 
         $user = $request->user();
-        if ($user->hasRole('admin')) {
+        if ($user->hasRole('Admin')) {
             $invalidAdvertisements = Advertisement::query()->where('validity_date', '<', date('Y-m-d'));
             $invalidAdvertisements = $this->paginationService->applyPagination($invalidAdvertisements, $request);
             return api_response(data: ['validAdvertisements' => $validAdvertisements, 'invalidAdvertisements' => $invalidAdvertisements]);
