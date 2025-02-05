@@ -33,7 +33,7 @@ class AdvertisementController extends Controller
         if ($user->hasRole('Admin')) {
             $invalidAdvertisements = Advertisement::query()->where('validity_date', '<', date('Y-m-d'));
             $invalidAdvertisements = $this->paginationService->applyPagination($invalidAdvertisements, $request);
-            return api_response(data: ['validAdvertisements' => $validAdvertisements->items(), 'invalidAdvertisements' => $invalidAdvertisements->items()]);
+            return api_response(data: ['validAdvertisements' => $validAdvertisements->items(), 'invalidAdvertisements' => $invalidAdvertisements->items()], message: 'Successfully getting advertisements', pagination: get_pagination($validAdvertisements, $request));
         }
 
         return api_response(data: $validAdvertisements->items(), message: 'Successfully getting advertisements', pagination: get_pagination($validAdvertisements, $request));
