@@ -36,7 +36,7 @@ class AdvertisementsRequest extends FormRequest
             'description' => ['sometimes','string',],
             'image' => ['nullable','mimes:png,jpg,jpeg','max:10024'],
             'logo' => ['nullable','mimes:png,jpg,jpeg','max:10024'],
-            'validity_date' => ['sometimes','dateTime','after:today'],
+            'validity_date' => ['sometimes','date','after:today'],
         ];
     }
 

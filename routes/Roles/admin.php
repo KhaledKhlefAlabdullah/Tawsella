@@ -96,7 +96,7 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     //*****************************Start route services ******************************** */
     //********************************************************************************** */
     Route::apiResource('advertisements', AdvertisementController::class)->only(['store','destroy']);
-    Route::post('our-services/{our_service}', [AdvertisementController::class, 'update']);
+    Route::post('advertisements/{advertisement}', [AdvertisementController::class, 'update']);
     //*****************************End route services ******************************** */
     //******************************************************************************** */
 });
