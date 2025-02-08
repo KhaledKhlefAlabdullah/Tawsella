@@ -14,7 +14,7 @@ class NotificationController extends Controller
     {
         $unreadNotifications = Auth::user()->notifications;
 
-        return api_response(data: $unreadNotifications, message: "Successfully get notifications");
+        return api_response(data: $unreadNotifications, message: 'Successfully get notifications');
     }
 
     /**
@@ -25,7 +25,7 @@ class NotificationController extends Controller
     {
         $unreadNotifications = Auth::user()->unReadNotifications;
 
-        return api_response(data: $unreadNotifications, message: "Successfully get unread notifications");
+        return api_response(data: $unreadNotifications, message: 'Successfully get unread notifications');
     }
 
     /**
@@ -34,10 +34,10 @@ class NotificationController extends Controller
     public function readNotifications()
     {
         try {
-            Auth::user()->unreadNotifications->markAsRead();
-            return api_response(message: "Successfully read notifications");
+            Auth::user()->unreadNotifications()->markAsRead();
+            return api_response(message: 'Successfully read notifications');
         } catch (\Exception $e) {
-            return api_response(message: "Failed to read notifications", code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'Failed to read notifications', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -52,11 +52,40 @@ class NotificationController extends Controller
 
             if ($notification) {
                 $notification->markAsRead();
-                return api_response(message: "Successfully read notification");
+                return api_response(message: 'Successfully read notification');
             }
-            return api_response(message: "Notification not found", code: 404, errors: ["Notification not found"]);
+            return api_response(message: 'Notification not found', code: 404, errors: ['Notification not found']);
         } catch (\Exception $e) {
-            return api_response(message: "Failed to read notification", code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'Failed to read notification', code: 500, errors: [$e->getMessage()]);
+        }
+    }
+
+    /**
+     * @param string $notificationId
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteSingleNotifications(string $notificationId){
+        try {
+            $notification = auth()->user()->notifications()->find($notificationId);
+            if ($notification) {
+                $notification->delete();
+            }
+            return api_response(message: 'Notification deleted');
+        }catch (\Exception $e){
+            return api_response(message: 'Deleting notification error', code: 500, errors: [$e->getMessage()]);
+        }
+    }
+
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function deleteNotifications()
+    {
+        try {
+            Auth::user()->notifications()->delete();
+            return api_response(message: 'Successfully delete all notifications');
+        } catch (\Exception $e) {
+            return api_response(message: 'Failed to delete all notifications', code: 500, errors: [$e->getMessage()]);
         }
     }
 }

@@ -47,6 +47,8 @@ Route::group(['prefix' => 'notifications', 'controller' => NotificationControlle
     Route::get('/unread','unReadNotifications');
     Route::post('/','readNotifications');
     Route::post('/{notificationId}','readSingleNotifications');
+    Route::delete('/{notificationId}','deleteSingleNotifications');
+    Route::delete('/delete-all','deleteNotifications');
 });
 
 Route::apiResource('advertisements', \App\Http\Controllers\AdvertisementController::class)->only(['index', 'show']);
