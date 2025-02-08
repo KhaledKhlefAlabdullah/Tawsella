@@ -4,6 +4,7 @@ namespace App\Events\Movements;
 
 use App\Enums\UserEnums\UserGender;
 use App\Models\TaxiMovement;
+use Google\Service\Drive\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -26,13 +27,13 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
+     * @return Channel[]
      */
     public function broadcastOn(): array
     {
         return [
-            'customer.' . $this->taxiMovement->customer_id,
-            'driver.' . $this->taxiMovement->driver_id
+            new Channel('customer.' . $this->taxiMovement->customer_id),
+            new Channel('driver.' . $this->taxiMovement->driver_id)
         ];
     }
 

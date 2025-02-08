@@ -70,7 +70,7 @@ class TawsellaNotification extends Notification implements ShouldQueue
         } catch (\Exception $e) {
             Log::error('Email sending error: ' . [$e->getMessage()]);
 
-            return api_response(errors: [$e->getMessage()], message: 'Could not send the email');
+            return api_response(message: 'Could not send the email', errors: [$e->getMessage()]);
         }
 
         return api_response(message: 'Could not send the email', code: 500);

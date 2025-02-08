@@ -66,7 +66,7 @@ class TaxiMovementTypeController extends Controller
             $movement_type = TaxiMovementType::create($validatedData);
             return api_response(data: TaxiMovementType::mappingSingleMovementType($movement_type), message: 'Successfully creating movements type');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in creating movements type', code: 500);
+            return api_response(message: 'Error in creating movements type', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -85,7 +85,7 @@ class TaxiMovementTypeController extends Controller
             $movement_type->update($validatedData);
             return api_response(data: TaxiMovementType::mappingSingleMovementType($movement_type), message: 'Successfully updating movements type');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in updating movements type', code: 500);
+            return api_response(message: 'Error in updating movements type', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -100,7 +100,7 @@ class TaxiMovementTypeController extends Controller
             $movement_type->delete();
             return api_response(message: 'Successfully deleting movements type');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in deleting movements type', code: 500);
+            return api_response(message: 'Error in deleting movements type', code: 500, errors: [$e->getMessage()]);
         }
     }
 }

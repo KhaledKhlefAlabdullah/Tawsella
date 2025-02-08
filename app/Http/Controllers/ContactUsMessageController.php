@@ -56,7 +56,7 @@ class ContactUsMessageController extends Controller
 
             return api_response(message: 'contact us message send successfully');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'contact us message sending error', code: 500);
+            return api_response(message: 'contact us message sending error', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -84,7 +84,7 @@ class ContactUsMessageController extends Controller
 
             return api_response(message: 'contact us message answered successfully');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in answering contact us message.', code: 500);
+            return api_response(message: 'Error in answering contact us message.', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -111,7 +111,7 @@ class ContactUsMessageController extends Controller
             $contact_us->delete();
             return api_response(message: 'Contact us message deleted successfully');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in deleting contact us message.', code: 500);
+            return api_response(message: 'Error in deleting contact us message.', code: 500, errors: [$e->getMessage()]);
         }
     }
 }

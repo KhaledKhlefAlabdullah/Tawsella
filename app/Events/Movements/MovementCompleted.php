@@ -2,29 +2,28 @@
 
 namespace App\Events\Movements;
 
+use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CustomerFoundEvent implements ShouldBroadcast
+class MovementCompleted implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    protected $driverName;
-    protected $customerName;
+    protected User $driver;
+    protected User $customer;
     protected $message;
 
     /**
      * Create a new event instance.
      */
-    public function __construct($driverName, $customerName, $message = null)
+    public function __construct($driver, $customer, $message = null)
     {
-        $this->driverName = $driverName;
-        $this->customerName = $customerName;
+        $this->driver = $driver;
+        $this->customer = $customer;
         $this->message = $message ?? __('Customer-Found').' '.$customerName;
 
     }
@@ -36,20 +35,26 @@ class CustomerFoundEvent implements ShouldBroadcast
      */
     public function broadcastOn(): Channel
     {
-        return new Channel('foundCustomer.'.getAdminId());
+        return new Channel('movementCompleted.'.getAdminId());
     }
 
     public function broadcastWith():array
     {
         return [
-            'driver' => $this->driverName ,
-            'customer' => $this->customerName ,
+            'driver' => [
+                'name'=>$this->driver->profile->name,
+                'profile' => $this->driver->profile->avatar
+            ] ,
+            'customer' => [
+                'name'=>$this->customer->profile->name,
+                'profile' => $this->customer->profile->avatar
+            ] ,
             'message' => $this->message
         ];
     }
 
     public function broadcastAs(): string
     {
-        return 'foundCustomer';
+        return 'movementCompleted';
     }
 }

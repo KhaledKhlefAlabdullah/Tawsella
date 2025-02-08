@@ -72,7 +72,7 @@ class TaxiController extends Controller
             }
             return api_response(message: 'Successfully updating taxi locations.');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in updating taxi location', code: 500);
+            return api_response(message: 'Error in updating taxi location', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -106,7 +106,7 @@ class TaxiController extends Controller
             $taxi = Taxi::create($validatedData);
             return api_response(data: $taxi, message: 'Successfully created taxi');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in creating taxi', code: 500);
+            return api_response(message: 'Error in creating taxi', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -124,7 +124,7 @@ class TaxiController extends Controller
             $taxi->update($validatedData);
             return api_response(data: $taxi, message: 'Successfully updated taxi');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in updating taxi', code: 500);
+            return api_response(message: 'Error in updating taxi', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -139,7 +139,7 @@ class TaxiController extends Controller
             $taxi->delete();
             return api_response(message: 'Successfully deleted taxi');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in deleting taxi', code: 500);
+            return api_response(message: 'Error in deleting taxi', code: 500, errors: [$e->getMessage()]);
         }
     }
 }

@@ -32,7 +32,7 @@ class MessageController extends Controller
 
             return api_response(data: Message::mapingMessages($messages), message: 'Successfully getting messages');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Getting messages error', code: 500);
+            return api_response(message: 'Getting messages error', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -52,7 +52,7 @@ class MessageController extends Controller
 
             return api_response(data: Message::mapingMessages($starredMessages), message: 'Successfully getting all starred messages');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Getting starred messages error', code: 500);
+            return api_response(message: 'Getting starred messages error', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -73,7 +73,7 @@ class MessageController extends Controller
 
             return api_response(data: Message::mapingMessages($starredMessages), message: 'Successfully getting chat starred messages');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Getting starred messages error', code: 500);
+            return api_response(message: 'Getting starred messages error', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -121,7 +121,7 @@ class MessageController extends Controller
 
             return api_response(message: 'Successfully sending message');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Sending message error', code: 500);
+            return api_response(message: 'Sending message error', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -151,7 +151,7 @@ class MessageController extends Controller
 
             return api_response(message: $message);
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Message starred error', code: 500);
+            return api_response(message: 'Message starred error', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -180,7 +180,7 @@ class MessageController extends Controller
 
             return api_response(message: 'Successfully editing message');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Editing message error', code: 500);
+            return api_response(message: 'Editing message error', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -202,7 +202,7 @@ class MessageController extends Controller
 
             return api_response(message: 'Successfully deleting message');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Deleting message error', code: 500);
+            return api_response(message: 'Deleting message error', code: 500, errors: [$e->getMessage()]);
         }
     }
 }

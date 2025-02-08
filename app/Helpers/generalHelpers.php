@@ -202,7 +202,7 @@ if (!function_exists('send_mail')) {
 
             return true;
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Cold not sending the email');
+            return api_response(message: 'Cold not sending the email', errors: [$e->getMessage()]);
         }
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Events\Locations;
 
 use App\Models\User;
+use Google\Service\Drive\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -13,28 +14,28 @@ class GetCustomerLocationEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    protected $driver;
-    protected $customer;
+    protected User $customer;
+    protected float $latitude;
+    protected float $longitude;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(User $customer, User $driver)
+    public function __construct(User $customer, float $lat, float $lon)
     {
-        $this->driver = $driver;
         $this->customer = $customer;
+        $this->latitude = $lat;
+        $this->longitude = $lon;
     }
 
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
+     * @return Channel
      */
-    public function broadcastOn(): array
+    public function broadcastOn(): Channel
     {
-        return [
-            'customer-location.' . $this->driver->id,
-        ];
+        return new Channel('customerLocation.'. $this->customer->id);
     }
 
     /**
@@ -43,10 +44,10 @@ class GetCustomerLocationEvent implements ShouldBroadcast
     public function broadcastWith()
     {
         return [
-            'driver_name' => $this->customer()->profile?->name,
-            'driver_avatar' => $this->customer()->profile?->avatar,
-            'latitude' => $this->customer->last_location_latitude,
-            'longitude' => $this->customer->last_location_longitude
+            'customer_name' => $this->customer->profile?->name,
+            'customer_avatar' => $this->customer->profile?->avatar,
+            'latitude' => $this->latitude,
+            'longitude' => $this->longitude
         ];
     }
 

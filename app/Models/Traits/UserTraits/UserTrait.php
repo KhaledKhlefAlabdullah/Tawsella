@@ -123,10 +123,10 @@ trait UserTrait
 
         } catch (QueryException $e) {
             DB::rollBack();
-            return api_response(errors: [$e->getMessage()], message: 'Database error during registration', code: 500);
+            return api_response(message: 'Database error during registration', code: 500, errors: [$e->getMessage()]);
         } catch (Exception $e) {
             DB::rollBack();
-            return api_response(errors: [$e->getMessage()], message: 'Registration failed', code: 500);
+            return api_response(message: 'Registration failed', code: 500, errors: [$e->getMessage()]);
         }
     }
 

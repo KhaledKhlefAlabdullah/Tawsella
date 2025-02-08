@@ -33,7 +33,7 @@ class UserProfileController extends Controller
             ];
             return api_response(data: $profile, message: 'Profile retrieved successfully.');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Profile retrieved error.', code: 500);
+            return api_response(message: 'Profile retrieved error.', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -64,7 +64,7 @@ class UserProfileController extends Controller
             return api_response(data: $profile,message: 'Profile updated successfully.');
         } catch (Exception $e) {
             DB::rollBack();
-            return api_response(errors: [$e->getMessage()], message: 'Profile updated error.', code: 500);
+            return api_response(message: 'Profile updated error.', code: 500, errors: [$e->getMessage()]);
         }
     }
 }

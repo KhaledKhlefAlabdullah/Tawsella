@@ -16,7 +16,7 @@ class GetTaxiLocationsEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     protected Taxi $taxi;
-    protected $path;
+    protected $path = null;
 
     /**
      * Create a new event instance.
@@ -29,22 +29,25 @@ class GetTaxiLocationsEvent implements ShouldBroadcast
 
     /**
      * Get the channels the event should broadcast on.
-     * @return PrivateChannel[]
+     * @return Channel
      */
-    public function broadcastOn()
+    public function broadcastOn(): Channel
     {
-        return ['TaxiLocation.' . getAdminId()];
+        return new Channel('TaxiLocation.' . $this->taxi->driver_id);
     }
 
     public function broadcastWith(): array
     {
+        $driver = User::with(['profile'])->where('id',$this->taxi->driver_id)->first();
         $data = [
-            'driver_id' => $this->taxi->driver_id,
+            'driver_id' => $driver->id,
+            'driver_name' => $driver->profile->name,
+            'driver_avatar' => $driver->profile->avatar,
             'lat' => $this->taxi->last_location_latitude,
             'long' => $this->taxi->last_location_longitude
         ];
 
-        if ($this->path) {
+        if (!is_null($this->path)) {
             $data = array_merge($data, ['path' => $this->path]);
         }
 

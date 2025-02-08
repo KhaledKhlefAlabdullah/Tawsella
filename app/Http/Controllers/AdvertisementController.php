@@ -124,9 +124,9 @@ class AdvertisementController extends Controller
             removeFile($advertisement->image);
             $advertisement->delete();
 
-            return api_response(message: 'Successfully deleted advertisementss');
+            return api_response(message: 'Successfully deleted advertisements');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in deleted advertisementss', code: 500);
+            return api_response(message: 'Error in deleted advertisements', code: 500, errors: [$e->getMessage()]);
         }
     }
 }

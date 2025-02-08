@@ -65,7 +65,7 @@ class AboutUsController extends Controller
 
             return api_response(data: $aboutUs, message: $messag);
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'There error in proceced data.', code: 500);
+            return api_response(message: 'There error in proceced data.', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -91,7 +91,7 @@ class AboutUsController extends Controller
             return api_response(data: $data, message: 'Successfully created additional info.');
 
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in create additional info', code: 500);
+            return api_response(message: 'Error in create additional info', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -117,7 +117,7 @@ class AboutUsController extends Controller
             return api_response(data: $aboutUs, message: 'Updated additional info.');
 
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in update additional info.', code: 500);
+            return api_response(message: 'Error in update additional info.', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -135,7 +135,7 @@ class AboutUsController extends Controller
             $aboutUs->delete();
             return api_response(message: 'Successfully deleted about us.');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in deleted about us', code: 500);
+            return api_response(message: 'Error in deleted about us', code: 500, errors: [$e->getMessage()]);
         }
     }
 }

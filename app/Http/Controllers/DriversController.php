@@ -74,7 +74,7 @@ class DriversController extends Controller
 
             return api_response(data: $driver, message: 'Successfully getting driver details.');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in getting driver details.', code: 500);
+            return api_response(message: 'Error in getting driver details.', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -95,7 +95,7 @@ class DriversController extends Controller
             return api_response(data: User::mappingSingleDriver($driver),message: 'Profile updated successfully.');
         } catch (Exception $e) {
             DB::rollBack();
-            return api_response(errors: [$e->getMessage()], message: 'Profile updated error.', code: 500);
+            return api_response(message: 'Profile updated error.', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -144,7 +144,7 @@ class DriversController extends Controller
             $driver->delete();
             return api_response(message: 'Successfully deleted driver.');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in deleting driver', code: 500);
+            return api_response(message: 'Error in deleting driver', code: 500, errors: [$e->getMessage()]);
         }
     }
 }

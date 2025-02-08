@@ -83,7 +83,7 @@ class ChatController extends Controller
             return api_response(message: 'Successfully creating chat');
         } catch (Exception $e) {
             DB::rollBack();
-            return api_response(errors: [$e->getMessage()], message: 'Error in creating chat', code: 500);
+            return api_response(message: 'Error in creating chat', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -98,7 +98,7 @@ class ChatController extends Controller
             $chat->delete();
             return api_response(message: 'Successfully deleting chat');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in deleting chat', code: 500);
+            return api_response(message: 'Error in deleting chat', code: 500, errors: [$e->getMessage()]);
         }
     }
 }

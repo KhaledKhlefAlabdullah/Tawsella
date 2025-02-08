@@ -19,39 +19,14 @@ Broadcast::channel('App.Models.User.{id}', function ($user, $id) {
     return  $user->id ==  $id;
 });
 
+require __DIR__.'/Channels/locations.php';
+
+require __DIR__.'/Channels/movements.php';
+
 Broadcast::channel('test', function () {
     return  true;
 });
 
-Broadcast::channel('Taxi-movement.{id}', function ($user, $id) {
-    return  $user->id ==  $id;
-});
-
-
-Broadcast::channel('TaxiLocation.{id}', function ($user, $id) {
-
-    return $user->id == $id;
-});
-
-Broadcast::channel('admin-customer-cancel.{id}', function ($user, $id) {
-    return  $user->id ==  $id;
-});
-
-Broadcast::channel('driver-customer-cancel.{id}', function ($user, $id) {
-    return  $user->id ==  $id;
-});
-
-Broadcast::channel('found-customer.{id}', function ($user, $id) {
-    return  $user->id ==  $id;
-});
-
-Broadcast::channel('driver.{id}', function ($user, $id) {
-    return  $user->id ==  $id;
-});
-
-Broadcast::channel('customer.{id}', function ($user, $id) {
-    return  $user->id ==  $id;
-});
 
 Broadcast::channel('send-message.{id}', function ($user, $id) {
     $chat = \App\Models\ChatMember::where(['chat_id' => $id, 'member_id' => $user->id])->first();

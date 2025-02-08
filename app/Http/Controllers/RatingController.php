@@ -49,7 +49,7 @@ class RatingController extends Controller
             $this->updateDriverRating($driver);
             return api_response(message: 'Successfully getting ratings.');
         } catch (\Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Something went wrong, please try again later.', code: 500);
+            return api_response(message: 'Something went wrong, please try again later.', code: 500, errors: [$e->getMessage()]);
         }
     }
 

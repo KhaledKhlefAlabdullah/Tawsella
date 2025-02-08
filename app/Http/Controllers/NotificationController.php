@@ -37,7 +37,7 @@ class NotificationController extends Controller
             Auth::user()->unreadNotifications->markAsRead();
             return api_response(message: "Successfully read notifications");
         } catch (\Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: "Failed to read notifications", code: 500);
+            return api_response(message: "Failed to read notifications", code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -54,9 +54,9 @@ class NotificationController extends Controller
                 $notification->markAsRead();
                 return api_response(message: "Successfully read notification");
             }
-            return api_response(errors: ["Notification not found"], message: "Notification not found", code: 404);
+            return api_response(message: "Notification not found", code: 404, errors: ["Notification not found"]);
         } catch (\Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: "Failed to read notification", code: 500);
+            return api_response(message: "Failed to read notification", code: 500, errors: [$e->getMessage()]);
         }
     }
 }

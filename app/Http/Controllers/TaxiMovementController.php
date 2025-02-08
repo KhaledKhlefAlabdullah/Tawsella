@@ -6,8 +6,7 @@ use App\Enums\MovementRequestStatus;
 use App\Enums\UserEnums\DriverState;
 use App\Enums\UserEnums\UserGender;
 use App\Events\Movements\CustomerCanceledMovementEvent;
-use App\Events\Movements\CustomerFoundEvent;
-use App\Events\Movements\RejectTransportationServiceRequestEvent;
+use App\Events\Movements\MovementCompleted;
 use App\Events\Movements\RequestingTransportationServiceEvent;
 use App\Http\Requests\TaxiMovements\MarkMovementAsCompletedRequest;
 use App\Http\Requests\TaxiMovements\AcceptOrRejectMovementRequest;
@@ -107,10 +106,14 @@ class TaxiMovementController extends Controller
             }
             $validatedData['gender'] = UserGender::getValue($validatedData['gender']);
             $taxiMovement = TaxiMovement::create($validatedData);
-            broadcast(new RequestingTransportationServiceEvent($taxiMovement));
+            RequestingTransportationServiceEvent::dispatch($taxiMovement);
+            User::find(getAdminId())->notify([
+                'title' => 'new movement request',
+                'body' => 'The user '.Auth::user()->profile->name.' requested a new movement request.',
+            ]);
             return api_response(data: ['movement_id' => $taxiMovement->id], message: 'Successfully creating movement');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in creatting taxi movement', code: 500);
+            return api_response(message: 'Error in creating taxi movement', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -150,7 +153,7 @@ class TaxiMovementController extends Controller
 
             $customerPayload = [
                 'notification' => [
-                    'title' => 'Hello!',
+                    'title' => 'Your request accepted!',
                     'body' => [
                         'request_id' => $taxiMovement->id,
                         'message' => 'your request was accepted.',
@@ -160,11 +163,12 @@ class TaxiMovementController extends Controller
             ];
 
             $customerRecipientValue = $customer->device_token;
+            $customer->notify($customerPayload['notification']);
             $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
 
             $driverPayload =  [
                 'notification' => [
-                    'title' => 'Hello!',
+                    'title' => 'You have new request!',
                     'body' => [
                         'request_id' => $taxiMovement->id,
                         'customer' => $customer->profile,
@@ -173,12 +177,14 @@ class TaxiMovementController extends Controller
                     ],
                 ]
             ];
+
             $driverRecipientValue = $driver->device_token;
+            $driver->notify($driverPayload['notification']);
             $this->fcmNotificationService->sendNotification($driverPayload, $driverRecipientValue);
 
             return api_response(message: $message);
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in accept movement', code: 500);
+            return api_response(message: 'Error in accept movement', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -198,6 +204,7 @@ class TaxiMovementController extends Controller
             'type' => $this->taxiMovement->movement_type->type,
         ];
     }
+
     /**
      * Reject Taxi movement request
      * @param AcceptOrRejectMovementRequest $request contains the request details
@@ -219,11 +226,23 @@ class TaxiMovementController extends Controller
                 return $processMovementStateRequest;
             }
             DB::commit();
-            RejectTransportationServiceRequestEvent::dispatch($taxiMovement);
+            //RejectTransportationServiceRequestEvent::dispatch($taxiMovement);
+            $customerPayload = [
+                'notification' => [
+                    'title' => 'Your request rejected!',
+                    'body' => [
+                        'message' => array_key_exists('message', $validatedData) ? $validatedData['message'] : 'your request was rejected.',
+                    ],
+                ]
+            ];
+            $customer = $taxiMovement->customer;
+            $customerRecipientValue = $customer->device_token;
+            $customer->notify($customerPayload['notification']);
+            $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
 
             return api_response(message: 'Successfully rejecting movement');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in rejecet movement', code: 500);
+            return api_response(message: 'Error in rejecet movement', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -240,9 +259,7 @@ class TaxiMovementController extends Controller
             $driverName = $taxiMovement->driver->profile->name;
             $customerName = $taxiMovement->customer->profile->name;
             $message = 'driver: ' . $driverName . ($validatedData['state'] ? ' found' : ' don\'t found') . ' customer: ' . $customerName;
-            event(new CustomerFoundEvent(
-                $driverName, $customerName, $message
-            ));
+            MovementCompleted::dispatch($driverName, $customerName, $message);
 
             if ($validatedData['state']) {
                 $taxiMovement->state_message = __('customer-was-found');
@@ -253,7 +270,7 @@ class TaxiMovementController extends Controller
 
             return api_response(message: 'Successfully found customer');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in find customer', code: 500);
+            return api_response(message: 'Error in find customer', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -285,21 +302,17 @@ class TaxiMovementController extends Controller
                 'driver_state' => DriverState::Ready
             ]);
 
-            $driverName = $taxiMovement->driver->profile->name;
-            $customerName = $taxiMovement->customer->profile->name;
+            $driver = $taxiMovement->driver;
+            $customer = $taxiMovement->customer;
             $from = $taxiMovement->start_address;
             $to = $taxiMovement->destination_address;
             $message = 'completed movement request from: ' . $from . ' to: ' . $to;
             DB::commit();
-            event(new CustomerFoundEvent(
-                $driverName,
-                $customerName,
-                $message,
-            ));
+            MovementCompleted::dispatch($driver,$customer,$message);
             return api_response(data: ['amount' => $calculation->totalPrice], message: 'Successfully completed movement request');
         } catch (Exception $e) {
             DB::rollBack();
-            return api_response(errors: [$e->getMessage()], message: 'Error in make movement completed', code: 500);
+            return api_response(message: 'Error in make movement completed', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -319,14 +332,32 @@ class TaxiMovementController extends Controller
             ]);
 
             CustomerCanceledMovementEvent::dispatch($taxiMovement);
+            if ($taxiMovement->is_redirected){
+                $driverPayload =  [
+                    'notification' => [
+                        'title' => 'Movement canceled!',
+                        'body' => [
+                            'request_id' => $taxiMovement->id,
+                            'customer' => $taxiMovement->customer->profile,
+                            'message' => 'The customer canceled the movement',
+                            'taxiMovementInfo' => $this->getDriverData()
+                        ],
+                    ]
+                ];
 
+                $driver = $taxiMovement->driver();
+                $driverRecipientValue = $taxiMovement->driver->device_token;
+                $driver->notify($driverPayload['notification']);
+                $this->fcmNotificationService->sendNotification($driverPayload, $driverRecipientValue);
+
+            }
             $calculateCanceledMovementsRequest = TaxiMovement::calculateCanceledMovements(Auth::user());
             if ($calculateCanceledMovementsRequest) {
                 return $calculateCanceledMovementsRequest;
             }
             return api_response(message: 'Movement Canceled Successfully');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Movement Canceled error', code: 500);
+            return api_response(message: 'Movement Canceled error', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -367,7 +398,7 @@ class TaxiMovementController extends Controller
     }
 
     /**
-     * Send Taxi movemnt request details
+     * Send Taxi movement request details
      */
     public function get_request_data(string $driver_id)
     {
@@ -408,32 +439,6 @@ class TaxiMovementController extends Controller
             'price' => $lastRequest->movement_type->price,
             'is_onKM' => $lastRequest->movement_type->is_onKM
         ];
-//        try {
-//            //todo need to remove and use realtime
-//            $request = TaxiMovement::select(
-//                'taxi_movements.id as request_id',
-//                'up.name',
-//                'up.phone_number',
-//                'taxi_movements.start_address as customer_address',
-//                'taxi_movements.destination_address as destination_address',
-//                'taxi_movements.gender as gender',
-//                'taxi_movements.start_latitude as location_lat',
-//                'taxi_movements.start_longitude as location_long',
-//                'tmt.type',
-//                'tmt.price',
-//                'tmt.is_onKM'
-//            )
-//                ->join('user_profiles as up', 'taxi_movements.customer_id', '=', 'up.user_id')
-//                ->join('taxi_movement_types as tmt', 'taxi_movements.movement_type_id', '=', 'tmt.id')
-//                ->where(['taxi_movements.driver_id' => $driver_id, 'is_completed' => false, 'is_canceled' => false, 'is_redirected' => true])
-//                ->whereDate('taxi_movements.created_at', today())
-//                ->first();
-//            if ($request)
-//                return api_response(data: $request, message: 'نجح في الحول على بيانات');
-//            return api_response(message: 'there now data');
-//        } catch (Exception $e) {
-//            return api_response(errors: [$e->getMessage()], message: 'حدث خطأ في الحصول على بيانات', code: 500);
-//        }
     }
 
     /**
@@ -447,7 +452,7 @@ class TaxiMovementController extends Controller
             $taxiMovement->delete();
             return api_response(message: 'Successfully deleted taxi movement');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in deleted taxi movement', code: 500);
+            return api_response(message: 'Error in deleted taxi movement', code: 500, errors: [$e->getMessage()]);
         }
     }
 }

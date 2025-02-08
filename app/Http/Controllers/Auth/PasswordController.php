@@ -33,7 +33,7 @@ class PasswordController extends Controller
             return api_response(message: 'Successfully change password');
 
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error change password', code: 500);
+            return api_response(message: 'Error change password', code: 500, errors: [$e->getMessage()]);
         }
     }
 }

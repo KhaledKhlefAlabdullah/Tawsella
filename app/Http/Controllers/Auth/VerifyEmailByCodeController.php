@@ -30,7 +30,7 @@ class VerifyEmailByCodeController extends Controller
 
                 $user->sendEmailVerificationNotification(true);
 
-                return api_response(errors: 'The confirmation code has expired. Please try again.', code: 500);
+                return api_response(code: 500, errors: 'The confirmation code has expired. Please try again.');
             } else {
 
                 $user->markEmailAsVerified();
@@ -55,7 +55,7 @@ class VerifyEmailByCodeController extends Controller
                 $seconds_left = (int) config('mailCode.attempts_ban_seconds') - $mailCodeLastAttemptDate->diffInSeconds();
 
                 if ($seconds_left > 0) {
-                    return api_response(errors: 'There was an error verifying the account. Please wait ' . $seconds_left . ' seconds before trying again.', code: 500);
+                    return api_response(code: 500, errors: 'There was an error verifying the account. Please wait ' . $seconds_left . ' seconds before trying again.');
                 }
 
                 // Send new code and set new attempts when the user is no longer banned
@@ -65,9 +65,9 @@ class VerifyEmailByCodeController extends Controller
 
             $user->decrement('mail_code_attempts_left');
             $user->update(['mail_code_last_attempt_date' => now()]);
-            return api_response(errors: 'You have ' . $user->mail_code_attempts_left . ' attempts left.', code: 500);
+            return api_response(code: 500, errors: 'You have ' . $user->mail_code_attempts_left . ' attempts left.');
         }
 
-        return api_response(errors: 'The code you entered is incorrect. Please try again.', code: 500);
+        return api_response(code: 500, errors: 'The code you entered is incorrect. Please try again.');
     }
 }

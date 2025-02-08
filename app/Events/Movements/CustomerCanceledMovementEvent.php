@@ -4,6 +4,7 @@ namespace App\Events\Movements;
 
 
 use App\Models\TaxiMovement;
+use Google\Service\Drive\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
@@ -27,13 +28,13 @@ class CustomerCanceledMovementEvent implements ShouldBroadcast
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
+     * @return Channel[]
      */
     public function broadcastOn(): array
     {
         return [
-            'driver-customer-cancel.' . $this->taxiMovement->driver_id,
-            'admin-customer-cancel.' . getAdminId(),
+//            new Channel('customerCancelMovement.' . $this->taxiMovement->driver_id),
+            new Channel('customerCancelMovement.' . getAdminId()),
         ];
     }
 

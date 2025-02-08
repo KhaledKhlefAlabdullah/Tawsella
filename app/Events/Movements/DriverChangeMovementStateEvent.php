@@ -3,6 +3,7 @@
 namespace App\Events\Movements;
 
 use App\Models\TaxiMovement;
+use Google\Service\AppHub\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
@@ -28,11 +29,11 @@ class DriverChangeMovementStateEvent implements ShouldBroadcast
 
     /**
      * Get the channels the event should broadcast on.
-     *
+     * @return Channel
      */
-    public function broadcastOn()
+    public function broadcastOn(): Channel
     {
-        return ['found-customer.' . getAdminId()];
+        return new Channel('foundCustomer.' . getAdminId());
     }
 
     public function broadcastWith(): array

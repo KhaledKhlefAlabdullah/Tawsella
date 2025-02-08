@@ -51,7 +51,7 @@ class OfferController extends Controller
 
             return api_response(data: $offer, message: 'Successfully created offer.');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in creating offer.', code: 500);
+            return api_response(message: 'Error in creating offer.', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -83,7 +83,7 @@ class OfferController extends Controller
 
             return api_response(data: $offer, message: 'Successfully updated offer.');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in updating offer.', code: 500);
+            return api_response(message: 'Error in updating offer.', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -102,7 +102,7 @@ class OfferController extends Controller
 
             return api_response(message: 'Successfully deleted offer.');
         } catch (Exception $e) {
-            return api_response(errors: [$e->getMessage()], message: 'Error in deleting error.', code: 500);
+            return api_response(message: 'Error in deleting error.', code: 500, errors: [$e->getMessage()]);
         }
     }
 }
