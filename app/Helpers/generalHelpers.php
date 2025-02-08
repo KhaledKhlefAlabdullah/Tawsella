@@ -1,7 +1,7 @@
 <?php
 
-use App\Mail\TawsellaMail;
-use App\Notifications\TawsellaNotification;
+use App\Mail\StarTaxiMail;
+use App\Notifications\StarTaxiNotification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -198,7 +198,7 @@ if (!function_exists('send_mail')) {
     {
         try {
 
-            Mail::to($receiver)->send(new TawsellaMail($mail_message));
+            Mail::to($receiver)->send(new StarTaxiMail($mail_message));
 
             return true;
         } catch (Exception $e) {
@@ -228,7 +228,7 @@ if (!function_exists('send_notifications')) {
      * Send notifications to receivers.
      *
      * @param array|Illuminate\Support\Collection|App\Models\User $receivers
-     * @param string $message
+     * @param string|array $message
      * @param array $viaChannel
      * @throws Exception
      */
@@ -265,7 +265,7 @@ if (!function_exists('send_notifications')) {
 
         // Trigger event and send notifications
         foreach ($receiversArray as $receiver) {
-            Notification::send($receiver, new TawsellaNotification($user_profile, $message, $receivers, $viaChannel));
+            Notification::send($receiver, new StarTaxiNotification($user_profile, $message, $receivers, $viaChannel));
         }
     }
 

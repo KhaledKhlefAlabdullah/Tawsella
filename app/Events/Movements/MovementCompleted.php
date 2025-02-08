@@ -24,7 +24,7 @@ class MovementCompleted implements ShouldBroadcast
     {
         $this->driver = $driver;
         $this->customer = $customer;
-        $this->message = $message ?? __('Customer-Found').' '.$customerName;
+        $this->message = $message;
 
     }
 

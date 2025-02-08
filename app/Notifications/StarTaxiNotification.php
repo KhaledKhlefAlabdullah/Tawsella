@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Mail\TawsellaMail;
+use App\Mail\StarTaxiMail;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Bus\Queueable;
@@ -12,7 +12,7 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Log;
 
-class TawsellaNotification extends Notification implements ShouldQueue
+class StarTaxiNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -24,7 +24,7 @@ class TawsellaNotification extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      */
-    public function __construct($user_profile, string $message, $receiver, array $viaChannels = ['database'])
+    public function __construct($user_profile, $message, $receiver, array $viaChannels = ['database'])
     {
         $this->viaChannels = $viaChannels;
         $this->user_profile = $user_profile;
@@ -42,7 +42,7 @@ class TawsellaNotification extends Notification implements ShouldQueue
         return [
             'sender_name' => $this->user_profile->name ?? 'Anonymous',
             'sender_image' => $this->user_profile ? $this->user_profile->avatar_url : null,
-            'message' => __($this->message),
+            'message' => $this->message,
         ];
     }
 
@@ -50,7 +50,7 @@ class TawsellaNotification extends Notification implements ShouldQueue
     {
         try {
             $emails = [];
-            foreach ($this->receivers as $receiver) {
+            foreach ($this->receiver as $receiver) {
                 if (is_object($receiver) && property_exists($receiver, 'email')) {
                     $emails[] = $receiver->email;
                 } else {
@@ -62,13 +62,13 @@ class TawsellaNotification extends Notification implements ShouldQueue
                 $success = send_mail($this->message, $emails);
 
                 if ($success) {
-                    return (new TawsellaMail($this->message))->to($notifiable);
+                    return (new StarTaxiMail($this->message))->to($notifiable);
                 }
             } else {
                 throw new \Exception('No valid email addresses found');
             }
         } catch (\Exception $e) {
-            Log::error('Email sending error: ' . [$e->getMessage()]);
+            Log::error('Email sending error: ' .  [$e->getMessage()]);
 
             return api_response(message: 'Could not send the email', errors: [$e->getMessage()]);
         }
@@ -92,7 +92,7 @@ class TawsellaNotification extends Notification implements ShouldQueue
      */
     public function broadcastOn()
     {
-        'Notification-to-user.' . $this->receiver->id;
+        return new Channel('Notification-to-user.' . $this->receiver->id);
     }
 
     public function broadcastAs(){

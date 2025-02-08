@@ -6,6 +6,7 @@ use App\Enums\MovementRequestStatus;
 use App\Enums\UserEnums\DriverState;
 use App\Enums\UserEnums\UserGender;
 use App\Events\Movements\CustomerCanceledMovementEvent;
+use App\Events\Movements\CustomerFoundEvent;
 use App\Events\Movements\MovementCompleted;
 use App\Events\Movements\RequestingTransportationServiceEvent;
 use App\Http\Requests\TaxiMovements\MarkMovementAsCompletedRequest;
@@ -107,9 +108,12 @@ class TaxiMovementController extends Controller
             $validatedData['gender'] = UserGender::getValue($validatedData['gender']);
             $taxiMovement = TaxiMovement::create($validatedData);
             RequestingTransportationServiceEvent::dispatch($taxiMovement);
-            User::find(getAdminId())->notify([
+            $admin = User::find(getAdminId())->notify();
+            send_notifications($admin, [
                 'title' => 'new movement request',
-                'body' => 'The user '.Auth::user()->profile->name.' requested a new movement request.',
+                'body' => [
+                    'message' => 'The user ' . Auth::user()->profile->name . ' requested a new movement request.'
+                ],
             ]);
             return api_response(data: ['movement_id' => $taxiMovement->id], message: 'Successfully creating movement');
         } catch (Exception $e) {
@@ -163,10 +167,10 @@ class TaxiMovementController extends Controller
             ];
 
             $customerRecipientValue = $customer->device_token;
-            $customer->notify($customerPayload['notification']);
+            send_notifications($customer, $customerPayload['notification']);
             $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
 
-            $driverPayload =  [
+            $driverPayload = [
                 'notification' => [
                     'title' => 'You have new request!',
                     'body' => [
@@ -179,7 +183,7 @@ class TaxiMovementController extends Controller
             ];
 
             $driverRecipientValue = $driver->device_token;
-            $driver->notify($driverPayload['notification']);
+            send_notifications($driver, $driverPayload['notification']);
             $this->fcmNotificationService->sendNotification($driverPayload, $driverRecipientValue);
 
             return api_response(message: $message);
@@ -237,7 +241,7 @@ class TaxiMovementController extends Controller
             ];
             $customer = $taxiMovement->customer;
             $customerRecipientValue = $customer->device_token;
-            $customer->notify($customerPayload['notification']);
+            send_notifications($customer, $customerPayload['notification']);
             $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
 
             return api_response(message: 'Successfully rejecting movement');
@@ -259,7 +263,16 @@ class TaxiMovementController extends Controller
             $driverName = $taxiMovement->driver->profile->name;
             $customerName = $taxiMovement->customer->profile->name;
             $message = 'driver: ' . $driverName . ($validatedData['state'] ? ' found' : ' don\'t found') . ' customer: ' . $customerName;
-            MovementCompleted::dispatch($driverName, $customerName, $message);
+            CustomerFoundEvent::dispatch($driverName, $customerName, $message);
+            $admin = User::find(getAdminId())->notify();
+            send_notifications($admin, [
+                'title' => 'Movement Completed!',
+                'body' => [
+                    'request_id' => $taxiMovement->id,
+                    'customer' => $taxiMovement->customer->profile,
+                    'message' => $message
+                ]
+            ]);
 
             if ($validatedData['state']) {
                 $taxiMovement->state_message = __('customer-was-found');
@@ -308,7 +321,17 @@ class TaxiMovementController extends Controller
             $to = $taxiMovement->destination_address;
             $message = 'completed movement request from: ' . $from . ' to: ' . $to;
             DB::commit();
-            MovementCompleted::dispatch($driver,$customer,$message);
+            MovementCompleted::dispatch($driver, $customer, $message);
+            $admin = User::find(getAdminId())->notify();
+            send_notifications($admin, [
+                'title' => 'Movement Completed!',
+                'body' => [
+                    'request_id' => $taxiMovement->id,
+                    'customer' => $taxiMovement->customer->profile,
+                    'message' => $message,
+                    'taxiMovementInfo' => $this->getDriverData()
+                ]
+            ]);
             return api_response(data: ['amount' => $calculation->totalPrice], message: 'Successfully completed movement request');
         } catch (Exception $e) {
             DB::rollBack();
@@ -332,8 +355,19 @@ class TaxiMovementController extends Controller
             ]);
 
             CustomerCanceledMovementEvent::dispatch($taxiMovement);
-            if ($taxiMovement->is_redirected){
-                $driverPayload =  [
+            $admin = User::find(getAdminId())->notify();
+            send_notifications($admin, [
+                'title' => 'Movement canceled!',
+                'body' => [
+                    'request_id' => $taxiMovement->id,
+                    'customer' => $taxiMovement->customer->profile,
+                    'message' => 'The customer canceled the movement',
+                    'taxiMovementInfo' => $this->getDriverData()
+                ]
+            ]);
+
+            if ($taxiMovement->is_redirected) {
+                $driverPayload = [
                     'notification' => [
                         'title' => 'Movement canceled!',
                         'body' => [
@@ -347,7 +381,7 @@ class TaxiMovementController extends Controller
 
                 $driver = $taxiMovement->driver();
                 $driverRecipientValue = $taxiMovement->driver->device_token;
-                $driver->notify($driverPayload['notification']);
+                send_notifications($driver,$driverPayload['notification']);
                 $this->fcmNotificationService->sendNotification($driverPayload, $driverRecipientValue);
 
             }

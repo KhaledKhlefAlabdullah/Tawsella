@@ -56,6 +56,6 @@ class RequestingTransportationServiceEvent implements ShouldBroadcast
 
     public function broadcastAs(): string
     {
-        return 'requesting-transportation-service';
+        return 'requestingTransportationService';
     }
 }

@@ -54,6 +54,6 @@ class CustomerCanceledMovementEvent implements ShouldBroadcast
 
     public function broadcastAs(): string
     {
-        return 'canceledTransportationServiceRequest';
+        return 'customerCancelMovement';
     }
 }
