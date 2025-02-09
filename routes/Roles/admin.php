@@ -12,7 +12,6 @@ use App\Http\Controllers\OfferController;
 use App\Http\Controllers\TaxiController;
 use App\Http\Controllers\TaxiMovementController;
 use App\Http\Controllers\TaxiMovementTypeController;
-use App\Http\Controllers\OurServiceController;
 
 Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     //*****************************Start route movements types******************************** */
@@ -46,6 +45,9 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     //*************************** START route taxi-movement *********************************** */
     //***************************************************************************************** */
     Route::group(['prefix' => 'taxi-movement', 'controller' => TaxiMovementController::class], function () {
+
+        Route::get('/', 'index');
+
         Route::get('/current', 'LifeTaxiMovements');
 
         Route::get('/completed', 'completedTaxiMovements');

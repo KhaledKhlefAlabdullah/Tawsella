@@ -22,6 +22,20 @@ class TaxiMovementTypeController extends Controller
     }
 
     /**
+     * @return JsonResponse
+     */
+    public function getKMPrice()
+    {
+        $KMprice = TaxiMovementType::where('is_onKM', true)
+            ->select(['price1',
+                'payment1',
+                'price2',
+                'payment2',])->first();
+
+        return api_response(data: $KMprice, message: 'Successfully getting KM price');
+    }
+
+    /**
      * Display a listing of the resource.
      * @return JsonResponse
      */
@@ -62,7 +76,12 @@ class TaxiMovementTypeController extends Controller
     {
         try {
             $validatedData = $request->validated();
-            $validatedData['payment'] = PaymentTypesEnum::getValue($validatedData['payment']);
+            if (array_key_exists('payment1', $validatedData)) {
+                $validatedData['payment1'] = PaymentTypesEnum::getValue($validatedData['payment1']);
+            }
+            if (array_key_exists('payment2', $validatedData)) {
+                $validatedData['payment2'] = PaymentTypesEnum::getValue($validatedData['payment2']);
+            }
             $movement_type = TaxiMovementType::create($validatedData);
             return api_response(data: TaxiMovementType::mappingSingleMovementType($movement_type), message: 'Successfully creating movements type');
         } catch (Exception $e) {
@@ -80,8 +99,12 @@ class TaxiMovementTypeController extends Controller
     {
         try {
             $validatedData = $request->validated();
-            if (isset($validatedData['payment']))
-                    $validatedData['payment'] = PaymentTypesEnum::getValue($validatedData['payment']);
+            if (isset($validatedData['payment1']) && array_key_exists('payment1', $validatedData)) {
+                $validatedData['payment1'] = PaymentTypesEnum::getValue($validatedData['payment1']);
+            }
+            if (isset($validatedData['payment2']) && array_key_exists('payment2', $validatedData)) {
+                $validatedData['payment2'] = PaymentTypesEnum::getValue($validatedData['payment2']);
+            }
             $movement_type->update($validatedData);
             return api_response(data: TaxiMovementType::mappingSingleMovementType($movement_type), message: 'Successfully updating movements type');
         } catch (Exception $e) {

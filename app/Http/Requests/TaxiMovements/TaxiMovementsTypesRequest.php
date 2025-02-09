@@ -25,10 +25,12 @@ class TaxiMovementsTypesRequest extends FormRequest
     {
         return [
             'type' => ['sometimes'],
-            'price' => ['sometimes', 'numeric'],
+            'price1' => ['sometimes', 'numeric'],
+            'price2' => ['sometimes', 'numeric'],
             'description' => ['nullable'],
             'is_onKM' => ['sometimes', 'boolean'],
-            'payment' => ['sometimes', Rule::in(PaymentTypesEnum::getKeys())],
+            'payment1' => ['sometimes', Rule::in(PaymentTypesEnum::getKeys())],
+            'payment2' => ['sometimes', Rule::in(PaymentTypesEnum::getKeys())],
             'is_general' => ['sometimes', 'boolean'],
         ];
     }

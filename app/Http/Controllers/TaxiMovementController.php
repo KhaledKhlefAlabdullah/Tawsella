@@ -39,6 +39,24 @@ class TaxiMovementController extends Controller
     }
 
     /**
+     * @return JsonResponse
+     */
+    public function index(){
+        $currentDate = Carbon::now()->format('Y-m-d');
+        $movements = TaxiMovement::query()
+            ->where([
+                'is_completed' => false,
+                'is_canceled' => false,
+                'request_state' => MovementRequestStatus::Pending
+            ])
+            ->whereDate('created_at', $currentDate)
+            ->orderBy('created_at', 'asc') // ترتيب تصاعدي (الأقدم أولاً)
+            ->get();
+
+        return api_response(data: $movements, message: 'Successfully getting movement ');
+    }
+
+    /**
      * Show the form for creating a new resource.
      * @return JsonResponse
      * @author Khaled <khaledabdullah2001104@gmail.com>

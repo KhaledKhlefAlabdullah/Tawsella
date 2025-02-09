@@ -24,4 +24,6 @@ Route::middleware([DriverMiddleware::class])->group(function() {
     Route::post('/get-taxi-location/{driver}',[TaxiController::class,'getTaxiLocation']);
 
     Route::post('/drivers/change-state', [DriversController::class, 'changeDriverState']);
+
+    Route::get('/getKMPrice', [\App\Http\Controllers\TaxiMovementTypeController::class, 'getKMPrice']);
 });
