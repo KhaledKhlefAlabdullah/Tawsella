@@ -125,7 +125,7 @@ class TaxiMovementController extends Controller
 //            }
             $validatedData['gender'] = UserGender::getValue($validatedData['gender']);
             $taxiMovement = TaxiMovement::create($validatedData);
-            RequestingTransportationServiceEvent::dispatch($taxiMovement);
+            event(new RequestingTransportationServiceEvent($taxiMovement));
             $admin = User::find(getAdminId());
             send_notifications($admin, [
                 'title' => 'new movement request',
