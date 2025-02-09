@@ -27,12 +27,25 @@ class TaxiMovementTypeController extends Controller
     public function getKMPrice()
     {
         $KMprice = TaxiMovementType::where('is_onKM', true)
-            ->select(['price1',
+            ->select([
+                'price1',
                 'payment1',
                 'price2',
-                'payment2',])->first();
+                'payment2',
+            ])->first();
 
-        return api_response(data: $KMprice, message: 'Successfully getting KM price');
+        if (!$KMprice) {
+            return api_response(message: 'No KM price found', code: 404);
+        }
+
+        $data = [
+            'price1' => $KMprice->price1,
+            'payment1' => PaymentTypesEnum::getKey($KMprice->payment1),
+            'price2' => $KMprice->price2,
+            'payment2' => PaymentTypesEnum::getKey($KMprice->payment2)
+        ];
+
+        return api_response(data: $data, message: 'Successfully getting KM price');
     }
 
     /**
