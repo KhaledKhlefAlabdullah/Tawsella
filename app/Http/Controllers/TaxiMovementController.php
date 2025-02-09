@@ -108,7 +108,7 @@ class TaxiMovementController extends Controller
             $validatedData['gender'] = UserGender::getValue($validatedData['gender']);
             $taxiMovement = TaxiMovement::create($validatedData);
             RequestingTransportationServiceEvent::dispatch($taxiMovement);
-            $admin = User::find(getAdminId())->notify();
+            $admin = User::find(getAdminId());
             send_notifications($admin, [
                 'title' => 'new movement request',
                 'body' => [
@@ -264,7 +264,7 @@ class TaxiMovementController extends Controller
             $customerName = $taxiMovement->customer->profile->name;
             $message = 'driver: ' . $driverName . ($validatedData['state'] ? ' found' : ' don\'t found') . ' customer: ' . $customerName;
             CustomerFoundEvent::dispatch($driverName, $customerName, $message);
-            $admin = User::find(getAdminId())->notify();
+            $admin = User::find(getAdminId());
             send_notifications($admin, [
                 'title' => 'Movement Completed!',
                 'body' => [
@@ -322,7 +322,7 @@ class TaxiMovementController extends Controller
             $message = 'completed movement request from: ' . $from . ' to: ' . $to;
             DB::commit();
             MovementCompleted::dispatch($driver, $customer, $message);
-            $admin = User::find(getAdminId())->notify();
+            $admin = User::find(getAdminId());
             send_notifications($admin, [
                 'title' => 'Movement Completed!',
                 'body' => [
@@ -355,7 +355,7 @@ class TaxiMovementController extends Controller
             ]);
 
             CustomerCanceledMovementEvent::dispatch($taxiMovement);
-            $admin = User::find(getAdminId())->notify();
+            $admin = User::find(getAdminId());
             send_notifications($admin, [
                 'title' => 'Movement canceled!',
                 'body' => [
