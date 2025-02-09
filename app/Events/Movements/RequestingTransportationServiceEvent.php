@@ -4,10 +4,8 @@ namespace App\Events\Movements;
 
 use App\Models\TaxiMovement;
 use App\Models\User;
-use App\Models\UserProfile;
-use Google\Service\Drive\Channel;
+use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
@@ -29,11 +27,11 @@ class RequestingTransportationServiceEvent implements ShouldBroadcast
     /**
      * Get the channels the event should broadcast on.
      *
-     * @return Channel
+     * @return Channel[]
      */
-    public function broadcastOn(): Channel
+    public function broadcastOn(): array
     {
-        return new Channel('TaxiMovement.f97e24de-3fd7-4924-ad8d-852a053c3790');
+        return[new Channel('TaxiMovement.f97e24de-3fd7-4924-ad8d-852a053c3790')];
 
 //        return new Channel('TaxiMovement.'.getAdminId());
     }
