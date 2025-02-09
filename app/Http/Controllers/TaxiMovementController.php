@@ -114,15 +114,15 @@ class TaxiMovementController extends Controller
     public function store(TaxiMovementRequest $request)
     {
         try {
-            $canceledMovementResponse = TaxiMovement::calculateCanceledMovements(Auth::user());
-            if ($canceledMovementResponse) {
-                return $canceledMovementResponse;
-            }
+//            $canceledMovementResponse = TaxiMovement::calculateCanceledMovements(Auth::user());
+//            if ($canceledMovementResponse) {
+//                return $canceledMovementResponse;
+//            }
             $validatedData = $request->validated();
-            $ExistsCustomerMovementsResponse = User::checkExistingCustomerMovements($validatedData['customer_id']);
-            if ($ExistsCustomerMovementsResponse) {
-                return $ExistsCustomerMovementsResponse;
-            }
+//            $ExistsCustomerMovementsResponse = User::checkExistingCustomerMovements($validatedData['customer_id']);
+//            if ($ExistsCustomerMovementsResponse) {
+//                return $ExistsCustomerMovementsResponse;
+//            }
             $validatedData['gender'] = UserGender::getValue($validatedData['gender']);
             $taxiMovement = TaxiMovement::create($validatedData);
             RequestingTransportationServiceEvent::dispatch($taxiMovement);
