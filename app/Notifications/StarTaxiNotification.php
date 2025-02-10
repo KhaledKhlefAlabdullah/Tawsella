@@ -92,11 +92,11 @@ class StarTaxiNotification extends Notification implements ShouldQueue
      */
     public function broadcastOn()
     {
-        return new Channel('Notification-to-user.' . $this->receiver->id);
+        return new Channel('notification.' . $this->receiver->id);
     }
 
     public function broadcastAs(){
-        return 'Notifications';
+        return 'notification';
     }
 
 

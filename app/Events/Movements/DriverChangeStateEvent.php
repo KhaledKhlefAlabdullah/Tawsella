@@ -3,6 +3,7 @@
 namespace App\Events\Movements;
 
 use App\Models\User;
+use http\Message;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -19,7 +20,7 @@ class DriverChangeStateEvent implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
-    public function __construct(User $driver)
+    public function __construct(User $driver, $notification)
     {
         $this->driver = $driver;
     }

@@ -46,10 +46,11 @@ class DriversController extends Controller
      * Get ready drivers
      * @return JsonResponse
      */
-    public function getReadiesDrivers(){
-            $readyDrivers = User::getReadyDrivers();
+    public function getReadiesDrivers()
+    {
+        $readyDrivers = User::getReadyDrivers();
 
-            return api_response(data: $readyDrivers, message: 'Successfully getting ready drivers.');
+        return api_response(data: $readyDrivers, message: 'Successfully getting ready drivers.');
     }
 
     /**
@@ -84,7 +85,8 @@ class DriversController extends Controller
      * @param User $driver
      * @return JsonResponse
      */
-    public function update(UpdateDriverRequest $request, User $driver){
+    public function update(UpdateDriverRequest $request, User $driver)
+    {
         try {
             DB::beginTransaction();
             $validatedData = $request->validated();
@@ -92,7 +94,7 @@ class DriversController extends Controller
             User::handelUpdateDetails($driver, $validatedData);
 
             DB::commit();
-            return api_response(data: User::mappingSingleDriver($driver),message: 'Profile updated successfully.');
+            return api_response(data: User::mappingSingleDriver($driver), message: 'Profile updated successfully.');
         } catch (Exception $e) {
             DB::rollBack();
             return api_response(message: 'Profile updated error.', code: 500, errors: [$e->getMessage()]);
@@ -121,7 +123,14 @@ class DriversController extends Controller
             $driver->save();
 
             DriverChangeStateEvent::dispatch($driver);
-
+            $admin = User::find(getAdminId());
+            send_notifications($admin, [
+                'title' => $message.'!',
+                'body' => [
+                    'message' => 'The driver is '.DriverState::getKey($validatedData['state']).' now',
+                    'driver' => $driver->profile
+                ]
+            ]);
             return api_response($message, 200);
         } catch (Exception $e) {
             return api_response(null, 'Failed to update driver state', 500, null, ['error' => [$e->getMessage()]]);

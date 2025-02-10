@@ -27,6 +27,10 @@ Broadcast::channel('driverChangeState.{id}', function ($user, $id) {
     return  $user->id ==  $id;
 });
 
+Broadcast::channel('notification.{id}', function ($user, $id) {
+    return  $user->id ==  $id;
+});
+
 Broadcast::channel('test', function () {
     return  true;
 });
