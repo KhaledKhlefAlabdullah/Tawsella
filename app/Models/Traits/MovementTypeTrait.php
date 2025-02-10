@@ -21,8 +21,10 @@ trait MovementTypeTrait
                 'type' => $type->type,
                 'description' => $type->description,
                 'is_onKM' => $type->is_on_km,
-                'price' => $type->price,
-                'payment' => PaymentTypesEnum::getKey($type->payment),
+                'price1' => $type->price1,
+                'payment1' => PaymentTypesEnum::getKey($type->payment1),
+                'price2' => $type->price2,
+                'payment2' => PaymentTypesEnum::getKey($type->payment2),
                 'is_general' => $type->is_general,
             ];
         });
@@ -40,8 +42,10 @@ trait MovementTypeTrait
             'type' => $movementType->type,
             'description' => $movementType->description,
             'is_onKM' => $movementType->is_on_km,
-            'price' => $movementType->price,
-            'payment' => PaymentTypesEnum::getKey($movementType->payment),
+            'price1' => $movementType->price1,
+            'payment1' => PaymentTypesEnum::getKey($movementType->payment1),
+            'price2' => $movementType->price2,
+            'payment2' => PaymentTypesEnum::getKey($movementType->payment2),
             'is_general' => $movementType->is_general,
         ];
     }
