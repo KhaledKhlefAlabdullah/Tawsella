@@ -32,7 +32,7 @@ class DriverChangeStateEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            'driver-change-state.'.getAdminId(),
+            new channel('driverChangeState.'.getAdminId()),
         ];
     }
 
@@ -46,6 +46,6 @@ class DriverChangeStateEvent implements ShouldBroadcast
 
     public function broadcastAs(): string
     {
-        return 'Driver-change-state';
+        return 'driverChangeState';
     }
 }

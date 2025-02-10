@@ -23,6 +23,10 @@ require __DIR__.'/Channels/locations.php';
 
 require __DIR__.'/Channels/movements.php';
 
+Broadcast::channel('driverChangeState.{id}', function ($user, $id) {
+    return  $user->id ==  $id;
+});
+
 Broadcast::channel('test', function () {
     return  true;
 });
