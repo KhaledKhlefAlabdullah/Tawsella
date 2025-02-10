@@ -14,8 +14,8 @@ return new class extends Migration {
             $table->uuid('id')->unique()->primary();
             $table->string('admin_id');
             $table->string('title');
-            $table->string('image')->default('/images/services/images/service.jpg');
-            $table->string('logo')->default('/images/services/logos/logo.jpg ');
+            $table->string('image')->default('/images/services/images/service.png');
+            $table->string('logo')->default('/images/services/logos/logo.png ');
             $table->text('description');
             $table->dateTime('validity_date')->nullable();
             $table->foreign('admin_id')->references('id')->on('users')->onDelete('cascade');

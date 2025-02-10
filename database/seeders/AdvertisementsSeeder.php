@@ -20,8 +20,8 @@ class AdvertisementsSeeder extends Seeder
                 'id' => Str::uuid(),
                 'admin_id' => getAdminId(), // تأكد من وجود مستخدم بهذا المعرف في جدول users
                 'title' => 'إعلان ' . ($i + 1),
-                'image' => '/images/services/images/service.jpg',
-                'logo' => '/images/services/logos/logo.jpg',
+                'image' => '/images/services/images/service.png',
+                'logo' => '/images/services/logos/logo.png',
                 'description' => 'هذا وصف للإعلان رقم ' . ($i + 1),
                 'validity_date' => Carbon::now()->addDays(rand(10, 30)),
                 'created_at' => now(),
