@@ -248,13 +248,7 @@ if (!function_exists('send_notifications')) {
                 'avatar_url' => 'images/profile/default_user_avatar.png'
             ];
 
-        if ($receivers instanceof \Illuminate\Support\Collection) {
-            $receiversArray = $receivers->all();
-        } elseif (is_array($receivers)) {
-            $receiversArray = $receivers;
-        } else {
-            $receiversArray = [$receivers];
-        }
+        $receiversArray = collect($receivers)->filter(fn($receiver) => $receiver instanceof \App\Models\User)->all();
 
         // Validate each receiver is a User instance
         foreach ($receiversArray as $receiver) {

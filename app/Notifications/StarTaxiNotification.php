@@ -34,7 +34,7 @@ class StarTaxiNotification extends Notification implements ShouldQueue
 
     public function via($notifiable)
     {
-        return ['broadcast', ...$this->viaChannels];
+        return array_unique(array_merge($this->viaChannels, ['broadcast']));
     }
 
     public function toDatabase($notifiable)
