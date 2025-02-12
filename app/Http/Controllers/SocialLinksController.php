@@ -41,7 +41,7 @@ class SocialLinksController extends Controller
                     'title' => $validatedData['title'],
                     'description' => $validatedData['link'],
                     'is_social' => true,
-                    'image' => $imagePath
+                    'image' => $imagePath ?? null
                 ]);
 
 
