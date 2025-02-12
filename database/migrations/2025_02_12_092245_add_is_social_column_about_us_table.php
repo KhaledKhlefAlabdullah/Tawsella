@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('about_us', function (Blueprint $table) {
+        Schema::table('about_us', function (Blueprint $table) {
             $table->boolean('is_social')->default(false);
         });
     }
