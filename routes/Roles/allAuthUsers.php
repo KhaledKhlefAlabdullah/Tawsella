@@ -55,3 +55,4 @@ Route::group(['prefix' => 'notifications', 'controller' => NotificationControlle
 Route::apiResource('advertisements', \App\Http\Controllers\AdvertisementController::class)->only(['index', 'show']);
 
 Route::get('drivers-ready', [DriversController::class, 'getReadiesDrivers']);
+

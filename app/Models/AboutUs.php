@@ -20,6 +20,7 @@ class AboutUs extends Model
         'description',
         'complaints_number',
         'is_general',
+        'is_social',
         'image'
     ];
 

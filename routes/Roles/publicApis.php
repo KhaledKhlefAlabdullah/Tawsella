@@ -25,5 +25,4 @@ Route::get('/phone', function () {
     return $phone;
 });
 
-
-
+Route::apiResource('social-links', \App\Http\Controllers\SocialLinksController::class)->only(['index', 'show']);

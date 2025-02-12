@@ -23,7 +23,8 @@ class AboutUsController extends Controller
     {
         $aboutUsRecords = AboutUs::select('id', 'title', 'description', 'complaints_number', 'image')->where('is_general', true)->get();
         $additional_info = AboutUs::select('id', 'title', 'description', 'image')->where('is_general', false)->get();
-        return api_response(data: ['aboutUsRecords' => $aboutUsRecords, 'additional_info' => $additional_info], message: 'Successfully retrieved about us.');
+        $socialLinks = AboutUs::select('id', 'title', 'description as link', 'image as icon')->where('is_social', true)->get();
+        return api_response(data: ['aboutUsRecords' => $aboutUsRecords, 'additional_info' => $additional_info, 'social' => $socialLinks], message: 'Successfully retrieved about us.');
     }
 
     /**
@@ -50,22 +51,22 @@ class AboutUsController extends Controller
                     'image' => $imagePath
                 ]);
 
-                $messag = 'Successfully created about us.';
+                $message = 'Successfully created about us.';
             } else {
                 $imagePath = $validatedData['image'] ? editFile($aboutUs->image, '/images/aboutUs', $validatedData['image']) : $aboutUs->image;
                 $aboutUs->update([
-                    'title' => $validatedData['title'],
-                    'description' => $validatedData['description'],
-                    'complaints_number' => $validatedData['complaints_number'],
-                    'image' => $imagePath
+                    'title' => $validatedData['title'] ?? $aboutUs->title,
+                    'description' => $validatedData['description'] ?? $aboutUs->description,
+                    'complaints_number' => $validatedData['complaints_number'] ?? $aboutUs->complaints_number,
+                    'image' => $imagePath ?? $aboutUs->image
                 ]);
 
-                $messag = 'Successfully updated about us.';
+                $message = 'Successfully updated about us.';
             }
 
-            return api_response(data: $aboutUs, message: $messag);
+            return api_response(data: $aboutUs, message: $message);
         } catch (Exception $e) {
-            return api_response(message: 'There error in proceced data.', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'There error in processed data.', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -110,9 +111,9 @@ class AboutUsController extends Controller
             $validatedData = $request->validated();
             $imagePath = $validatedData['image'] ? editFile($aboutUs->image, '/images/aboutUs/additional', $validatedData['image']) : $aboutUs->image;
             $aboutUs->update([
-                'title' => $validatedData['title'],
-                'description' => $validatedData['description'],
-                'image' => $imagePath
+                'title' => $validatedData['title'] ?? $aboutUs->title,
+                'description' => $validatedData['description'] ?? $aboutUs->description,
+                'image' => $imagePath ?? $aboutUs->image
             ]);
             return api_response(data: $aboutUs, message: 'Updated additional info.');
 

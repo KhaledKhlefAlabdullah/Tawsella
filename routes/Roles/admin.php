@@ -4,6 +4,7 @@ use App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\AdvertisementController;
 use App\Http\Controllers\ContactUsMessageController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SocialLinksController;
 use App\Http\Middleware\RolesMiddlewares\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CalculationController;
@@ -19,8 +20,6 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     Route::apiResource('movement-types', TaxiMovementTypeController::class)->except(['index', 'show']);
     //*****************************End route movements types******************************** */
     //************************************************************************************** */
-
-
 
     //***************************start route driver ******************************** */
     //****************************************************************************** */
@@ -99,6 +98,13 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     Route::apiResource('advertisements', AdvertisementController::class)->only(['store','destroy']);
     Route::post('advertisements/{advertisement}', [AdvertisementController::class, 'update']);
     //*****************************End route services ******************************** */
+    //******************************************************************************** */
+
+    //*****************************Start Social link ******************************** */
+    //********************************************************************************** */
+    Route::apiResource('social-links', SocialLinksController::class)->only(['store','destroy']);
+    Route::post('social-links', [SocialLinksController::class, 'update']);
+    //*****************************End Social link ******************************** */
     //******************************************************************************** */
 });
 
