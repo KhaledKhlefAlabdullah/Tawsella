@@ -29,7 +29,9 @@ class UserProfileController extends Controller
                 'name' => $user->profile?->name,
                 'avatar' => $user->profile?->avatar,
                 'phone_number' => $user->profile?->phone_number,
-                'email' => $user->email
+                'email' => $user->email,
+                'address' => $user->profile?->address,
+
             ];
             return api_response(data: $profile, message: 'Profile retrieved successfully.');
         } catch (Exception $e) {
@@ -57,7 +59,8 @@ class UserProfileController extends Controller
                 'name' => $user->profile?->name,
                 'avatar' => $user->profile?->avatar,
                 'phone_number' => $user->profile?->phone_number,
-                'email' => $user->email
+                'email' => $user->email,
+                'address' => $user->profile?->address,
             ];
 
             DB::commit();

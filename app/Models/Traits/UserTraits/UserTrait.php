@@ -148,8 +148,9 @@ trait UserTrait
 
         $userProfile = UserProfile::where('user_id', $user->id)->first();
         $userProfile->update([
-            'name' => $validatedData['name'],
-            'phone_number' => $validatedData['phone_number']
+            'name' => $validatedData['name']?? $userProfile->name,
+            'phone_number' => $validatedData['phone_number']?? $userProfile->phone_number,
+            'address' => $validatedData['address'] ?? $userProfile->address,
         ]);
 
         if (isset($validatedData['avatar'])) {
