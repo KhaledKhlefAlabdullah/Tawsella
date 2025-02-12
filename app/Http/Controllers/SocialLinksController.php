@@ -33,19 +33,23 @@ class SocialLinksController extends Controller
         try {
             $validatedData = $request->validated();
 
-            if(array_key_exists('icon', $validatedData)) {
+            if (array_key_exists('icon', $validatedData)) {
                 $imagePath = storeFile($validatedData['icon'], '/images/aboutUs/icons');
             }
             $aboutUs = AboutUs::create([
-                    'admin_id' => $validatedData['admin_id'],
-                    'title' => $validatedData['title'],
-                    'description' => $validatedData['link'],
-                    'is_social' => true,
-                    'image' => $imagePath ?? null
-                ]);
+                'admin_id' => $validatedData['admin_id'],
+                'title' => $validatedData['title'],
+                'description' => $validatedData['link'],
+                'is_social' => true,
+                'image' => $imagePath ?? null
+            ]);
 
-
-            return api_response(data: $aboutUs, message: 'Successfully created social link');
+            $data = [
+                'title' => $aboutUs->title,
+                'link' => $aboutUs->description,
+                'icon' => $aboutUs->image,
+            ];
+            return api_response(data: $data, message: 'Successfully created social link');
         } catch (Exception $e) {
             return api_response(message: 'There error in processed data.', code: 500, errors: [$e->getMessage()]);
         }
@@ -70,7 +74,13 @@ class SocialLinksController extends Controller
                 'description' => $validatedData['link'] ?? $aboutUs->description,
                 'image' => $imagePath ?? $aboutUs->image
             ]);
-            return api_response(data: $aboutUs, message: 'Updated additional info.');
+
+            $data = [
+                'title' => $aboutUs->title,
+                'link' => $aboutUs->description,
+                'icon' => $aboutUs->image,
+            ];
+            return api_response(data: $data, message: 'Updated additional info.');
 
         } catch (Exception $e) {
             return api_response(message: 'Error in update additional info.', code: 500, errors: [$e->getMessage()]);
