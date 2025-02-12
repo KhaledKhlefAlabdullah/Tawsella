@@ -25,7 +25,6 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     //***************************start route driver ******************************** */
     //****************************************************************************** */
     Route::apiResource('drivers', DriversController::class);
-    Route::get('drivers-ready', [DriversController::class, 'getReadiesDrivers']);
     //***************************End route driver ******************************** */
     //**************************************************************************** */
 
