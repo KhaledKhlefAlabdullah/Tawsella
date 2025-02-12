@@ -128,7 +128,7 @@ class TaxiMovementController extends Controller
             event(new RequestingTransportationServiceEvent($taxiMovement));
             $admin = User::find(getAdminId());
 
-            send_notifications($admin, [
+            return send_notifications($admin, [
                 'title' => 'new movement request',
                 'body' => [
                     'message' => 'The user ' . Auth::user()->profile->name . ' requested a new movement request.'
