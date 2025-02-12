@@ -57,7 +57,8 @@ trait DriverTrait
                 'id' => $driver->id,
                 'name' => $driver->profile?->name,
                 'gender' => UserGender::getKey($driver->profile?->gender),
-                'avatar' => $driver->profile?->avatar
+                'avatar' => $driver->profile?->avatar,
+                'age' => $driver->profile?->birthdate ? now()->diffInYears($driver->profile->birthdate) : null,
             ];
         });
     }
