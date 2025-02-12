@@ -17,12 +17,14 @@ class DriverChangeStateEvent implements ShouldBroadcast
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     protected User $driver;
+    protected array $notification;
     /**
      * Create a new event instance.
      */
     public function __construct(User $driver, $notification)
     {
         $this->driver = $driver;
+        $this->notification = $notification;
     }
 
     /**
@@ -41,7 +43,8 @@ class DriverChangeStateEvent implements ShouldBroadcast
     {
         return [
             'driver_id' => $this->driver->id,
-            'new_driver_state' => $this->driver->driver_state
+            'new_driver_state' => $this->driver->driver_state,
+            'notification' => $this->notification,
         ];
     }
 

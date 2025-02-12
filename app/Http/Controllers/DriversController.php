@@ -121,16 +121,16 @@ class DriversController extends Controller
 
             $driver->driver_state = $validatedData['state'];
             $driver->save();
-
-            DriverChangeStateEvent::dispatch($driver);
-            $admin = User::find(getAdminId());
-            send_notifications($admin, [
+            $notification = [
                 'title' => $message.'!',
                 'body' => [
                     'message' => 'The driver is '.DriverState::getKey($validatedData['state']).' now',
                     'driver' => $driver->profile
                 ]
-            ]);
+            ];
+            DriverChangeStateEvent::dispatch($driver, $notification);
+            $admin = User::find(getAdminId());
+            send_notifications($admin, $notification);
             return api_response($message, 200);
         } catch (Exception $e) {
             return api_response(null, 'Failed to update driver state', 500, null, ['error' => [$e->getMessage()]]);
