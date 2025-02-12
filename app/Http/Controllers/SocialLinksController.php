@@ -33,7 +33,9 @@ class SocialLinksController extends Controller
         try {
             $validatedData = $request->validated();
 
+            if(array_key_exists('icon', $validatedData)) {
                 $imagePath = storeFile($validatedData['icon'], '/images/aboutUs/icons');
+            }
             $aboutUs = AboutUs::create([
                     'admin_id' => $validatedData['admin_id'],
                     'title' => $validatedData['title'],
