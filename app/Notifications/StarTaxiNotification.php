@@ -75,25 +75,25 @@ class StarTaxiNotification extends Notification implements ShouldQueue
 
         return api_response(message: 'Could not send the email', code: 500);
     }
-
-    public function toBroadcast($notifiable)
-    {
-        return new BroadcastMessage([
-            'sender_name' => $this->user_profile->name ?? 'Anonymous',
-            'sender_image' => $this->user_profile ? $this->user_profile->avatar_url : null,
-            'message' => __($this->message),
-        ]);
-    }
-
-    /**
-     * Select the channel whill broadcaston
-     *
-     * @return \Illuminate\Broadcasting\Channel|\Illuminate\Broadcasting\Channel
-     */
-    public function broadcastOn()
-    {
-        return new Channel('notification.' . $this->receiver->id);
-    }
+//
+//    public function toBroadcast($notifiable)
+//    {
+//        return new BroadcastMessage([
+//            'sender_name' => $this->user_profile->name ?? 'Anonymous',
+//            'sender_image' => $this->user_profile ? $this->user_profile->avatar_url : null,
+//            'message' => __($this->message),
+//        ]);
+//    }
+//
+//    /**
+//     * Select the channel whill broadcaston
+//     *
+//     * @return \Illuminate\Broadcasting\Channel|\Illuminate\Broadcasting\Channel
+//     */
+//    public function broadcastOn()
+//    {
+//        return new Channel('notification.' . $this->receiver->id);
+//    }
 
     public function broadcastAs(){
         return 'notification';
