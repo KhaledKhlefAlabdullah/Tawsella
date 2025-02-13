@@ -211,7 +211,7 @@ if (!function_exists('send_mail')) {
 if (!function_exists('count_items')) {
     /**
      * Get Counter
-     * @param Model $model to counst within
+     * @param mixed $model to counst within
      * @param array $validations to check by
      * @return <numeric/JsonResponse> count of items
      */

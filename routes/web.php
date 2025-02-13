@@ -25,16 +25,3 @@ Route::group(['controller' => DashboardController::class], function () {
 
     Route::get('/AppPlatform', 'appPlatform')->name('AppPlatform');
 });
-
-Route::get('test', function () {
-    $admin = User::find(getAdminId());
-
-     $admin->notify(new StarTaxiNotification([
-        'title' => 'new movement request',
-        'body' => [
-            'message' => 'The user requested a new movement request.'
-        ]
-    ]));
-
-    return $admin->notifications;
-});
