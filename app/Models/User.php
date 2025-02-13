@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\UserEnums\DriverState;
 use App\Interfaces\IMustVerifyEmailByCode;
 use App\Models\Traits\HasUuid;
 use App\Models\Traits\UserTraits\AdminTrait;
@@ -21,9 +22,9 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
 
     use MustVerifyEmailByCode;
 
-    protected $keyType='string';
+    protected $keyType = 'string';
 
-    protected $primaryKey='id';
+    protected $primaryKey = 'id';
 
     public $incrementing = false;
 
@@ -66,52 +67,79 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
         'password' => 'hashed',
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
 
-    public function profile(){
-        return $this->hasOne(UserProfile::class,'user_id');
+        static::retrieved(function ($driver) {
+            if ($driver->driver_state === DriverState::Ready) {
+                $driver->driver_state = 'Ready';
+            } elseif ($driver->driver_state === DriverState::InBreak) {
+                $driver->driver_state = 'InBreak';
+            } elseif ($driver->driver_state === DriverState::Reserved) {
+                $driver->driver_state = 'Reserved';
+            }
+        });
     }
 
-    public function customer_ratings(){
-        return $this->hasMany(Rating::class,'customer_id');
+
+    public function profile()
+    {
+        return $this->hasOne(UserProfile::class, 'user_id');
     }
 
-    public function driver_ratings(){
-        return $this->hasMany(Rating::class,'driver_id');
+    public function customer_ratings()
+    {
+        return $this->hasMany(Rating::class, 'customer_id');
     }
 
-    public function taxi(){
-        return $this->hasOne(Taxi::class,'driver_id');
+    public function driver_ratings()
+    {
+        return $this->hasMany(Rating::class, 'driver_id');
     }
 
-    public function customer_movements(){
-        return $this->hasMany(TaxiMovement::class,'customer_id');
+    public function taxi()
+    {
+        return $this->hasOne(Taxi::class, 'driver_id');
     }
 
-    public function driver_movements(){
-        return $this->hasMany(TaxiMovement::class,'driver_id');
-    }
-    public function admin_offers(){
-        return $this->hasMany(Offer::class,'admin_id');
+    public function customer_movements()
+    {
+        return $this->hasMany(TaxiMovement::class, 'customer_id');
     }
 
-    public function about_us(){
-        return $this->hasOne(AboutUs::class,'admin_id');
+    public function driver_movements()
+    {
+        return $this->hasMany(TaxiMovement::class, 'driver_id');
     }
 
-    public function contact_us_messages(){
-        return $this->hasMany(ContactUsMessage::class,'admin_id');
+    public function admin_offers()
+    {
+        return $this->hasMany(Offer::class, 'admin_id');
     }
 
-    public function our_services(){
-        return $this->hasMany(Advertisement::class,'admin_id');
+    public function about_us()
+    {
+        return $this->hasOne(AboutUs::class, 'admin_id');
     }
 
-    public function calculations(){
-        return $this->hasMany(Calculation::class,'driver_id');
+    public function contact_us_messages()
+    {
+        return $this->hasMany(ContactUsMessage::class, 'admin_id');
+    }
+
+    public function our_services()
+    {
+        return $this->hasMany(Advertisement::class, 'admin_id');
+    }
+
+    public function calculations()
+    {
+        return $this->hasMany(Calculation::class, 'driver_id');
     }
 
     public function movementsCount()
     {
-        return $this->hasOne(CustomerMovementsCount::class,'customer_id');
+        return $this->hasOne(CustomerMovementsCount::class, 'customer_id');
     }
 }

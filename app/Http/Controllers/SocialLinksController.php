@@ -17,7 +17,10 @@ class SocialLinksController extends Controller
      */
     public function index()
     {
-        $socialLinks = AboutUs::select('id', 'title', 'description as link', 'image as icon')->where('is_social', true)->get();
+        $socialLinks = AboutUs::select('id', 'title', 'description as link', 'image as icon')
+            ->where('is_social', true)
+            ->orderBy('created_at', 'desc')
+            ->get();
         return api_response(data: $socialLinks, message: 'Successfully retrieved social links.');
     }
 

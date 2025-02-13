@@ -32,7 +32,7 @@ class ChatController extends Controller
             ->pluck('chat_id');
 
         // Retrieve chats where the user is a member
-        $query = Chat::whereIn('id', $chatIds);
+        $query = Chat::query()->whereIn('id', $chatIds);
 
         $chatsQ = $this->paginationService->applyPagination($query, $request);
 

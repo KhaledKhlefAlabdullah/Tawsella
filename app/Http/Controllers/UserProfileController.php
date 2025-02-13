@@ -27,11 +27,11 @@ class UserProfileController extends Controller
             $profile = [
                 'id' => $user->id,
                 'name' => $user->profile?->name,
+                'gender' => $user->profile?->gender,
                 'avatar' => $user->profile?->avatar,
                 'phone_number' => $user->profile?->phone_number,
                 'email' => $user->email,
                 'address' => $user->profile?->address,
-
             ];
             return api_response(data: $profile, message: 'Profile retrieved successfully.');
         } catch (Exception $e) {

@@ -26,7 +26,7 @@ trait MovementTrait
                     $state = 'live';
                 }
 
-                if ($movement->request_state == MovementRequestStatus::Rejected) {
+                if ($movement   ->request_state == MovementRequestStatus::Rejected) {
                     $state = 'rejected by driver';
                 }
                 if ($movement->is_canceled) {

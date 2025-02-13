@@ -15,6 +15,7 @@ trait OfferTrait
     {
         $offers = Offer::with('movement_type_offer')
             ->where('valid_date', $cond, now())
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return $offers->map(function ($offer) {

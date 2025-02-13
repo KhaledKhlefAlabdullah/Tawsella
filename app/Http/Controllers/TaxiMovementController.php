@@ -50,7 +50,7 @@ class TaxiMovementController extends Controller
                 'request_state' => MovementRequestStatus::Pending
             ])
             ->whereDate('created_at', $currentDate)
-            ->orderBy('created_at', 'asc') // ترتيب تصاعدي (الأقدم أولاً)
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return api_response(data: $movements, message: 'Successfully getting movement ');
