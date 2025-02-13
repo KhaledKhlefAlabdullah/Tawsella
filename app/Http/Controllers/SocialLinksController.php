@@ -75,7 +75,7 @@ class SocialLinksController extends Controller
             $aboutUs->update([
                 'title' => $validatedData['title'] ?? $aboutUs->title,
                 'description' => $validatedData['link'] ?? $aboutUs->description,
-                'image' => $imagePath ?? $aboutUs->image
+                'image' => $imagePath
             ]);
 
             $data = [
