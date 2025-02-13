@@ -71,6 +71,7 @@ class SocialLinksController extends Controller
         try {
 
             $validatedData = $request->validated();
+            $aboutUs = AboutUs::find('7f5386ab-c429-43e6-bc2a-89d0110ceb35');
             return api_response(data:[$aboutUs, $validatedData]);
             $imagePath = array_key_exists('icon', $validatedData) ? editFile($aboutUs->image, '/images/aboutUs/icons', $validatedData['icon']) : $aboutUs->image;
             $aboutUs->update([
