@@ -105,7 +105,7 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     //*****************************Start Social link ******************************** */
     //********************************************************************************** */
     Route::apiResource('social-links', SocialLinksController::class)->only(['store','destroy']);
-    Route::post('social-links/{link}', [SocialLinksController::class, 'update']);
+    Route::post('social-links/{social_link}', [SocialLinksController::class, 'update']);
     //*****************************End Social link ******************************** */
     //******************************************************************************** */
 });
