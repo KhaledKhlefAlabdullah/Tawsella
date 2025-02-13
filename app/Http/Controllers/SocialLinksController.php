@@ -66,7 +66,7 @@ class SocialLinksController extends Controller
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-
      */
-    public function update(SocialLinksRequest $request, AboutUs $aboutUs): JsonResponse
+    public function update(AboutUs $aboutUs, SocialLinksRequest $request): JsonResponse
     {
         try {
 
