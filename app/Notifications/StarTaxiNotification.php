@@ -18,19 +18,21 @@ class StarTaxiNotification extends Notification implements ShouldQueue
 
     protected $message;
     protected $viaChannels;
+    protected $receiver;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($message, array $viaChannels = ['database'])
+    public function __construct($message, $receiver, array $viaChannels = ['database'])
     {
         $this->viaChannels = $viaChannels;
         $this->message = $message;
+        $this->receiver = $receiver;
     }
 
     public function via($notifiable)
     {
-        return $this->viaChannels;
+        return array_unique(array_merge($this->viaChannels, ['broadcast']));
     }
 
     public function toDatabase($notifiable)
@@ -60,7 +62,7 @@ class StarTaxiNotification extends Notification implements ShouldQueue
                 throw new \Exception('No valid email addresses found');
             }
         } catch (\Exception $e) {
-            Log::error('Email sending error: ' .  $e->getMessage());
+            Log::error('Email sending error: ' .  [$e->getMessage()]);
 
             return api_response(message: 'Could not send the email', errors: [$e->getMessage()]);
         }
