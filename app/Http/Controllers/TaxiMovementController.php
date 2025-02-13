@@ -17,6 +17,7 @@ use App\Models\Chat;
 use App\Models\ChatMember;
 use App\Models\TaxiMovement;
 use App\Models\User;
+use App\Notifications\StarTaxiNotification;
 use App\Services\FcmNotificationService;
 use App\Services\PaginationService;
 use Carbon\Carbon;
@@ -128,12 +129,18 @@ class TaxiMovementController extends Controller
             event(new RequestingTransportationServiceEvent($taxiMovement));
             $admin = User::find(getAdminId());
 
-            send_notifications($admin, [
+            $admin->notify(new StarTaxiNotification([
                 'title' => 'new movement request',
                 'body' => [
                     'message' => 'The user ' . Auth::user()->profile->name . ' requested a new movement request.'
-                ],
-            ]);
+                ]
+            ]));
+//            send_notifications($admin, [
+//                'title' => 'new movement request',
+//                'body' => [
+//                    'message' => 'The user ' . Auth::user()->profile->name . ' requested a new movement request.'
+//                ],
+//            ]);
             return api_response(data: ['movement_id' => $taxiMovement->id], message: 'Successfully creating movement');
         } catch (Exception $e) {
             return api_response(message: 'Error in creating taxi movement', code: 500, errors: [$e->getMessage()]);
