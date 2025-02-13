@@ -71,7 +71,7 @@ class SocialLinksController extends Controller
         try {
 
             $validatedData = $request->validated();
-            return [$aboutUs, $validatedData];
+            return api_response(data:[$aboutUs, $validatedData]);
             $imagePath = array_key_exists('icon', $validatedData) ? editFile($aboutUs->image, '/images/aboutUs/icons', $validatedData['icon']) : $aboutUs->image;
             $aboutUs->update([
                 'title' => $validatedData['title'] ?? $aboutUs->title,
