@@ -61,18 +61,18 @@ class SocialLinksController extends Controller
     /**
      * Update additional info records
      * @param SocialLinksRequest $request
-     * @param AboutUs $aboutUs
+     * @para string $aboutUs
      * @return JsonResponse to view page
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-
      */
-    public function update(AboutUs $aboutUs, SocialLinksRequest $request): JsonResponse
+    public function update(SocialLinksRequest $request, string $aboutUs): JsonResponse
     {
         try {
 
             $validatedData = $request->validated();
+            $aboutUs = AboutUs::find($aboutUs);
 
-            return api_response(data:[$aboutUs, $validatedData]);
             $imagePath = array_key_exists('icon', $validatedData) ? editFile($aboutUs->image, '/images/aboutUs/icons', $validatedData['icon']) : $aboutUs->image;
             $aboutUs->update([
                 'title' => $validatedData['title'] ?? $aboutUs->title,
