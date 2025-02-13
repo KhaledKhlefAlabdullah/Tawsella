@@ -50,6 +50,8 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
 
         Route::get('/completed', 'completedTaxiMovements');
 
+        Route::get('/canceled', 'canceledTaxiMovements');
+
         Route::post('/accept/{taxiMovement}', 'acceptRequest');
 
         Route::post('/reject/{taxiMovement}', 'rejectMovement');
@@ -103,7 +105,7 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     //*****************************Start Social link ******************************** */
     //********************************************************************************** */
     Route::apiResource('social-links', SocialLinksController::class)->only(['store','destroy']);
-    Route::post('social-links/{link}', [SocialLinksController::class, 'update']);
+//    Route::post('social-links/{link}', [SocialLinksController::class, 'update']);
     //*****************************End Social link ******************************** */
     //******************************************************************************** */
 });

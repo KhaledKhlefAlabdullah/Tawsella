@@ -83,10 +83,10 @@ class SocialLinksController extends Controller
                 'link' => $aboutUs->description,
                 'icon' => $aboutUs->image,
             ];
-            return api_response(data: $data, message: 'Updated additional info.');
+            return api_response(data: $data, message: 'Updated social link');
 
         } catch (Exception $e) {
-            return api_response(message: 'Error in update additional info.', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'Error in update social link', code: 500, errors: [$e->getMessage()]);
         }
     }
 

@@ -41,7 +41,8 @@ class TaxiMovementController extends Controller
     /**
      * @return JsonResponse
      */
-    public function index(){
+    public function index(): JsonResponse
+    {
         $currentDate = Carbon::now()->format('Y-m-d');
         $movements = TaxiMovement::query()
             ->where([
@@ -61,7 +62,7 @@ class TaxiMovementController extends Controller
      * @return JsonResponse
      * @author Khaled <khaledabdullah2001104@gmail.com>
      */
-    public function LifeTaxiMovements(Request $request)
+    public function LifeTaxiMovements(Request $request): JsonResponse
     {
         $currentDate = Carbon::now()->format('Y-m-d');
         $query = TaxiMovement::query()->where(['is_completed' => false, 'is_canceled' => false, 'request_state' => MovementRequestStatus::Accepted])
@@ -77,9 +78,23 @@ class TaxiMovementController extends Controller
      * @return JsonResponse
      * @author Khaled <khaledabdullah2001104@gmail.com>
      */
-    public function completedTaxiMovements(Request $request)
+    public function completedTaxiMovements(Request $request): JsonResponse
     {
         $query = TaxiMovement::query()->where(['is_completed' => true, 'is_canceled' => false]);
+
+        $completedRequests = $this->paginationService->applyPagination($query, $request);
+
+        return api_response(data: TaxiMovement::mappingMovements($completedRequests->items()), message: 'Successfully getting completed taxiMovements.', pagination: get_pagination($completedRequests, $request));
+    }
+
+    /**
+     * Get Canceled taxi movements requests
+     * @return JsonResponse
+     * @author Khaled <khaledabdullah2001104@gmail.com>
+     */
+    public function canceledTaxiMovements(Request $request): JsonResponse
+    {
+        $query = TaxiMovement::query()->where(['is_completed' => false, 'is_canceled' => true]);
 
         $completedRequests = $this->paginationService->applyPagination($query, $request);
 
