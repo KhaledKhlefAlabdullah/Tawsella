@@ -234,20 +234,6 @@ if (!function_exists('send_notifications')) {
      */
     function send_notifications($receivers, $message, array $viaChannel = ['database'])
     {
-        // Check if the user is authenticated
-        $user = Auth::user();
-        $user_profile = Auth::check()
-            ? (object)[
-                'email' => $user->email,
-                'name' => $user->profile?->name,
-                'avatar_url' => $user->profile?->avatar
-            ]
-            : (object)[
-                'email' => 'default@example.com',
-                'name' => 'Anonymous',
-                'avatar_url' => 'images/profile/default_user_avatar.png'
-            ];
-
         $receiversArray = collect($receivers)->filter(fn($receiver) => $receiver instanceof \App\Models\User)->all();
 
         // Validate each receiver is a User instance
@@ -259,7 +245,7 @@ if (!function_exists('send_notifications')) {
 
         // Trigger event and send notifications
         foreach ($receiversArray as $receiver) {
-            Notification::send($receiver, new StarTaxiNotification($user_profile, $message, $receivers, $viaChannel));
+            Notification::send($receiver, new StarTaxiNotification($message, $viaChannel));
         }
     }
 

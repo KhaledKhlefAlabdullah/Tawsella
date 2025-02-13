@@ -16,34 +16,26 @@ class StarTaxiNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected $user_profile;
     protected $message;
     protected $viaChannels;
-    protected $receiver;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($user_profile, $message, $receiver, array $viaChannels = ['database'])
+    public function __construct($message, array $viaChannels = ['database'])
     {
         $this->viaChannels = $viaChannels;
-        $this->user_profile = $user_profile;
         $this->message = $message;
-        $this->receiver = $receiver;
     }
 
     public function via($notifiable)
     {
-        return array_unique(array_merge($this->viaChannels, ['broadcast']));
+        return $this->viaChannels;
     }
 
     public function toDatabase($notifiable)
     {
-        return [
-            'sender_name' => $this->user_profile->name ?? 'Anonymous',
-            'sender_image' => $this->user_profile ? $this->user_profile->avatar_url : null,
-            'message' => $this->message,
-        ];
+        return  $this->message;
     }
 
     public function toMail($notifiable)
@@ -68,37 +60,13 @@ class StarTaxiNotification extends Notification implements ShouldQueue
                 throw new \Exception('No valid email addresses found');
             }
         } catch (\Exception $e) {
-            Log::error('Email sending error: ' .  [$e->getMessage()]);
+            Log::error('Email sending error: ' .  $e->getMessage());
 
             return api_response(message: 'Could not send the email', errors: [$e->getMessage()]);
         }
 
         return api_response(message: 'Could not send the email', code: 500);
     }
-//
-//    public function toBroadcast($notifiable)
-//    {
-//        return new BroadcastMessage([
-//            'sender_name' => $this->user_profile->name ?? 'Anonymous',
-//            'sender_image' => $this->user_profile ? $this->user_profile->avatar_url : null,
-//            'message' => __($this->message),
-//        ]);
-//    }
-//
-//    /**
-//     * Select the channel whill broadcaston
-//     *
-//     * @return \Illuminate\Broadcasting\Channel|\Illuminate\Broadcasting\Channel
-//     */
-//    public function broadcastOn()
-//    {
-//        return new Channel('notification.' . $this->receiver->id);
-//    }
-
-    public function broadcastAs(){
-        return 'notification';
-    }
-
 
     public function toArray($notifiable)
     {

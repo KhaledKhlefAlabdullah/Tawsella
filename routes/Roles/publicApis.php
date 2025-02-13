@@ -26,3 +26,5 @@ Route::get('/phone', function () {
 });
 
 Route::apiResource('social-links', \App\Http\Controllers\SocialLinksController::class)->only(['index', 'show']);
+
+Route::get('/getKMPrice', [\App\Http\Controllers\TaxiMovementTypeController::class, 'getKMPrice']);
