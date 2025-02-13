@@ -31,7 +31,7 @@ class SocialLinksController extends Controller
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-30
      */
-    public function store(SocialLinksRequest $request)
+    public function store(SocialLinksRequest $request): JsonResponse
     {
         try {
             $validatedData = $request->validated();
@@ -66,11 +66,12 @@ class SocialLinksController extends Controller
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-
      */
-    public function update(SocialLinksRequest $request, AboutUs $aboutUs)
+    public function update(SocialLinksRequest $request, AboutUs $aboutUs): JsonResponse
     {
         try {
 
             $validatedData = $request->validated();
+            return [$aboutUs, $validatedData];
             $imagePath = array_key_exists('icon', $validatedData) ? editFile($aboutUs->image, '/images/aboutUs/icons', $validatedData['icon']) : $aboutUs->image;
             $aboutUs->update([
                 'title' => $validatedData['title'] ?? $aboutUs->title,
