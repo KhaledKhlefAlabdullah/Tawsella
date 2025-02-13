@@ -134,7 +134,7 @@ trait DriverTrait
         return (object)[
             'driver_id' => $driver->id,
             'name' => $driver->profile?->name,
-            'gender' => UserGender::getKey($driver->profile?->gender ?? 0),
+            'gender' => $driver->profile?->gender,
             'email' => $driver->email,
             'phone_number' => $driver->profile?->phone_number,
             'avatar' => $driver->profile?->avatar,
