@@ -12,7 +12,7 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        $unreadNotifications = Auth::user()->notifications()->orderBy('created_at', 'desc')->pluck('data');
+        $unreadNotifications = Auth::user()->notifications()->orderBy('created_at', 'desc')->select('id','data');
 
         return api_response(data: $unreadNotifications, message: 'Successfully get notifications');
     }
@@ -23,7 +23,7 @@ class NotificationController extends Controller
      */
     public function unReadNotifications(Request $request)
     {
-        $unreadNotifications = Auth::user()->unReadNotifications()->orderBy('created_at', 'desc')->pluck('data');
+        $unreadNotifications = Auth::user()->unReadNotifications()->orderBy('created_at', 'desc')->select('id','data');
 
         return api_response(data: $unreadNotifications, message: 'Successfully get unread notifications');
     }
