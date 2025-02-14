@@ -94,15 +94,15 @@ class SocialLinksController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     * @param AboutUs $aboutUs
+     * @param string $aboutUs
      * @return JsonResponse to view page
      * @author Khaled <khaledabdullah2001104@gmail.com>
      * @Target T-
      */
-    public function destroy(AboutUs $aboutUs)
+    public function destroy(string $aboutUs)
     {
         try {
-            return $aboutUs;
+            $aboutUs = AboutUs::find($aboutUs);
             removeFile($aboutUs->image);
             $aboutUs->delete();
             return api_response(message: 'Successfully deleted social link.');
