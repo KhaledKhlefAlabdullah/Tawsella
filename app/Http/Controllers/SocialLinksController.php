@@ -102,6 +102,7 @@ class SocialLinksController extends Controller
     public function destroy(AboutUs $aboutUs)
     {
         try {
+            return $aboutUs->image;
             removeFile($aboutUs->image);
             $aboutUs->delete();
             return api_response(message: 'Successfully deleted social link.');
