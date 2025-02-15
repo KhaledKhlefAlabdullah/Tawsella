@@ -202,7 +202,8 @@ class TaxiMovementController extends Controller
 
             $customerRecipientValue = $customer->device_token;
             send_notifications($customer, $customerPayload['notification']);
-            $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
+//            $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
+            $this->fcmNotificationService->sendNotification($customerPayload, 'customer', 'topic');
 
             $driverPayload = [
                 'notification' => [
