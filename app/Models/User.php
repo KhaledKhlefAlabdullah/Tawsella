@@ -65,6 +65,7 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'driver_state' => DriverState::class,
     ];
 
     protected static function boot()
@@ -78,6 +79,16 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
                 $driver->driver_state = 'InBreak';
             } elseif ($driver->driver_state === DriverState::Reserved) {
                 $driver->driver_state = 'Reserved';
+            }
+        });
+
+        static::saving(function ($driver) {
+            if ($driver->driver_state === 'Ready') {
+                $driver->driver_state = DriverState::Ready->value;
+            } elseif ($driver->driver_state === 'InBreak') {
+                $driver->driver_state = DriverState::InBreak->value;
+            } elseif ($driver->driver_state === 'Reserved') {
+                $driver->driver_state = DriverState::Reserved->value;
             }
         });
     }
