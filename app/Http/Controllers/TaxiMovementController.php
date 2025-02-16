@@ -129,6 +129,8 @@ class TaxiMovementController extends Controller
     public function store(TaxiMovementRequest $request)
     {
         try {
+            // todo remove the comint
+
 //            $canceledMovementResponse = TaxiMovement::calculateCanceledMovements(Auth::user());
 //            if ($canceledMovementResponse) {
 //                return $canceledMovementResponse;
@@ -268,14 +270,13 @@ class TaxiMovementController extends Controller
             $customerPayload = [
                 'notification' => [
                     'title' => 'Your request rejected!',
-                    'body' => [
-                        'message' => array_key_exists('message', $validatedData) ? $validatedData['message'] : 'your request was rejected.',
-                    ],
+                    'body' => array_key_exists('message', $validatedData) ? $validatedData['message'] : 'your request was rejected.',
                 ]
             ];
             $customer = $taxiMovement->customer;
             $customerRecipientValue = $customer->device_token;
             send_notifications($customer, $customerPayload['notification']);
+            // todo remove the comint
 //            $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
             $this->fcmNotificationService->sendNotification($customerPayload, 'customer', 'topic');
 
