@@ -276,9 +276,8 @@ class TaxiMovementController extends Controller
             $customer = $taxiMovement->customer;
             $customerRecipientValue = $customer->device_token;
             send_notifications($customer, $customerPayload['notification']);
-            // todo remove the comint
-//            $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
-            $this->fcmNotificationService->sendNotification($customerPayload, 'customer', 'topic');
+
+            $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
 
             return api_response(message: 'Successfully rejecting movement');
         } catch (Exception $e) {
