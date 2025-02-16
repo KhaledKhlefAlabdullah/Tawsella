@@ -47,22 +47,27 @@ class FcmNotificationService
      * @return array
      * @throws Exception
      */
-    public function sendNotification($payload, $recipientValue, $recipientType='token')
+    public function sendNotification($payload, $recipientValue, $recipientType = 'token')
     {
         $notificationPayload = [
             'message' => [
                 $recipientType => $recipientValue, // 'topic' or 'token'
-                'notification' => $payload['notification'] ?? [],
+                'notification' => [
+                    'title' => $payload['notification']['title'] ?? 'Default Title',
+                    'body' => $payload['notification']['body'] ?? 'Default Body',
+                ],
                 'android' => [
-                        'notification' =>
-                            [
-                                'channel_id' => 'channel_id2',
-                                'sound' => 'default',
-                                'notification_priority' => 'PRIORITY_HIGH',
-                                'visibility' => 'PUBLIC'
-                            ]
-                    ] ?? [],
-                'data' => $payload['data'] ?? [],
+                    'notification' => [
+                        'channel_id' => 'channel_id2',
+                        'sound' => 'default',
+                        'notification_priority' => 'PRIORITY_HIGH',
+                        'visibility' => 'PUBLIC'
+                    ]
+                ],
+                'data' => $payload['data'] ??  [
+                        'key1' => 'value1',
+                        'key2' => 'value2',
+                    ],
             ],
         ];
 
@@ -85,5 +90,4 @@ class FcmNotificationService
         } catch (Exception $e) {
             throw new Exception('Error sending notification: ' . $e->getMessage());
         }
-    }
-}
+    }}
