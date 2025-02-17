@@ -34,7 +34,7 @@ class NotificationController extends Controller
     public function readNotifications()
     {
         try {
-            Auth::user()->unreadNotifications()->markAsRead();
+            Auth::user()->unreadNotifications->markAsRead();
             return api_response(message: 'Successfully read notifications');
         } catch (\Exception $e) {
             return api_response(message: 'Failed to read notifications', code: 500, errors: [$e->getMessage()]);
