@@ -91,7 +91,6 @@ class TaxiMovementTypeController extends Controller
             $validatedData = $request->validated();
             if (array_key_exists('payment1', $validatedData)) {
                 $validatedData['payment1'] = PaymentTypesEnum::getValue($validatedData['payment1']);
-                return $validatedData['payment1'];
             }
             if (array_key_exists('payment2', $validatedData)) {
                 $validatedData['payment2'] = PaymentTypesEnum::getValue($validatedData['payment2']);

@@ -25,7 +25,10 @@ trait OfferTrait
                 'value_of_discount' => $offer->value_of_discount,
                 'valid_date' => $offer->valid_date,
                 'type' => $offer->movement_type_offer->type ?? null,
-                'price' => $offer->movement_type_offer->price ?? null,
+                'price1' => $offer->movement_type_offer->price1 ?? null,
+                'payment1' => $offer->movement_type_offer->payment1 ?? null,
+                'price2' => $offer->movement_type_offer->price2 ?? null,
+                'payment2' => $offer->movement_type_offer->price2 ?? null,
                 'description' => $offer->description ?? null
             ];
         });
