@@ -506,7 +506,7 @@ class TaxiMovementController extends Controller
             'location_long' => $lastRequest->start_longitude,
             'type' => $lastRequest->movement_type->type,
             'price' => $lastRequest->movement_type->price,
-            'is_onKM' => $lastRequest->movement_type->is_onKM
+            'is_onKM' => (boolean)$lastRequest->movement_type->is_onKM
         ];
     }
 
