@@ -45,7 +45,7 @@ trait MovementTypeTrait
             'price1' => $movementType->price1,
             'payment1' => PaymentTypesEnum::getKey($movementType->payment1),
             'price2' => $movementType->price2,
-            'payment2' => PaymentTypesEnum::getKey($movementType->payment2) ?? null,
+            'payment2' => !is_null($movementType->payment2) ? PaymentTypesEnum::getKey($movementType->payment2) : null,
             'is_general' => $movementType->is_general,
         ];
     }
