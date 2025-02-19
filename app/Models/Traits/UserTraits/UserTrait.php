@@ -137,11 +137,11 @@ trait UserTrait
      */
     public static function handelUpdateDetails(User $user, $validatedData)
     {
-        if (isset($validatedData['email']))
+        if (array_key_exists('email', $validatedData))
             $user->update([
                 'email' => $validatedData['email']
             ]);
-        if (isset($validatedData['password']))
+        if (array_key_exists('password', $validatedData))
             $user->update([
                 'password' => Hash::make($validatedData['password']),
             ]);
@@ -151,9 +151,10 @@ trait UserTrait
             'name' => $validatedData['name']?? $userProfile->name,
             'phone_number' => $validatedData['phone_number']?? $userProfile->phone_number,
             'address' => $validatedData['address'] ?? $userProfile->address,
+            'gender' => UserGender::getValue($validatedData['gender']) ?? $userProfile->gender,
         ]);
 
-        if (isset($validatedData['avatar'])) {
+        if (array_key_exists('avatar' ,$validatedData)) {
             $avatar = $validatedData['avatar'];
             $path = 'images/profile';
             $avatar_path = editFile($userProfile->avatar, $path, $avatar);
