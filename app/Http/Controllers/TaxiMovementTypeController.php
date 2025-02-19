@@ -92,9 +92,9 @@ class TaxiMovementTypeController extends Controller
             if (array_key_exists('payment1', $validatedData)) {
                 $validatedData['payment1'] = PaymentTypesEnum::getValue($validatedData['payment1']);
             }
-            if (array_key_exists('payment2', $validatedData)) {
-                $validatedData['payment2'] = PaymentTypesEnum::getValue($validatedData['payment2']);
-            }
+//            if (array_key_exists('payment2', $validatedData)) {
+//                $validatedData['payment2'] = PaymentTypesEnum::getValue($validatedData['payment2']);
+//            }
             $movement_type = TaxiMovementType::create($validatedData);
             return api_response(data: TaxiMovementType::mappingSingleMovementType($movement_type), message: 'Successfully creating movements type');
         } catch (Exception $e) {
