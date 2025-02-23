@@ -141,7 +141,7 @@ trait DriverTrait
             'is_active' => $driver->is_active,
             'has_taxi' => $driver->taxi()->exists(),
             'unBring' => $unBring,
-            'driver_state' => $driver->driver_state,
+            'driver_state' => DriverState::getKey($driver->driver_state),
             'plate_number' => $driver->taxi?->plate_number,
             'lamp_number' => $driver->taxi?->lamp_number,
             'created_at' => $driver->created_at

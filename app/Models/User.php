@@ -65,7 +65,6 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
-        'driver_state' => DriverState::class,
     ];
 
     protected static function boot()
