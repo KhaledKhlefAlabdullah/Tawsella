@@ -194,14 +194,16 @@ class TaxiMovementController extends Controller
             $customerPayload = [
                 'notification' => [
                     'title' => 'Your request accepted!',
-                    'body' => json_encode([
-                        'request_id' => $taxiMovement->id,
-                        'customer' => $taxiMovement->customer->profile,
-                        'message' => 'your request was accepted.',
-                        'taxiMovementInfo' => $this->getDriverData($taxiMovement)
-                    ], JSON_THROW_ON_ERROR)
+                    'body' => 'Your taxi request has been accepted.' // يجب أن يكون نصًا فقط
+                ],
+                'data' => [
+                    'request_id' => (string) $taxiMovement->id,
+                    'customer' => json_encode($taxiMovement->customer->profile, JSON_THROW_ON_ERROR),
+                    'message' => 'your request was accepted.',
+                    'taxiMovementInfo' => json_encode($this->getDriverData($taxiMovement), JSON_THROW_ON_ERROR)
                 ],
             ];
+
 
             $customerRecipientValue = $customer->device_token;
             send_notifications($customer, $customerPayload);
