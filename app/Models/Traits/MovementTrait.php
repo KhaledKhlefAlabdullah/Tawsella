@@ -77,9 +77,9 @@ trait MovementTrait
     {
         $movement_type = $taxiMovement->movement_type;
         if ($movement_type->is_onKM) {
-            $totalPrice = $data['distance'] * $movement_type->price;
+            $totalPrice = $data['distance'] * $movement_type->price1;
         } else {
-            $totalPrice = $movement_type->price;
+            $totalPrice = $movement_type->price1;
         }
 
         $calculation = $taxiMovement->calculations()->create([
