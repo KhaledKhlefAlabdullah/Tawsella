@@ -172,9 +172,9 @@ class TaxiMovementController extends Controller
             DB::beginTransaction();
             $validatedData = $request->validated();
             $driver = User::find($validatedData['driver_id']);
-            if ($driver->driver_state != DriverState::Ready) {
-                return api_response(message: 'This driver is currently unavailable. Please try another driver.', code: 409);
-            }
+//            if ($driver->driver_state != DriverState::Ready) {
+//                return api_response(message: 'This driver is currently unavailable. Please try another driver.', code: 409);
+//            }
             $state = MovementRequestStatus::Accepted;
             $message = __('accepted-movement-success');
             $processMovementStateRequest = User::processMovementState($taxiMovement, $state, $message, $driver);
@@ -206,7 +206,6 @@ class TaxiMovementController extends Controller
 
 
             $customerRecipientValue = $customer->device_token;
-            return $customerRecipientValue;
             send_notifications($customer, $customerPayload);
             $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
 
