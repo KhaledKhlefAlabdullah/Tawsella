@@ -194,11 +194,12 @@ class TaxiMovementController extends Controller
             $customerPayload = [
                 'notification' => [
                     'title' => 'Your request accepted!',
-                    'body' => 'your request was accepted.'
-                ],
-                'data' => [
-                    'request_id' => $taxiMovement->id,
-                    'driver' => $driver->profile
+                    'body' => json_encode([
+                        'request_id' => $taxiMovement->id,
+                        'customer' => $taxiMovement->customer->profile,
+                        'message' => 'your request was accepted.',
+                        'taxiMovementInfo' => $this->getDriverData()
+                    ], JSON_THROW_ON_ERROR)
                 ],
             ];
 
@@ -209,12 +210,12 @@ class TaxiMovementController extends Controller
             $driverPayload = [
                 'notification' => [
                     'title' => 'You have new request!',
-                    'body' => 'you have new request',
-                ],
-                'data' => [
-                    'request_id' => $taxiMovement->id,
-                    'customer' => $customer->profile,
-                    'taxiMovementInfo' => $this->getDriverData()
+                    'body' => json_encode([
+                        'request_id' => $taxiMovement->id,
+                        'customer' => $customer->profile,
+                        'message' => 'you have new request',
+                        'taxiMovementInfo' => $this->getDriverData()
+                    ],JSON_THROW_ON_ERROR)
                 ],
             ];
 
