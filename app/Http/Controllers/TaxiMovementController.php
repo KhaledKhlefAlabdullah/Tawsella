@@ -194,12 +194,12 @@ class TaxiMovementController extends Controller
             $customerPayload = [
                 'notification' => [
                     'title' => 'Your request accepted!',
-                    'body' => [
-                        'request_id' => $taxiMovement->id,
-                        'message' => 'your request was accepted.',
-                        'driver' => $driver->profile
-                    ],
-                ]
+                    'body' => 'your request was accepted.'
+                ],
+                'data' => [
+                    'request_id' => $taxiMovement->id,
+                    'driver' => $driver->profile
+                ],
             ];
 
             $customerRecipientValue = $customer->device_token;
@@ -417,7 +417,7 @@ class TaxiMovementController extends Controller
 
                 $driver = $taxiMovement->driver();
                 $driverRecipientValue = $taxiMovement->driver->device_token;
-                send_notifications($driver,$driverPayload['notification']);
+                send_notifications($driver, $driverPayload['notification']);
                 $this->fcmNotificationService->sendNotification($driverPayload, $driverRecipientValue);
 
             }
