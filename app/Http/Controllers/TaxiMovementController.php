@@ -172,9 +172,9 @@ class TaxiMovementController extends Controller
             DB::beginTransaction();
             $validatedData = $request->validated();
             $driver = User::find($validatedData['driver_id']);
-//            if ($driver->driver_state != DriverState::Ready) {
-//                return api_response(message: 'This driver is currently unavailable. Please try another driver.', code: 409);
-//            }
+            if ($driver->driver_state != DriverState::Ready) {
+                return api_response(message: 'This driver is currently unavailable. Please try another driver.', code: 409);
+            }
             $state = MovementRequestStatus::Accepted;
             $message = __('accepted-movement-success');
             $processMovementStateRequest = User::processMovementState($taxiMovement, $state, $message, $driver);
@@ -197,7 +197,7 @@ class TaxiMovementController extends Controller
                     'body' => 'Your taxi request has been accepted.' // يجب أن يكون نصًا فقط
                 ],
                 'data' => [
-                    'request_id' => (string) $taxiMovement->id,
+                    'request_id' => (string)$taxiMovement->id,
                     'customer' => json_encode($taxiMovement->customer->profile, JSON_THROW_ON_ERROR),
                     'message' => 'your request was accepted.',
                     'taxiMovementInfo' => json_encode($this->getDriverData($taxiMovement), JSON_THROW_ON_ERROR)
@@ -211,13 +211,14 @@ class TaxiMovementController extends Controller
 
             $driverPayload = [
                 'notification' => [
-                    'title' => 'You have new request!',
-                    'body' => json_encode([
-                        'request_id' => $taxiMovement->id,
-                        'customer' => $customer->profile,
-                        'message' => 'you have new request',
-                        'taxiMovementInfo' => $this->getDriverData($taxiMovement)
-                    ],JSON_THROW_ON_ERROR)
+                    'title' => 'You have a new request!',
+                    'body' => 'A customer has requested a ride.', // يجب أن يكون نصًا فقط
+                ],
+                'data' => [
+                    'request_id' => (string)$taxiMovement->id,
+                    'customer' => json_encode($customer->profile, JSON_THROW_ON_ERROR),
+                    'message' => 'You have a new request',
+                    'taxiMovementInfo' => json_encode($this->getDriverData($taxiMovement), JSON_THROW_ON_ERROR)
                 ],
             ];
 
@@ -409,13 +410,14 @@ class TaxiMovementController extends Controller
                 $driverPayload = [
                     'notification' => [
                         'title' => 'Movement canceled!',
-                        'body' => [
-                            'request_id' => $taxiMovement->id,
-                            'customer' => $taxiMovement->customer->profile,
-                            'message' => 'The customer canceled the movement',
-                            'taxiMovementInfo' => $this->getDriverData($taxiMovement)
-                        ],
-                    ]
+                        'body' => 'The customer canceled the movement.', // يجب أن يكون نصًا فقط
+                    ],
+                    'data' => [
+                        'request_id' => (string)$taxiMovement->id,
+                        'customer' => json_encode($taxiMovement->customer->profile, JSON_THROW_ON_ERROR),
+                        'message' => 'The customer canceled the movement',
+                        'taxiMovementInfo' => json_encode($this->getDriverData($taxiMovement), JSON_THROW_ON_ERROR),
+                    ],
                 ];
 
                 $driver = $taxiMovement->driver();
