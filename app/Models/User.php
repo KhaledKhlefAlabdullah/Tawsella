@@ -67,32 +67,6 @@ class User extends Authenticatable implements IMustVerifyEmailByCode
         'password' => 'hashed',
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::retrieved(function ($driver) {
-            if ($driver->driver_state === DriverState::Ready) {
-                $driver->driver_state = 'Ready';
-            } elseif ($driver->driver_state === DriverState::InBreak) {
-                $driver->driver_state = 'InBreak';
-            } elseif ($driver->driver_state === DriverState::Reserved) {
-                $driver->driver_state = 'Reserved';
-            }
-        });
-
-        static::saving(function ($driver) {
-            if ($driver->driver_state === 'Ready') {
-                $driver->driver_state = DriverState::Ready->value;
-            } elseif ($driver->driver_state === 'InBreak') {
-                $driver->driver_state = DriverState::InBreak->value;
-            } elseif ($driver->driver_state === 'Reserved') {
-                $driver->driver_state = DriverState::Reserved->value;
-            }
-        });
-    }
-
-
     public function profile()
     {
         return $this->hasOne(UserProfile::class, 'user_id');
