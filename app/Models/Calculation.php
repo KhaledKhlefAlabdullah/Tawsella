@@ -21,7 +21,9 @@ class Calculation extends Model
         'taxi_movement_id',
         'totalPrice',
         'distance',
-        'is_bring'
+        'additional_amount',
+        'reason',
+        'is_bring',
     ];
 
     public function driver(){

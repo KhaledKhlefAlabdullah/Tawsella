@@ -24,7 +24,10 @@ class MarkMovementAsCompletedRequest extends FormRequest
         return [
             'distance' => ['sometimes','numeric'],
             'end_latitude' => ['required','numeric'],
-            'end_longitude' => ['required','numeric']
+            'end_longitude' => ['required','numeric'],
+            'notes' => ['sometimes','string'],
+            'additional_amount' => ['sometimes','numeric'],
+            'reason' => ['sometimes','string'],
         ];
     }
 }

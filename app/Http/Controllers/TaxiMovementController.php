@@ -339,12 +339,13 @@ class TaxiMovementController extends Controller
             $taxiMovement->update([
                 'is_completed' => true,
                 'end_latitude' => $validatedData['end_latitude'],
-                'end_longitude' => $validatedData['end_longitude']
+                'end_longitude' => $validatedData['end_longitude'],
+                'notes' => array_key_exists('notes', $validatedData) ? $validatedData['notes'] : null,
             ]);
 
             $taxiMovement->incrementMovementCount($taxiMovement->customer_id);
 
-            $calculation = TaxiMovement::calculateAmountPaid($taxiMovement, $validatedData['distance']);
+            $calculation = TaxiMovement::calculateAmountPaid($taxiMovement, $validatedData);
 
             $taxiMovement->driver()->update([
                 'driver_state' => DriverState::Ready

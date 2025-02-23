@@ -34,6 +34,7 @@ class TaxiMovement extends Model
         'is_completed',
         'is_canceled',
         'state_message',
+        'notes',
         'request_state',
         'total_price_for_this_movement'
     ];

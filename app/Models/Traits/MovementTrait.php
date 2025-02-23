@@ -26,7 +26,7 @@ trait MovementTrait
                     $state = 'live';
                 }
 
-                if ($movement   ->request_state == MovementRequestStatus::Rejected) {
+                if ($movement->request_state == MovementRequestStatus::Rejected) {
                     $state = 'rejected by driver';
                 }
                 if ($movement->is_canceled) {
@@ -70,14 +70,14 @@ trait MovementTrait
     /**
      * Calculate amount paid for movements
      * @param TaxiMovement $movement
-     * @param User $driver
+     * @param array $data
      * @return float|int|mixed
      */
-    public static function calculateAmountPaid(TaxiMovement $taxiMovement, float $distance)
+    public static function calculateAmountPaid(TaxiMovement $taxiMovement, array $data)
     {
         $movement_type = $taxiMovement->movement_type;
         if ($movement_type->is_onKM) {
-            $totalPrice = $distance * $movement_type->price;
+            $totalPrice = $data['distance'] * $movement_type->price;
         } else {
             $totalPrice = $movement_type->price;
         }
@@ -85,9 +85,10 @@ trait MovementTrait
         $calculation = $taxiMovement->calculations()->create([
             'driver_id' => $taxiMovement->driver_id,
             'totalPrice' => $totalPrice,
-            'distance' => $distance
+            'distance' => $data['distance'],
+            'additional_amount' => array_key_exists('additional_amount', $data) ? $data['additional_amount'] : null,
+            'reason' => array_key_exists('reason', $data) ? $data['reason'] : null,
         ]);
-
 
         return $calculation;
     }
