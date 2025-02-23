@@ -198,7 +198,7 @@ class TaxiMovementController extends Controller
                         'request_id' => $taxiMovement->id,
                         'customer' => $taxiMovement->customer->profile,
                         'message' => 'your request was accepted.',
-                        'taxiMovementInfo' => $taxiMovement->getDriverData()
+                        'taxiMovementInfo' => $this->getDriverData($taxiMovement)
                     ], JSON_THROW_ON_ERROR)
                 ],
             ];
@@ -214,7 +214,7 @@ class TaxiMovementController extends Controller
                         'request_id' => $taxiMovement->id,
                         'customer' => $customer->profile,
                         'message' => 'you have new request',
-                        'taxiMovementInfo' => $taxiMovement->getDriverData()
+                        'taxiMovementInfo' => $this->getDriverData($taxiMovement)
                     ],JSON_THROW_ON_ERROR)
                 ],
             ];
@@ -234,15 +234,15 @@ class TaxiMovementController extends Controller
      *
      * @return array
      */
-    public function getDriverData(): array
+    public function getDriverData(TaxiMovement $taxiMovement): array
     {
         return [
-            'gender' => UserGender::getKey($this->taxiMovement->gender),
-            'customer_address' => $this->taxiMovement->start_address,
-            'destination_address' => $this->taxiMovement->destination_address,
-            'location_lat' => $this->taxiMovement->start_latitude,
-            'location_long' => $this->taxiMovement->start_longitude,
-            'type' => $this->taxiMovement->movement_type->type,
+            'gender' => UserGender::getKey($taxiMovement->gender),
+            'customer_address' => $taxiMovement->start_address,
+            'destination_address' => $taxiMovement->destination_address,
+            'location_lat' => $taxiMovement->start_latitude,
+            'location_long' => $taxiMovement->start_longitude,
+            'type' => $taxiMovement->movement_type->type,
         ];
     }
 
@@ -366,7 +366,7 @@ class TaxiMovementController extends Controller
                     'request_id' => $taxiMovement->id,
                     'customer' => $taxiMovement->customer->profile,
                     'message' => $message,
-                    'taxiMovementInfo' => $taxiMovement->getDriverData()
+                    'taxiMovementInfo' => $this->getDriverData($taxiMovement)
                 ]
             ]);
             return api_response(data: ['amount' => $calculation->totalPrice], message: 'Successfully completed movement request');
@@ -399,7 +399,7 @@ class TaxiMovementController extends Controller
                     'request_id' => $taxiMovement->id,
                     'customer' => $taxiMovement->customer->profile,
                     'message' => 'The customer canceled the movement',
-                    'taxiMovementInfo' => $taxiMovement->getDriverData()
+                    'taxiMovementInfo' => $this->getDriverData($taxiMovement)
                 ]
             ]);
 
@@ -411,7 +411,7 @@ class TaxiMovementController extends Controller
                             'request_id' => $taxiMovement->id,
                             'customer' => $taxiMovement->customer->profile,
                             'message' => 'The customer canceled the movement',
-                            'taxiMovementInfo' => $taxiMovement->getDriverData()
+                            'taxiMovementInfo' => $this->getDriverData($taxiMovement)
                         ],
                     ]
                 ];
