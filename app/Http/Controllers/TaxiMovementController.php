@@ -54,7 +54,7 @@ class TaxiMovementController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return api_response(data: $movements, message: 'Successfully getting movement ');
+        return api_response(data: TaxiMovement::mappingMovements($movements), message: 'Successfully getting movement ');
     }
 
     /**
