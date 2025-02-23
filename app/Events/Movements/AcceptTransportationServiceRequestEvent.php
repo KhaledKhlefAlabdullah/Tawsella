@@ -66,7 +66,7 @@ class AcceptTransportationServiceRequestEvent implements ShouldBroadcast
         return [
             'request_id' => $this->taxiMovement->id,
             'customer' => $customer_profile,
-            'taxiMovementInfo' => $this->getDriverData()
+            'taxiMovementInfo' => $this->taxiMovement->getDriverData()
         ];
     }
 

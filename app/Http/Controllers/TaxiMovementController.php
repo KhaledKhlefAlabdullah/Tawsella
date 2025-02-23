@@ -198,7 +198,7 @@ class TaxiMovementController extends Controller
                         'request_id' => $taxiMovement->id,
                         'customer' => $taxiMovement->customer->profile,
                         'message' => 'your request was accepted.',
-                        'taxiMovementInfo' => $this->getDriverData()
+                        'taxiMovementInfo' => $taxiMovement->getDriverData()
                     ], JSON_THROW_ON_ERROR)
                 ],
             ];
@@ -214,7 +214,7 @@ class TaxiMovementController extends Controller
                         'request_id' => $taxiMovement->id,
                         'customer' => $customer->profile,
                         'message' => 'you have new request',
-                        'taxiMovementInfo' => $this->getDriverData()
+                        'taxiMovementInfo' => $taxiMovement->getDriverData()
                     ],JSON_THROW_ON_ERROR)
                 ],
             ];
@@ -366,7 +366,7 @@ class TaxiMovementController extends Controller
                     'request_id' => $taxiMovement->id,
                     'customer' => $taxiMovement->customer->profile,
                     'message' => $message,
-                    'taxiMovementInfo' => $this->getDriverData()
+                    'taxiMovementInfo' => $taxiMovement->getDriverData()
                 ]
             ]);
             return api_response(data: ['amount' => $calculation->totalPrice], message: 'Successfully completed movement request');
@@ -399,7 +399,7 @@ class TaxiMovementController extends Controller
                     'request_id' => $taxiMovement->id,
                     'customer' => $taxiMovement->customer->profile,
                     'message' => 'The customer canceled the movement',
-                    'taxiMovementInfo' => $this->getDriverData()
+                    'taxiMovementInfo' => $taxiMovement->getDriverData()
                 ]
             ]);
 
@@ -411,7 +411,7 @@ class TaxiMovementController extends Controller
                             'request_id' => $taxiMovement->id,
                             'customer' => $taxiMovement->customer->profile,
                             'message' => 'The customer canceled the movement',
-                            'taxiMovementInfo' => $this->getDriverData()
+                            'taxiMovementInfo' => $taxiMovement->getDriverData()
                         ],
                     ]
                 ];
