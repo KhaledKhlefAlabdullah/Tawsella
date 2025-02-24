@@ -406,14 +406,15 @@ class TaxiMovementController extends Controller
             ]);
 
             CustomerCanceledMovementEvent::dispatch($taxiMovement);
+            $profile = $taxiMovement->customer?->profile ?? 'Guest';
             $admin = User::find(getAdminId());
             send_notifications($admin, [
                 'title' => 'Movement canceled!',
                 'body' => [
                     'request_id' => $taxiMovement->id,
-                    'customer' => $taxiMovement->customer?->profile,
+                    'customer' => $profile,
                     'message' => 'The customer canceled the movement',
-                    'taxiMovementInfo' => $this->getDriverData($taxiMovement)
+                    'taxiMovementInfo' => json_encode(collect($this->getDriverData($taxiMovement))->toArray(), JSON_THROW_ON_ERROR)
                 ]
             ]);
 
