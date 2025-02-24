@@ -44,14 +44,6 @@ class UserProfile extends Model
                     : '/images/profile/woman.png';
             }
         });
-
-        static::retrieved(function ($profile) {
-            if ($profile->gender === UserGender::male) {
-                $profile->gender = 'Male';
-            } elseif ($profile->gender === UserGender::female) {
-                $profile->gender = 'Female';
-            }
-        });
     }
 
     public function user()
