@@ -206,7 +206,7 @@ class TaxiMovementController extends Controller
 
 
             $customerRecipientValue = $customer->device_token;
-            send_notifications($customer, $customerPayload);
+            send_notifications($customer, $customerPayload['notification']);
             $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
 
             $driverPayload = [
@@ -223,7 +223,7 @@ class TaxiMovementController extends Controller
             ];
 
             $driverRecipientValue = $driver->device_token;
-            send_notifications($driver, $driverPayload);
+            send_notifications($driver, $driverPayload['notification']);
 //            $this->fcmNotificationService->sendNotification($driverPayload, $driverRecipientValue);
 
             return api_response(message: $message);
