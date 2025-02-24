@@ -514,7 +514,6 @@ class TaxiMovementController extends Controller
             ->whereDate('created_at', Carbon::today())
             ->latest()
             ->first();
-        return $lastRequest;
         if (!$lastRequest) {
             return api_response(message: 'There no request for this driver', code: 404);
         }
