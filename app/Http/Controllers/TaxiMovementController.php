@@ -194,13 +194,13 @@ class TaxiMovementController extends Controller
 
             $customerPayload = [
                 'notification' => [
-                    'title' => 'Your request accepted!',
-                    'body' => 'Your taxi request has been accepted.'
+                    'title' => 'تم قبول طلبك!',
+                    'body' => 'الطلب الذي أرسلته منذ قليل تم قبوله بنجاح.'
                 ],
                 'data' => [
                     'request_id' => (string)$taxiMovement->id,
                     'customer' => json_encode($taxiMovement->customer->profile, JSON_THROW_ON_ERROR),
-                    'message' => 'your request was accepted.',
+                    'message' => 'الطلب الذي أرسلته منذ قليل تم قبوله بنجاح.',
                     'taxiMovementInfo' => json_encode($this->getDriverData($taxiMovement), JSON_THROW_ON_ERROR)
                 ],
             ];
@@ -208,6 +208,8 @@ class TaxiMovementController extends Controller
 
             $customerRecipientValue = $customer->device_token;
             send_notifications($customer, $customerPayload['notification']);
+
+            return $customerRecipientValue;
             if (!is_null($customerRecipientValue))
                 $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
 
