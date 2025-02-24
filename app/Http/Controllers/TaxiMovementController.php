@@ -432,6 +432,10 @@ class TaxiMovementController extends Controller
                 ];
 
                 $driver = $taxiMovement->driver();
+                $driver->update([
+                    'driver_state' => DriverState::Ready
+                ]);
+
                 $driverRecipientValue = $taxiMovement->driver->device_token;
 
                 send_notifications($driver, $driverPayload['notification']);
