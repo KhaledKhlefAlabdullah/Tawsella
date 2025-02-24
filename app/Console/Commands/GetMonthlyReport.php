@@ -32,7 +32,8 @@ class GetMonthlyReport extends Command
             // Define the start and end of the week using Carbon
             $startDate = Carbon::now()->startOfMonth();
             $endDate = Carbon::now()->endOfMonth();
-            send_notifications([User::find(getAdminId())], 'monthly report is ready to view');
+            $admin = User::find(getAdminId());
+            send_notifications($admin, 'monthly report is ready to view');
 
             User::downloadReport($startDate, $endDate, 'report.monthly-report');
 

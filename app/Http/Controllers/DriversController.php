@@ -131,7 +131,7 @@ class DriversController extends Controller
             DriverChangeStateEvent::dispatch($driver, $notification);
             $admin = User::find(getAdminId());
             send_notifications($admin, $notification);
-            return api_response($message, 200);
+            return api_response($message);
         } catch (Exception $e) {
             return api_response(null, 'Failed to update driver state', 500, null, ['error' => [$e->getMessage()]]);
         }

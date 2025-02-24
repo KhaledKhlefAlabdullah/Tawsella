@@ -32,7 +32,8 @@ class GetYearlyReport extends Command
             // Define the start and end of the week using Carbon
             $startDate = Carbon::now()->startOfYear();
             $endDate = Carbon::now()->endOfYear();
-            send_notifications([User::find(getAdminId())], 'yearly report is ready to view');
+            $admin = User::find(getAdminId());
+            send_notifications($admin, 'yearly report is ready to view');
 
             User::downloadReport($startDate, $endDate, 'report.yearly-report');
 

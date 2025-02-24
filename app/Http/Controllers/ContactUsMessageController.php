@@ -51,7 +51,7 @@ class ContactUsMessageController extends Controller
 
             ContactUsMessage::create($validatedData);
 
-            $admin = getAndCheckModelById(User::class, getAdminId());
+            $admin = User::find(getAdminId());
             send_notifications($admin, 'The user: ' . $validatedData['sender_name'] . ' send new contact-us message');
 
             return api_response(message: 'contact us message send successfully');

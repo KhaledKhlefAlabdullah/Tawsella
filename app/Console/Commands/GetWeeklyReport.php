@@ -32,8 +32,8 @@ class GetWeeklyReport extends Command
             // Define the start and end of the week using Carbon
             $startDate = Carbon::now()->startOfWeek();
             $endDate = Carbon::now()->endOfWeek();
-
-            send_notifications([User::find(getAdminId())], 'weekly report is ready to view');
+            $admin = User::find(getAdminId());
+            send_notifications($admin, 'weekly report is ready to view');
 
             User::downloadReport($startDate, $endDate, 'report.weekly-report');
 
