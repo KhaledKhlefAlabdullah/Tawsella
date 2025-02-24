@@ -1,6 +1,8 @@
 <?php
 
 use App\Events\test;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Broadcast;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Middleware\EnsureEmailIsVerifiedByCodeMiddleware;
@@ -26,8 +28,14 @@ Route::middleware(['auth:sanctum', EnsureEmailIsVerifiedByCodeMiddleware::class]
 });
 
 Route::post('test', function () {
-    event(new test('Hello, world!'));
-    return 'Event dispatched!';
+    $admin = User::find(getAdminId());
+
+    send_notifications($admin, [
+        'title' => 'new movement request',
+        'body' => [
+            'message' => 'The user requested a new movement request.'
+        ],
+    ]);    return 'Event dispatched!';
 });
 require __DIR__.'/Roles/publicApis.php';
 require __DIR__ . '/auth.php';
