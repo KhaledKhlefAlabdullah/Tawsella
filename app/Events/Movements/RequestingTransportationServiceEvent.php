@@ -2,6 +2,7 @@
 
 namespace App\Events\Movements;
 
+use App\Enums\UserEnums\UserGender;
 use App\Models\TaxiMovement;
 use App\Models\User;
 use Illuminate\Broadcasting\Channel;
@@ -45,7 +46,7 @@ class RequestingTransportationServiceEvent implements ShouldBroadcast
             'drivers' => User::getReadyDrivers(),
             'request_id' => $this->taxiMovement->request_id,
             'customer' => $customer,
-            'gender' => $this->taxiMovement->gender,
+            'gender' => UserGender::getKey($this->taxiMovement->gender),
             'customer_address' => $this->taxiMovement->customer_address,
             'destination_address' => $this->taxiMovement->customer_destination_address,
             'start_latitude' => $this->taxiMovement->start_latitude,
