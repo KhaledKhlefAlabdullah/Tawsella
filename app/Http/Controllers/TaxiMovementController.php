@@ -353,7 +353,8 @@ class TaxiMovementController extends Controller
 
             $calculation = TaxiMovement::calculateAmountPaid($taxiMovement, $validatedData);
 
-            $taxiMovement->driver()->update([
+            $driver = User::find($taxiMovement->driver_id);
+            $driver->update([
                 'driver_state' => DriverState::Ready
             ]);
 
