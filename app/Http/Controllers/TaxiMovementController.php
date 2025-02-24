@@ -406,48 +406,54 @@ class TaxiMovementController extends Controller
             ]);
 
             CustomerCanceledMovementEvent::dispatch($taxiMovement);
-            $profile = $taxiMovement->customer?->profile ?? 'Guest';
-            $admin = User::find(getAdminId());
-            send_notifications($admin, [
-                'title' => 'Movement canceled!',
-                'body' => [
-                    'request_id' => $taxiMovement->id,
-                    'customer' => $profile,
-                    'message' => 'The customer canceled the movement',
-                    'taxiMovementInfo' => json_encode(collect($this->getDriverData($taxiMovement))->toArray(), JSON_THROW_ON_ERROR)
-                ]
-            ]);
+            $profile = optional($taxiMovement->customer)->profile ? $taxiMovement->customer->profile->toArray() : 'Guest';
+
+            $adminId = getAdminId();
+            if ($adminId) {
+                $admin = User::find($adminId);
+                if ($admin) {
+                    send_notifications($admin->id, [
+                        'title' => 'Movement canceled!',
+                        'body' => [
+                            'request_id' => $taxiMovement->id,
+                            'customer' => $profile,
+                            'message' => 'The customer canceled the movement',
+                            'taxiMovementInfo' => $this->getDriverData($taxiMovement)
+                        ]
+                    ]);
+                }
+            }
 
             if ($taxiMovement->is_redirected) {
-                $driverPayload = [
-                    'notification' => [
-                        'title' => 'Movement canceled!',
-                        'body' => 'The customer canceled the movement.',
-                    ],
-                    'data' => [
-                        'request_id' => (string)$taxiMovement->id,
-                        'customer' => json_encode($taxiMovement->customer->profile->toArray(), JSON_THROW_ON_ERROR),
-                        'message' => 'The customer canceled the movement',
-                        'taxiMovementInfo' => json_encode(collect($this->getDriverData($taxiMovement))->toArray(), JSON_THROW_ON_ERROR),
-                    ],
-                ];
+                $driver = $taxiMovement->driver;
+                if ($driver) {
+                    $driver->update([
+                        'driver_state' => DriverState::Ready
+                    ]);
 
-                $driver = $taxiMovement->driver();
-                $driver->update([
-                    'driver_state' => DriverState::Ready
-                ]);
+                    $driverPayload = [
+                        'notification' => [
+                            'title' => 'Movement canceled!',
+                            'body' => 'The customer canceled the movement.',
+                        ],
+                        'data' => [
+                            'request_id' => (string)$taxiMovement->id,
+                            'customer' => optional($taxiMovement->customer->profile)->toArray() ?? 'Guest',
+                            'message' => 'The customer canceled the movement',
+                            'taxiMovementInfo' => $this->getDriverData($taxiMovement),
+                        ],
+                    ];
 
-                $driverRecipientValue = $taxiMovement->driver->device_token;
-
-                send_notifications($driver, $driverPayload['notification']);
-                // ->sendNotification($driverPayload, $driverRecipientValue);
-
+                    send_notifications($driver->id, $driverPayload['notification']);
+                }
             }
+
             $calculateCanceledMovementsRequest = TaxiMovement::calculateCanceledMovements(Auth::user());
             if ($calculateCanceledMovementsRequest) {
                 return $calculateCanceledMovementsRequest;
             }
             return api_response(message: 'Movement Canceled Successfully');
+
         } catch (Exception $e) {
             return api_response(message: 'Movement Canceled error', code: 500, errors: [$e->getMessage()]);
         }
