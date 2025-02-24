@@ -144,11 +144,12 @@ class TaxiMovementController extends Controller
             $taxiMovement = TaxiMovement::create($validatedData);
             event(new RequestingTransportationServiceEvent($taxiMovement));
             $admin = User::find(getAdminId());
+            $userName = Auth::check() ? Auth::user()->profile->name : 'Guest';
 
             send_notifications($admin, [
                 'title' => 'new movement request',
                 'body' => [
-                    'message' => 'The user ' . Auth::user()->profile->name . ' requested a new movement request.'
+                    'message' => "The user {$userName} requested a new movement request."
                 ],
             ]);
             return api_response(data: ['movement_id' => $taxiMovement->id], message: 'Successfully creating movement');

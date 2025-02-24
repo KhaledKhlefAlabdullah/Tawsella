@@ -170,9 +170,9 @@ if (!function_exists('getAdminId')) {
      */
     function getAdminId()
     {
-        $admin_id = \App\Models\User::role(\App\Enums\UserEnums\UserType::Admin()->key)->first()->id;
-        return $admin_id;
+        return \App\Models\User::role(\App\Enums\UserEnums\UserType::Admin()->key)->first()?->id;
     }
+
 }
 
 
@@ -227,26 +227,13 @@ if (!function_exists('send_notifications')) {
     /**
      * Send notifications to receivers.
      *
-     * @param array|Illuminate\Support\Collection|App\Models\User $receivers
-     * @param string|array $message
+     * @param  $receiver
+     * @param array|string $message
      * @param array $viaChannel
      * @throws Exception
      */
-    function send_notifications($receivers, $message, array $viaChannel = ['database'])
+    function send_notifications($receiver, array|string $message, array $viaChannel = ['database'])
     {
-        $receiversArray = collect($receivers)->filter(fn($receiver) => $receiver instanceof \App\Models\User)->all();
-
-        // Validate each receiver is a User instance
-        foreach ($receiversArray as $receiver) {
-            if (!($receiver instanceof \App\Models\User)) {
-                throw new \Exception('Each receiver must be an instance of User model.');
-            }
-        }
-
-        // Trigger event and send notifications
-        foreach ($receiversArray as $receiver) {
-            Notification::send($receiver, new StarTaxiNotification($message, $viaChannel));
-        }
+        Notification::send($receiver, new StarTaxiNotification($message, $receiver, $viaChannel));
     }
-
 }
