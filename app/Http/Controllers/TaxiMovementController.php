@@ -460,14 +460,14 @@ class TaxiMovementController extends Controller
         }
 
         $driver_profile = $lastRequest->driver ? $lastRequest->driver->profile : null;
-        $chat = ChatMember::where('member_id', Auth::id())
-            ->whereIn('chat_id', function ($query) use ($driver_profile) {
-                $query->select('chat_id')
-                    ->from('chat_members')
-                    ->where('member_id', $driver_profile->user_id)
-                    ->get(); // Ensure both members are present
-            })
-            ->first();
+//        $chat = ChatMember::where('member_id', Auth::id())
+//            ->whereIn('chat_id', function ($query) use ($driver_profile) {
+//                $query->select('chat_id')
+//                    ->from('chat_members')
+//                    ->where('member_id', $driver_profile->user_id)
+//                    ->get(); // Ensure both members are present
+//            })
+//            ->first();
 
         return [
             'chat_id' => $chat->chat_id ?? '',
