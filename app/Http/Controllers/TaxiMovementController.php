@@ -357,12 +357,13 @@ class TaxiMovementController extends Controller
                 'driver_state' => DriverState::Ready
             ]);
 
+            DB::commit();
+
             $driver = $taxiMovement->driver;
             $customer = $taxiMovement->customer;
             $from = $taxiMovement->start_address;
             $to = $taxiMovement->destination_address;
             $message = 'completed movement request from: ' . $from . ' to: ' . $to;
-            DB::commit();
             MovementCompleted::dispatch($driver, $customer, $message);
             $admin = User::find(getAdminId());
             send_notifications($admin, [
