@@ -30,12 +30,12 @@ Route::middleware(['auth:sanctum', EnsureEmailIsVerifiedByCodeMiddleware::class]
 Route::post('test', function () {
     $admin = User::find(getAdminId());
 
-    send_notifications($admin, [
+    return send_notifications($admin, [
         'title' => 'new movement request',
         'body' => [
             'message' => 'The user requested a new movement request.'
         ],
-    ]);    return 'Event dispatched!';
+    ]);
 });
 require __DIR__.'/Roles/publicApis.php';
 require __DIR__ . '/auth.php';
