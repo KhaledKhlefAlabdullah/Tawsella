@@ -377,7 +377,13 @@ class TaxiMovementController extends Controller
                     'taxiMovementInfo' => $this->getDriverData($taxiMovement)
                 ]
             ]);
-            return api_response(data: ['amount' => $calculation->totalPrice], message: 'Successfully completed movement request');
+            return api_response(data: [
+                'amount' => $calculation->totalPrice,
+                'distance' => $calculation->distance,
+                'additional_amount' => $calculation->additional_amount,
+                'reason' => $calculation->reason,
+            ], message: 'Successfully completed movement request');
+
         } catch (Exception $e) {
             DB::rollBack();
             return api_response(message: 'Error in make movement completed', code: 500, errors: [$e->getMessage()]);
@@ -481,6 +487,9 @@ class TaxiMovementController extends Controller
 
     /**
      * Send Taxi movement request details
+     * @param string $driver_id
+     * @return mixed
+     * @throws \BenSampo\Enum\Exceptions\InvalidEnumMemberException
      */
     public function get_request_data(string $driver_id)
     {
