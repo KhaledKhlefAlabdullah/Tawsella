@@ -35,7 +35,7 @@ class TaxiMovementController extends Controller
     public function __construct(PaginationService $paginationService, FcmNotificationService $fcmNotificationService)
     {
         $this->paginationService = $paginationService;
-       //  = $fcmNotificationService;
+        //  = $fcmNotificationService;
     }
 
     /**
@@ -207,7 +207,7 @@ class TaxiMovementController extends Controller
 
             $customerRecipientValue = $customer->device_token;
             send_notifications($customer, $customerPayload['notification']);
-           // ->sendNotification($customerPayload, $customerRecipientValue);
+            // ->sendNotification($customerPayload, $customerRecipientValue);
 
             $driverPayload = [
                 'notification' => [
@@ -283,7 +283,7 @@ class TaxiMovementController extends Controller
             $customerRecipientValue = $customer->device_token;
             send_notifications($customer, $customerPayload['notification']);
 
-           // ->sendNotification($customerPayload, $customerRecipientValue);
+            // ->sendNotification($customerPayload, $customerRecipientValue);
 
             return api_response(message: 'Successfully rejecting movement');
         } catch (Exception $e) {
@@ -428,7 +428,7 @@ class TaxiMovementController extends Controller
                 $driverRecipientValue = $taxiMovement->driver->device_token;
 
                 send_notifications($driver, $driverPayload['notification']);
-               // ->sendNotification($driverPayload, $driverRecipientValue);
+                // ->sendNotification($driverPayload, $driverRecipientValue);
 
             }
             $calculateCanceledMovementsRequest = TaxiMovement::calculateCanceledMovements(Auth::user());
@@ -460,15 +460,16 @@ class TaxiMovementController extends Controller
         }
 
         $driver_profile = $lastRequest->driver ? $lastRequest->driver->profile : null;
-//        $chat = ChatMember::where('member_id', Auth::id())
-//            ->whereIn('chat_id', function ($query) use ($driver_profile) {
-//                $query->select('chat_id')
-//                    ->from('chat_members')
-//                    ->where('member_id', $driver_profile->user_id)
-//                    ->get(); // Ensure both members are present
-//            })
-//            ->first();
-
+        if (!is_null($driver_profile)) {
+            $chat = ChatMember::where('member_id', Auth::id())
+                ->whereIn('chat_id', function ($query) use ($driver_profile) {
+                    $query->select('chat_id')
+                        ->from('chat_members')
+                        ->where('member_id', $driver_profile->user_id)
+                        ->get(); // Ensure both members are present
+                })
+                ->first();
+        }
         return [
             'chat_id' => $chat->chat_id ?? '',
             'request_id' => $lastRequest->id,
