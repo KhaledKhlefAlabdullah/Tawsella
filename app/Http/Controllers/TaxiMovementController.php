@@ -308,7 +308,7 @@ class TaxiMovementController extends Controller
             CustomerFoundEvent::dispatch($driverName, $customerName, $message);
             $admin = User::find(getAdminId());
             send_notifications($admin, [
-                'title' => 'Movement Completed!',
+                'title' => 'تم إيجاد الزبون!',
                 'body' => [
                     'request_id' => $taxiMovement->id,
                     'customer' => $taxiMovement->customer->profile,

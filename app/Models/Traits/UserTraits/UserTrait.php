@@ -151,7 +151,7 @@ trait UserTrait
             'name' => $validatedData['name']?? $userProfile->name,
             'phone_number' => $validatedData['phone_number']?? $userProfile->phone_number,
             'address' => $validatedData['address'] ?? $userProfile->address,
-            'gender' => UserGender::getValue($validatedData['gender']) ?? $userProfile->gender,
+            'gender' => array_key_exists('gender', $validatedData) ? UserGender::getValue($validatedData['gender']) : $userProfile->gender,
         ]);
 
         if (array_key_exists('avatar' ,$validatedData)) {
