@@ -208,7 +208,7 @@ class TaxiMovementController extends Controller
 
             $customerRecipientValue = $customer->device_token;
             send_notifications($customer, $customerPayload['notification']);
-            // ->sendNotification($customerPayload, $customerRecipientValue);
+            $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
 
             $driverPayload = [
                 'notification' => [
@@ -227,7 +227,7 @@ class TaxiMovementController extends Controller
 
             $driverRecipientValue = $driver->device_token;
             send_notifications($driver, $driverPayload['notification']);
-//           // ->sendNotification($driverPayload, $driverRecipientValue);
+//           $this->fcmNotificationService->sendNotification($driverPayload, $driverRecipientValue);
 
             return api_response(message: $message);
         } catch (Exception $e) {
@@ -284,7 +284,7 @@ class TaxiMovementController extends Controller
             $customerRecipientValue = $customer->device_token;
             send_notifications($customer, $customerPayload['notification']);
 
-            // ->sendNotification($customerPayload, $customerRecipientValue);
+            $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
 
             return api_response(message: 'Successfully rejecting movement');
         } catch (Exception $e) {
