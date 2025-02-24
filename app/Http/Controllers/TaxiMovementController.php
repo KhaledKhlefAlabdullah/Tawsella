@@ -35,7 +35,7 @@ class TaxiMovementController extends Controller
     public function __construct(PaginationService $paginationService, FcmNotificationService $fcmNotificationService)
     {
         $this->paginationService = $paginationService;
-        $this->fcmNotificationService = $fcmNotificationService;
+       //  = $fcmNotificationService;
     }
 
     /**
@@ -194,7 +194,7 @@ class TaxiMovementController extends Controller
             $customerPayload = [
                 'notification' => [
                     'title' => 'Your request accepted!',
-                    'body' => 'Your taxi request has been accepted.' // يجب أن يكون نصًا فقط
+                    'body' => 'Your taxi request has been accepted.'
                 ],
                 'data' => [
                     'request_id' => (string)$taxiMovement->id,
@@ -207,12 +207,14 @@ class TaxiMovementController extends Controller
 
             $customerRecipientValue = $customer->device_token;
             send_notifications($customer, $customerPayload['notification']);
-            $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
+           // ->sendNotification($customerPayload, $customerRecipientValue);
 
             $driverPayload = [
                 'notification' => [
                     'title' => 'You have a new request!',
-                    'body' => 'A customer has requested a ride.', // يجب أن يكون نصًا فقط
+                    'body' => 'A customer has requested a ride.',
+
+
                 ],
                 'data' => [
                     'request_id' => (string)$taxiMovement->id,
@@ -224,7 +226,7 @@ class TaxiMovementController extends Controller
 
             $driverRecipientValue = $driver->device_token;
             send_notifications($driver, $driverPayload['notification']);
-//            $this->fcmNotificationService->sendNotification($driverPayload, $driverRecipientValue);
+//           // ->sendNotification($driverPayload, $driverRecipientValue);
 
             return api_response(message: $message);
         } catch (Exception $e) {
@@ -281,7 +283,7 @@ class TaxiMovementController extends Controller
             $customerRecipientValue = $customer->device_token;
             send_notifications($customer, $customerPayload['notification']);
 
-            $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
+           // ->sendNotification($customerPayload, $customerRecipientValue);
 
             return api_response(message: 'Successfully rejecting movement');
         } catch (Exception $e) {
@@ -410,7 +412,7 @@ class TaxiMovementController extends Controller
                 $driverPayload = [
                     'notification' => [
                         'title' => 'Movement canceled!',
-                        'body' => 'The customer canceled the movement.', // يجب أن يكون نصًا فقط
+                        'body' => 'The customer canceled the movement.',
                     ],
                     'data' => [
                         'request_id' => (string)$taxiMovement->id,
@@ -422,8 +424,9 @@ class TaxiMovementController extends Controller
 
                 $driver = $taxiMovement->driver();
                 $driverRecipientValue = $taxiMovement->driver->device_token;
+
                 send_notifications($driver, $driverPayload['notification']);
-                $this->fcmNotificationService->sendNotification($driverPayload, $driverRecipientValue);
+               // ->sendNotification($driverPayload, $driverRecipientValue);
 
             }
             $calculateCanceledMovementsRequest = TaxiMovement::calculateCanceledMovements(Auth::user());
