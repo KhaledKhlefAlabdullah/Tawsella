@@ -484,14 +484,15 @@ class TaxiMovementController extends Controller
      */
     public function get_request_data(string $driver_id)
     {
-        $lastRequest = Auth::user()->driver_movements()
+        $driver = User::find($driver_id);
+        $lastRequest = $driver->driver_movements()
             ->where('is_completed', false)
             ->where('is_canceled', false)
             ->where('is_redirected', true)
             ->whereDate('created_at', Carbon::today())
             ->latest()
             ->first();
-
+        return $lastRequest;
         if (!$lastRequest) {
             return api_response(message: 'There no request for this driver', code: 404);
         }
