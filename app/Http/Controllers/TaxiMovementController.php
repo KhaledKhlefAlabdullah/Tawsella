@@ -209,10 +209,11 @@ class TaxiMovementController extends Controller
             $customerRecipientValue = $customer->device_token;
             send_notifications($customer, $customerPayload['notification']);
 
-            return $customerRecipientValue;
-            if (!is_null($customerRecipientValue))
-                $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
 
+            if (!is_null($customerRecipientValue)) {
+                return $customerRecipientValue;
+                $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
+            }
             $driverPayload = [
                 'notification' => [
                     'title' => 'You have a new request!',
