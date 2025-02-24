@@ -418,7 +418,6 @@ class TaxiMovementController extends Controller
             ]);
 
             if ($taxiMovement->is_redirected) {
-                $profile = $taxiMovement->customer->profile ?? 'Guest';
                 $driverPayload = [
                     'notification' => [
                         'title' => 'Movement canceled!',
@@ -426,9 +425,9 @@ class TaxiMovementController extends Controller
                     ],
                     'data' => [
                         'request_id' => (string)$taxiMovement->id,
-                        'customer' => json_encode($profile, JSON_THROW_ON_ERROR),
+                        'customer' => json_encode($taxiMovement->customer->profile->toArray(), JSON_THROW_ON_ERROR),
                         'message' => 'The customer canceled the movement',
-                        'taxiMovementInfo' => json_encode($this->getDriverData($taxiMovement), JSON_THROW_ON_ERROR),
+                        'taxiMovementInfo' => json_encode(collect($this->getDriverData($taxiMovement))->toArray(), JSON_THROW_ON_ERROR),
                     ],
                 ];
 
