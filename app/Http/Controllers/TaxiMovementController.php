@@ -211,7 +211,6 @@ class TaxiMovementController extends Controller
 
 
             if (!is_null($customerRecipientValue)) {
-                return $customerRecipientValue;
                 $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
             }
             $driverPayload = [
