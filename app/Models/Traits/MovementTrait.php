@@ -39,7 +39,7 @@ trait MovementTrait
             };
 
             return [
-                'movement_id' => $movement->id,
+                'id' => $movement->id,
                 'start_address' => $movement->start_address,
                 'destination_address' => $movement->destination_address,
                 'gender' => UserGender::getKey($movement->gender),
