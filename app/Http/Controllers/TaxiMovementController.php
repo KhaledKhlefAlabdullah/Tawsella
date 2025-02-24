@@ -208,22 +208,18 @@ class TaxiMovementController extends Controller
 
             $customerRecipientValue = $customer->device_token;
             send_notifications($customer, $customerPayload['notification']);
-
-
             if (!is_null($customerRecipientValue)) {
                 $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
             }
             $driverPayload = [
                 'notification' => [
-                    'title' => 'You have a new request!',
-                    'body' => 'A customer has requested a ride.',
-
-
+                    'title' => 'لديك طلب جديد!',
+                    'body' => 'تم إرسال طلب جديد، يرجى مراجعته واتخاذ الإجراء المناسب.',
                 ],
                 'data' => [
                     'request_id' => (string)$taxiMovement->id,
                     'customer' => json_encode($customer->profile, JSON_THROW_ON_ERROR),
-                    'message' => 'You have a new request',
+                    'message' => 'تم إرسال طلب جديد، يرجى مراجعته واتخاذ الإجراء المناسب.',
                     'taxiMovementInfo' => json_encode($this->getDriverData($taxiMovement), JSON_THROW_ON_ERROR)
                 ],
             ];
@@ -280,8 +276,8 @@ class TaxiMovementController extends Controller
             //RejectTransportationServiceRequestEvent::dispatch($taxiMovement);
             $customerPayload = [
                 'notification' => [
-                    'title' => 'Your request rejected!',
-                    'body' => array_key_exists('message', $validatedData) ? $validatedData['message'] : 'your request was rejected.',
+                    'title' => 'تم رفض طلبك!',
+                    'body' => array_key_exists('message', $validatedData) ? $validatedData['message'] : 'نرجو المعذرة، تم رفض طلبك للأسف.',
                 ]
             ];
             $customer = $taxiMovement->customer;
@@ -308,7 +304,7 @@ class TaxiMovementController extends Controller
             $validatedData = $request->validated();
             $driverName = $taxiMovement->driver->profile->name;
             $customerName = $taxiMovement->customer->profile->name;
-            $message = 'driver: ' . $driverName . ($validatedData['state'] ? ' found' : ' don\'t found') . ' customer: ' . $customerName;
+            $message = 'السائق: ' . $driverName . ($validatedData['state'] ? ' وجد' : ' لم يجد') . ' الزبون: ' . $customerName;
             CustomerFoundEvent::dispatch($driverName, $customerName, $message);
             $admin = User::find(getAdminId());
             send_notifications($admin, [
@@ -369,11 +365,11 @@ class TaxiMovementController extends Controller
             $customer = $taxiMovement->customer;
             $from = $taxiMovement->start_address;
             $to = $taxiMovement->destination_address;
-            $message = 'completed movement request from: ' . $from . ' to: ' . $to;
+            $message = 'تم اكمال طلب من: ' . $from . ' إلى: ' . $to;
             MovementCompleted::dispatch($driver, $customer, $message);
             $admin = User::find(getAdminId());
             send_notifications($admin, [
-                'title' => 'Movement Completed!',
+                'title' => 'الطلب مكتمل!',
                 'body' => [
                     'request_id' => $taxiMovement->id,
                     'customer' => $taxiMovement->customer->profile,
