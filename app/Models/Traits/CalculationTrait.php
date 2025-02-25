@@ -44,7 +44,7 @@ trait CalculationTrait
         $todayAccounts = Calculation::where('driver_id', $driver_id)
             ->where('is_bring', false)
             ->whereDate('created_at', $today)
-            ->selectRaw('coin_type, SUM(additional_amount) as total_amount')
+            ->selectRaw('coin, SUM(additional_amount) as total_amount')
             ->groupBy('coin')
             ->get();
 
@@ -61,7 +61,7 @@ trait CalculationTrait
     {
         $totalAccounts = Calculation::where('driver_id', $driver_id)
             ->where('is_bring', false)
-            ->selectRaw('coin_type, SUM(additional_amount) as total_amount')
+            ->selectRaw('coin, SUM(additional_amount) as total_amount')
             ->groupBy('coin')
             ->get();
 
