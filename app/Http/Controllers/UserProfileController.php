@@ -70,4 +70,9 @@ class UserProfileController extends Controller
             return api_response(message: 'Profile updated error.', code: 500, errors: [$e->getMessage()]);
         }
     }
+
+    /**
+     * @return JsonResponse
+     */
+
 }

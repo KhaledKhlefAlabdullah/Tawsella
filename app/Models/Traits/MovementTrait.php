@@ -60,7 +60,8 @@ trait MovementTrait
                 'car_lamp_number' => $movement->taxi->lamp_number ?? null,
                 'car_plate_number' => $movement->taxi->plate_number ?? null,
                 'type' => $movement->movement_type->type,
-                'price' => $movement?->calculations->totalPrice ?? 0,
+                'price' => $movement?->calculations->additional_amount ?? 0,
+                'coin' => PaymentTypesEnum::getKey($movement?->calculations->coin ?? 0),
                 'date' => $movement->created_at,
             ];
         });
