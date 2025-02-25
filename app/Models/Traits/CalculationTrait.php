@@ -2,6 +2,7 @@
 
 namespace App\Models\Traits;
 
+use App\Enums\PaymentTypesEnum;
 use App\Models\Calculation;
 use App\Models\TaxiMovement;
 use App\Models\User;
@@ -46,7 +47,13 @@ trait CalculationTrait
             ->whereDate('created_at', $today)
             ->selectRaw('coin, SUM(additional_amount) as total_amount')
             ->groupBy('coin')
-            ->get();
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'coin' => PaymentTypesEnum::getKey($item->coin),
+                    'total_amount' => $item->total_amount,
+                ];
+            });
 
 
         return $todayAccounts ?? 0;
@@ -63,7 +70,13 @@ trait CalculationTrait
             ->where('is_bring', false)
             ->selectRaw('coin, SUM(additional_amount) as total_amount')
             ->groupBy('coin')
-            ->get();
+            ->get()
+            ->map(function ($item) {
+                return [
+                    'coin' => PaymentTypesEnum::getKey($item->coin),
+                    'total_amount' => $item->total_amount,
+                ];
+            });
 
         return $totalAccounts ?? 0;
     }
