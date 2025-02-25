@@ -76,12 +76,13 @@ trait MovementTrait
     public static function calculateAmountPaid(TaxiMovement $taxiMovement, array $data)
     {
         $movement_type = $taxiMovement->movement_type;
-        if ($movement_type->is_onKM) {
-            $totalPrice = $data['distance'] * $movement_type->price1;
-        } else {
-            $totalPrice = $movement_type->price1;
-        }
+//        if ($movement_type->is_onKM) {
+//            $totalPrice = $data['distance'] * $movement_type->price1;
+//        } else {
+//            $totalPrice = $movement_type->price1;
+//        }
 
+        $totalPrice = $data['additional_amount'];
         $calculation = $taxiMovement->calculations()->create([
             'driver_id' => $taxiMovement->driver_id,
             'totalPrice' => $totalPrice,
