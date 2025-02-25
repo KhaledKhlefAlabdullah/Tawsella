@@ -3,6 +3,7 @@
 namespace App\Models\Traits;
 
 use App\Enums\MovementRequestStatus;
+use App\Enums\PaymentTypesEnum;
 use App\Enums\UserEnums\UserGender;
 use App\Models\Calculation;
 use App\Models\CustomerMovementsCount;
@@ -89,6 +90,7 @@ trait MovementTrait
             'distance' => $data['distance'],
             'additional_amount' => array_key_exists('additional_amount', $data) ? $data['additional_amount'] : null,
             'reason' => array_key_exists('reason', $data) ? $data['reason'] : null,
+            'coin' => PaymentTypesEnum::getValue($data['coin'])
         ]);
 
         return $calculation;

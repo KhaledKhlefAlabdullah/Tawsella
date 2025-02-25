@@ -44,7 +44,7 @@ trait CalculationTrait
         $todayAccounts = Calculation::where('driver_id', $driver_id)
             ->where('is_bring', false)
             ->whereDate('created_at', $today)
-            ->sum('totalPrice');
+            ->sum('additional_amount');
 
         return $todayAccounts ?? 0;
     }

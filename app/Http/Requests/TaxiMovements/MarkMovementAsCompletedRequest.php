@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\TaxiMovements;
 
+use App\Enums\PaymentTypesEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class MarkMovementAsCompletedRequest extends FormRequest
 {
@@ -28,6 +30,7 @@ class MarkMovementAsCompletedRequest extends FormRequest
             'notes' => ['sometimes','string'],
             'additional_amount' => ['sometimes','numeric'],
             'reason' => ['sometimes','string'],
+            'coin' => ['sometimes', Rule::in(PaymentTypesEnum::getKeys())],
         ];
     }
 }
