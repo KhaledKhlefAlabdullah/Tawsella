@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('calculations', function (Blueprint $table) {
-            $table->float('additional_amount')->nullable()->after('distance');
+            $table->string('additional_amount')->nullable()->after('distance');
             $table->text('reason')->nullable()->after('additional_amount');
         });
     }
