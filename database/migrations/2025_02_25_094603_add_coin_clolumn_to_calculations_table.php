@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('calculations', function (Blueprint $table) {
-            $table->integer('coin')->default(\App\Enums\PaymentTypesEnum::USD);
+            $table->integer('coin')->default(\App\Enums\PaymentTypesEnum::USD)->after('additional_amount');
         });
     }
 
