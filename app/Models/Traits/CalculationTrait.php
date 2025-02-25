@@ -93,8 +93,9 @@ trait CalculationTrait
                 'elat' => $movement->end_latitude,
                 'elong' => $movement->end_longitude,
                 'date' => $movement->created_at,
-                'totalPrice' => $calculation ? $calculation->totalPrice : 0,
+                'totalPrice' => $calculation ? $calculation->additional_amount : 0,
                 'distance' => $calculation ? $calculation->distance : null,
+                'reason' => $calculation ? $calculation->reason : null
             ];
         });
     }
