@@ -65,6 +65,11 @@ class FcmNotificationService
                         'visibility' => 'PUBLIC'
                     ]
                 ],
+                'apns' => [
+                    'headers' => [
+                        'apns-priority' => '10',
+                    ],
+                ],
                 'data' => $payload['data'] ??  [
                         'key1' => 'value1',
                         'key2' => 'value2',
