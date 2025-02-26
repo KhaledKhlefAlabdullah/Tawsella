@@ -380,11 +380,11 @@ class TaxiMovementController extends Controller
                 'distance' => $calculation->distance,
                 'additional_amount' => $calculation->additional_amount,
                 'reason' => $calculation->reason,
-            ], message: 'Successfully completed movement request');
+            ], message: 'تم إكــمال الطلب بنجاح');
 
         } catch (Exception $e) {
             DB::rollBack();
-            return api_response(message: 'Error in make movement completed', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'حطأ في إكمال الطلب', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -411,11 +411,11 @@ class TaxiMovementController extends Controller
                 $admin = User::find($adminId);
                 if ($admin) {
                     send_notifications($admin->id, [
-                        'title' => 'Movement canceled!',
+                        'title' => 'تم إلغاء الطلب!',
                         'body' => [
                             'request_id' => $taxiMovement->id,
                             'customer' => $profile,
-                            'message' => 'The customer canceled the movement',
+                            'message' => 'قام المستخدم بإلغاء الطلب',
                             'taxiMovementInfo' => $this->getDriverData($taxiMovement)
                         ]
                     ]);

@@ -52,7 +52,7 @@ class ContactUsMessageController extends Controller
             ContactUsMessage::create($validatedData);
 
             $admin = User::find(getAdminId());
-            send_notifications($admin, 'The user: ' . $validatedData['sender_name'] . ' send new contact-us message');
+            send_notifications($admin, 'المستخدم: ' . $validatedData['sender_name'] . ' ارسل رسالة للتواصل معنا');
 
             return api_response(message: 'contact us message send successfully');
         } catch (Exception $e) {

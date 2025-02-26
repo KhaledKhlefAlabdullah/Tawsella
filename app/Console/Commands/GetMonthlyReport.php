@@ -33,7 +33,7 @@ class GetMonthlyReport extends Command
             $startDate = Carbon::now()->startOfMonth();
             $endDate = Carbon::now()->endOfMonth();
             $admin = User::find(getAdminId());
-            send_notifications($admin, 'monthly report is ready to view');
+            send_notifications($admin, 'التقرير الشهري');
 
             User::downloadReport($startDate, $endDate, 'report.monthly-report');
 

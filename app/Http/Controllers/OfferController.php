@@ -100,9 +100,9 @@ class OfferController extends Controller
         try {
             $offer->delete();
 
-            return api_response(message: 'Successfully deleted offer.');
+            return api_response(message: 'تم حذف العرض بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Error in deleting error.', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'خطأ في حذف العرض', code: 500, errors: [$e->getMessage()]);
         }
     }
 }

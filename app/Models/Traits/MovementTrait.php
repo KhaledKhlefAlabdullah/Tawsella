@@ -138,7 +138,7 @@ trait MovementTrait
         if ($lastTenDaysCanceledMovements >= 30) {
             $user->is_active = false;
             $user->save();
-            return api_response(message: 'Account deactivated due to excessive cancellations in the last 10 days.', code: 423);
+            return api_response(message: 'تم إلغاء تنشيط الحساب بسبب الإلغاءات المفرطة خلال الأيام العشرة الماضية.', code: 423);
         }
     }
 

@@ -23,7 +23,7 @@ trait DriverTrait
     {
         if ($taxiMovement->is_canceled) {
             return api_response(
-                message: 'The request has already been canceled by the customer. We apologize for any inconvenience caused.',
+                message: 'تم إلغاء الطلب بالفعل من قبل العميل. نعتذر عن أي إزعاج قد يكون قد تسبب فيه.',
                 code: 410);
         } else {
             // Update the request state
@@ -56,7 +56,7 @@ trait DriverTrait
             return [
                 'id' => $driver->id,
                 'name' => $driver->profile?->name,
-                'gender' => $driver->profile?->gender,
+                'gender' => UserGender::getKey($driver->profile?->gender ?? 0),
                 'avatar' => $driver->profile?->avatar,
                 'age' => $driver->profile?->birthdate ? now()->diffInYears($driver->profile->birthdate) : null,
             ];

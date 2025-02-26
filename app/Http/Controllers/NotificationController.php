@@ -14,7 +14,7 @@ class NotificationController extends Controller
     {
         $unreadNotifications = Auth::user()->notifications()->orderBy('created_at', 'desc')->select('id','data')->get();
 
-        return api_response(data: $unreadNotifications, message: 'Successfully get notifications');
+        return api_response(data: $unreadNotifications, message: 'تم جلب الاشعارات بنجاح');
     }
 
     /**
@@ -25,7 +25,7 @@ class NotificationController extends Controller
     {
         $unreadNotifications = Auth::user()->unReadNotifications()->orderBy('created_at', 'desc')->select('id','data')->get();
 
-        return api_response(data: $unreadNotifications, message: 'Successfully get unread notifications');
+        return api_response(data: $unreadNotifications, message: 'تم جلب الاشعارات غير المقروءة ينجاح');
     }
 
     /**
@@ -35,9 +35,9 @@ class NotificationController extends Controller
     {
         try {
             Auth::user()->unreadNotifications->markAsRead();
-            return api_response(message: 'Successfully read notifications');
+            return api_response(message: 'تم تعليم جميع الاشعارات كمقروءة');
         } catch (\Exception $e) {
-            return api_response(message: 'Failed to read notifications', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'فشل في تعليم جميع الاشارات كمقروءة', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -52,11 +52,11 @@ class NotificationController extends Controller
 
             if ($notification) {
                 $notification->markAsRead();
-                return api_response(message: 'Successfully read notification');
+                return api_response(message: 'تم تعليم الاشعار كمقروء');
             }
-            return api_response(message: 'Notification not found', code: 404, errors: ['Notification not found']);
+            return api_response(message: 'الإشعار غير موجود', code: 404, errors: ['الأشعار غير موجود']);
         } catch (\Exception $e) {
-            return api_response(message: 'Failed to read notification', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'فشل في تعليم الإشعار كمقروء', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -70,9 +70,9 @@ class NotificationController extends Controller
             if ($notification) {
                 $notification->delete();
             }
-            return api_response(message: 'Notification deleted');
+            return api_response(message: 'تم حذف الإشعار بنجاح');
         }catch (\Exception $e){
-            return api_response(message: 'Deleting notification error', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في حذف الإشعار', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -83,9 +83,9 @@ class NotificationController extends Controller
     {
         try {
             Auth::user()->notifications()->delete();
-            return api_response(message: 'Successfully delete all notifications');
+            return api_response(message: 'تم حذف جميع الإشعارات بنجاح');
         } catch (\Exception $e) {
-            return api_response(message: 'Failed to delete all notifications', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'فشل في حذف الإشعارات', code: 500, errors: [$e->getMessage()]);
         }
     }
 }
