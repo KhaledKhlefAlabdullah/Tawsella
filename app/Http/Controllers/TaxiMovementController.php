@@ -436,10 +436,10 @@ class TaxiMovementController extends Controller
                             'body' => 'The customer canceled the movement.',
                         ],
                         'data' => [
-//                            'request_id' => (string)$taxiMovement->id,
-                            'customer' => optional($taxiMovement->customer->profile)->toArray() ?? 'Guest',
-                            'message' => 'The customer canceled the movement',
-                            'taxiMovementInfo' => $this->getDriverData($taxiMovement),
+                            'request_id' => (string) ($payload['data']['request_id'] ?? ''),
+                            'customer' => json_encode($payload['data']['customer'] ?? []), // حول المصفوفة إلى JSON
+                            'message' => $payload['data']['message'] ?? '',
+                            'taxiMovementInfo' => json_encode($payload['data']['taxiMovementInfo'] ?? [])
                         ],
                     ];
 
