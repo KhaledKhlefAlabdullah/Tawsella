@@ -20,7 +20,8 @@ use \App\Http\Middleware\EnsureEmailIsVerifiedByCodeMiddleware;
 
 Broadcast::routes(['middleware' => ['auth:sanctum']]);
 
-Route::middleware(['auth:sanctum', EnsureEmailIsVerifiedByCodeMiddleware::class])->group(function () {
+// to verify the email use this 'verified.email' in middleware
+Route::middleware(['auth:sanctum'])->group(function () {
     require __DIR__.'/Roles/driver.php';
     require __DIR__.'/Roles/customer.php';
     require __DIR__ . '/Roles/admin.php';
