@@ -29,7 +29,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     require __DIR__ . '/Roles/allAuthUsers.php';
 });
 
-Route::post('test', function (string $recepint) {
+Route::post('test/{recepint}', function (string $recepint) {
     $admin = User::find(getAdminId());
     $fcm = new \App\Services\FcmNotificationService();
     $customerPayload = [
