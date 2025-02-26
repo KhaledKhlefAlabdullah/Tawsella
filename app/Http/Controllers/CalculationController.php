@@ -10,6 +10,7 @@ use App\Services\PaginationService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 
 class CalculationController extends Controller
@@ -33,7 +34,7 @@ class CalculationController extends Controller
         $drivers = $this->paginationService->applyPagination($query, $request);
         return api_response(
             data: Calculation::mappingDriversCalculations($drivers->items()),
-            message: 'Successfully getting drivers and calculations',
+            message: 'تم جلب معلومات الحسابات المالية للسائقين',
             pagination: get_pagination($drivers, $request));
     }
 
@@ -57,9 +58,9 @@ class CalculationController extends Controller
                 'totalDistance' => $totalDistance
             ];
 
-            return api_response(data: ['details' => $details, 'movements' => $movements], message: 'Successfully getting driver movements');
+            return api_response(data: ['details' => $details, 'movements' => $movements], message: 'تم جلب معلومات طلبات السائقين');
         } catch (Exception $e) {
-            return api_response(message: 'There an error in getting the data tray again', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في جلب معلومات طلبات السائقين الرجاء المحاولة مرة أخرى', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -75,15 +76,16 @@ class CalculationController extends Controller
             $bringCount = $driver->calculations()->where('is_bring', false)->count();
 
             if ($bringCount == 0) {
-                return api_response(message: 'The driver has no outstanding payments to bring.');
+                return api_response(message: 'السائق ليس لديه أي مبالغ غير مدفوعة بعد');
             }
-
+            DB::beginTransaction();
             $driver->calculations()->where('is_bring', false)
                 ->update(['is_bring' => true]);
-
-            return api_response(message: 'The outstanding payments have been successfully marked as brought.');
+            DB::commit();
+            return api_response(message: 'تم استلام المبلغ من السائق بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Error bringing payments. Please try again.', code: 500, errors: [$e->getMessage()]);
+            DB::rollBack();
+            return api_response(message: 'هناك خطأ في استلام المبلغ من السائق الرجاء المحاولة مرة أخرى', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -99,9 +101,9 @@ class CalculationController extends Controller
         try {
             $calculation->delete();
 
-            return api_response(message: 'Successfully calculation deleted.');
+            return api_response(message: 'تم حذف الحسابات بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Error in deleted calculation.', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في حذف الحساب بنجاح', code: 500, errors: [$e->getMessage()]);
         }
     }
 }

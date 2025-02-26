@@ -36,7 +36,7 @@ class TaxiController extends Controller
         $taxisDetails = $this->paginationService->applyPagination($query, $request);
 
         $taxis = Taxi::mappingTaxis($taxisDetails->items());
-        return api_response(data: $taxis, message: 'Successfully retrieved taxis', pagination: get_pagination($taxisDetails, $request));
+        return api_response(data: $taxis, message: 'تم جلب بيانات السيارات بنجاح', pagination: get_pagination($taxisDetails, $request));
     }
 
     /**
@@ -53,7 +53,7 @@ class TaxiController extends Controller
             $validatedData = $request->validated();
             $taxi = $driver->taxi;
             if (!$taxi) {
-                return api_response(message: 'This driver don\'t have taxi', code: 404);
+                return api_response(message: 'السائق ليس لديه سيارة', code: 404);
             }
             $taxi->update([
                 'last_location_latitude' => $validatedData['lat'],
@@ -70,9 +70,9 @@ class TaxiController extends Controller
             }else{
                 GetTaxiLocationsEvent::dispatch($taxi);
             }
-            return api_response(message: 'Successfully updating taxi locations.');
+            return api_response(message: 'تم تحديث موقع السيارة بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Error in updating taxi location', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'خطأ في تحديث موقع السيارة', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -91,7 +91,7 @@ class TaxiController extends Controller
             'name' => $taxi->driver?->profile?->name,
         ];
 
-        return api_response(data: $data, message: 'Successfully retrieving life map');
+        return api_response(data: $data, message: 'تم جلب بيانات الخريطة الحية بنجاح');
     }
 
     /**
@@ -105,9 +105,9 @@ class TaxiController extends Controller
         try {
             $validatedData = $request->validated();
             $taxi = Taxi::create($validatedData);
-            return api_response(data: $taxi, message: 'Successfully created taxi');
+            return api_response(data: $taxi, message: 'تم اضافة سيارة بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Error in creating taxi', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في اضافة سيارة', code: 500, errors: [$e->getMessage()]);
         }
     }
 

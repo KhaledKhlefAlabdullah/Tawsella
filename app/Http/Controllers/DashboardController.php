@@ -34,16 +34,16 @@ class DashboardController extends Controller
             'lifeTaxiMovements' => $lifeTaxiMovements,
         ];
 
-        return api_response(data: $data, message: 'Successfully get data');
+        return api_response(data: $data, message: 'تم جلب بيانات لوحة التحكم بنجاح');
     }
 
     /**
      * @param TaxiMovement $taxiMovement
-     * @return JsonResponse\
+     * @return JsonResponse
      */
     public function showRequestDetails(TaxiMovement $taxiMovement){
         $details = $taxiMovement->getSingleLifeTaxiMovementDetails();
-        return api_response(data: $details, message: 'Successfully get taxi movement details');
+        return api_response(data: $details, message: 'تم جلب تفاصيل الطلب بنجاح');
     }
 
     /**
@@ -62,7 +62,7 @@ class DashboardController extends Controller
     public function viewReport()
     {
         $data = User::getReportData(Carbon::today(), Carbon::tomorrow()->subSecond());
-        return api_response(data: $data, message: 'Successfully get data');
+        return api_response(data: $data, message: 'تم جلب بيانات التقرير بنجاح');
     }
 
     /**

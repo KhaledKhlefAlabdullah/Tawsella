@@ -28,7 +28,7 @@ class RatingController extends Controller
         $query = User::query()->with('driver_ratings');
 
         $driversRatings = $this->paginationService->applyPagination($query, $request);
-        return api_response(data: $driversRatings->items(), message: 'Successfully getting drivers ratings.', pagination: get_pagination($driversRatings, $request));
+        return api_response(data: $driversRatings->items(), message: 'تم جلب تقييمات السائقين بنجاح', pagination: get_pagination($driversRatings, $request));
     }
 
     /**
@@ -47,9 +47,9 @@ class RatingController extends Controller
             $rating = Rating::create($validatedData);
             $driver = getAndCheckModelById(User::class, $rating->driver_id);
             $this->updateDriverRating($driver);
-            return api_response(message: 'Successfully getting ratings.');
+            return api_response(message: 'تم جلب التقييمات بنجاح');
         } catch (\Exception $e) {
-            return api_response(message: 'Something went wrong, please try again later.', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في جلب التقييمات', code: 500, errors: [$e->getMessage()]);
         }
     }
 

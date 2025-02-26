@@ -30,9 +30,9 @@ class MessageController extends Controller
             // get chat messages
             $messages = $chat->messages->sortByDesc('created_at');
 
-            return api_response(data: Message::mapingMessages($messages), message: 'Successfully getting messages');
+            return api_response(data: Message::mapingMessages($messages), message: 'تم جلب الرسائل بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Getting messages error', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في جلب الرسائل', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -50,9 +50,9 @@ class MessageController extends Controller
             // if the chat is null get all starred messages for this user else get just starred messages in on chat
             $starredMessages = $user->starredMessages;
 
-            return api_response(data: Message::mapingMessages($starredMessages), message: 'Successfully getting all starred messages');
+            return api_response(data: Message::mapingMessages($starredMessages), message: 'تم جلب الرسائل المميزة بنجمة');
         } catch (Exception $e) {
-            return api_response(message: 'Getting starred messages error', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في جلب الرسائل المميزة بنجمة', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -71,9 +71,9 @@ class MessageController extends Controller
             // if the chat is null get all starred messages for this user else get just starred messages in on chat
             $starredMessages = $user->starredMessages->where('chat_id', $chat->id);
 
-            return api_response(data: Message::mapingMessages($starredMessages), message: 'Successfully getting chat starred messages');
+            return api_response(data: Message::mapingMessages($starredMessages), message: 'تم جلب الرسائل المميزة بنجمة في هذه المحادثة بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Getting starred messages error', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في جلب الرسائل المميزة بنجمة في هذه المحادثة', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -119,9 +119,9 @@ class MessageController extends Controller
 //
 //            send_notifications($receiver, $notificationMessage);
 
-            return api_response(message: 'Successfully sending message');
+            return api_response(message: 'تم ارسال الرسالة بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Sending message error', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في ارسال الرسالة', code: 500, errors: [$e->getMessage()]);
         }
     }
 

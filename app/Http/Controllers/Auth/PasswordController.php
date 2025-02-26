@@ -30,10 +30,10 @@ class PasswordController extends Controller
                 'password' => Hash::make($validated['new_password']),
             ]);
 
-            return api_response(message: 'Successfully change password');
+            return api_response(message: 'تم تغيير كلمة المرور بنجاح');
 
         } catch (Exception $e) {
-            return api_response(message: 'Error change password', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في تغيير كلمة المرور', code: 500, errors: [$e->getMessage()]);
         }
     }
 }

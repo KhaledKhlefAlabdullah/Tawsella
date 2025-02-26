@@ -54,7 +54,7 @@ class TaxiMovementController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
 
-        return api_response(data: TaxiMovement::mappingMovements($movements), message: 'Successfully getting movement ');
+        return api_response(data: TaxiMovement::mappingMovements($movements), message: 'تم جلب بيانات الرحلات بنجاح');
     }
 
     /**
@@ -70,7 +70,7 @@ class TaxiMovementController extends Controller
 
         $taxiMovement = $this->paginationService->applyPagination($query, $request);
 
-        return api_response(data: TaxiMovement::mappingMovements($taxiMovement->items()), message: 'Successfully getting life taxiMovements.', pagination: get_pagination($taxiMovement, $request));
+        return api_response(data: TaxiMovement::mappingMovements($taxiMovement->items()), message: 'تم جلب بيانات الرحلات الحية بنجاح', pagination: get_pagination($taxiMovement, $request));
     }
 
     /**
@@ -84,7 +84,7 @@ class TaxiMovementController extends Controller
 
         $completedRequests = $this->paginationService->applyPagination($query, $request);
 
-        return api_response(data: TaxiMovement::mappingMovements($completedRequests->items()), message: 'Successfully getting completed taxiMovements.', pagination: get_pagination($completedRequests, $request));
+        return api_response(data: TaxiMovement::mappingMovements($completedRequests->items()), message: 'تم جلب بيانات الرحلات المكتملة بنجاح', pagination: get_pagination($completedRequests, $request));
     }
 
     /**
@@ -98,7 +98,7 @@ class TaxiMovementController extends Controller
 
         $completedRequests = $this->paginationService->applyPagination($query, $request);
 
-        return api_response(data: TaxiMovement::mappingMovements($completedRequests->items()), message: 'Successfully getting completed taxiMovements.', pagination: get_pagination($completedRequests, $request));
+        return api_response(data: TaxiMovement::mappingMovements($completedRequests->items()), message: 'تم جلب بيانات الرحلات الملغية بنجاح', pagination: get_pagination($completedRequests, $request));
     }
 
     /**
@@ -116,7 +116,7 @@ class TaxiMovementController extends Controller
             'name' => $taxiMovement->driver?->profile?->name,
             'path' => json_decode($taxiMovement->path) ?? []
         ];
-        return api_response(data: $data, message: 'Successfully getting map taxiMovement.');
+        return api_response(data: $data, message: 'تم جلب بيانات الخريطة للطلب بنجاح');
     }
 
     /**
@@ -150,9 +150,9 @@ class TaxiMovementController extends Controller
                     'message' => "The user {$userName} requested a new movement request."
                 ],
             ]);
-            return api_response(data: ['movement_id' => $taxiMovement->id], message: 'Successfully creating movement');
+            return api_response(data: ['movement_id' => $taxiMovement->id], message: 'تم انشاء طلب بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Error in creating taxi movement', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في إنشاء طلب', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -172,10 +172,10 @@ class TaxiMovementController extends Controller
             $validatedData = $request->validated();
             $driver = User::find($validatedData['driver_id']);
             if ($driver->driver_state != DriverState::Ready) {
-                return api_response(message: 'This driver is currently unavailable. Please try another driver.', code: 409);
+                return api_response(message: 'هذا السائق غير متاح حاليا، حاول مع سائق أخر من فضلك', code: 409);
             }
             $state = MovementRequestStatus::Accepted;
-            $message = __('accepted-movement-success');
+            $message = 'تم قبول الطلب بنجاح';
             $processMovementStateRequest = User::processMovementState($taxiMovement, $state, $message, $driver);
             if ($processMovementStateRequest) {
                 return $processMovementStateRequest;
@@ -229,7 +229,7 @@ class TaxiMovementController extends Controller
 
             return api_response(message: $message);
         } catch (Exception $e) {
-            return api_response(message: 'Error in accept movement', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في قبول الطلب', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -284,9 +284,9 @@ class TaxiMovementController extends Controller
             if (!is_null($customerRecipientValue))
                 $this->fcmNotificationService->sendNotification($customerPayload, $customerRecipientValue);
 
-            return api_response(message: 'Successfully rejecting movement');
+            return api_response(message: 'تم رفض الطلب بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Error in rejecet movement', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في رفض الطلب', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -321,9 +321,9 @@ class TaxiMovementController extends Controller
                 $taxiMovement->state_message = __('customer-was-not-found');
             }
 
-            return api_response(message: 'Successfully found customer');
+            return api_response(message: 'تم ايجاد الزبون بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Error in find customer', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'حصل خطأ أثناء تعليم الزبون كموجود', code: 500, errors: [$e->getMessage()]);
         }
     }
 

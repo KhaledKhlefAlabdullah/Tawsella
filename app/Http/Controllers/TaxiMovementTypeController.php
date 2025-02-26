@@ -35,7 +35,7 @@ class TaxiMovementTypeController extends Controller
             ])->first();
 
         if (!$KMprice) {
-            return api_response(message: 'No KM price found', code: 404);
+            return api_response(message: 'لا يوجد سعر للكيلومتر حالياً', code: 404);
         }
 
         $data = [
@@ -45,7 +45,7 @@ class TaxiMovementTypeController extends Controller
             'payment2' => PaymentTypesEnum::getKey($KMprice->payment2)
         ];
 
-        return api_response(data: $data, message: 'Successfully getting KM price');
+        return api_response(data: $data, message: 'تم جلب سعر الكيلومتر بنجاح');
     }
 
     /**
@@ -60,7 +60,7 @@ class TaxiMovementTypeController extends Controller
 
         $generalMovementTypes = TaxiMovementType::where('is_general', true)->get();
 
-        $message = 'Successfully getting movements types';
+        $message = 'تم جلب انواع الرحلات بنجاح';
         return api_response(
             data: [
                 'movementTypes' => TaxiMovementType::mappingMovementTypes($generalMovementTypes),
@@ -77,7 +77,7 @@ class TaxiMovementTypeController extends Controller
      */
     public function show(TaxiMovementType $movement_type)
     {
-        return api_response(data: TaxiMovementType::mappingSingleMovementType($movement_type), message: 'Successfully getting movements types details.');
+        return api_response(data: TaxiMovementType::mappingSingleMovementType($movement_type), message: 'تم جلب تفاصيل نوع الطلب بنجاح');
     }
 
     /**
@@ -96,9 +96,9 @@ class TaxiMovementTypeController extends Controller
                 $validatedData['payment2'] = PaymentTypesEnum::getValue($validatedData['payment2']);
             }
             $movement_type = TaxiMovementType::create($validatedData);
-            return api_response(data: TaxiMovementType::mappingSingleMovementType($movement_type), message: 'Successfully creating movements type');
+            return api_response(data: TaxiMovementType::mappingSingleMovementType($movement_type), message: 'تم اضافة نوع رحلة جديد');
         } catch (Exception $e) {
-            return api_response(message: 'Error in creating movements type', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في اضافة نوع رحلة جديد', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -119,9 +119,9 @@ class TaxiMovementTypeController extends Controller
                 $validatedData['payment2'] = PaymentTypesEnum::getValue($validatedData['payment2']);
             }
             $movement_type->update($validatedData);
-            return api_response(data: TaxiMovementType::mappingSingleMovementType($movement_type), message: 'Successfully updating movements type');
+            return api_response(data: TaxiMovementType::mappingSingleMovementType($movement_type), message: 'تم تحديث نوع الطلب بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Error in updating movements type', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في تحديث نوع الطلب', code: 500, errors: [$e->getMessage()]);
         }
     }
 

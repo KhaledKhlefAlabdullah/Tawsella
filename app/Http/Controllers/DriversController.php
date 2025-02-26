@@ -39,7 +39,7 @@ class DriversController extends Controller
         $drivers = $this->paginationService->applyPagination($query, $request);
 
         $mappedDrivers = User::mappingDrivers($drivers->items());
-        return api_response(data: $mappedDrivers, message: 'Successfully getting drivers.', pagination: get_pagination($drivers, $request));
+        return api_response(data: $mappedDrivers, message: 'تم جلب بيانات السائقين بنجاح', pagination: get_pagination($drivers, $request));
     }
 
     /**
@@ -50,7 +50,7 @@ class DriversController extends Controller
     {
         $readyDrivers = User::getReadyDrivers();
 
-        return api_response(data: $readyDrivers, message: 'Successfully getting ready drivers.');
+        return api_response(data: $readyDrivers, message: 'تم جلب بيانات السائقين المتاحين بنجاح');
     }
 
     /**
@@ -73,9 +73,9 @@ class DriversController extends Controller
         try {
             $driver = User::mappingSingleDriver($driver);
 
-            return api_response(data: $driver, message: 'Successfully getting driver details.');
+            return api_response(data: $driver, message: 'تم جلب بيانات السائق بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Error in getting driver details.', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في جلب بيانات السائق', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -94,10 +94,10 @@ class DriversController extends Controller
             User::handelUpdateDetails($driver, $validatedData);
 
             DB::commit();
-            return api_response(data: User::mappingSingleDriver($driver), message: 'Profile updated successfully.');
+            return api_response(data: User::mappingSingleDriver($driver), message: 'تم تحديث الملف الشخصي بنجاح');
         } catch (Exception $e) {
             DB::rollBack();
-            return api_response(message: 'Profile updated error.', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في تحديث الملف الشخصي', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -151,9 +151,9 @@ class DriversController extends Controller
                 $taxi->update(['driver_id' => null]);
             }
             $driver->delete();
-            return api_response(message: 'Successfully deleted driver.');
+            return api_response(message: 'تم حذف السائق بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Error in deleting driver', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في حذف السائق', code: 500, errors: [$e->getMessage()]);
         }
     }
 }

@@ -67,6 +67,7 @@ trait CustomerTrait
         $existsRequest = TaxiMovement::where('customer_id', $customer_id)
             ->where('created_at', '>=', Carbon::now()->subMinutes(10))
             ->where('is_canceled', false)
+            ->where('is_completed', false)
             ->latest()
             ->first();
 

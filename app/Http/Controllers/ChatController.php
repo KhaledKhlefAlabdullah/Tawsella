@@ -63,7 +63,7 @@ class ChatController extends Controller
         });
 
         // Return response with formatted chat data
-        return api_response(data: $chats, message: 'Successfully getting chats', pagination: get_pagination($chatsQ, $request));
+        return api_response(data: $chats, message: 'تم جلب المحادثات بنجاح', pagination: get_pagination($chatsQ, $request));
     }
 
     /**
@@ -80,10 +80,10 @@ class ChatController extends Controller
                 return $createChatBetweenUsersRequest;
             }
             DB::commit();
-            return api_response(message: 'Successfully creating chat');
+            return api_response(message: 'تم إنشاء المحادثة بنجاح');
         } catch (Exception $e) {
             DB::rollBack();
-            return api_response(message: 'Error in creating chat', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في إنشاء المحادثة', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -96,9 +96,9 @@ class ChatController extends Controller
     {
         try {
             $chat->delete();
-            return api_response(message: 'Successfully deleting chat');
+            return api_response(message: 'تم حذف المحادثة بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Error in deleting chat', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في حذف المحادثة', code: 500, errors: [$e->getMessage()]);
         }
     }
 }

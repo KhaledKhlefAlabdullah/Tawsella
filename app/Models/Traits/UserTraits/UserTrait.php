@@ -108,7 +108,7 @@ trait UserTrait
                 $user->save();
                 DB::commit();
 
-                return api_response(data: ['user' => $user, 'profile' => $user->profile], message: 'Register success');
+                return api_response(data: ['user' => $user, 'profile' => $user->profile], message: 'تم تسجيل الدخول بنجاح');
             }
 
             // Default role for other users
@@ -119,14 +119,14 @@ trait UserTrait
             $token = createUserToken($user, 'register-token');
 
             DB::commit();
-            return api_response(data: ['token' => $token, 'user' => $user, 'profile' => $user->profile, 'mail_code_verified_at' => $user->mail_code_verified_at], message: 'Register success');
+            return api_response(data: ['token' => $token, 'user' => $user, 'profile' => $user->profile, 'mail_code_verified_at' => $user->mail_code_verified_at], message: 'تم تسجيل الدخول بنجاح');
 
         } catch (QueryException $e) {
             DB::rollBack();
-            return api_response(message: 'Database error during registration', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'حصل خطأ في قاعدة البيانات اثناء التسجيل', code: 500, errors: [$e->getMessage()]);
         } catch (Exception $e) {
             DB::rollBack();
-            return api_response(message: 'Registration failed', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'فشل تسجيل الدخول', code: 500, errors: [$e->getMessage()]);
         }
     }
 

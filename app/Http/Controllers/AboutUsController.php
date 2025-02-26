@@ -23,7 +23,7 @@ class AboutUsController extends Controller
     {
         $aboutUsRecords = AboutUs::select('id', 'title', 'description', 'complaints_number', 'image')->where('is_general', true)->orderBy('created_at', 'desc')->get();
         $additional_info = AboutUs::select('id', 'title', 'description', 'image')->where('is_general', false)->orderBy('created_at', 'desc')->get();
-        return api_response(data: ['aboutUsRecords' => $aboutUsRecords, 'additional_info' => $additional_info], message: 'Successfully retrieved about us.');
+        return api_response(data: ['aboutUsRecords' => $aboutUsRecords, 'additional_info' => $additional_info], message: 'تم جلب معلومات حولنا بنجاح');
     }
 
     /**
@@ -50,7 +50,7 @@ class AboutUsController extends Controller
                     'image' => $imagePath
                 ]);
 
-                $message = 'Successfully created about us.';
+                $message = 'تم انشاء ملعومات حولنا بنجاح';
             } else {
                 $imagePath = $validatedData['image'] ? editFile($aboutUs->image, '/images/aboutUs', $validatedData['image']) : $aboutUs->image;
                 $aboutUs->update([
@@ -60,12 +60,12 @@ class AboutUsController extends Controller
                     'image' => $imagePath ?? $aboutUs->image
                 ]);
 
-                $message = 'Successfully updated about us.';
+                $message = 'تم تحديث معلومات حولنا بنجاح';
             }
 
             return api_response(data: $aboutUs, message: $message);
         } catch (Exception $e) {
-            return api_response(message: 'There error in processed data.', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في معالجة البيانات', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -88,10 +88,10 @@ class AboutUsController extends Controller
                 'image' => $imagePath
             ]);
 
-            return api_response(data: $data, message: 'Successfully created additional info.');
+            return api_response(data: $data, message: 'تم اضافة المعلومات الاضافية بنجاح');
 
         } catch (Exception $e) {
-            return api_response(message: 'Error in create additional info', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'خطأ في اضافة المعلومات الاضافية', code: 500, errors: [$e->getMessage()]);
         }
     }
 

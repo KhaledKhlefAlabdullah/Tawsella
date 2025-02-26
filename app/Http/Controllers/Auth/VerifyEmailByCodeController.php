@@ -30,11 +30,11 @@ class VerifyEmailByCodeController extends Controller
 
                 $user->sendEmailVerificationNotification(true);
 
-                return api_response(code: 500, errors: 'The confirmation code has expired. Please try again.');
+                return api_response(code: 500, errors: 'انتهت صلاحية كود التحقق الخاص بك الرجاء المحاولة مرة أخرى');
             } else {
 
                 $user->markEmailAsVerified();
-                return api_response(message: 'Your account has been successfully verified.');
+                return api_response(message: 'تم تأكيد حسابك بنجاح.');
             }
         }
 
@@ -60,7 +60,7 @@ class VerifyEmailByCodeController extends Controller
 
                 // Send new code and set new attempts when the user is no longer banned
                 $user->sendEmailVerificationNotification(true);
-                return api_response(message: 'A new code has been sent to your email.', code: 500);
+                return api_response(message: 'تم إرسال رمز تحقق جديد إلى بريدك', code: 500);
             }
 
             $user->decrement('mail_code_attempts_left');

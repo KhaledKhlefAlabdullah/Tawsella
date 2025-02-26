@@ -33,9 +33,9 @@ class UserProfileController extends Controller
                 'email' => $user->email,
                 'address' => $user->profile?->address,
             ];
-            return api_response(data: $profile, message: 'Profile retrieved successfully.');
+            return api_response(data: $profile, message: 'تم جلب بيانات الملف الشخصي بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Profile retrieved error.', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في جلب بيانات الملف الشخصي', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -64,10 +64,10 @@ class UserProfileController extends Controller
             ];
 
             DB::commit();
-            return api_response(data: $profile,message: 'Profile updated successfully.');
+            return api_response(data: $profile,message: 'تم تحديث الملف الشخصي بنجاح');
         } catch (Exception $e) {
             DB::rollBack();
-            return api_response(message: 'Profile updated error.', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في تحديث الملف الشخصي', code: 500, errors: [$e->getMessage()]);
         }
     }
 

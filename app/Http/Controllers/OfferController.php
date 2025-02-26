@@ -27,10 +27,10 @@ class OfferController extends Controller
         $validOffers = Offer::getOffers();
         $authUser = Auth::user();
         if (!$authUser || $authUser && !$authUser->hasRole(UserType::Admin()->key))
-            return api_response(data: $validOffers, message: 'Successfully getting offers');
+            return api_response(data: $validOffers, message: 'تم جلب العروض بنجاح');
         $endedOffers = Offer::getOffers('<');
         $response = ['validOffers' => $validOffers, 'endedOffers' => $endedOffers];
-        return api_response(data: $response, message: 'Successfully getting offers');
+        return api_response(data: $response, message: 'تم جلب العروض بنجاح');
     }
 
     /**
@@ -49,9 +49,9 @@ class OfferController extends Controller
 
             $offer = Offer::create($validatedData);
 
-            return api_response(data: $offer, message: 'Successfully created offer.');
+            return api_response(data: $offer, message: 'تم إضافة عرض جديد بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Error in creating offer.', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في اضافة عرض', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -62,7 +62,7 @@ class OfferController extends Controller
      */
     public function show(Offer $offer)
     {
-        return api_response(data: Offer::getOfferDetails($offer), message: 'Successfully getting offer details');
+        return api_response(data: Offer::getOfferDetails($offer), message: 'تم جلب تفاصيل العرض بنجاح');
     }
 
     /**
@@ -81,9 +81,9 @@ class OfferController extends Controller
 
             $offer->update($validatedData);
 
-            return api_response(data: $offer, message: 'Successfully updated offer.');
+            return api_response(data: $offer, message: 'تم تحديث العرض بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Error in updating offer.', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'هناك خطأ في تحديث العرض', code: 500, errors: [$e->getMessage()]);
         }
     }
 
