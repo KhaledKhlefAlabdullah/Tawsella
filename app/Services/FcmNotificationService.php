@@ -52,18 +52,20 @@ class FcmNotificationService
         $notificationPayload = [
             'message' => [
                 $recipientType => $recipientValue, // 'topic' or 'token'
-                'notification' => [
-                    'title' => $payload['notification']['title'] ?? 'Default Title',
-                    'body' => $payload['notification']['body'] ?? 'Default Body',
-                ],
+//                'notification' => [
+//                    'title' => $payload['notification']['title'] ?? 'Default Title',
+//                    'body' => $payload['notification']['body'] ?? 'Default Body',
+//                ],
                 'android' => [
-                    'priority' => 'HIGH',
-//                    'notification' => [
-//                        'channel_id' => 'channel_id2',
-//                        'sound' => 'default',
-//                        'notification_priority' => 'PRIORITY_HIGH',
-//                        'visibility' => 'PUBLIC'
-//                    ]
+//                    'priority' => 'HIGH',
+                    'notification' => [
+                        'channel_id' => 'channel_id2',
+                        'sound' => 'default',
+                        'notification_priority' => 'PRIORITY_HIGH',
+                        'visibility' => 'PUBLIC',
+                        'title' => $payload['notification']['title'] ?? 'Default Title',
+                        'body' => $payload['notification']['body'] ?? 'Default Body',
+                    ]
                 ],
                 'apns' => [
                     'headers' => [
