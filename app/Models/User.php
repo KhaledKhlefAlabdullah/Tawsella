@@ -16,7 +16,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements IMustVerifyEmailByCode
+class User extends Authenticatable
+    // Use it if you want to verify the users: implements IMustVerifyEmailByCode
 {
     use HasApiTokens, HasFactory, Notifiable, HasUuid, HasRoles, UserTrait, DriverTrait, CustomerTrait, AdminTrait;
 
