@@ -57,6 +57,7 @@ class FcmNotificationService
                     'body' => $payload['notification']['body'] ?? 'Default Body',
                 ],
                 'android' => [
+                    'priority' => 'HIGH',
                     'notification' => [
                         'channel_id' => 'channel_id2',
                         'sound' => 'default',
@@ -68,7 +69,6 @@ class FcmNotificationService
                         'key1' => 'value1',
                         'key2' => 'value2',
                     ],
-                'priority' => 'high',
             ],
         ];
 
