@@ -23,13 +23,13 @@ Broadcast::routes(['middleware' => ['auth:sanctum']]);
 // to verify the email use this 'verified.email' in middleware
 // Also check the user model
 Route::middleware(['auth:sanctum'])->group(function () {
-    require __DIR__.'/Roles/driver.php';
-    require __DIR__.'/Roles/customer.php';
+    require __DIR__ . '/Roles/driver.php';
+    require __DIR__ . '/Roles/customer.php';
     require __DIR__ . '/Roles/admin.php';
-    require __DIR__.'/Roles/allAuthUsers.php';
+    require __DIR__ . '/Roles/allAuthUsers.php';
 });
 
-Route::post('test', function () {
+Route::post('test', function (string $recepint) {
     $admin = User::find(getAdminId());
     $fcm = new \App\Services\FcmNotificationService();
     $customerPayload = [
@@ -39,9 +39,9 @@ Route::post('test', function () {
         ]
     ];
     return $fcm->sendNotification($customerPayload,
-        'eyroUh6-Tn68EIXmwC7mKj:APA91bFGosFTIz0lYsl3XWTrJfMP_Z3sH7HfaA4uybBsHbgAconlgFN3fApi5do-ABYChtCv10HaxRApxvoIo00CiMmlu3z2e-yegeFYS8gBzXnqSB6mwbo'
+        $recepint
     );
 });
-require __DIR__.'/Roles/publicApis.php';
+require __DIR__ . '/Roles/publicApis.php';
 require __DIR__ . '/auth.php';
 
