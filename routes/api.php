@@ -31,13 +31,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 Route::post('test', function () {
     $admin = User::find(getAdminId());
-
-    return send_notifications($admin, [
-        'title' => 'new movement request',
-        'body' => [
-            'message' => 'The user requested a new movement request.'
-        ],
-    ]);
+    $fcm = new \App\Services\FcmNotificationService();
+    $customerPayload = [
+        'notification' => [
+            'title' => 'تم قبول طلبك!',
+            'body' => 'الطلب الذي أرسلته منذ قليل تم قبوله بنجاح.'
+        ]
+    ];
+    return $fcm->sendNotification($customerPayload,
+        'edphC3L4SbqyzA2IxMf60l:APA91bG7NHDd78D70aBGLUNzMDqQXmlB69a2BjFsC5V9DOH2gX0a5_DR0HfbCihXWRfxqiWT85hd-QYBpo1PMd_uutoZ_rDER_zlkJHV_Fw-UQV3wtOEfjk'
+    );
 });
 require __DIR__.'/Roles/publicApis.php';
 require __DIR__ . '/auth.php';
