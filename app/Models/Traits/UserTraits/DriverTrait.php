@@ -58,8 +58,7 @@ trait DriverTrait
                 'name' => $driver->profile?->name,
                 'gender' => UserGender::getKey($driver->profile?->gender ?? 0),
                 'avatar' => $driver->profile?->avatar,
-                'age' => $driver->profile?->birthdate ? now()->diffInYears($driver->profile->birthdate) : null,
-            ];
+                'age' => optional($driver->profile)->birthdate ? now()->diffInYears(optional($driver->profile)->birthdate) : null,];
         });
     }
 
@@ -138,8 +137,7 @@ trait DriverTrait
             'email' => $driver->email,
             'phone_number' => $driver->profile?->phone_number,
             'avatar' => $driver->profile?->avatar,
-            'age' => $driver->profile?->birthdate ? now()->diffInYears($driver->profile->birthdate) : null,
-            'is_active' => $driver->is_active,
+            'age' => optional($driver->profile)->birthdate ? now()->diffInYears(optional($driver->profile)->birthdate) : null, 'is_active' => $driver->is_active,
             'has_taxi' => $driver->taxi()->exists(),
             'unBring' => $unBring,
             'driver_state' => DriverState::getKey($driver->driver_state),
