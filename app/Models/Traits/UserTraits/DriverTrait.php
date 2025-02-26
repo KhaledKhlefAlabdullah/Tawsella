@@ -138,6 +138,7 @@ trait DriverTrait
             'email' => $driver->email,
             'phone_number' => $driver->profile?->phone_number,
             'avatar' => $driver->profile?->avatar,
+            'age' => $driver->profile?->birthdate ? now()->diffInYears($driver->profile->birthdate) : null,
             'is_active' => $driver->is_active,
             'has_taxi' => $driver->taxi()->exists(),
             'unBring' => $unBring,
