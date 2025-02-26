@@ -14,6 +14,7 @@ Route::group(['prefix' => 'profile', 'controller' => UserProfileController::clas
     Route::get('/', 'index');
     Route::post('/', 'update');
 });
+Route::delete('/delete-account/{user}', [UserProfileController::class, 'destroy']);
 /**
  * End Profile Management
  */

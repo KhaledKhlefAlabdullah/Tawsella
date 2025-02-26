@@ -72,7 +72,18 @@ class UserProfileController extends Controller
     }
 
     /**
+     * @param User $user
      * @return JsonResponse
      */
-
+    public function destroy(User $user){
+        try {
+            DB::beginTransaction();
+            $user->delete();
+            DB::commit();
+            return api_response(message: 'تم حذف المستخدم بنجاح');
+        }catch (Exception $e) {
+            DB::rollBack();
+            return api_response(message: 'هناك خطأ في حذف الحساب', code: 500, errors: [$e->getMessage()]);
+        }
+    }
 }
