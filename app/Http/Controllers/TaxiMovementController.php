@@ -432,15 +432,9 @@ class TaxiMovementController extends Controller
 
                     $driverPayload = [
                         'notification' => [
-                            'title' => 'Movement canceled!',
-                            'body' => 'The customer canceled the movement.',
-                        ],
-                        'data' => [
-                            'request_id' => (string) ($payload['data']['request_id'] ?? ''),
-                            'customer' => json_encode($payload['data']['customer'] ?? []), // حول المصفوفة إلى JSON
-                            'message' => $payload['data']['message'] ?? '',
-                            'taxiMovementInfo' => json_encode($payload['data']['taxiMovementInfo'] ?? [])
-                        ],
+                            'title' => 'تم إلغاء الطلب!',
+                            'body' => 'قام المستخدم بالغاء الطلب.',
+                        ]
                     ];
 
                     $driveResentValue = $driver->device_token;
