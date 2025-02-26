@@ -39,7 +39,7 @@ Route::post('test', function () {
         ]
     ];
     return $fcm->sendNotification($customerPayload,
-        'edphC3L4SbqyzA2IxMf60l:APA91bG7NHDd78D70aBGLUNzMDqQXmlB69a2BjFsC5V9DOH2gX0a5_DR0HfbCihXWRfxqiWT85hd-QYBpo1PMd_uutoZ_rDER_zlkJHV_Fw-UQV3wtOEfjk'
+        'e-DWambjTBap1jr1IoPV-q:APA91bEDFPWDQPCgW_kcXi1MDp_rU2jT38areLxc3nHKaMbT0rsjS4e44rO1GPnXhekEgQT9U28sGTEPa58GgzK5PUW9NZAoG1RTgdhGXYxTLJc7Al4a3Q4'
     );
 });
 require __DIR__.'/Roles/publicApis.php';
