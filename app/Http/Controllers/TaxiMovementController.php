@@ -403,11 +403,12 @@ class TaxiMovementController extends Controller
                 'is_canceled' => true
             ]);
 
-            CustomerCanceledMovementEvent::dispatch($taxiMovement);
             $profile = optional($taxiMovement->customer)->profile ? $taxiMovement->customer->profile->toArray() : 'Guest';
 
             $adminId = getAdminId();
             if ($adminId) {
+                CustomerCanceledMovementEvent::dispatch($taxiMovement);
+
                 $admin = User::find($adminId);
                 if ($admin) {
                     send_notifications($admin->id, [
@@ -435,7 +436,7 @@ class TaxiMovementController extends Controller
                             'body' => 'The customer canceled the movement.',
                         ],
                         'data' => [
-                            'request_id' => (string)$taxiMovement->id,
+//                            'request_id' => (string)$taxiMovement->id,
                             'customer' => optional($taxiMovement->customer->profile)->toArray() ?? 'Guest',
                             'message' => 'The customer canceled the movement',
                             'taxiMovementInfo' => $this->getDriverData($taxiMovement),
