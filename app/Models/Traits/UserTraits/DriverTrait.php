@@ -8,6 +8,7 @@ use App\Enums\UserEnums\UserType;
 use App\Models\TaxiMovement;
 use App\Models\User;
 use BenSampo\Enum\Exceptions\InvalidEnumMemberException;
+use Illuminate\Support\Carbon;
 
 trait DriverTrait
 {
@@ -58,7 +59,10 @@ trait DriverTrait
                 'name' => $driver->profile?->name,
                 'gender' => UserGender::getKey($driver->profile?->gender ?? 0),
                 'avatar' => $driver->profile?->avatar,
-                'age' => optional($driver->profile)->birthdate ? now()->diffInYears(optional($driver->profile)->birthdate) : null,];
+                'age' => optional($driver->profile)->birthdate
+                    ? now()->diffInYears(Carbon::parse($driver->profile->birthdate)) . ' سنة'
+                    : 'غير متوفر',
+            ];
         });
     }
 
@@ -137,8 +141,9 @@ trait DriverTrait
             'email' => $driver->email,
             'phone_number' => $driver->profile?->phone_number,
             'avatar' => $driver->profile?->avatar,
-            'age' => optional($driver->profile)->birthdate ? now()->diffInYears(optional($driver->profile)->birthdate) : null, 'is_active' => $driver->is_active,
-            'has_taxi' => $driver->taxi()->exists(),
+            'age' => optional($driver->profile)->birthdate
+                ? now()->diffInYears(Carbon::parse($driver->profile->birthdate)) . ' سنة'
+                : 'غير متوفر',            'has_taxi' => $driver->taxi()->exists(),
             'unBring' => $unBring,
             'driver_state' => DriverState::getKey($driver->driver_state),
             'plate_number' => $driver->taxi?->plate_number,
