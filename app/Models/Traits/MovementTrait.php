@@ -55,6 +55,7 @@ trait MovementTrait
                 'driver_phone' => $movement->driver->profile?->phone_number ?? null,
                 'customer_name' => $movement->customer->profile?->name ?? null,
                 'customer_phone' => $movement->customer->profile?->phone_number ?? null,
+                'customer_address' => $movement->customer->profile?->address ?? null,
                 'taxi_id' => $movement->taxi_id ?? null,
                 'car_name' => $movement->taxi->car_name ?? null,
                 'car_lamp_number' => $movement->taxi->lamp_number ?? null,
