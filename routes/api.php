@@ -30,7 +30,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 Route::post('test/{recepint}', function (string $recepint) {
-    $admin = User::find(getAdminId());
     $fcm = new \App\Services\FcmNotificationService();
     $customerPayload = [
         'notification' => [

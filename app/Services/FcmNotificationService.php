@@ -77,6 +77,8 @@ class FcmNotificationService
                             'sound' => 'default',
                             'content-available' => 1,
                             'mutable-content' => 1,
+                            'title' => $payload['notification']['title'] ?? 'Default Title',
+                            'body' => $payload['notification']['body'] ?? 'Default Body',
                         ]
                     ]
                 ],
