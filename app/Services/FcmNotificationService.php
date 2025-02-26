@@ -60,7 +60,6 @@ class FcmNotificationService
                     'notification' => [
                         'channel_id' => 'channel_id2',
                         'sound' => 'default',
-                        'priority' => 'high',
                         'notification_priority' => 'PRIORITY_HIGH',
                         'visibility' => 'PUBLIC'
                     ]
@@ -69,6 +68,7 @@ class FcmNotificationService
                         'key1' => 'value1',
                         'key2' => 'value2',
                     ],
+                'priority' => 'high',
             ],
         ];
 
