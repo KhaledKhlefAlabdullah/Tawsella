@@ -59,7 +59,7 @@ class FcmNotificationService
                 'android' => [
                     'priority' => 'HIGH',
                     'notification' => [
-                        'channel_id' => 'channel_id2',
+                        'channel_id' => 'channel_id',
                         'sound' => 'default',
                         'notification_priority' => 'PRIORITY_HIGH',
                         'visibility' => 'PUBLIC',
