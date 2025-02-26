@@ -68,7 +68,15 @@ class FcmNotificationService
                 'apns' => [
                     'headers' => [
                         'apns-priority' => '10',
+                        'apns-push-type' => 'alert',
                     ],
+                    'payload' => [
+                        'aps' => [
+                            'sound' => 'default',
+                            'content-available' => 1,
+                            'mutable-content' => 1,
+                        ]
+                    ]
                 ],
                 'data' => $payload['data'] ??  [
                         'key1' => 'value1',
