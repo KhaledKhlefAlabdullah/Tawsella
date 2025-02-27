@@ -17,7 +17,9 @@ use App\Http\Controllers\TaxiMovementTypeController;
 Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     //*****************************Start route movements types******************************** */
     //*********************************************************************************** */
-    Route::apiResource('movement-types', TaxiMovementTypeController::class)->except(['index', 'show']);
+    Route::apiResource('movement-types', TaxiMovementTypeController::class)->except(['index', 'show','destroy']);
+    Route::delete('movement-types/m-inside/{movement_type}', [TaxiMovementTypeController::class, 'destroy']);
+    Route::delete('movement-types/m-out/{movement_type}', [TaxiMovementTypeController::class, 'destroy']);
     //*****************************End route movements types******************************** */
     //************************************************************************************** */
 
