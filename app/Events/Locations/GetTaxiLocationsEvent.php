@@ -57,7 +57,7 @@ class GetTaxiLocationsEvent implements ShouldBroadcast
 
     public function broadcastWith(): array
     {
-        $driversLocations = $this->getDriversLocations();
+//        $driversLocations = $this->getDriversLocations();
         $driver = User::with(['profile'])->where('id',$this->taxi->driver_id)->first();
         $data = [
             'driver_id' => $driver->id,
@@ -71,9 +71,9 @@ class GetTaxiLocationsEvent implements ShouldBroadcast
             $data = array_merge($data, ['path' => $this->path]);
         }
 
-        if($driversLocations) {
-            $data = array_merge($data, ['drivers_locations' => $driversLocations]);
-        }
+//        if($driversLocations) {
+//            $data = array_merge($data, ['drivers_locations' => $driversLocations]);
+//        }
         return $data;
     }
 
