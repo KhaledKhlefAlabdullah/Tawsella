@@ -114,9 +114,11 @@ class DriversController extends Controller
             $driver = Auth::user();
 
             if ($validatedData['state'] == DriverState::InBreak) {
-                $message = 'Driver is in_break';
+                $message = 'السائق في استراحة';
+                $state = 'في استراحة';
             } elseif ($validatedData['state'] == DriverState::Ready) {
-                $message = 'Driver is Ready';
+                $message = 'السائق مستعد';
+                $state = 'جاهز';
             }
 
             $driver->driver_state = $validatedData['state'];
@@ -124,7 +126,7 @@ class DriversController extends Controller
             $notification = [
                 'title' => $message.'!',
                 'body' => [
-                    'message' => 'The driver is '.DriverState::getKey($validatedData['state']).' now',
+                    'message' => 'السائق '.$state.' الأن',
                     'driver' => $driver->profile
                 ]
             ];

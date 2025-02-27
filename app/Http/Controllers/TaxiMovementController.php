@@ -145,9 +145,9 @@ class TaxiMovementController extends Controller
             $userName = Auth::check() ? Auth::user()->profile->name : 'Guest';
 
             send_notifications($admin, [
-                'title' => 'new movement request',
+                'title' => 'طلب تكسي جديد',
                 'body' => [
-                    'message' => "The user {$userName} requested a new movement request."
+                    'message' => "المستخدم {$userName} قام بطلب سيارة"
                 ],
             ]);
             return api_response(data: ['movement_id' => $taxiMovement->id], message: 'تم انشاء طلب بنجاح');
