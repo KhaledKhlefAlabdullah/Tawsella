@@ -22,7 +22,7 @@ class AboutUsController extends Controller
     public function index()
     {
         $aboutUsRecords = AboutUs::select('id', 'title', 'description', 'complaints_number', 'image')->where('is_general', true)->orderBy('created_at', 'desc')->get();
-        $additional_info = AboutUs::select('id', 'title', 'description', 'image')->where('is_general', false)->orderBy('created_at', 'desc')->get();
+        $additional_info = AboutUs::select('id', 'title', 'description', 'image')->where(['is_general', false, 'is_social' => false])->orderBy('created_at', 'desc')->get();
         return api_response(data: ['aboutUsRecords' => $aboutUsRecords, 'additional_info' => $additional_info], message: 'تم جلب معلومات حولنا بنجاح');
     }
 
