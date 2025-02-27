@@ -24,6 +24,7 @@ class Calculation extends Model
         'additional_amount',
         'reason',
         'is_bring',
+        'coin'
     ];
 
     public function driver(){
