@@ -152,8 +152,9 @@ if (!function_exists('removeFile')) {
      */
     function removeFile($path): string
     {
+        $fullPath = public_path($path);
         // Delete the old file from storage
-        if (file_exists(public_path($path)) && !in_array($path, ['/images/profile/man', '/images/profile/woman'])) {
+        if (file_exists($fullPath) && is_file($fullPath) && !in_array($path, ['/images/profile/man', '/images/profile/woman'])) {
             unlink(public_path($path));
             return 'success';
         }
