@@ -2,7 +2,6 @@
 
 namespace App\Events\Locations;
 
-use App\Enums\UserEnums\UserType;
 use App\Models\Taxi;
 use App\Models\User;
 use Illuminate\Broadcasting\Channel;
@@ -27,25 +26,6 @@ class GetTaxiLocationsEvent implements ShouldBroadcast
         $this->path = $path;
     }
 
-    public function getDriversLocations(){
-        $drivers = User::with(['taxi', 'profile'])
-            ->role(UserType::TaxiDriver()->key)
-            ->where([
-                'is_active' => true
-            ])
-            ->has('taxi') // Ensure the user has a related taxi
-            ->get();
-
-        return $drivers->map(function ($driver) {
-            return [
-                'driver_id' => $driver->id,
-                'name' => $driver->profile?->name,
-                'avatar' => $driver->profile?->avatar,
-                'lat' => $driver->taxi?->last_location_latitude ?? null,
-                'long' => $driver->taxi?->last_location_longitude ?? null,
-            ];
-        });
-    }
     /**
      * Get the channels the event should broadcast on.
      * @return Channel
@@ -57,7 +37,6 @@ class GetTaxiLocationsEvent implements ShouldBroadcast
 
     public function broadcastWith(): array
     {
-//        $driversLocations = $this->getDriversLocations();
         $driver = User::with(['profile'])->where('id',$this->taxi->driver_id)->first();
         $data = [
             'driver_id' => $driver->id,
@@ -70,10 +49,6 @@ class GetTaxiLocationsEvent implements ShouldBroadcast
         if (!is_null($this->path)) {
             $data = array_merge($data, ['path' => $this->path]);
         }
-
-//        if($driversLocations) {
-//            $data = array_merge($data, ['drivers_locations' => $driversLocations]);
-//        }
         return $data;
     }
 
