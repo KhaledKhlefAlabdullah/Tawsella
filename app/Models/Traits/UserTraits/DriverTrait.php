@@ -150,8 +150,8 @@ trait DriverTrait
             'plate_number' => $driver->taxi?->plate_number,
             'lamp_number' => $driver->taxi?->lamp_number,
             'created_at' => $driver->created_at,
-            'lat' => $driver->last_location_latitude,
-            'long' => $driver->last_location_longitude,
+            'lat' => $driver->last_location_latitude ?? null,
+            'long' => $driver->last_location_longitude ?? null,
         ];
     }
 }
