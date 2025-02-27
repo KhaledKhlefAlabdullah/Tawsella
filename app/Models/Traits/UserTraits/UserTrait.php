@@ -113,7 +113,7 @@ trait UserTrait
 
             // Default role for other users
             $user->assignRole(UserType::Customer()->key);
-            $user->sendEmailVerificationNotification(true);
+            // $user->sendEmailVerificationNotification(true);
 
             // Generate a token for the newly registered user
             $token = createUserToken($user, 'register-token');
