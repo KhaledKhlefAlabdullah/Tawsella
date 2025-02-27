@@ -149,7 +149,9 @@ trait DriverTrait
             'driver_state' => DriverState::getKey($driver->driver_state),
             'plate_number' => $driver->taxi?->plate_number,
             'lamp_number' => $driver->taxi?->lamp_number,
-            'created_at' => $driver->created_at
+            'created_at' => $driver->created_at,
+            'lat' => $driver->last_location_latitude,
+            'long' => $driver->last_location_longitude,
         ];
     }
 }
