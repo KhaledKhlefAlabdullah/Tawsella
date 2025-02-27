@@ -147,11 +147,11 @@ trait DriverTrait
                 : 'غير متوفر',
             'unBring' => $unBring,
             'driver_state' => DriverState::getKey($driver->driver_state),
-            'plate_number' => $driver->taxi?->plate_number,
-            'lamp_number' => $driver->taxi?->lamp_number,
+            'plate_number' => $driver->taxi?->plate_number ?? null,
+            'lamp_number' => $driver->taxi?->lamp_number ?? null,
             'created_at' => $driver->created_at,
-            'lat' => $driver->last_location_latitude ?? null,
-            'long' => $driver->last_location_longitude ?? null,
+            'lat' => $driver->taxi?->last_location_latitude ?? null,
+            'long' => $driver->taxi?->last_location_longitude ?? null,
         ];
     }
 }
