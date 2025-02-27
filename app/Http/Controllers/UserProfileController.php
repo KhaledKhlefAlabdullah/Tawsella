@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserEnums\UserGender;
 use App\Http\Requests\UserRequests\UserRequest;
 use App\Models\User;
 use Exception;
@@ -27,7 +28,7 @@ class UserProfileController extends Controller
             $profile = [
                 'id' => $user->id,
                 'name' => $user->profile?->name,
-                'gender' => $user->profile?->gender,
+                'gender' => UserGender::getKey($user->profile?->gender ?? 0),
                 'avatar' => $user->profile?->avatar,
                 'phone_number' => $user->profile?->phone_number,
                 'email' => $user->email,

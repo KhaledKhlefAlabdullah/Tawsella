@@ -28,7 +28,7 @@ trait CustomerTrait
                 'phone_number' => $driver->profile?->phone_number ?? '',
                 'avatar' => $driver->profile?->avatar ?? '',
                 'user_type' => $driver->getRoleNames()[0],
-                'gender' => $driver->profile?->gender ?? '',
+                'gender' => UserGender::getKey($driver->profile?->gender ?? 0),
                 'distance' => $driver->distance.' KM',
                 'latitude' => $driver->last_location_latitude,
                 'longitude' => $driver->last_location_longitude,

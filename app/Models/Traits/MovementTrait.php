@@ -184,7 +184,7 @@ trait MovementTrait
             'id' => $this->id,
             'start_address' => $this->start_address,
             'destination_address' => $this->destination_address,
-            'gender' => UserGender::getKey($this->gender),
+            'gender' => UserGender::getKey($this->gender ?? 0),
             'start_latitude' => $this->start_latitude,
             'start_longitude' => $this->start_longitude,
             'avatar' => $this->customer?->profile?->avatar ?? null,
