@@ -20,7 +20,7 @@ class UserPolicy
      */
     public function is_admin(User $user): bool
     {
-        return $user->hasRole(UserType::Admin()->key || UserType::Moderator()->key);
+        return $user->hasRole(UserType::Admin()->key) || $user->hasRole(UserType::Moderator()->key);
     }
 
     public function is_moderator(User $user): bool
