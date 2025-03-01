@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\UserEnums\UserType;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
 use Exception;
@@ -23,21 +24,24 @@ class AuthenticatedSessionController extends Controller
 
             $request->authenticate();
 
-            // Delete all existing tokens for the authenticated user
-            $request->user()->tokens()->delete();
-
+//            // Delete all existing tokens for the authenticated user
             // Get user details
             $user = $request->user();
             $user->device_token = $request->input('device_token');
             $user->save();
             $taxi = $user->taxi;
 
-            if($user->hasRole(\App\Enums\UserEnums\UserType::TaxiDriver()->key) && !$taxi){
+            if ($user->hasRole(\App\Enums\UserEnums\UserType::TaxiDriver()->key) && !$taxi) {
                 return api_response(message: 'لا يمكنك تسجيل الدخول بهذا الحساب لأنه غير مربوط بتكسي', code: 403);
             }
 
-            // Create a new token for the user
-            $token = createUserToken($user, 'login-token');
+            if ($user->hasRole(UserType::Customer()->key) || $user->hasRole(UserType::TaxiDriver()->key)) {
+                $request->user()->tokens()->delete();
+                // Create a new token for the user
+                $token = createUserToken($user, 'login-token');
+            } else {
+                $token = $request->user()->tokens()->first();
+            }
 
             return api_response(data: ['token' => $token, 'user' => $user, 'profile' => $user->profile, 'mail_code_verified_at' => $user->mail_code_verified_at], message: 'تم تسجيل الدخول بنجاح');
 
@@ -60,7 +64,11 @@ class AuthenticatedSessionController extends Controller
     public function destroy(Request $request)
     {
         try {
-            $request->user()->currentAccessToken()->delete();
+
+            $user = $request->user();
+            if ($user->hasRole(UserType::Customer()->key) || $user->hasRole(UserType::TaxiDriver()->key)) {
+                $user->currentAccessToken()->delete();
+            }
 
             return api_response(message: 'تم تسجيل الخروج بنجاح');
 
