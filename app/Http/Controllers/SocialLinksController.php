@@ -21,7 +21,7 @@ class SocialLinksController extends Controller
             ->where('is_social', true)
             ->orderBy('created_at', 'desc')
             ->get();
-        return api_response(data: $socialLinks, message: 'Successfully retrieved social links.');
+        return api_response(data: $socialLinks, message: 'تم جلب روابط مواقع التواصل الاجتماعي بنجاح');
     }
 
     /**
@@ -52,9 +52,9 @@ class SocialLinksController extends Controller
                 'link' => $aboutUs->description,
                 'icon' => $aboutUs->image,
             ];
-            return api_response(data: $data, message: 'Successfully created social link');
+            return api_response(data: $data, message: 'تم إنشاء رابط موقع التواصل الاجتماعي بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'There error in processed data.', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'خطأ في إنشاء رابط موقع التواصل الاجتماعي', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -85,10 +85,10 @@ class SocialLinksController extends Controller
                 'link' => $aboutUs->description,
                 'icon' => $aboutUs->image,
             ];
-            return api_response(data: $data, message: 'Updated social link');
+            return api_response(data: $data, message: 'تم تعديل رابط موقع التواصل الاجتماعي بنجاح');
 
         } catch (Exception $e) {
-            return api_response(message: 'Error in update social link', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'خطأ في تعديل رابط موقع التواصل الاجتماعي', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -105,9 +105,9 @@ class SocialLinksController extends Controller
             $aboutUs = AboutUs::find($aboutUs);
             removeFile($aboutUs->image);
             $aboutUs->delete();
-            return api_response(message: 'Successfully deleted social link.');
+            return api_response(message: 'تم حذف رابط موقع التواصل الاجتماعي بنجاح.');
         } catch (Exception $e) {
-            return api_response(message: 'Error in deleted social link', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'خطأ في حذف رابط موقع التواصل الاجتماعي', code: 500, errors: [$e->getMessage()]);
         }
     }
 }

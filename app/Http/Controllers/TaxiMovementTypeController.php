@@ -134,9 +134,9 @@ class TaxiMovementTypeController extends Controller
     {
         try {
             $movement_type->delete();
-            return api_response(message: 'Successfully deleting movements type');
+            return api_response(message: 'تم حذف نوع الرحلة بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Error in deleting movements type', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'خطأ في حذف نوع الرحلة', code: 500, errors: [$e->getMessage()]);
         }
     }
 }
