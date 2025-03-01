@@ -8,13 +8,14 @@ use BenSampo\Enum\Enum;
  * @method static static Admin()
  * @method static static Customer()
  * @method static static TaxiDriver()
+ * @method static static Moderator()
  */
 final class UserType extends Enum
 {
     const Admin = 0;
     const Customer = 1;
     const TaxiDriver = 2;
-
+    const Moderator = 3;
     public static function getUsersTypes()
     {
         $allKeys = UserType::getKeys();

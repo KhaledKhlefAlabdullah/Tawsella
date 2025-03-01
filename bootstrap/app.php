@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\EnsureEmailIsVerifiedByCodeMiddleware;
+use App\Http\Middleware\ModeratorMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -24,6 +25,7 @@ return Application::configure(basePath: dirname(__DIR__))
 
         $middleware->alias([
             'verified.email' => EnsureEmailIsVerifiedByCodeMiddleware::class,
+            'localAdmin' => ModeratorMiddleware::class,
         ]);
 
         //

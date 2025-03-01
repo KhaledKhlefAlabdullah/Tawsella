@@ -23,6 +23,11 @@ class UserPolicy
         return $user->hasRole(UserType::Admin()->key);
     }
 
+    public function is_moderator(User $user): bool
+    {
+        return $user->hasRole(UserType::Moderator()->key);
+
+    }
     /**
      * Check if the user is a customer.
      *
