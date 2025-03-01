@@ -37,11 +37,9 @@ class AuthenticatedSessionController extends Controller
 
             if ($user->hasRole(UserType::Customer()->key) || $user->hasRole(UserType::TaxiDriver()->key)) {
                 $request->user()->tokens()->delete();
-                // Create a new token for the user
-                $token = createUserToken($user, 'login-token');
-            } else {
-                $token = $request->user()->tokens()->first()->plainTextToken;
             }
+
+            $token = createUserToken($user, 'login-token');
 
             return api_response(data: ['token' => $token, 'user' => $user, 'profile' => $user->profile, 'mail_code_verified_at' => $user->mail_code_verified_at], message: 'تم تسجيل الدخول بنجاح');
 
