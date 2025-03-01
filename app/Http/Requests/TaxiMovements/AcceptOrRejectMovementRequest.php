@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\TaxiMovements;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\BaseRequest;
 
-class AcceptOrRejectMovementRequest extends FormRequest
+class AcceptOrRejectMovementRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.

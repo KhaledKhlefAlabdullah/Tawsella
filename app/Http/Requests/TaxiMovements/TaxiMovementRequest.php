@@ -3,11 +3,11 @@
 namespace App\Http\Requests\TaxiMovements;
 
 use App\Enums\UserEnums\UserGender;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\BaseRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
-class TaxiMovementRequest extends FormRequest
+class TaxiMovementRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.

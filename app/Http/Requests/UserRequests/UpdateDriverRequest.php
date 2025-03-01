@@ -6,11 +6,11 @@ use App\Enums\UserEnums\UserGender;
 use App\Models\User;
 use App\Models\UserProfile;
 use App\Rules\PhoneNumber;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\BaseRequest;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
 
-class UpdateDriverRequest extends FormRequest
+class UpdateDriverRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.

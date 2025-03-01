@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\ContactUsMessages;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\BaseRequest;
 
-class AnswereContactUsMessagesRequest extends FormRequest
+class AnswereContactUsMessagesRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -3,10 +3,10 @@
 namespace App\Http\Requests\TaxiMovements;
 
 use App\Enums\PaymentTypesEnum;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\BaseRequest;
 use Illuminate\Validation\Rule;
 
-class MarkMovementAsCompletedRequest extends FormRequest
+class MarkMovementAsCompletedRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.

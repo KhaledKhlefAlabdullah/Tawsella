@@ -3,10 +3,10 @@
 namespace App\Http\Requests;
 
 use App\Models\TaxiMovement;
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\BaseRequest;
 use Illuminate\Support\Facades\Auth;
 
-class RatingRequest extends FormRequest
+class RatingRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
