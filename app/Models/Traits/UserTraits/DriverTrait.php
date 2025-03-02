@@ -152,6 +152,7 @@ trait DriverTrait
             'created_at' => $driver->created_at,
             'lat' => $driver->taxi?->last_location_latitude ?? null,
             'long' => $driver->taxi?->last_location_longitude ?? null,
+            'has_taxi' => $driver->taxi !== null,
         ];
     }
 }
