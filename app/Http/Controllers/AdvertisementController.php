@@ -36,7 +36,7 @@ class AdvertisementController extends Controller
             return api_response(data: ['validAdvertisements' => $validAdvertisements->items(), 'invalidAdvertisements' => $invalidAdvertisements->items()], message: 'تم جلب الإعلانات بالنجاح', pagination: get_pagination($validAdvertisements, $request));
         }
 
-        return api_response(data: $validAdvertisements->items(), message: 'Successfully getting advertisements', pagination: get_pagination($validAdvertisements, $request));
+        return api_response(data: $validAdvertisements->items(), message: 'تم جلب الاعلانات بنجاح', pagination: get_pagination($validAdvertisements, $request));
     }
 
     /**
@@ -45,7 +45,7 @@ class AdvertisementController extends Controller
      * @return \Illuminate\Http\JsonResponse
      */
     public function show(Advertisement $advertisement){
-        return api_response(data: $advertisement, message: 'Successfully getting advertisements details');
+        return api_response(data: $advertisement, message: 'تم جلب تفاصيل الإعلان بنجاح');
     }
 
     /**
@@ -73,9 +73,9 @@ class AdvertisementController extends Controller
                 'validity_date' => $validatedData['validity_date'],
             ]);
 
-            return api_response(data: $Advertisement, message: 'Successfully created advertisementss');
+            return api_response(data: $Advertisement, message: 'تم إضافة الإعلان بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Error in creating advertisementss', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'خطأ في إضافة الإعلان', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -103,9 +103,9 @@ class AdvertisementController extends Controller
                 'logo' => $logoPath
             ]);
 
-            return api_response(data: $advertisement, message: 'Successfully updated advertisement');
+            return api_response(data: $advertisement, message: 'تم تعديل الاعلان بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Error in updated advertisement', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'خطأ في تعديل الإعلان', code: 500, errors: [$e->getMessage()]);
         }
     }
 
@@ -124,9 +124,9 @@ class AdvertisementController extends Controller
             removeFile($advertisement->image);
             $advertisement->delete();
 
-            return api_response(message: 'Successfully deleted advertisements');
+            return api_response(message: 'تم حذف الإعلان بنجاح');
         } catch (Exception $e) {
-            return api_response(message: 'Error in deleted advertisements', code: 500, errors: [$e->getMessage()]);
+            return api_response(message: 'خطأ في حذف الإعلان', code: 500, errors: [$e->getMessage()]);
         }
     }
 }
