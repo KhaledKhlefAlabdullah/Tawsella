@@ -60,9 +60,8 @@ class AdvertisementController extends Controller
         try {
             $validatedData = $request->validated();
 
-            $imagePath = $validatedData['image'] ? storeFile($validatedData['image'], '/images/advertisements/images') : '/images/services/images/service.png';
-
-            $logoPath = $validatedData['logo'] ? storeFile($validatedData['logo'], '/images/advertisements/logos') : '/images/services/logos/logo.png';
+            $imagePath = array_key_exists('image',$validatedData) ? storeFile($validatedData['image'], '/images/advertisements/images') : '/images/services/images/service.png';
+            $logoPath = array_key_exists( 'logo',$validatedData) ? storeFile($validatedData['logo'], '/images/advertisements/logos') : '/images/services/logos/logo.png';
 
             $Advertisement = Advertisement::create([
                 'admin_id' => $validatedData['admin_id'],
