@@ -158,7 +158,7 @@ trait UserTrait
 
         if (array_key_exists('avatar', $validatedData)) {
             $avatar = $validatedData['avatar'];
-            $path = 'images/profile';
+            $path = '/images/profile';
             $avatar_path = editFile($userProfile->avatar, $path, $avatar);
 
             $userProfile->update([
