@@ -90,7 +90,7 @@ class DriversController extends Controller
         try {
             DB::beginTransaction();
             $validatedData = $request->validated();
-
+            return $validatedData;
             User::handelUpdateDetails($driver, $validatedData);
 
             DB::commit();
