@@ -62,6 +62,7 @@ trait DriverTrait
                 'age' => optional($driver->profile)->birthdate
                     ? abs(floor(now()->diffInYears(Carbon::parse($driver->profile->birthdate)))) . ' سنة'
                     : 'غير متوفر',
+                'birthdate' => $driver->profile?->birthdate
 
             ];
         });
