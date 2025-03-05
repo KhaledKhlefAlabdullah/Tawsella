@@ -35,6 +35,7 @@ class UpdateDriverRequest extends BaseRequest
             'gender' => ['sometimes', 'string', Rule::in(UserGender::getKeys())],
             'password' => ['sometimes', Password::defaults()],
             'birthdate' => ['sometimes', 'date', 'date_format:Y-m-d'],
+            'avatar' => ['sometimes','mimes:jpeg,jpg,png', 'max:10048'],
         ];
     }
 }
