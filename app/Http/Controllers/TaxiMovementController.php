@@ -302,11 +302,12 @@ class TaxiMovementController extends Controller
             $validatedData = $request->validated();
             $driverName = $taxiMovement->driver->profile->name;
             $customerName = $taxiMovement->customer->profile->name;
+            $title = ($validatedData['state'] ? ' تم' : ' لم يتم') . 'إيجاد الزبون';
             $message = 'السائق: ' . $driverName . ($validatedData['state'] ? ' وجد' : ' لم يجد') . ' الزبون: ' . $customerName;
             CustomerFoundEvent::dispatch($driverName, $customerName, $message);
             $admin = User::find(getAdminId());
             send_notifications($admin, [
-                'title' => 'تم إيجاد الزبون!',
+                'title' => $title,
                 'body' => [
                     'request_id' => $taxiMovement->id,
                     'customer' => $taxiMovement->customer->profile,
@@ -314,13 +315,7 @@ class TaxiMovementController extends Controller
                 ]
             ]);
 
-            if ($validatedData['state']) {
-                $taxiMovement->state_message = __('customer-was-found');
-
-            } else {
-                $taxiMovement->state_message = __('customer-was-not-found');
-            }
-
+            $taxiMovement->state_message = $message;
             return api_response(message: 'تم ايجاد الزبون بنجاح');
         } catch (Exception $e) {
             return api_response(message: 'حصل خطأ أثناء تعليم الزبون كموجود', code: 500, errors: [$e->getMessage()]);
