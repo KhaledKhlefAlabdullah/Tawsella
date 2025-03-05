@@ -34,33 +34,7 @@ class UpdateDriverRequest extends BaseRequest
             'phone_number' => ['sometimes', 'nullable', 'string', new PhoneNumber, is_null($user) ? 'unique:' . UserProfile::class : Rule::unique('user_profiles')->ignore($user->profile?->id)],
             'gender' => ['sometimes', 'string', Rule::in(UserGender::getKeys())],
             'password' => ['sometimes', Password::defaults()],
-        ];
-    }
-
-    /**
-     * Get custom error messages for validation rules.
-     *
-     * @return array<string, string>
-     */
-    public function messages(): array
-    {
-        return [
-            'name.required' => 'The name field is required.',
-            'name.string' => 'The name field must be a string.',
-            'name.max' => 'The name field must not exceed 255 characters.',
-            'name.min' => 'The name field must be at least 3 characters.',
-            'email.required' => 'The email field is required.',
-            'email.string' => 'The email field must be a string.',
-            'email.email' => 'The email is invalid.',
-            'email.max' => 'The email field must not exceed 255 characters.',
-            'email.unique' => 'The email has already been taken.',
-            'phone_number.unique' => 'The phone number has already been taken.',
-            'phone_number.required' => 'The phone number field is required.',
-            'phone_number.string' => 'The phone number field must be a string.',
-            'phone_number.regex' => 'The phone number is invalid.',
-            'password.required' => 'The password field is required.',
-            'password.confirmed' => 'The password confirmation does not match.',
-            'gender.required' => 'The gender field is required.'
+            'birthdate' => ['sometimes', 'date', 'date_format:Y-m-d'],
         ];
     }
 }
