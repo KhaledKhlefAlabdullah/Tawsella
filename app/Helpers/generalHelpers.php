@@ -132,7 +132,7 @@ if (!function_exists('editFile')) {
     {
         // Delete the old file from storage
         if (file_exists($old_path)) {
-            if (!in_array($old_path, ['/images/profile/man', '/images/profile/woman']))
+            if (!in_array($old_path, ['/images/profile/man', '/images/profile/woman', '/images/services/logos/logo.png', '/images/services/images/service.png']))
                 unlink(public_path($old_path));
         }
 
