@@ -25,7 +25,8 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
 
     //***************************start route driver ******************************** */
     //****************************************************************************** */
-    Route::apiResource('drivers', DriversController::class);
+    Route::apiResource('drivers', DriversController::class)->except(['update']);
+    Route::post('drivers/{driver}', [DriversController::class, 'update']);
     //***************************End route driver ******************************** */
     //**************************************************************************** */
 
