@@ -24,6 +24,7 @@ trait OfferTrait
                 'offer' => $offer->offer,
                 'value_of_discount' => $offer->value_of_discount,
                 'valid_date' => $offer->valid_date,
+                'movement_type_id' => $offer->movement_type_offer->id,
                 'type' => $offer->movement_type_offer->type ?? null,
                 'price1' => $offer->movement_type_offer->price1 ?? null,
                 'payment1' => $offer->movement_type_offer->payment1 ?? null,
