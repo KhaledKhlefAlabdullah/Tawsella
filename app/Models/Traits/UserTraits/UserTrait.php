@@ -156,21 +156,26 @@ trait UserTrait
             'gender' => array_key_exists('gender', $validatedData) ? UserGender::getValue($validatedData['gender']) : $userProfile->gender,
         ]);
 
-        if (array_key_exists('avatar', $validatedData) || array_key_exists('gender', $validatedData)) {
-            if (array_key_exists('avatar', $validatedData)) {
-                $avatar = $validatedData['avatar'];
-                $path = 'images/profile';
-                $avatar_path = editFile($userProfile->avatar, $path, $avatar);
-            } else {
-                $avatar_path = UserGender::getValue($validatedData['gender']) == UserGender::male
-                    ? '/images/profile/man.png'
-                    : '/images/profile/woman.png';
-            }
+        if (array_key_exists('avatar', $validatedData)) {
+            $avatar = $validatedData['avatar'];
+            $path = 'images/profile';
+            $avatar_path = editFile($userProfile->avatar, $path, $avatar);
+
             $userProfile->update([
                 'avatar' => $avatar_path
             ]);
         }
 
+        if (!array_key_exists('avatar', $validatedData) && array_key_exists('gender', $validatedData)) {
+
+            $avatar_path = UserGender::getValue($validatedData['gender']) == UserGender::male
+                ? '/images/profile/man.png'
+                : '/images/profile/woman.png';
+
+            $userProfile->update([
+                'avatar' => $avatar_path
+            ]);
+        }
         return $userProfile;
     }
 }
