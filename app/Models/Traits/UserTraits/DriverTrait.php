@@ -146,6 +146,7 @@ trait DriverTrait
             'age' => optional($driver->profile)->birthdate
                 ? abs(floor(now()->diffInYears(Carbon::parse($driver->profile->birthdate)))) . ' سنة'
                 : 'غير متوفر',
+            'birthdate' => $driver->profile?->birthdate,
             'unBring' => $unBring,
             'driver_state' => DriverState::getKey($driver->driver_state),
             'plate_number' => $driver->taxi?->plate_number ?? null,
