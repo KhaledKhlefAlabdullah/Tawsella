@@ -102,7 +102,7 @@ trait UserTrait
 
             // Assign role based on authe
             $authUser = Auth::user();
-            if ($authUser && $authUser->hasRole(UserType::Admin()->key) || $authUser->hasRole(UserType::Moderator()->key)) {
+            if ($authUser && ($authUser->hasRole(UserType::Admin()->key) || $authUser->hasRole(UserType::Moderator()->key))) {
                 $user->assignRole(UserType::TaxiDriver()->key);
                 $user->mail_code_verified_at = now();
                 $user->save();
