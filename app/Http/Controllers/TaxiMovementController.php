@@ -315,7 +315,10 @@ class TaxiMovementController extends Controller
                 ]
             ]);
 
-            $taxiMovement->state_message = $message;
+            $taxiMovement->update([
+                'state_message' => $message,
+                'is_canceled' => true
+            ]);
             return api_response(message: 'تم ايجاد الزبون بنجاح');
         } catch (Exception $e) {
             return api_response(message: 'حصل خطأ أثناء تعليم الزبون كموجود', code: 500, errors: [$e->getMessage()]);
