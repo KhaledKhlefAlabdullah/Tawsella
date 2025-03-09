@@ -166,7 +166,7 @@ trait UserTrait
             ]);
         }
 
-        if (!array_key_exists('avatar', $validatedData) && array_key_exists('gender', $validatedData) && in_array($userProfile->avatar, ['/images/profile/man', '/images/profile/woman'])) {
+        if (!array_key_exists('avatar', $validatedData) && array_key_exists('gender', $validatedData) && in_array($userProfile->avatar, ['/images/profile/man.png', '/images/profile/woman.png'])) {
 
             $avatar_path = UserGender::getValue($validatedData['gender']) == UserGender::male
                 ? '/images/profile/man.png'
