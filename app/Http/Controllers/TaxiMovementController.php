@@ -316,14 +316,16 @@ class TaxiMovementController extends Controller
                 ]
             ]);
 
-            $taxiMovement->update([
-                'state_message' => $message,
-                'is_canceled' => true
-            ]);
+            if (!$validatedData['state']) {
+                $taxiMovement->update([
+                    'state_message' => $message,
+                    'is_canceled' => true
+                ]);
 
-            $taxiMovement->driver()->update([
-                'driver_state' => DriverState::Ready
-            ]);
+                $taxiMovement->driver()->update([
+                    'driver_state' => DriverState::Ready
+                ]);
+            }
             DB::commit();
             return api_response(message: 'تم ايجاد الزبون بنجاح');
         } catch (Exception $e) {
