@@ -300,6 +300,7 @@ class TaxiMovementController extends Controller
     {
         try {
             $validatedData = $request->validated();
+            DB::beginTransaction();
             $driverName = $taxiMovement->driver->profile->name;
             $customerName = $taxiMovement->customer->profile->name;
             $title = ($validatedData['state'] ? ' تم' : ' لم يتم') . 'إيجاد الزبون';
@@ -319,8 +320,14 @@ class TaxiMovementController extends Controller
                 'state_message' => $message,
                 'is_canceled' => true
             ]);
+
+            $taxiMovement->driver()->update([
+                'driver_state' => DriverState::Ready
+            ]);
+            DB::commit();
             return api_response(message: 'تم ايجاد الزبون بنجاح');
         } catch (Exception $e) {
+            DB::rollBack();
             return api_response(message: 'حصل خطأ أثناء تعليم الزبون كموجود', code: 500, errors: [$e->getMessage()]);
         }
     }
