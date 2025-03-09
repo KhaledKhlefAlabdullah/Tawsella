@@ -434,7 +434,8 @@ class TaxiMovementController extends Controller
 
                     $driveResentValue = $driver->device_token;
                     send_notifications($driver->id, $driverPayload['notification']);
-                    $this->fcmNotificationService->sendNotification($driverPayload, $driveResentValue);
+                    if ($driveResentValue)
+                        $this->fcmNotificationService->sendNotification($driverPayload, $driveResentValue);
                 }
             }
 
