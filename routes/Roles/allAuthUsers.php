@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\DriversController;
 use App\Http\Controllers\NotificationController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserProfileController;
@@ -55,5 +54,4 @@ Route::group(['prefix' => 'notifications', 'controller' => NotificationControlle
 
 Route::apiResource('advertisements', \App\Http\Controllers\AdvertisementController::class)->only(['index', 'show']);
 
-Route::get('drivers-ready', [DriversController::class, 'getReadiesDrivers']);
 

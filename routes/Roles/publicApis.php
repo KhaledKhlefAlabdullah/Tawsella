@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ContactUsMessageController;
+use App\Http\Controllers\DriversController;
 use Illuminate\Support\Facades\Route;
 use \App\Http\Controllers\AboutUsController;
 use App\Http\Controllers\OfferController;
@@ -28,3 +29,5 @@ Route::get('/phone', function () {
 Route::apiResource('social-links', \App\Http\Controllers\SocialLinksController::class)->only(['index', 'show']);
 
 Route::get('/getKMPrice', [\App\Http\Controllers\TaxiMovementTypeController::class, 'getKMPrice']);
+
+Route::get('drivers-ready', [DriversController::class, 'getReadiesDrivers']);
