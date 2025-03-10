@@ -4,6 +4,7 @@ namespace App\Http\Requests\TaxiMovements;
 
 use App\Enums\UserEnums\UserGender;
 use App\Http\Requests\BaseRequest;
+use App\Models\TaxiMovementType;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
@@ -21,6 +22,7 @@ class TaxiMovementRequest extends BaseRequest
     {
         $this->merge([
             'customer_id' => Auth::id(),
+            'movement_type_id' => TaxiMovementType::where('is_onKM', true)->first()->id
         ]);
     }
     /**
@@ -34,7 +36,7 @@ class TaxiMovementRequest extends BaseRequest
             'driver_id' => ['sometimes', 'required', 'string', 'exists:users,id'],
             'customer_id' => ['sometimes', 'required', 'string', 'exists:users,id'],
             'taxi_id' => ['sometimes', 'required', 'string', 'exists:taxis,id'],
-            'movement_type_id' => ['sometimes', 'required', 'string', 'exists:taxi_movement_types,id'],
+            'movement_type_id' => ['sometimes', 'string', 'exists:taxi_movement_types,id'],
             'start_address' => ['nullable', 'sometimes', 'string'],
             'destination_address' => ['nullable', 'sometimes', 'string'],
             'gender' => ['required', 'sometimes', 'string', Rule::in(UserGender::getKeys())],

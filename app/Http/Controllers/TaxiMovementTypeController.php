@@ -133,6 +133,10 @@ class TaxiMovementTypeController extends Controller
     public function destroy(TaxiMovementType $movement_type)
     {
         try {
+
+            if($movement_type->is_general)
+                return api_response(message: 'لا يمكن حذف أنواع الرحلات الأساسية', code: 404);
+
             $movement_type->delete();
             return api_response(message: 'تم حذف نوع الرحلة بنجاح');
         } catch (Exception $e) {
