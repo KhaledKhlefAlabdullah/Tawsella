@@ -52,6 +52,4 @@ Route::group(['prefix' => 'notifications', 'controller' => NotificationControlle
     Route::delete('/delete-all','deleteNotifications');
 });
 
-Route::apiResource('advertisements', \App\Http\Controllers\AdvertisementController::class)->only(['index', 'show']);
-
 

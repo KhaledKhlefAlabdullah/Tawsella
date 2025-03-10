@@ -31,3 +31,5 @@ Route::apiResource('social-links', \App\Http\Controllers\SocialLinksController::
 Route::get('/getKMPrice', [\App\Http\Controllers\TaxiMovementTypeController::class, 'getKMPrice']);
 
 Route::get('drivers-ready', [DriversController::class, 'getReadiesDrivers']);
+
+Route::apiResource('advertisements', \App\Http\Controllers\AdvertisementController::class)->only(['index', 'show']);
