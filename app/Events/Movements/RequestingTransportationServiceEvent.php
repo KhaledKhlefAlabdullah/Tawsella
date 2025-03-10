@@ -47,6 +47,7 @@ class RequestingTransportationServiceEvent implements ShouldBroadcast
             'request_id' => $this->taxiMovement->request_id,
             'customer' => $customer,
             'gender' => UserGender::getKey($this->taxiMovement->gender),
+            'movement_type' => $this->taxiMovement->movement_type->type ?? 'افتراضي',
             'customer_address' => $this->taxiMovement->start_address,
             'destination_address' => $this->taxiMovement->destination_address,
             'start_latitude' => $this->taxiMovement->start_latitude,

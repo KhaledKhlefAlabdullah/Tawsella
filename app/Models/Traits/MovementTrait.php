@@ -60,7 +60,7 @@ trait MovementTrait
                 'car_name' => $movement->taxi->car_name ?? null,
                 'car_lamp_number' => $movement->taxi->lamp_number ?? null,
                 'car_plate_number' => $movement->taxi->plate_number ?? null,
-                'type' => $movement->movement_type->type,
+                'type' => $movement->movement_type->type ?? 'افتراضي',
                 'price' => $movement?->calculations->additional_amount ?? 0,
                 'coin' => PaymentTypesEnum::getKey($movement?->calculations->coin ?? 0),
                 'date' => $movement->created_at,

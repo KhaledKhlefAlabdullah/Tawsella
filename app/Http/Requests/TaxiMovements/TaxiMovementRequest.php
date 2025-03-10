@@ -22,7 +22,6 @@ class TaxiMovementRequest extends BaseRequest
     {
         $this->merge([
             'customer_id' => Auth::id(),
-            'movement_type_id' => TaxiMovementType::where('is_onKM', true)->first()->id
         ]);
     }
     /**
