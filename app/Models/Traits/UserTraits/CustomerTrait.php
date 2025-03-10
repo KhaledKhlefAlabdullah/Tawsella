@@ -2,6 +2,7 @@
 
 namespace App\Models\Traits\UserTraits;
 
+use App\Enums\MovementRequestStatus;
 use App\Enums\UserEnums\UserGender;
 use App\Enums\UserEnums\UserType;
 
@@ -68,6 +69,7 @@ trait CustomerTrait
             ->where('created_at', '>=', Carbon::now()->subMinutes(10))
             ->where('is_canceled', false)
             ->where('is_completed', false)
+            ->whereNot('request_state', MovementRequestStatus::Rejected)
             ->latest()
             ->first();
 
