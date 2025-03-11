@@ -32,7 +32,7 @@ class AddModeratorAccount extends Seeder
             'phone_number' => '+352000000',
         ]);
 
-        Role::create(['name' => UserType::Moderator()->key, 'guard_name' => 'web']);
+//        Role::create(['name' => UserType::Moderator()->key, 'guard_name' => 'web']);
 
         $user->assignRole(UserType::Moderator()->key);
     }
