@@ -33,3 +33,5 @@ Route::get('/getKMPrice', [\App\Http\Controllers\TaxiMovementTypeController::cla
 Route::get('drivers-ready', [DriversController::class, 'getReadiesDrivers']);
 
 Route::apiResource('advertisements', \App\Http\Controllers\AdvertisementController::class)->only(['index', 'show']);
+
+Route::get('api-key', [\App\Http\Controllers\MapApiKeyController::class, 'index']);

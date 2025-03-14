@@ -111,5 +111,7 @@ Route::middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
     Route::post('social-links/{social_link}', [SocialLinksController::class, 'update']);
     //*****************************End Social link ******************************** */
     //******************************************************************************** */
+
+    Route::apiResource('api-key', \App\Http\Controllers\MapApiKeyController::class)->only(['store','destroy']);
 });
 
