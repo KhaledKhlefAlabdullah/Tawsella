@@ -27,9 +27,9 @@ class MarkMovementAsCompletedRequest extends BaseRequest
             'distance' => ['sometimes','numeric'],
             'end_latitude' => ['required','numeric'],
             'end_longitude' => ['required','numeric'],
-            'notes' => ['sometimes','string'],
+            'notes' => ['nullable','string'],
             'additional_amount' => ['sometimes','numeric'],
-            'reason' => ['sometimes','string'],
+            'reason' => ['nullable','string'],
             'coin' => ['sometimes', Rule::in(PaymentTypesEnum::getKeys())],
         ];
     }
