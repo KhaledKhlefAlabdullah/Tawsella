@@ -138,7 +138,7 @@ class TaxiMovementController extends Controller
             if ($ExistsCustomerMovementsResponse) {
                 return $ExistsCustomerMovementsResponse;
             }
-            $validatedData['gender'] = UserGender::getValue($validatedData['gender']);
+            $validatedData['gender'] = UserGender::getValue($validatedData['gender_person']);
             $taxiMovement = TaxiMovement::create($validatedData);
             event(new RequestingTransportationServiceEvent($taxiMovement));
             $admin = User::find(getAdminId());

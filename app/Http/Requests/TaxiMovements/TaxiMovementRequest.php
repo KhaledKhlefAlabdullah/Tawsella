@@ -38,7 +38,7 @@ class TaxiMovementRequest extends BaseRequest
             'movement_type_id' => ['sometimes', 'string', 'exists:taxi_movement_types,id'],
             'start_address' => ['nullable', 'sometimes', 'string'],
             'destination_address' => ['nullable', 'sometimes', 'string'],
-            'gender' => ['required', 'sometimes', 'string', Rule::in(UserGender::getKeys())],
+            'gender_person' => ['required', 'sometimes', 'string', Rule::in(UserGender::getKeys())],
             'start_latitude' => ['sometimes', 'required', 'numeric'],
             'start_longitude' => ['sometimes', 'required', 'numeric'],
             'end_latitude' => ['sometimes', 'required', 'numeric'],
