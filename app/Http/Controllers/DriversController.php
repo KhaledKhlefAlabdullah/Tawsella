@@ -113,6 +113,11 @@ class DriversController extends Controller
 
             $driver = Auth::user();
 
+            $movements = $driver->driver_movements()->where(['is_completed' => false, 'is_canceled' => false])->count();
+
+            if ($movements > 0) {
+                return api_response(message: 'قم بإنهاء الرحلة التي أنت فيها أولا حتى تتمكن من تغيير حالتك', code: 400);
+            }
             if ($validatedData['state'] == DriverState::InBreak) {
                 $message = 'السائق في استراحة';
                 $state = 'في استراحة';
@@ -124,9 +129,9 @@ class DriversController extends Controller
             $driver->driver_state = $validatedData['state'];
             $driver->save();
             $notification = [
-                'title' => $message.'!',
+                'title' => $message . '!',
                 'body' => [
-                    'message' => 'السائق '.$state.' الأن',
+                    'message' => 'السائق ' . $state . ' الأن',
                     'driver' => $driver->profile
                 ]
             ];
