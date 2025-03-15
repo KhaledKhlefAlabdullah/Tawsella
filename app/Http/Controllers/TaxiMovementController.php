@@ -65,8 +65,8 @@ class TaxiMovementController extends Controller
     public function LifeTaxiMovements(Request $request): JsonResponse
     {
         $currentDate = Carbon::now()->format('Y-m-d');
-        $query = TaxiMovement::query()->where(['is_completed' => false, 'is_canceled' => false, 'request_state' => MovementRequestStatus::Accepted])
-            ->whereDate('created_at', $currentDate);
+        $query = TaxiMovement::query()->where(['is_completed' => false, 'is_canceled' => false, 'request_state' => MovementRequestStatus::Accepted]);
+//            ->whereDate('created_at', $currentDate);
 
         $taxiMovement = $this->paginationService->applyPagination($query, $request);
 
