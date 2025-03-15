@@ -512,11 +512,11 @@ class TaxiMovementController extends Controller
             ->where('is_completed', false)
             ->where('is_canceled', false)
             ->where('is_redirected', true)
-            ->whereDate('created_at', Carbon::today())
+            //->whereDate('created_at', Carbon::today())
             ->latest()
             ->first();
         if (!$lastRequest) {
-            return api_response(message: 'There no request for this driver', code: 404);
+            return api_response(message: 'لا يوجد طلب من أجلك', code: 404);
         }
 
         $customer_profile = $lastRequest->customer ? $lastRequest->customer->profile : null;
